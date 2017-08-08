@@ -1,0 +1,23 @@
+language: cpp
+compiler:
+  - clang
+  - gcc
+sudo: false
+dist: trusty
+os:
+  - linux
+script:
+  - echo "To be implemented..."
+#  - mkdir ./build
+#  - cd ./build
+#  - cmake ../
+#  - make -j4
+#  - ctest -V
+addons:
+  apt:
+    packages:
+    - g++
+    - libcurl4-gnutls-dev
+    - libjsoncpp-dev
+notifications:
+  email: false
