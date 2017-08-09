@@ -7,11 +7,12 @@ dist: trusty
 os:
   - linux
 script:
-  - echo "To be implemented..."
-#  - mkdir ./build
-#  - cd ./build
-#  - cmake ../
-#  - make -j4
+  - ./ci/cpplint.sh
+  - mkdir ./build
+  - cd ./build
+  - cmake ../
+  - make -j4
+  - echo "Test still need to be implemented..."
 #  - ctest -V
 addons:
   apt:
