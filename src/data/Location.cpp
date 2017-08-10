@@ -26,8 +26,8 @@ namespace wic
 
 Location::Location()
 : m_id(0),
-  m_longitude(std::numeric_limits<float>::quiet_NaN()),
   m_latitude(std::numeric_limits<float>::quiet_NaN()),
+  m_longitude(std::numeric_limits<float>::quiet_NaN()),
   m_name(""),
   m_postcode("")
 {
@@ -38,9 +38,14 @@ uint32_t Location::id() const
   return m_id;
 }
 
-float Location::longitude() const
+void Location::setId(const uint32_t newId)
 {
-  return m_longitude;
+  m_id = newId;
+}
+
+bool Location::hasId() const
+{
+  return (m_id != 0);
 }
 
 float Location::latitude() const
@@ -48,14 +53,51 @@ float Location::latitude() const
   return m_latitude;
 }
 
+float Location::longitude() const
+{
+  return m_longitude;
+}
+
+void Location::setLatitudeLongitude(const float lat, const float lon)
+{
+  m_latitude = lat;
+  m_longitude = lon;
+}
+
+bool Location::hasLatitudeAndLongitude() const
+{
+  return (m_latitude >= -90.0f) && (m_latitude <= 90.0f)
+      && (m_longitude >= -180.0f) && (m_longitude <= 180.0f);
+}
+
 const std::string& Location::name() const
 {
   return m_name;
 }
 
+void Location::setName(const std::string& newName)
+{
+  m_name = newName;
+}
+
+bool Location::hasName() const
+{
+  return !m_name.empty();
+}
+
 const std::string& Location::postcode() const
 {
   return m_postcode;
+}
+
+void Location::setPostcode(const std::string& newPostcode)
+{
+  m_postcode = newPostcode;
+}
+
+bool Location::hasPostcode() const
+{
+  return !m_postcode.empty();
 }
 
 } //namespace

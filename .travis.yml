@@ -12,11 +12,11 @@ script:
   - cd ./build
   - cmake ../
   - make -j4
-  - echo "Test still need to be implemented..."
-#  - ctest -V
+  - ctest -V
 addons:
   apt:
     packages:
+    - catch
     - g++
     - libcurl4-gnutls-dev
     - libjsoncpp-dev

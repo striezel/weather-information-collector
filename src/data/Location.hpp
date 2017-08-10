@@ -44,12 +44,19 @@ class Location
     uint32_t id() const;
 
 
-    /** \brief gets the longitude of the location
+    /** \brief sets the API id of the location
      *
-     * \return Returns the longitude of the location (in degrees).
-     *         Returns NaN, if no longitude is set.
+     * \param newId  the new API id of the location
      */
-    float longitude() const;
+    void setId(const uint32_t newId);
+
+
+    /** \brief checks whether the location has an API id
+     *
+     * \return Returns true, if the location has an API id.
+     *         Returns false otherwise.
+     */
+    bool hasId() const;
 
 
     /** \brief gets the latitude of the location
@@ -60,6 +67,30 @@ class Location
     float latitude() const;
 
 
+    /** \brief gets the longitude of the location
+     *
+     * \return Returns the longitude of the location (in degrees).
+     *         Returns NaN, if no longitude is set.
+     */
+    float longitude() const;
+
+
+    /** \brief sets the latitude and longitude of the location
+     *
+     * \param lat  the new latitude [-90;90] of the location
+     * \param lon  the new longitude [-180;180] of the location
+     */
+    void setLatitudeLongitude( const float lat, const float lon);
+
+
+    /** \brief checks whether the location has valid latitude and longitude values
+     *
+     * \return Returns true, if the location has valid latitude and longitude
+     *         values. Returns false otherwise.
+     */
+    bool hasLatitudeAndLongitude() const;
+
+
     /** \brief gets the name of the location (if any)
      *
      * \return Returns the name of the location.
@@ -68,16 +99,46 @@ class Location
     const std::string& name() const;
 
 
+    /** \brief sets the name of the location
+     *
+     * \param newName  the new name of the location
+     */
+    void setName(const std::string& newName);
+
+
+    /** \brief checks whether the location has a name
+     *
+     * \return Returns true, if the location has a name.
+     *         Returns false otherwise.
+     */
+    bool hasName() const;
+
+
     /** \brief gets the postcode of the location (if any)
      *
      * \return Returns the postcode of the location.
      *         Returns an empty string, if no postcode is set.
      */
     const std::string& postcode() const;
+
+
+    /** \brief sets the postcode of the location
+     *
+     * \param newPostcode  the new postcode of the location
+     */
+    void setPostcode(const std::string& newPostcode);
+
+
+    /** \brief checks whether the location has a postcode
+     *
+     * \return Returns true, if the location has a postcode.
+     *         Returns false otherwise.
+     */
+    bool hasPostcode() const;
   private:
     uint32_t m_id; /**< id of the location */
-    float m_longitude; /**< longitude of the location */
     float m_latitude; /**< latitude of the location */
+    float m_longitude; /**< longitude of the location */
     std::string m_name; /**< name of the location */
     std::string m_postcode; /**< postcode of the location */
 }; //class
