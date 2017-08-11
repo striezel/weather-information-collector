@@ -7,6 +7,7 @@ project(weather-information-collector)
 
 set(weather-information-collector_sources
     data/Location.cpp
+    data/Weather.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)

@@ -5,6 +5,7 @@ project(weather_information_collector_tests)
 
 set(weather_information_collector_tests_sources
     ../src/data/Location.cpp
+    ../src/data/Weather.cpp
     data/Location.cpp
     main.cpp)
 

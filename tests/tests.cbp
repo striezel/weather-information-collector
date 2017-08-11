@@ -27,7 +27,10 @@
 		</Compiler>
 		<Unit filename="../src/data/Location.cpp" />
 		<Unit filename="../src/data/Location.hpp" />
+		<Unit filename="../src/data/Weather.cpp" />
+		<Unit filename="../src/data/Weather.hpp" />
 		<Unit filename="data/Location.cpp" />
+		<Unit filename="data/Weather.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

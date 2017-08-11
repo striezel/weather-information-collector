@@ -37,6 +37,8 @@
 		</Compiler>
 		<Unit filename="data/Location.cpp" />
 		<Unit filename="data/Location.hpp" />
+		<Unit filename="data/Weather.cpp" />
+		<Unit filename="data/Weather.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />
