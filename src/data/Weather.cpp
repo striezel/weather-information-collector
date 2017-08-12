@@ -30,9 +30,10 @@ Weather::Weather()
   m_tempK(std::numeric_limits<float>::quiet_NaN()),
   m_tempC(std::numeric_limits<float>::quiet_NaN()),
   m_tempF(std::numeric_limits<float>::quiet_NaN()),
+  m_humidity(-1),
   m_windSpeed(std::numeric_limits<float>::quiet_NaN()),
-  m_windDegrees(std::numeric_limits<uint16_t>::max()),
-  m_cloudiness(std::numeric_limits<uint8_t>::max()),
+  m_windDegrees(-1),
+  m_cloudiness(-1),
   m_json(std::string(""))
 {
 }
@@ -113,6 +114,24 @@ void Weather::setTemperatureFahrenheit(const float newTempF)
   m_tempF = newTempF;
 }
 
+bool Weather::hasHumidity() const
+{
+  return (0 <= m_humidity) && (m_humidity <= 100);
+}
+
+int8_t Weather::humidity() const
+{
+  return m_humidity;
+}
+
+void Weather::setHumidity(const int8_t newHumidity)
+{
+  if ((newHumidity < 0) || (newHumidity > 100))
+    m_humidity = -1;
+  else
+    m_humidity = newHumidity;
+}
+
 bool Weather::hasWindSpeed() const
 {
   return (m_windSpeed == m_windSpeed);
@@ -125,37 +144,46 @@ float Weather::windSpeed() const
 
 void Weather::setWindSpeed(const float newSpeed)
 {
-  m_windSpeed = newSpeed;
+  if (newSpeed >= 0.0f)
+    m_windSpeed = newSpeed;
+  else
+    m_windSpeed = 0.0f / 0.0f;
 }
 
 bool Weather::hasWindDegrees() const
 {
-  return (0 <= m_windDegrees) && (m_windDegrees <= 360);
+  return (m_windDegrees >= 0);
 }
 
-float Weather::windDegrees() const
+int16_t Weather::windDegrees() const
 {
   return m_windDegrees;
 }
 
-void Weather::setWindDegrees(const float newWindDegrees)
+void Weather::setWindDegrees(const int16_t newWindDegrees)
 {
-  m_windDegrees = newWindDegrees;
+  if ((0 <= newWindDegrees) && (newWindDegrees <= 360))
+    m_windDegrees = newWindDegrees;
+  else
+    m_windDegrees = -1;
 }
 
 bool Weather::hasCloudiness() const
 {
-  return m_cloudiness <= 100;
+  return (m_cloudiness != -1);
 }
 
-uint8_t Weather::cloudiness() const
+int8_t Weather::cloudiness() const
 {
   return m_cloudiness;
 }
 
-void Weather::setCloudiness(const float newCloudiness)
+void Weather::setCloudiness(const int8_t newCloudiness)
 {
-  m_cloudiness = newCloudiness;
+  if ((0 <= newCloudiness) && (newCloudiness <= 100))
+    m_cloudiness = newCloudiness;
+  else
+    m_cloudiness = -1;
 }
 
 bool Weather::hasJson() const

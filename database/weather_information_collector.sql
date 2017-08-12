@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `weatherdata` (
   `temperature_K` float DEFAULT NULL COMMENT 'temperature in Kelvin',
   `temperature_C` float DEFAULT NULL COMMENT 'temperature in degrees Celsius',
   `temperature_F` float DEFAULT NULL COMMENT 'temperature in degrees Fahrenheit',
+  `humidity` tinyint(3) unsigned DEFAULT NULL COMMENT 'relative humidity in percent',
   `wind_speed` float DEFAULT NULL COMMENT 'wind speed in meters per second',
   `wind_degrees` smallint(5) unsigned DEFAULT NULL COMMENT 'wind direction in degrees',
   `cloudiness` tinyint(3) unsigned NOT NULL COMMENT 'cloudiness in percent',

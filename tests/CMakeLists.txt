@@ -7,6 +7,7 @@ set(weather_information_collector_tests_sources
     ../src/data/Location.cpp
     ../src/data/Weather.cpp
     data/Location.cpp
+    data/Weather.cpp
     main.cpp)
 
 add_definitions(-std=c++11)

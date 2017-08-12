@@ -150,6 +150,29 @@ class Weather
     void setTemperatureFahrenheit(const float newTempF);
 
 
+    /** \brief checks whether this instance has a relative humidity
+     *
+     * \return Returns true, if the instance has humidity information.
+     *         Returns false otherwise.
+     */
+    bool hasHumidity() const;
+
+
+    /** \brief gets the relative humidity in percent, if it was set
+     *
+     * \return Returns the relative humidity in percent.
+     *         Returns -1, if no humidity is set.
+     */
+    int8_t humidity() const;
+
+
+    /** \brief sets the humidity in percent
+     *
+     * \param newHumidity  the new humidity in percent
+     */
+    void setHumidity(const int8_t newHumidity);
+
+
     /** \brief checks whether this instance has a wind speed
      *
      * \return Returns true, if the instance has a wind speed.
@@ -184,16 +207,16 @@ class Weather
     /** \brief gets the wind direction in degrees, if it was set
      *
      * \return Returns the wind direction in degrees.
-     *         Returns NaN, if no wind direction is set.
+     *         Returns -1, if no wind direction is set.
      */
-    float windDegrees() const;
+    int16_t windDegrees() const;
 
 
     /** \brief sets the wind direction degrees (0°=N, 90°=E,...)
      *
      * \param newWindDegrees  the new wind direction in degrees
      */
-    void setWindDegrees(const float newWindDegrees);
+    void setWindDegrees(const int16_t newWindDegrees);
 
 
     /** \brief checks whether this instance has cloudiness information
@@ -207,16 +230,16 @@ class Weather
     /** \brief gets the cloudiness in percent, if it was set
      *
      * \return Returns the cloudiness in percent.
-     *         Returns a value larger than 100, if no cloudiness is set.
+     *         Returns -1, if no cloudiness is set.
      */
-    uint8_t cloudiness() const;
+    int8_t cloudiness() const;
 
 
     /** \brief sets the cloudiness in percent
      *
      * \param newCloudiness  the new cloudiness in percent
      */
-    void setCloudiness(const float newCloudiness);
+    void setCloudiness(const int8_t newCloudiness);
 
 
     /** \brief checks whether this instance has raw JSON data
@@ -246,9 +269,10 @@ class Weather
     float m_tempK; /**< temperature in Kelvin */
     float m_tempC; /**< temperature in degrees Celsius */
     float m_tempF; /**< temperature in degrees Fahrenheit */
+    int8_t m_humidity; /**< relative humidity in percent */
     float m_windSpeed; /**< wind speed in meters per second */
-    uint16_t m_windDegrees; /**< wind direction in degrees */
-    uint8_t m_cloudiness; /**< cloudiness in percent */
+    int16_t m_windDegrees; /**< wind direction in degrees */
+    int8_t m_cloudiness; /**< cloudiness in percent */
     std::string m_json; /**< raw JSON data */
 }; //class
 

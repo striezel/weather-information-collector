@@ -35,6 +35,7 @@ TEST_CASE("WeatherClass")
     REQUIRE_FALSE( weather.hasTemperatureKelvin() );
     REQUIRE_FALSE( weather.hasTemperatureCelsius() );
     REQUIRE_FALSE( weather.hasTemperatureFahrenheit() );
+    REQUIRE_FALSE( weather.hasHumidity() );
     REQUIRE_FALSE( weather.hasWindSpeed() );
     REQUIRE_FALSE( weather.hasWindDegrees() );
     REQUIRE_FALSE( weather.hasCloudiness() );
@@ -78,11 +79,37 @@ TEST_CASE("WeatherClass")
     REQUIRE( weather.temperatureFahrenheit() == 225.125 );
   }
 
+  SECTION("set, has + get relative humidity")
+  {
+    weather.setHumidity(65);
+    REQUIRE( weather.hasHumidity() );
+    REQUIRE( weather.humidity() == 65 );
+  }
+
+  SECTION("out of range humidity")
+  {
+    weather.setHumidity(-5);
+    REQUIRE_FALSE( weather.hasHumidity() );
+    REQUIRE( weather.humidity() == -1 );
+
+    weather.setHumidity(101);
+    REQUIRE_FALSE( weather.hasHumidity() );
+    REQUIRE( weather.humidity() == -1 );
+  }
+
   SECTION("set, has + get wind speed")
   {
     weather.setWindSpeed(10.0f);
     REQUIRE( weather.hasWindSpeed() );
     REQUIRE( weather.windSpeed() == 10.0f );
+  }
+
+  SECTION("out of range wind speed")
+  {
+    weather.setWindSpeed(-10.0f);
+    REQUIRE_FALSE( weather.hasWindSpeed() );
+    const float ws = weather.windSpeed();
+    REQUIRE( ws != ws );
   }
 
   SECTION("set, has + get wind direction")
@@ -94,8 +121,15 @@ TEST_CASE("WeatherClass")
 
   SECTION("invalid wind direction does not count")
   {
-    weather.setWindDegrees(4444);
+    weather.setWindDegrees(4445);
     REQUIRE_FALSE( weather.hasWindDegrees() );
+    const auto degrees = weather.windDegrees();
+    REQUIRE( degrees == -1 );
+
+    weather.setWindDegrees(-180);
+    REQUIRE_FALSE( weather.hasWindDegrees() );
+    const auto deg2 = weather.windDegrees();
+    REQUIRE( deg2 == -1 );
   }
 
   SECTION("set, has + get cloudiness")
@@ -109,6 +143,11 @@ TEST_CASE("WeatherClass")
   {
     weather.setCloudiness(101);
     REQUIRE_FALSE( weather.hasCloudiness() );
+    REQUIRE( weather.cloudiness() == -1 );
+
+    weather.setCloudiness(-5);
+    REQUIRE_FALSE( weather.hasCloudiness() );
+    REQUIRE( weather.cloudiness() == -1 );
   }
 
   SECTION("set, has + get JSON")
