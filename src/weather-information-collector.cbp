@@ -35,6 +35,7 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="api/API.hpp" />
 		<Unit filename="data/Location.cpp" />
 		<Unit filename="data/Location.hpp" />
 		<Unit filename="data/Weather.cpp" />
