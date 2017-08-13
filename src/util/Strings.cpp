@@ -25,11 +25,10 @@ namespace wic
 
 std::string toLowerString(std::string str)
 {
-  unsigned int i;
   const int diff = 'a'-'A';
-  for (i=0; i<str.size(); ++i)
+  for (unsigned int i = 0; i < str.size(); ++i)
   {
-    if (str[i]>='A' and str[i]<='Z')
+    if (str[i] >= 'A' and str[i] <= 'Z')
     {
       str[i] = str[i] + diff;
     }
@@ -41,7 +40,7 @@ void trimLeft(std::string& str1)
 {
   if (str1.empty()) return;
   //trim stuff at begin
-  int len = str1.length();
+  const int len = str1.length();
   int pos = 0;
   bool go_on = true;
   while (go_on)
