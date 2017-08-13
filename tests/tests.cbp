@@ -25,13 +25,19 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="../src/api/Types.cpp" />
+		<Unit filename="../src/api/Types.hpp" />
 		<Unit filename="../src/data/Location.cpp" />
 		<Unit filename="../src/data/Location.hpp" />
 		<Unit filename="../src/data/Weather.cpp" />
 		<Unit filename="../src/data/Weather.hpp" />
+		<Unit filename="../src/util/Strings.cpp" />
+		<Unit filename="../src/util/Strings.hpp" />
+		<Unit filename="api/Types.cpp" />
 		<Unit filename="data/Location.cpp" />
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="util/Strings.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

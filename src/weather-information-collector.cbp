@@ -36,11 +36,15 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="api/API.hpp" />
+		<Unit filename="api/Types.cpp" />
+		<Unit filename="api/Types.hpp" />
 		<Unit filename="data/Location.cpp" />
 		<Unit filename="data/Location.hpp" />
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="data/Weather.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="util/Strings.cpp" />
+		<Unit filename="util/Strings.hpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

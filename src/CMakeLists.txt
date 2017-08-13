@@ -6,8 +6,10 @@ project(weather-information-collector)
 #add_definitions(-DDEFINE_CONSTANT_HERE -DANOTHER_ONE_THERE -DTHIS_IS_THE_THIRD)
 
 set(weather-information-collector_sources
+    api/Types.cpp
     data/Location.cpp
     data/Weather.cpp
+    util/Strings.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)
