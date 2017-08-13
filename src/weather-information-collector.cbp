@@ -35,6 +35,9 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Linker>
+			<Add library="curl" />
+		</Linker>
 		<Unit filename="api/API.hpp" />
 		<Unit filename="api/Types.cpp" />
 		<Unit filename="api/Types.hpp" />
@@ -43,6 +46,8 @@
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="data/Weather.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="net/Curly.cpp" />
+		<Unit filename="net/Curly.hpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Unit filename="util/Strings.hpp" />
 		<Extensions>
