@@ -42,6 +42,22 @@ std::string toLowerString(std::string str);
  */
 void trim(std::string& str1);
 
+
+/** \brief gets the string representation of an integer value
+ *
+ * \param value   integer value
+ * \return Returns a string containing the given integer.
+ */
+std::string intToString(const int value);
+
+
+/** \brief converts a floating point value into its string representation
+ *
+ * \param f  the floating point value
+ * \return Returns string representation of the floating point value.
+ */
+std::string floatToString(const float f);
+
 } //namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_STRINGS_HPP

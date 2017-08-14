@@ -18,24 +18,38 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_API_HPP
-#define WEATHER_INFORMATION_COLLECTOR_API_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
+#define WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
 
 #include <string>
-#include "../data/Location.hpp"
-#include "../data/Weather.hpp"
+#include "API.hpp"
 
 namespace wic
 {
 
-class API
+class OpenWeatherMap: public API
 {
   public:
+    /** \brief constructor
+     *
+     * \param key  the API key for requests
+     */
+    OpenWeatherMap(const std::string& key = "");
+
     /** \brief set the APi key for API requests
      *
      * \param key  the API key
      */
-    virtual void setApiKey(const std::string& key) = 0;
+    virtual void setApiKey(const std::string& key);
+
+
+    /** \brief checks whether the given location can be used for a request
+     *
+     * \param location  the location information
+     * \return Returns true, if the location can be uses for a request.
+     *         Returns false otherwise.
+     */
+    virtual bool validLocation(const Location& location);
 
 
     /** \brief retrieves the current weather for a given location
@@ -45,14 +59,20 @@ class API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool currentWeather(const Location& location, Weather& weather) = 0;
+    virtual bool currentWeather(const Location& location, Weather& weather);
+  private:
+    std::string m_apiKey; /**< the API key for requests */
 
 
-    /** \brief destructor
+    /** \brief turns info of a location to a request string
+     *
+     * \param location  the location information
+     * \return Returns part of URL that can be used for a request.
+     *         Returns empty string, if an error occurred.
      */
-    virtual ~API() { }
+    virtual std::string toRequestString(const Location& location) const;
 }; //class
 
 } //namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_API_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP

@@ -19,6 +19,7 @@
 */
 
 #include "Strings.hpp"
+#include <sstream>
 
 namespace wic
 {
@@ -105,5 +106,19 @@ void trim(std::string& str1)
   trimRight(str1);
   return;
 } //end of trim
+
+std::string intToString(const int value)
+{
+  std::ostringstream s;
+  s << value;
+  return s.str();
+}
+
+std::string floatToString(const float f)
+{
+  std::stringstream s_str;
+  s_str << f;
+  return s_str.str();
+}
 
 } //namespace

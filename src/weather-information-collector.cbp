@@ -37,8 +37,11 @@
 		</Compiler>
 		<Linker>
 			<Add library="curl" />
+			<Add library="jsoncpp" />
 		</Linker>
 		<Unit filename="api/API.hpp" />
+		<Unit filename="api/OpenWeatherMap.cpp" />
+		<Unit filename="api/OpenWeatherMap.hpp" />
 		<Unit filename="api/Types.cpp" />
 		<Unit filename="api/Types.hpp" />
 		<Unit filename="data/Location.cpp" />

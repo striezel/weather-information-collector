@@ -36,6 +36,7 @@ TEST_CASE("WeatherClass")
     REQUIRE_FALSE( weather.hasTemperatureCelsius() );
     REQUIRE_FALSE( weather.hasTemperatureFahrenheit() );
     REQUIRE_FALSE( weather.hasHumidity() );
+    REQUIRE_FALSE( weather.hasPressure() );
     REQUIRE_FALSE( weather.hasWindSpeed() );
     REQUIRE_FALSE( weather.hasWindDegrees() );
     REQUIRE_FALSE( weather.hasCloudiness() );
@@ -95,6 +96,24 @@ TEST_CASE("WeatherClass")
     weather.setHumidity(101);
     REQUIRE_FALSE( weather.hasHumidity() );
     REQUIRE( weather.humidity() == -1 );
+  }
+
+  SECTION("set, has + get air pressure")
+  {
+    weather.setPressure(1013);
+    REQUIRE( weather.hasPressure() );
+    REQUIRE( weather.pressure() == 1013 );
+  }
+
+  SECTION("out of range air pressure")
+  {
+    weather.setPressure(-500);
+    REQUIRE_FALSE( weather.hasPressure() );
+    REQUIRE( weather.pressure() == -1 );
+
+    weather.setPressure(0);
+    REQUIRE_FALSE( weather.hasPressure() );
+    REQUIRE( weather.pressure() == -1 );
   }
 
   SECTION("set, has + get wind speed")

@@ -173,6 +173,29 @@ class Weather
     void setHumidity(const int8_t newHumidity);
 
 
+    /** \brief checks whether this instance has air pressure information
+     *
+     * \return Returns true, if the instance has air pressure.
+     *         Returns false otherwise.
+     */
+    bool hasPressure() const;
+
+
+    /** \brief gets the air pressure in hPa, if it was set
+     *
+     * \return Returns the pressure in hPa.
+     *         Returns -1, if no pressure is set.
+     */
+    int16_t pressure() const;
+
+
+    /** \brief sets the pressure in hPa
+     *
+     * \param newPressure_hPa  the new pressure in hPa
+     */
+    void setPressure(const int16_t newPressure_hPa);
+
+
     /** \brief checks whether this instance has a wind speed
      *
      * \return Returns true, if the instance has a wind speed.
@@ -270,6 +293,7 @@ class Weather
     float m_tempC; /**< temperature in degrees Celsius */
     float m_tempF; /**< temperature in degrees Fahrenheit */
     int8_t m_humidity; /**< relative humidity in percent */
+    int16_t m_pressure; /**< air pressure in hPa */
     float m_windSpeed; /**< wind speed in meters per second */
     int16_t m_windDegrees; /**< wind direction in degrees */
     int8_t m_cloudiness; /**< cloudiness in percent */
