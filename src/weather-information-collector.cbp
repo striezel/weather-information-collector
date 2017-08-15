@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DDEBUG" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -40,6 +41,8 @@
 			<Add library="jsoncpp" />
 		</Linker>
 		<Unit filename="api/API.hpp" />
+		<Unit filename="api/Apixu.cpp" />
+		<Unit filename="api/Apixu.hpp" />
 		<Unit filename="api/OpenWeatherMap.cpp" />
 		<Unit filename="api/OpenWeatherMap.hpp" />
 		<Unit filename="api/Types.cpp" />

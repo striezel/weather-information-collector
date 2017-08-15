@@ -36,6 +36,7 @@ class OpenWeatherMap: public API
      */
     OpenWeatherMap(const std::string& key = "");
 
+
     /** \brief set the APi key for API requests
      *
      * \param key  the API key
@@ -70,7 +71,7 @@ class OpenWeatherMap: public API
      * \return Returns part of URL that can be used for a request.
      *         Returns empty string, if an error occurred.
      */
-    virtual std::string toRequestString(const Location& location) const;
+    std::string toRequestString(const Location& location) const;
 }; //class
 
 } //namespace

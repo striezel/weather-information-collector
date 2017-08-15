@@ -6,6 +6,7 @@ project(weather-information-collector)
 #add_definitions(-DDEFINE_CONSTANT_HERE -DANOTHER_ONE_THERE -DTHIS_IS_THE_THIRD)
 
 set(weather-information-collector_sources
+    api/Apixu.cpp
     api/OpenWeatherMap.cpp
     api/Types.cpp
     data/Location.cpp

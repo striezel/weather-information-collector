@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <ctime>
-#include "api/OpenWeatherMap.hpp"
+#include "api/Apixu.hpp"
 
 int main(int argc, char** argv)
 {
@@ -34,9 +34,9 @@ int main(int argc, char** argv)
     location.setName(std::string(argv[2]));
 
     wic::Weather weather;
-    wic::OpenWeatherMap owm(apiKey);
+    wic::Apixu api(apiKey);
 
-    if (!owm.currentWeather(location, weather))
+    if (!api.currentWeather(location, weather))
     {
       std::cout << "Failed to get current weather for " << location.name() << ".\n";
       return 1;
@@ -46,10 +46,12 @@ int main(int argc, char** argv)
     const auto kelvin = weather.temperatureKelvin();
     std::cout << "Temperature: " << kelvin << " K (" << weather.hasTemperatureKelvin() << ")\n"
               << "      in °C: " << (kelvin - 273.15) << " °C\n"
+              << "Temperature: " << weather.temperatureCelsius() << " °C (" << weather.hasTemperatureCelsius() << ")\n"
               << "Pressure: " << weather.pressure() << " hPa (" << weather.hasPressure() << ")\n"
               << "Humidity: " << static_cast<int>(weather.humidity()) << " % (" << weather.hasHumidity() << ")\n"
               << "Wind speed: " << weather.windSpeed() << " m/s (" << weather.hasWindSpeed() << ")\n"
-              << "Wind direction: " << weather.windDegrees() << " ° (" << weather.hasWindDegrees() << ")\n";
+              << "Wind direction: " << weather.windDegrees() << " ° (" << weather.hasWindDegrees() << ")\n"
+              << "Cloudiness: " << static_cast<int>(weather.cloudiness()) << " % (" << weather.hasCloudiness() << ")\n";
     const std::time_t dt_c = std::chrono::system_clock::to_time_t(weather.dataTime());
     std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
   } //if

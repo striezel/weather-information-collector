@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include "OpenWeatherMap.hpp"
+#include "Apixu.hpp"
 #include <iostream>
 #include <jsoncpp/json/reader.h>
 #include "../net/Curly.hpp"
@@ -27,43 +27,41 @@
 namespace wic
 {
 
-OpenWeatherMap::OpenWeatherMap(const std::string& key)
+Apixu::Apixu(const std::string& key)
 : m_apiKey(key)
 {
 }
 
-void OpenWeatherMap::setApiKey(const std::string& key)
+void Apixu::setApiKey(const std::string& key)
 {
   m_apiKey = key;
 }
 
-bool OpenWeatherMap::validLocation(const Location& location)
+bool Apixu::validLocation(const Location& location)
 {
-  return (location.hasId() || location.hasLatitudeAndLongitude()
-      || location.hasName() || location.hasPostcode());
+  return (location.hasLatitudeAndLongitude() || location.hasName()
+       || location.hasPostcode());
 }
 
-std::string OpenWeatherMap::toRequestString(const Location& location) const
+std::string Apixu::toRequestString(const Location& location) const
 {
-  if (location.hasId())
-    return std::string("id=") + intToString(location.id());
   if (location.hasLatitudeAndLongitude())
-    return std::string("lat=") + floatToString(location.latitude())
-         + std::string("&lon=") + floatToString(location.longitude());
+    return std::string("q=") + floatToString(location.latitude())
+         + std::string(",") + floatToString(location.longitude());
   if (location.hasName())
     return std::string("q=") + location.name();
   if (location.hasPostcode())
-    return std::string("zip=") + location.postcode();
+    return std::string("q=") + location.postcode();
   //no required data set
   return std::string();
 }
 
-bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
+bool Apixu::currentWeather(const Location& location, Weather& weather)
 {
   weather = Weather();
   if (m_apiKey.empty())
     return false;
-  const std::string url = "http://api.openweathermap.org/data/2.5/weather?appid="
+  const std::string url = "https://api.apixu.com/v1/current.json?key="
                         + m_apiKey + "&" + toRequestString(location);
   std::string response;
   {
@@ -76,7 +74,7 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
     }
     if (curly.getResponseCode() != 200)
     {
-      std::cerr << "Error in OpenWeatherMap::currentWeather(): Unexpected HTTP status code "
+      std::cerr << "Error in Apixu::currentWeather(): Unexpected HTTP status code "
                 << curly.getResponseCode() << "!" << std::endl;
       const auto & rh = curly.responseHeaders();
       std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
@@ -93,7 +91,7 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
   const bool success = jsonReader.parse(response, root, false);
   if (!success)
   {
-    std::cerr << "Error in OpenWeatherMap::currentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in Apixu::currentWeather(): Unable to parse JSON data!" << std::endl;
     return false;
   }
 
@@ -102,42 +100,54 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
 
   if (root.empty())
     return false;
-  Json::Value val = root["main"];
+  Json::Value val = root["current"];
   if (!val.empty() && val.isObject())
   {
-    Json::Value v2 = val["temp"];
+    //temperature
+    Json::Value v2 = val["temp_c"];
     if (!v2.empty() && v2.isDouble())
-      weather.setTemperatureKelvin(v2.asFloat());
-    v2 = val["pressure"];
+      weather.setTemperatureCelsius(v2.asFloat());
+    v2 = val["temp_f"];
+    if (!v2.empty() && v2.isDouble())
+      weather.setTemperatureFahrenheit(v2.asFloat());
+    //wind
+    v2 = val["wind_degree"];
     if (!v2.empty() && v2.isIntegral())
-      weather.setPressure(v2.asInt());
+      weather.setWindDegrees(v2.asInt());
+    v2 = val["wind_kph"];
+    if (!v2.empty() && v2.isDouble())
+      weather.setWindSpeed(v2.asFloat() / 3.6);
+    else
+    {
+      v2 = val["wind_mph"];
+      if (!v2.empty() && v2.isDouble())
+        weather.setWindSpeed(v2.asFloat() * 1.609344 / 3.6);
+    }
+    //humidity
     v2 = val["humidity"];
     if (!v2.empty() && v2.isIntegral())
       weather.setHumidity(v2.asInt());
-  } //if main object
-  val = root["wind"];
-  if (!val.empty() && val.isObject())
-  {
-    Json::Value v2 = val["speed"];
-    if (!v2.empty() && v2.isDouble())
-      weather.setWindSpeed(v2.asFloat());
-    v2 = val["deg"];
-    if (!v2.empty() && v2.isIntegral())
-      weather.setWindDegrees(v2.asInt());
-  } //if wind object
-  val = root["clouds"];
-  if (!val.empty() && val.isObject())
-  {
-    Json::Value v2 = val["all"];
+    //pressure
+    v2 = val["pressure_mb"];
+    if (!v2.empty())
+    {
+      if (v2.isDouble())
+        weather.setPressure(v2.asDouble());
+      else if (v2.isIntegral())
+        weather.setPressure(v2.asInt());
+    }
+    //cloudiness
+    v2 = val["cloud"];
     if (!v2.empty() && v2.isIntegral())
       weather.setCloudiness(v2.asInt());
-  } //if clouds object
-  val = root["dt"];
-  if (!val.empty() && val.isIntegral())
-  {
-    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.asInt()));
-    weather.setDataTime(dt);
-  }
+    //date of data update
+    v2 = val["last_updated_epoch"];
+    if (!v2.empty() && v2.isIntegral())
+    {
+      const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2.asInt()));
+      weather.setDataTime(dt);
+    }
+  } //if current object
 
   //Parsing is done here.
   return true;
