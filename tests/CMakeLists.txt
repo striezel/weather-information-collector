@@ -26,3 +26,7 @@ add_executable(weather_information_collector_tests ${weather_information_collect
 # test run
 add_test(NAME test-suite
          COMMAND $<TARGET_FILE:weather_information_collector_tests>)
+
+
+# Recurse into subdirectory for Apixu tests.
+add_subdirectory (api/apixu)

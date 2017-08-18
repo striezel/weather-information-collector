@@ -44,7 +44,7 @@ class API
      * \return Returns true, if the location can be uses for a request.
      *         Returns false otherwise.
      */
-    virtual bool validLocation(const Location& location) = 0;
+    virtual bool validLocation(const Location& location) const = 0;
 
 
     /** \brief retrieves the current weather for a given location

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="apixu-parsing" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/apixu-parsing" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++11" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Linker>
+			<Add library="jsoncpp" />
+			<Add library="curl" />
+		</Linker>
+		<Unit filename="../../../src/api/API.hpp" />
+		<Unit filename="../../../src/api/Apixu.cpp" />
+		<Unit filename="../../../src/api/Apixu.hpp" />
+		<Unit filename="../../../src/data/Location.cpp" />
+		<Unit filename="../../../src/data/Location.hpp" />
+		<Unit filename="../../../src/data/Weather.cpp" />
+		<Unit filename="../../../src/data/Weather.hpp" />
+		<Unit filename="../../../src/net/Curly.cpp" />
+		<Unit filename="../../../src/net/Curly.hpp" />
+		<Unit filename="../../../src/util/Strings.cpp" />
+		<Unit filename="../../../src/util/Strings.hpp" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<envvars />
+			<code_completion />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

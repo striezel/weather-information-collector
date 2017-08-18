@@ -37,7 +37,7 @@ void Apixu::setApiKey(const std::string& key)
   m_apiKey = key;
 }
 
-bool Apixu::validLocation(const Location& location)
+bool Apixu::validLocation(const Location& location) const
 {
   return (location.hasLatitudeAndLongitude() || location.hasName()
        || location.hasPostcode());
@@ -56,46 +56,18 @@ std::string Apixu::toRequestString(const Location& location) const
   return std::string();
 }
 
-bool Apixu::currentWeather(const Location& location, Weather& weather)
+bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
-  weather = Weather();
-  if (m_apiKey.empty())
-    return false;
-  const std::string url = "https://api.apixu.com/v1/current.json?key="
-                        + m_apiKey + "&" + toRequestString(location);
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in Apixu::currentWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } //scope of curly
-
   Json::Value root; // will contain the root value after parsing.
   Json::Reader jsonReader;
-  const bool success = jsonReader.parse(response, root, false);
+  const bool success = jsonReader.parse(json, root, false);
   if (!success)
   {
-    std::cerr << "Error in Apixu::currentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in Apixu::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
     return false;
   }
 
-  weather.setJson(response);
+  weather.setJson(json);
   weather.setRequestTime(std::chrono::system_clock::now());
 
   if (root.empty())
@@ -105,8 +77,13 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
   {
     //temperature
     Json::Value v2 = val["temp_c"];
-    if (!v2.empty() && v2.isDouble())
-      weather.setTemperatureCelsius(v2.asFloat());
+    if (!v2.empty())
+    {
+      if (v2.isDouble())
+        weather.setTemperatureCelsius(v2.asFloat());
+      else if (v2.isIntegral())
+        weather.setTemperatureCelsius(v2.asInt());
+    }
     v2 = val["temp_f"];
     if (!v2.empty() && v2.isDouble())
       weather.setTemperatureFahrenheit(v2.asFloat());
@@ -147,10 +124,43 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
       const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2.asInt()));
       weather.setDataTime(dt);
     }
+    return true;
   } //if current object
+  //No current object - return false to indicate failure.
+  return false;
+}
 
-  //Parsing is done here.
-  return true;
+bool Apixu::currentWeather(const Location& location, Weather& weather)
+{
+  weather = Weather();
+  if (m_apiKey.empty())
+    return false;
+  const std::string url = "https://api.apixu.com/v1/current.json?key="
+                        + m_apiKey + "&" + toRequestString(location);
+  std::string response;
+  {
+    Curly curly;
+    curly.setURL(url);
+
+    if (!curly.perform(response))
+    {
+      return false;
+    }
+    if (curly.getResponseCode() != 200)
+    {
+      std::cerr << "Error in Apixu::currentWeather(): Unexpected HTTP status code "
+                << curly.getResponseCode() << "!" << std::endl;
+      const auto & rh = curly.responseHeaders();
+      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
+      for (const auto & s : rh)
+      {
+        std::cerr << "    " << s << std::endl;
+      }
+      return false;
+    }
+  } //scope of curly
+
+  return parseCurrentWeather(response, weather);
 }
 
 } //namespace

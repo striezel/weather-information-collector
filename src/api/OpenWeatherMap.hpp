@@ -50,7 +50,7 @@ class OpenWeatherMap: public API
      * \return Returns true, if the location can be uses for a request.
      *         Returns false otherwise.
      */
-    virtual bool validLocation(const Location& location);
+    virtual bool validLocation(const Location& location) const;
 
 
     /** \brief retrieves the current weather for a given location
@@ -61,6 +61,16 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentWeather(const Location& location, Weather& weather);
+
+
+    /** \brief parses the current weather information from JSON into the Weather object
+     *
+     * \param json     string containing the JSON
+     * \param weather  variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const;
   private:
     std::string m_apiKey; /**< the API key for requests */
 
