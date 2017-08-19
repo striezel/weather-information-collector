@@ -57,6 +57,16 @@ class API
     virtual bool currentWeather(const Location& location, Weather& weather) = 0;
 
 
+    /** \brief parses the current weather information from JSON into the Weather object
+     *
+     * \param json     string containing the JSON
+     * \param weather  variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const = 0;
+
+
     /** \brief destructor
      */
     virtual ~API() { }
