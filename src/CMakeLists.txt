@@ -12,6 +12,7 @@ set(weather-information-collector_sources
     data/Location.cpp
     data/Weather.cpp
     net/Curly.cpp
+    store/StoreCSV.cpp
     util/Strings.cpp
     main.cpp)
 

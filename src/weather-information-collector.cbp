@@ -54,6 +54,9 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="net/Curly.cpp" />
 		<Unit filename="net/Curly.hpp" />
+		<Unit filename="store/Store.hpp" />
+		<Unit filename="store/StoreCSV.cpp" />
+		<Unit filename="store/StoreCSV.hpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Unit filename="util/Strings.hpp" />
 		<Extensions>

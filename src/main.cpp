@@ -21,6 +21,7 @@
 #include <iostream>
 #include <ctime>
 #include "api/Apixu.hpp"
+#include "store/StoreCSV.hpp"
 
 int main(int argc, char** argv)
 {
@@ -54,7 +55,19 @@ int main(int argc, char** argv)
               << "Cloudiness: " << static_cast<int>(weather.cloudiness()) << " % (" << weather.hasCloudiness() << ")\n";
     const std::time_t dt_c = std::chrono::system_clock::to_time_t(weather.dataTime());
     std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
+
+    wic::StoreCSV csv("data.csv");
+    if (csv.saveCurrentWeather(wic::ApiType::Apixu, location, weather))
+    {
+      std::cout << "Data saved to CSV file.\n";
+      csv.flush();
+    }
+    else
+    {
+      std::cerr << "Data could not be saved to CSV!\n";
+      return 1;
+    }
   } //if
 
-  return 1;
+  return 0;
 }

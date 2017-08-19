@@ -7,10 +7,12 @@ set(weather_information_collector_tests_sources
     ../src/api/Types.cpp
     ../src/data/Location.cpp
     ../src/data/Weather.cpp
+    ../src/store/StoreCSV.cpp
     ../src/util/Strings.cpp
     api/Types.cpp
     data/Location.cpp
     data/Weather.cpp
+    store/StoreCSV.cpp
     util/Strings.cpp
     main.cpp)
 

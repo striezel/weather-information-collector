@@ -31,12 +31,16 @@
 		<Unit filename="../src/data/Location.hpp" />
 		<Unit filename="../src/data/Weather.cpp" />
 		<Unit filename="../src/data/Weather.hpp" />
+		<Unit filename="../src/store/Store.hpp" />
+		<Unit filename="../src/store/StoreCSV.cpp" />
+		<Unit filename="../src/store/StoreCSV.hpp" />
 		<Unit filename="../src/util/Strings.cpp" />
 		<Unit filename="../src/util/Strings.hpp" />
 		<Unit filename="api/Types.cpp" />
 		<Unit filename="data/Location.cpp" />
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="store/StoreCSV.cpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Extensions>
 			<envvars />
