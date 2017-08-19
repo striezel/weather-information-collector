@@ -1,0 +1,42 @@
+{
+  "coord": {
+    "lon": 13.74,
+    "lat": 51.05
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01d"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 292.15,
+    "pressure": 1018,
+    "humidity": 88,
+    "temp_min": 292.15,
+    "temp_max": 292.15
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 2.6,
+    "deg": 220
+  },
+  "clouds": {
+    "all": 0
+  },
+  "dt": 1502859000,
+  "sys": {
+    "type": 1,
+    "id": 4879,
+    "message": 0.0027,
+    "country": "DE",
+    "sunrise": 1502855629,
+    "sunset": 1502907815
+  },
+  "id": 2935022,
+  "name": "Dresden",
+  "cod": 200
+}

@@ -30,3 +30,6 @@ add_test(NAME test-suite
 
 # Recurse into subdirectory for Apixu tests.
 add_subdirectory (api/apixu)
+
+# Recurse into subdirectory for OpenWeatherMap tests.
+add_subdirectory (api/owm)
