@@ -51,6 +51,8 @@
 		<Unit filename="data/Location.hpp" />
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="data/Weather.hpp" />
+		<Unit filename="db/ConnectionInformation.cpp" />
+		<Unit filename="db/ConnectionInformation.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="net/Curly.cpp" />
 		<Unit filename="net/Curly.hpp" />

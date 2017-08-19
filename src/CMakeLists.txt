@@ -11,6 +11,7 @@ set(weather-information-collector_sources
     api/Types.cpp
     data/Location.cpp
     data/Weather.cpp
+    db/ConnectionInformation.cpp
     net/Curly.cpp
     store/StoreCSV.cpp
     util/Strings.cpp
