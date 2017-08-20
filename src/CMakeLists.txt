@@ -15,6 +15,7 @@ set(weather-information-collector_sources
     net/Curly.cpp
     store/StoreCSV.cpp
     store/StoreMySQL.cpp
+    tasks/Task.cpp
     util/Strings.cpp
     main.cpp)
 

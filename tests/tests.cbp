@@ -36,6 +36,8 @@
 		<Unit filename="../src/store/Store.hpp" />
 		<Unit filename="../src/store/StoreCSV.cpp" />
 		<Unit filename="../src/store/StoreCSV.hpp" />
+		<Unit filename="../src/tasks/Task.cpp" />
+		<Unit filename="../src/tasks/Task.hpp" />
 		<Unit filename="../src/util/Strings.cpp" />
 		<Unit filename="../src/util/Strings.hpp" />
 		<Unit filename="api/Types.cpp" />
@@ -44,6 +46,7 @@
 		<Unit filename="db/ConnectionInformation.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="store/StoreCSV.cpp" />
+		<Unit filename="tasks/Task.cpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Extensions>
 			<envvars />

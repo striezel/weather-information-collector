@@ -153,6 +153,14 @@ class Location
      *         equal, too.
      */
     bool equalLatitudeAndLongitude(const Location& other) const;
+
+
+    /** \brief checks whether this instance has no data at all
+     *
+     * \return Returns true, if this instance has no usable data yet.
+     *         Returns false otherwise.
+     */
+    bool empty() const;
   private:
     uint32_t m_id; /**< id of the location */
     float m_latitude; /**< latitude of the location */

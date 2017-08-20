@@ -33,7 +33,43 @@ TEST_CASE("LocationClass")
     REQUIRE_FALSE( loc.hasLatitudeAndLongitude() );
     REQUIRE_FALSE( loc.hasName() );
     REQUIRE_FALSE( loc.hasPostcode() );
+
+    REQUIRE( loc.empty() );
   }
+
+  SECTION("emptiness")
+  {
+    REQUIRE( loc.empty() );
+
+    SECTION("empty: id")
+    {
+      REQUIRE( loc.empty() );
+      loc.setId(5);
+      REQUIRE_FALSE( loc.empty() );
+    }
+
+    SECTION("empty: lat. + lon.")
+    {
+      REQUIRE( loc.empty() );
+      loc.setLatitudeLongitude(5.0f, 120.0f);
+      REQUIRE_FALSE( loc.empty() );
+    }
+
+    SECTION("empty: name")
+    {
+      REQUIRE( loc.empty() );
+      loc.setName("Townington");
+      REQUIRE_FALSE( loc.empty() );
+    }
+
+    SECTION("empty: postcode")
+    {
+      REQUIRE( loc.empty() );
+      loc.setPostcode("01234");
+      REQUIRE_FALSE( loc.empty() );
+    }
+  } //emptiness section
+
 
   SECTION("set, has + get id")
   {

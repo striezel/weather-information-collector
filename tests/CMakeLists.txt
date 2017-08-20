@@ -9,12 +9,14 @@ set(weather_information_collector_tests_sources
     ../src/data/Weather.cpp
     ../src/db/ConnectionInformation.cpp
     ../src/store/StoreCSV.cpp
+    ../src/tasks/Task.cpp
     ../src/util/Strings.cpp
     api/Types.cpp
     data/Location.cpp
     data/Weather.cpp
     db/ConnectionInformation.cpp
     store/StoreCSV.cpp
+    tasks/Task.cpp
     util/Strings.cpp
     main.cpp)
 

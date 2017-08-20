@@ -129,4 +129,10 @@ bool Location::equalLatitudeAndLongitude(const Location& other) const
       && (std::abs(m_longitude - other.m_longitude) < epsilon);
 }
 
+bool Location::empty() const
+{
+  return (!hasId() && !hasName()
+       && !hasLatitudeAndLongitude() && !hasPostcode());
+}
+
 } //namespace

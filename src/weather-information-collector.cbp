@@ -64,6 +64,8 @@
 		<Unit filename="store/StoreCSV.hpp" />
 		<Unit filename="store/StoreMySQL.cpp" />
 		<Unit filename="store/StoreMySQL.hpp" />
+		<Unit filename="tasks/Task.cpp" />
+		<Unit filename="tasks/Task.hpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Unit filename="util/Strings.hpp" />
 		<Extensions>
