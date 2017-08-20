@@ -133,7 +133,8 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
     return false;
 
   mysqlpp::Query insertQuery(&conn);
-  insertQuery << "INSERT INTO weatherdata SET apiID=" << apiId;
+  insertQuery << "INSERT INTO weatherdata SET apiID=" << mysqlpp::quote << apiId
+              << ", locationID=" << mysqlpp::quote << locationId;
   if (weather.hasDataTime())
   {
     mysqlpp::sql_datetime dt(std::chrono::system_clock::to_time_t(weather.dataTime()));

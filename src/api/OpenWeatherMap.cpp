@@ -80,7 +80,10 @@ bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weath
   {
     Json::Value v2 = val["temp"];
     if (!v2.empty() && v2.isDouble())
+    {
       weather.setTemperatureKelvin(v2.asFloat());
+      weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
+    }
     v2 = val["pressure"];
     if (!v2.empty() && v2.isIntegral())
       weather.setPressure(v2.asInt());

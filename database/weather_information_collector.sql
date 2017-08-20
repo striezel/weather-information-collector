@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `location` (
 CREATE TABLE IF NOT EXISTS `weatherdata` (
 `dataID` int(10) unsigned NOT NULL COMMENT 'primary key',
   `apiID` int(10) unsigned NOT NULL COMMENT 'ID of the API that delivered the data',
+  `locationID` int(10) unsigned DEFAULT NULL COMMENT 'ID of the corresponding location data set',
   `dataTime` datetime NOT NULL COMMENT 'time when the data was received / measured',
   `requestTime` datetime NOT NULL COMMENT 'time when the API request was performed',
   `temperature_K` float DEFAULT NULL COMMENT 'temperature in Kelvin',
@@ -52,7 +53,7 @@ ALTER TABLE `location`
  ADD PRIMARY KEY (`locationID`);
 
 ALTER TABLE `weatherdata`
- ADD PRIMARY KEY (`dataID`), ADD KEY `dataTime` (`dataTime`), ADD KEY `apiID` (`apiID`);
+ ADD PRIMARY KEY (`dataID`), ADD KEY `dataTime` (`dataTime`), ADD KEY `apiID` (`apiID`), ADD KEY `locationID` (`locationID`);
 
 
 ALTER TABLE `api`
