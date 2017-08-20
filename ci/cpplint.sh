@@ -34,6 +34,8 @@ else
   echo "Info: Falling back to standard includes for jsoncpp!"
   CFLAGS="-I/usr/include/jsoncpp"
 fi
+# add includes for libmysql++
+CFLAGS="$CFLAGS -I/usr/include/mysql -I/usr/include/mysql++"
 
 # print $CXX version to see which version is used for syntax check
 $CXX --version

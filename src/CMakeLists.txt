@@ -14,6 +14,7 @@ set(weather-information-collector_sources
     db/ConnectionInformation.cpp
     net/Curly.cpp
     store/StoreCSV.cpp
+    store/StoreMySQL.cpp
     util/Strings.cpp
     main.cpp)
 
@@ -44,3 +45,7 @@ if (LIBJSONCPP_FOUND)
 else ()
   message ( FATAL_ERROR "libjsoncpp was not found!" )
 endif (LIBJSONCPP_FOUND)
+
+# libmysql++
+include_directories(/usr/include/mysql /usr/include/mysql++)
+target_link_libraries (weather-information-collector mysqlpp)

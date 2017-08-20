@@ -20,5 +20,6 @@ addons:
     - g++
     - libcurl4-gnutls-dev
     - libjsoncpp-dev
+    - libmysql++-dev
 notifications:
   email: false

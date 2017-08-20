@@ -21,7 +21,9 @@
 #include <iostream>
 #include <ctime>
 #include "api/Apixu.hpp"
+#include "db/ConnectionInformation.hpp"
 #include "store/StoreCSV.hpp"
+#include "store/StoreMySQL.hpp"
 
 int main(int argc, char** argv)
 {
@@ -65,6 +67,18 @@ int main(int argc, char** argv)
     else
     {
       std::cerr << "Data could not be saved to CSV!\n";
+      return 1;
+    }
+
+    wic::ConnectionInformation ci("localhost", "weather_information_collector", "wic", "wic", 3306);
+    wic::StoreMySQL mysql(ci);
+    if (mysql.saveCurrentWeather(wic::ApiType::Apixu, location, weather))
+    {
+      std::cout << "Data saved to database.\n";
+    }
+    else
+    {
+      std::cerr << "Data could not be saved to database!\n";
       return 1;
     }
   } //if

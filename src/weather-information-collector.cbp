@@ -35,10 +35,13 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
+			<Add directory="/usr/include/mysql/" />
+			<Add directory="/usr/include/mysql++" />
 		</Compiler>
 		<Linker>
 			<Add library="curl" />
 			<Add library="jsoncpp" />
+			<Add library="mysqlpp" />
 		</Linker>
 		<Unit filename="api/API.hpp" />
 		<Unit filename="api/Apixu.cpp" />
@@ -59,6 +62,8 @@
 		<Unit filename="store/Store.hpp" />
 		<Unit filename="store/StoreCSV.cpp" />
 		<Unit filename="store/StoreCSV.hpp" />
+		<Unit filename="store/StoreMySQL.cpp" />
+		<Unit filename="store/StoreMySQL.hpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Unit filename="util/Strings.hpp" />
 		<Extensions>
