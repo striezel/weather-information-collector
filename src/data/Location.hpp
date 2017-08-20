@@ -135,6 +135,24 @@ class Location
      *         Returns false otherwise.
      */
     bool hasPostcode() const;
+
+
+    /** \brief equality operator for Location
+     *
+     * \param other  the other location to compare to
+     * \return Returns true, if both locations are equal.
+     */
+    bool operator==(const Location& other) const;
+
+
+    /** \brief checks whether two locations have the same latitude and longitude
+     *
+     * \param other  the other location to compare to
+     * \return Returns true, if both locations have equal latitude and longitude.
+     *         If both locations have no latitude and longitude, that counts as
+     *         equal, too.
+     */
+    bool equalLatitudeAndLongitude(const Location& other) const;
   private:
     uint32_t m_id; /**< id of the location */
     float m_latitude; /**< latitude of the location */

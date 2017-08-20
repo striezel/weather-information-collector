@@ -81,4 +81,79 @@ TEST_CASE("LocationClass")
     REQUIRE( loc.hasPostcode() );
     REQUIRE( loc.postcode() == std::string("SW1") );
   }
+
+  SECTION("equality for latitude + longitude")
+  {
+    //both without lat./lon.: equal
+    Location loc1, loc2;
+    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //only one with lat./lon.: not equal
+    loc1.setLatitudeLongitude(9000.1f, 9000.1f);
+    loc1.setLatitudeLongitude(0.0f, 0.0f);
+    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //equal values: equal
+    loc1.setLatitudeLongitude(5.0, 12.34);
+    loc2.setLatitudeLongitude(5.0, 12.34);
+    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //almost equal (below 0.01 °): equal
+    loc1.setLatitudeLongitude(5.009, 12.34);
+    loc2.setLatitudeLongitude(5.0, 12.34);
+    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //almost equal (below 0.01 °): equal
+    loc1.setLatitudeLongitude(5.0, 123.409);
+    loc2.setLatitudeLongitude(5.0, 123.4);
+    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //almost equal (below 0.01 °): equal
+    loc1.setLatitudeLongitude(5.009, 123.409);
+    loc2.setLatitudeLongitude(5.0, 123.4);
+    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //difference above 0.01 °: not equal
+    loc1.setLatitudeLongitude(5.15, 123.4);
+    loc2.setLatitudeLongitude(5.0, 123.4);
+    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //difference above 0.01 °: not equal
+    loc1.setLatitudeLongitude(5.0, 123.51);
+    loc2.setLatitudeLongitude(5.0, 123.4);
+    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+
+    //difference above 0.01 °: not equal
+    loc1.setLatitudeLongitude(5.12, 123.51);
+    loc2.setLatitudeLongitude(5.0, 123.4);
+    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+  }
+
+  SECTION("equality operator")
+  {
+    Location loc1, loc2;
+    REQUIRE( loc1 == loc2 );
+
+    loc1.setLatitudeLongitude(12.0, 123.4);
+    REQUIRE_FALSE( loc1 == loc2 );
+    loc2.setLatitudeLongitude(12.0, 123.4);
+    REQUIRE( loc1 == loc2 );
+
+    loc1.setPostcode("SW1");
+    REQUIRE_FALSE( loc1 == loc2 );
+    loc2.setPostcode("SW1");
+    REQUIRE( loc1 == loc2 );
+
+    loc1.setName("Town");
+    REQUIRE_FALSE( loc1 == loc2 );
+    loc2.setName("Town");
+    REQUIRE( loc1 == loc2 );
+
+    loc1.setId(5);
+    REQUIRE_FALSE( loc1 == loc2 );
+    loc2.setId(4);
+    REQUIRE_FALSE( loc1 == loc2 );
+    loc2.setId(5);
+    REQUIRE( loc1 == loc2 );
+  }
 }
