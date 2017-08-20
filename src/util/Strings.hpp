@@ -51,12 +51,32 @@ void trim(std::string& str1);
 std::string intToString(const int value);
 
 
+/** \brief tries to convert the string representation of an integer number into an int
+ *
+ * \param str   the string that contains the number
+ * \param value the int that will be used to store the result
+ * \return Returns true on success, false on failure.
+ * \remarks If false is returned, the value of parameter value is undefined.
+ */
+bool stringToInt(const std::string& str, int& value);
+
+
 /** \brief converts a floating point value into its string representation
  *
  * \param f  the floating point value
  * \return Returns string representation of the floating point value.
  */
 std::string floatToString(const float f);
+
+
+/** \brief tries to convert the string representation of a floating point value into a float
+ *
+ * \param str    the string that contains the number
+ * \param value  the float that will be used to store the result
+ * \return Returns true on success, false on failure.
+ * \remarks If false is returned, the value of parameter value is undefined.
+ */
+bool stringToFloat(const std::string& str, float& value);
 
 } //namespace
 

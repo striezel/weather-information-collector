@@ -16,6 +16,7 @@ set(weather-information-collector_sources
     store/StoreCSV.cpp
     store/StoreMySQL.cpp
     tasks/Task.cpp
+    tasks/TaskManager.cpp
     util/Strings.cpp
     main.cpp)
 
