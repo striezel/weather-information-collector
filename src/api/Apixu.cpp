@@ -39,13 +39,13 @@ void Apixu::setApiKey(const std::string& key)
 
 bool Apixu::validLocation(const Location& location) const
 {
-  return (location.hasLatitudeAndLongitude() || location.hasName()
+  return (location.hasCoordinates() || location.hasName()
        || location.hasPostcode());
 }
 
 std::string Apixu::toRequestString(const Location& location) const
 {
-  if (location.hasLatitudeAndLongitude())
+  if (location.hasCoordinates())
     return std::string("q=") + floatToString(location.latitude())
          + std::string(",") + floatToString(location.longitude());
   if (location.hasName())

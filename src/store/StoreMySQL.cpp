@@ -45,7 +45,7 @@ int getLocationId(mysqlpp::Connection& conn, const Location& location)
   {
     query << "name=" << mysqlpp::quote << location.name();
   }
-  else if (location.hasLatitudeAndLongitude())
+  else if (location.hasCoordinates())
   {
     query << "latitude=" << mysqlpp::quote << location.latitude()
           << " AND longitude=" << mysqlpp::quote << location.longitude();
@@ -82,7 +82,7 @@ int getLocationId(mysqlpp::Connection& conn, const Location& location)
     insertQuery << "name=" << mysqlpp::quote << location.name();
     previousData = true;
   }
-  if (location.hasLatitudeAndLongitude())
+  if (location.hasCoordinates())
   {
     if (previousData)
       insertQuery << ", ";

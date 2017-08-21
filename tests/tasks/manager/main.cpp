@@ -66,8 +66,8 @@ int main(int argc, char** argv)
     return 1;
   }
   wic::Location l2;
-  l2.setLatitudeLongitude(50.1, 9.8);
-  if (!task.location().equalLatitudeAndLongitude(l2))
+  l2.setCoordinates(50.1, 9.8);
+  if (!task.location().equalCoordinates(l2))
   {
     std::cerr << "Error: Wrong coordinates!\n";
     return 1;

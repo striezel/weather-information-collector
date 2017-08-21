@@ -66,7 +66,7 @@ bool StoreCSV::saveCurrentWeather(const ApiType type, const Location& location, 
     dataLine += intToString(location.id()) + separator;
   else
     dataLine += separator;
-  if (location.hasLatitudeAndLongitude())
+  if (location.hasCoordinates())
   {
     dataLine += floatToString(location.latitude()) + separator
               + floatToString(location.longitude()) + separator;

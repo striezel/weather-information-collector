@@ -80,7 +80,7 @@ class Location
      * \param lat  the new latitude [-90;90] of the location
      * \param lon  the new longitude [-180;180] of the location
      */
-    void setLatitudeLongitude( const float lat, const float lon);
+    void setCoordinates(const float lat, const float lon);
 
 
     /** \brief checks whether the location has valid latitude and longitude values
@@ -88,7 +88,7 @@ class Location
      * \return Returns true, if the location has valid latitude and longitude
      *         values. Returns false otherwise.
      */
-    bool hasLatitudeAndLongitude() const;
+    bool hasCoordinates() const;
 
 
     /** \brief gets the name of the location (if any)
@@ -152,7 +152,7 @@ class Location
      *         If both locations have no latitude and longitude, that counts as
      *         equal, too.
      */
-    bool equalLatitudeAndLongitude(const Location& other) const;
+    bool equalCoordinates(const Location& other) const;
 
 
     /** \brief checks whether this instance has no data at all

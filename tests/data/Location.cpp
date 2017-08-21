@@ -30,7 +30,7 @@ TEST_CASE("LocationClass")
   {
     //no data should be set
     REQUIRE_FALSE( loc.hasId() );
-    REQUIRE_FALSE( loc.hasLatitudeAndLongitude() );
+    REQUIRE_FALSE( loc.hasCoordinates() );
     REQUIRE_FALSE( loc.hasName() );
     REQUIRE_FALSE( loc.hasPostcode() );
 
@@ -51,7 +51,7 @@ TEST_CASE("LocationClass")
     SECTION("empty: lat. + lon.")
     {
       REQUIRE( loc.empty() );
-      loc.setLatitudeLongitude(5.0f, 120.0f);
+      loc.setCoordinates(5.0f, 120.0f);
       REQUIRE_FALSE( loc.empty() );
     }
 
@@ -80,28 +80,28 @@ TEST_CASE("LocationClass")
 
   SECTION("set, has + get latitude and longitude")
   {
-    loc.setLatitudeLongitude(12.5, 123.4375);
-    REQUIRE( loc.hasLatitudeAndLongitude() );
+    loc.setCoordinates(12.5, 123.4375);
+    REQUIRE( loc.hasCoordinates() );
     REQUIRE( loc.latitude() == 12.5 );
     REQUIRE( loc.longitude() == 123.4375 );
   }
 
   SECTION("out of range latitude")
   {
-    loc.setLatitudeLongitude(123.0, 123.4);
-    REQUIRE_FALSE( loc.hasLatitudeAndLongitude() );
+    loc.setCoordinates(123.0, 123.4);
+    REQUIRE_FALSE( loc.hasCoordinates() );
 
-    loc.setLatitudeLongitude(-91.2, 123.4);
-    REQUIRE_FALSE( loc.hasLatitudeAndLongitude() );
+    loc.setCoordinates(-91.2, 123.4);
+    REQUIRE_FALSE( loc.hasCoordinates() );
   }
 
   SECTION("out of range longitude")
   {
-    loc.setLatitudeLongitude(12.5, 191.2);
-    REQUIRE_FALSE( loc.hasLatitudeAndLongitude() );
+    loc.setCoordinates(12.5, 191.2);
+    REQUIRE_FALSE( loc.hasCoordinates() );
 
-    loc.setLatitudeLongitude(-89.2, -323.2);
-    REQUIRE_FALSE( loc.hasLatitudeAndLongitude() );
+    loc.setCoordinates(-89.2, -323.2);
+    REQUIRE_FALSE( loc.hasCoordinates() );
   }
 
   SECTION("set, has + get name")
@@ -122,47 +122,47 @@ TEST_CASE("LocationClass")
   {
     //both without lat./lon.: equal
     Location loc1, loc2;
-    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+    REQUIRE( loc1.equalCoordinates(loc2) );
 
     //only one with lat./lon.: not equal
-    loc1.setLatitudeLongitude(9000.1f, 9000.1f);
-    loc1.setLatitudeLongitude(0.0f, 0.0f);
-    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(9000.1f, 9000.1f);
+    loc1.setCoordinates(0.0f, 0.0f);
+    REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
 
     //equal values: equal
-    loc1.setLatitudeLongitude(5.0, 12.34);
-    loc2.setLatitudeLongitude(5.0, 12.34);
-    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(5.0, 12.34);
+    loc2.setCoordinates(5.0, 12.34);
+    REQUIRE( loc1.equalCoordinates(loc2) );
 
     //almost equal (below 0.01 °): equal
-    loc1.setLatitudeLongitude(5.009, 12.34);
-    loc2.setLatitudeLongitude(5.0, 12.34);
-    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(5.009, 12.34);
+    loc2.setCoordinates(5.0, 12.34);
+    REQUIRE( loc1.equalCoordinates(loc2) );
 
     //almost equal (below 0.01 °): equal
-    loc1.setLatitudeLongitude(5.0, 123.409);
-    loc2.setLatitudeLongitude(5.0, 123.4);
-    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(5.0, 123.409);
+    loc2.setCoordinates(5.0, 123.4);
+    REQUIRE( loc1.equalCoordinates(loc2) );
 
     //almost equal (below 0.01 °): equal
-    loc1.setLatitudeLongitude(5.009, 123.409);
-    loc2.setLatitudeLongitude(5.0, 123.4);
-    REQUIRE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(5.009, 123.409);
+    loc2.setCoordinates(5.0, 123.4);
+    REQUIRE( loc1.equalCoordinates(loc2) );
 
     //difference above 0.01 °: not equal
-    loc1.setLatitudeLongitude(5.15, 123.4);
-    loc2.setLatitudeLongitude(5.0, 123.4);
-    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(5.15, 123.4);
+    loc2.setCoordinates(5.0, 123.4);
+    REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
 
     //difference above 0.01 °: not equal
-    loc1.setLatitudeLongitude(5.0, 123.51);
-    loc2.setLatitudeLongitude(5.0, 123.4);
-    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(5.0, 123.51);
+    loc2.setCoordinates(5.0, 123.4);
+    REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
 
     //difference above 0.01 °: not equal
-    loc1.setLatitudeLongitude(5.12, 123.51);
-    loc2.setLatitudeLongitude(5.0, 123.4);
-    REQUIRE_FALSE( loc1.equalLatitudeAndLongitude(loc2) );
+    loc1.setCoordinates(5.12, 123.51);
+    loc2.setCoordinates(5.0, 123.4);
+    REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
   }
 
   SECTION("equality operator")
@@ -170,9 +170,9 @@ TEST_CASE("LocationClass")
     Location loc1, loc2;
     REQUIRE( loc1 == loc2 );
 
-    loc1.setLatitudeLongitude(12.0, 123.4);
+    loc1.setCoordinates(12.0, 123.4);
     REQUIRE_FALSE( loc1 == loc2 );
-    loc2.setLatitudeLongitude(12.0, 123.4);
+    loc2.setCoordinates(12.0, 123.4);
     REQUIRE( loc1 == loc2 );
 
     loc1.setPostcode("SW1");

@@ -76,7 +76,7 @@ TEST_CASE("StoreCSV class")
     loc.setId(12345);
     loc.setName("Coldtown");
     loc.setPostcode("ASDF5");
-    loc.setLatitudeLongitude(-89.5f, 178.25f);
+    loc.setCoordinates(-89.5f, 178.25f);
 
     Weather weather;
     weather.setTemperatureCelsius(-41.0f);

@@ -176,7 +176,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
     } //if location.postcode
     else if ((name == "location.coordinates") || (name == "location_coordinates") || (name == "coordinates"))
     {
-      if (task.location().hasLatitudeAndLongitude())
+      if (task.location().hasCoordinates())
       {
         std::cerr << "Error: Location's coordinates are specified more than once in file "
                   << fileName << "!\n";
@@ -221,7 +221,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
         return false;
       }
       Location loc(task.location());
-      loc.setLatitudeLongitude(lat, lon);
+      loc.setCoordinates(lat, lon);
       task.setLocation(loc);
     } //if location.coordinates
   } //while

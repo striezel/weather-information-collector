@@ -59,13 +59,13 @@ float Location::longitude() const
   return m_longitude;
 }
 
-void Location::setLatitudeLongitude(const float lat, const float lon)
+void Location::setCoordinates(const float lat, const float lon)
 {
   m_latitude = lat;
   m_longitude = lon;
 }
 
-bool Location::hasLatitudeAndLongitude() const
+bool Location::hasCoordinates() const
 {
   return (m_latitude >= -90.0f) && (m_latitude <= 90.0f)
       && (m_longitude >= -180.0f) && (m_longitude <= 180.0f);
@@ -105,13 +105,13 @@ bool Location::operator==(const Location& other) const
 {
   return (m_id == other.m_id) && (m_name == other.m_name)
       && (m_postcode == other.m_postcode)
-      && equalLatitudeAndLongitude(other);
+      && equalCoordinates(other);
 }
 
-bool Location::equalLatitudeAndLongitude(const Location& other) const
+bool Location::equalCoordinates(const Location& other) const
 {
-  const bool hll_this = hasLatitudeAndLongitude();
-  const bool hll_other = other.hasLatitudeAndLongitude();
+  const bool hll_this = hasCoordinates();
+  const bool hll_other = other.hasCoordinates();
   //If one has long/lat, but the other not, then it is not equal.
   if (hll_this != hll_other)
     return false;
@@ -132,7 +132,7 @@ bool Location::equalLatitudeAndLongitude(const Location& other) const
 bool Location::empty() const
 {
   return (!hasId() && !hasName()
-       && !hasLatitudeAndLongitude() && !hasPostcode());
+       && !hasCoordinates() && !hasPostcode());
 }
 
 } //namespace
