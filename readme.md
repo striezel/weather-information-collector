@@ -12,21 +12,21 @@ from various available ReST API services. It will be highly configurable.
 ### Prerequisites
 
 To build the weather-information-collector from source you need a C++ compiler,
-CMake 2.8 or later, the cURL library (>=7.17), the JsonCpp library. pkg-config
-is required to make it easier to find compiler options for the installed
-libraries. Additionally, the program uses Catch (C++ Automated Test Cases in
-Headers) to perform some tests.
+CMake 2.8 or later, the cURL library (>=7.17), the JsonCpp library and Boost's
+filesystem library. pkg-config is required to make it easier to find compiler
+options for the installed libraries. Additionally, the program uses Catch (C++
+Automated Test Cases in Headers) to perform some tests.
 
 It also helps to have Git, a distributed version control system, on your build
 system to get the latest source code directly from the Git repository.
 
 All of that can usually be installed be typing
 
-    apt-get install catch cmake g++ git libcurl4-gnutls-dev libjsoncpp-dev pkg-config
+    apt-get install catch cmake g++ git libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev pkg-config
 
 or
 
-    yum install catch cmake gcc-c++ git libcurl-devel jsoncpp-devel pkgconfig
+    yum install catch cmake gcc-c++ git boost-filesystem boost-devel libcurl-devel jsoncpp-devel pkgconfig
 
 into a root terminal.
 

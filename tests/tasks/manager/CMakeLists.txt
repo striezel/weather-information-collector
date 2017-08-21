@@ -21,6 +21,15 @@ set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(task_manager_tests ${task_manager_tests_sources})
 
+# find Boost library: filesystem (+system as dependency)
+find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
+if (Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+  target_link_libraries(task_manager_tests ${Boost_LIBRARIES})
+else ()
+  message ( FATAL_ERROR "Boost library was not found!" )
+endif (Boost_FOUND)
+
 
 # test run
 add_test(NAME TaskManager_tests

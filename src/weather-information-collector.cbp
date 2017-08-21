@@ -42,6 +42,8 @@
 			<Add library="curl" />
 			<Add library="jsoncpp" />
 			<Add library="mysqlpp" />
+			<Add library="boost_filesystem" />
+			<Add library="boost_system" />
 		</Linker>
 		<Unit filename="api/API.hpp" />
 		<Unit filename="api/Apixu.cpp" />

@@ -21,6 +21,7 @@
 #include "TaskManager.hpp"
 #include <fstream>
 #include <iostream>
+#include <boost/filesystem.hpp>
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -33,7 +34,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
   std::ifstream stream(fileName, std::ios_base::in | std::ios_base::binary);
   if (!stream.good())
   {
-    std::cerr << "Error: Could not open file " << fileName << "!\n";
+    std::cerr << "Error: Could not open file " << fileName << "!" << std::endl;
     return false;
   }
   task = Task();
@@ -58,7 +59,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
     if (sepPos == std::string::npos)
     {
       std::cerr << "Error: Invalid line found: \"" << line <<"\".\n"
-                << "General format: \"Name of Setting=value\"\n";
+                << "General format: \"Name of Setting=value\"" << std::endl;
       return false;
     }
     std::string name = line.substr(0, sepPos);
@@ -69,7 +70,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
     if (value.empty())
     {
       std::cerr << "Error: Empty values are not allowed in task file "
-                << fileName << "!\n";
+                << fileName << "!" << std::endl;
       return false;
     }
     //test possible values
@@ -78,14 +79,14 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (task.api() != ApiType::none)
       {
         std::cerr << "Error: API type is specified more than once in file "
-                  << fileName << "!\n";
+                  << fileName << "!" << std::endl;
         return false;
       }
       const ApiType api = toApiType(value);
       if (api == ApiType::none)
       {
         std::cerr << "Error: API type \"" << value << "\" in file " << fileName
-                  << " is not a recognized API!\n";
+                  << " is not a recognized API!" << std::endl;
         return false;
       }
       task.setApi(api);
@@ -95,20 +96,20 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (task.interval() > std::chrono::seconds::zero())
       {
         std::cerr << "Error: Request interval is specified more than once in file "
-                  << fileName << "!\n";
+                  << fileName << "!" << std::endl;
         return false;
       }
       int seconds = -1;
       if (!stringToInt(value, seconds))
       {
         std::cerr << "Error: Request interval in file " << fileName
-                  << " must be a positive integer value!\n";
+                  << " must be a positive integer value!" << std::endl;
         return false;
       }
       if (seconds < 15)
       {
         std::cerr << "Error: Minimum request interval in file " << fileName
-                  << " must be 15 seconds!\n";
+                  << " must be 15 seconds!" << std::endl;
         return false;
       }
       task.setInterval(std::chrono::seconds(seconds));
@@ -118,20 +119,20 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (task.location().hasId())
       {
         std::cerr << "Error: Location ID is specified more than once in file "
-                  << fileName << "!\n";
+                  << fileName << "!" << std::endl;
         return false;
       }
       int id = -1;
       if (!stringToInt(value, id))
       {
         std::cerr << "Error: Location ID in file " << fileName
-                  << " must be a positive integer value!\n";
+                  << " must be a positive integer value!" << std::endl;
         return false;
       }
       if (id < 1)
       {
         std::cerr << "Error: Location ID in file " << fileName
-                  << " must be a positive integer value!\n";
+                  << " must be a positive integer value!" << std::endl;
         return false;
       }
       Location loc(task.location());
@@ -143,13 +144,13 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (task.location().hasName())
       {
         std::cerr << "Error: Location name is specified more than once in file "
-                  << fileName << "!\n";
+                  << fileName << "!" << std::endl;
         return false;
       }
       if (value.size() > 200)
       {
         std::cerr << "Error: Location name in file " << fileName
-                  << " is unreasonably long!\n";
+                  << " is unreasonably long!" << std::endl;
         return false;
       }
       Location loc(task.location());
@@ -161,13 +162,13 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (task.location().hasPostcode())
       {
         std::cerr << "Error: Location's postcode is specified more than once in file "
-                  << fileName << "!\n";
+                  << fileName << "!" << std::endl;
         return false;
       }
       if (value.size() > 25)
       {
         std::cerr << "Error: Location's postcode in file " << fileName
-                  << " is unreasonably long!\n";
+                  << " is unreasonably long!" << std::endl;
         return false;
       }
       Location loc(task.location());
@@ -179,7 +180,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (task.location().hasCoordinates())
       {
         std::cerr << "Error: Location's coordinates are specified more than once in file "
-                  << fileName << "!\n";
+                  << fileName << "!" << std::endl;
         return false;
       }
       const auto commaPos = value.find(',');
@@ -198,7 +199,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (!stringToFloat(latStr, lat))
       {
         std::cerr << "Error: Latitude in file " << fileName
-                  << " must be a floating point value!\n";
+                  << " must be a floating point value!" << std::endl;
         return false;
       }
       if ((lat > 90.0f) || (lat < -90.0f))
@@ -211,13 +212,13 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (!stringToFloat(lonStr, lon))
       {
         std::cerr << "Error: Longitude in file " << fileName
-                  << " must be a floating point value!\n";
+                  << " must be a floating point value!" << std::endl;
         return false;
       }
       if ((lon > 180.0f) || (lon < -1800.0f))
       {
         std::cerr << "Error: Longitude in file " << fileName
-                  << " must be within the range [-180;+180]!\n";
+                  << " must be within the range [-180;+180]!" << std::endl;
         return false;
       }
       Location loc(task.location());
@@ -227,6 +228,68 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
   } //while
   //No more data, done.
   return true;
+}
+
+bool TaskManager::loadFromDirectory(const std::string& directory, const std::string& extension, std::vector<Task>& storage)
+{
+  //Let's keep the namespace short and simple.
+  namespace fs = boost::filesystem;
+
+  fs::path dir(directory);
+  try
+  {
+    if (!fs::exists(dir))
+    {
+      std::cerr << "Error: Directory " << directory << " does not exist!" << std::endl;
+      return false;
+    }
+    if (!fs::is_directory(dir))
+    {
+      std::cerr << "Error: " << directory << " is not a directory!" << std::endl;
+      return false;
+    }
+
+    const fs::path ext(extension);
+    //Range-based for does not seem to work / compile here, so we use the "old"
+    // for loop and iterator instead.
+    for (fs::directory_iterator it = fs::directory_iterator(dir); it != fs::directory_iterator(); ++it)
+    {
+      const fs::path x = it->path();
+      if (fs::is_regular_file(x))
+      {
+        if (extension.empty() || (x.extension() == ext))
+        {
+          Task t;
+          if (!loadFromFile(x.string(), t))
+          {
+            std::cerr << "Error: Could not load task from file "
+                      << x.string() << "!" << std::endl;
+            return false;
+          }
+          if (!t.complete())
+          {
+            std::cerr << "Error: Task information in file " << x.string()
+                      << " is incomplete!" << std::endl;
+            return false;
+          }
+          storage.push_back(t);
+        } //if extension check passed
+        else
+        {
+          std::clog << "Info: Skipping loading of file " << x.string()
+                    << ", because it does not have the extension " << extension
+                    << ".\n";
+        }
+      } //if regular file
+    } //for
+    return true;
+  }
+  catch (const fs::filesystem_error& ex)
+  {
+    std::cerr << "File system error while loading tasks from directory "
+              << directory << ": " << ex.what() << std::endl;
+    return false;
+  }
 }
 
 } //namespace

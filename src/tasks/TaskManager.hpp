@@ -21,6 +21,7 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_TASKMANAGER_HPP
 #define WEATHER_INFORMATION_COLLECTOR_TASKMANAGER_HPP
 
+#include <vector>
 #include "Task.hpp"
 
 namespace wic
@@ -43,6 +44,18 @@ class TaskManager
      *         Returns false, if an error occurred.
      */
     static bool loadFromFile(const std::string& fileName, Task& task);
+
+
+    /** \brief loads all task files from a given directory
+     *
+     * \param directory  path of the directory where task files reside
+     * \param extension   extension (including dot) of file names that shall be
+     *                    loaded. Empty string means all files.
+     * \param storage    vector that will be used to store all loaded tasks, existing elements will be preserved
+     * \return Returns true, if all tasks from the directory were loaded successfully.
+     *         Returns false, if an error occurred.
+     */
+    static bool loadFromDirectory(const std::string& directory, const std::string& extension, std::vector<Task>& storage);
 }; //class
 
 } //namespace

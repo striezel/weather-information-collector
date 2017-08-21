@@ -33,6 +33,10 @@ int main(int argc, char** argv)
   wic::Task task;
   wic::TaskManager tm;
 
+  /* ************************ *
+   * tests for loadFromFile() *
+   * ************************ */
+
   if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg.conf", task))
   {
     std::cerr << "Error: Could not load task from file test-example-hammelburg.conf!\n";
@@ -97,6 +101,56 @@ int main(int argc, char** argv)
     std::cerr << "Error: Locations do not match!\n";
     return 1;
   }
+
+
+  /* ***************************** *
+   * tests for loadFromDirectory() *
+   * ***************************** */
+
+  std::vector<wic::Task> tasks;
+  if (!tm.loadFromDirectory(baseDirectory, ".conf", tasks))
+  {
+    std::cerr << "Error: Could not load tasks from directory " << baseDirectory
+              << "!\n";
+    return 2;
+  }
+  if (tasks.size() != 2)
+  {
+    std::cerr << "Error: Expected number of tasks from directory " << baseDirectory
+              << " to be two, but there were " << tasks.size() << " tasks!\n";
+    return 2;
+  }
+  //compare data with prev. task
+  if (task.api() != tasks[0].api())
+  {
+    std::cerr << "Error: API values do not match!\n"
+              << wic::toString(task.api()) << " != " << wic::toString(tasks[0].api()) << "\n";
+    return 2;
+  }
+  if (task.interval() != tasks[0].interval())
+  {
+    std::cerr << "Error: Request intervals do not match!\n";
+    return 2;
+  }
+  if (!(task.location() == tasks[0].location()))
+  {
+    std::cerr << "Error: Locations do not match!\n";
+    return 2;
+  }
+
+  /* ************************************************** *
+   * tests for loadFromDirectory() with incomplete data *
+   * ************************************************** */
+
+  tasks.clear();
+  const std::string incompleteDirectory = baseDirectory + "/conf.d-incomplete";
+  if (tm.loadFromDirectory(incompleteDirectory, ".conf", tasks))
+  {
+    std::cerr << "Error: Could load tasks from directory " << incompleteDirectory
+              << ", although configuration file there is incomplete!" << std::endl;
+    return 3;
+  }
+  std::cout << "Info: Passed test for incomplete task data." << std::endl;
 
   //all tests passed
   return 0;

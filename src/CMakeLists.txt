@@ -51,3 +51,12 @@ endif (LIBJSONCPP_FOUND)
 # libmysql++
 include_directories(/usr/include/mysql /usr/include/mysql++)
 target_link_libraries (weather-information-collector mysqlpp)
+
+# find Boost library: filesystem (+ system as dependency)
+find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
+if (Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+  target_link_libraries(weather-information-collector ${Boost_LIBRARIES})
+else ()
+  message ( FATAL_ERROR "Boost library was not found!" )
+endif (Boost_FOUND)

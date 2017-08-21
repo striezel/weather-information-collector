@@ -20,10 +20,16 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Weffc++" />
+			<Add option="-pedantic" />
 			<Add option="-Wall" />
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Linker>
+			<Add library="boost_filesystem" />
+			<Add library="boost_system" />
+		</Linker>
 		<Unit filename="../../../src/api/Types.cpp" />
 		<Unit filename="../../../src/api/Types.hpp" />
 		<Unit filename="../../../src/data/Location.cpp" />
