@@ -20,10 +20,10 @@
 
 #include <iostream>
 #include <ctime>
-#include "api/Apixu.hpp"
-#include "db/ConnectionInformation.hpp"
-#include "store/StoreCSV.hpp"
-#include "store/StoreMySQL.hpp"
+#include "../api/Apixu.hpp"
+#include "../db/ConnectionInformation.hpp"
+#include "../store/StoreCSV.hpp"
+#include "../store/StoreMySQL.hpp"
 
 int main(int argc, char** argv)
 {
