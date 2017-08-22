@@ -21,6 +21,7 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_CONFIGURATION_HPP
 #define WEATHER_INFORMATION_COLLECTOR_CONFIGURATION_HPP
 
+#include <map>
 #include <vector>
 #include "../db/ConnectionInformation.hpp"
 #include "../tasks/Task.hpp"
@@ -83,6 +84,15 @@ class Configuration
     const std::vector<Task>& tasks() const;
 
 
+    /** \brief gets the API key for the given API
+     *
+     * \param api   the API for which the key shall be retrieved
+     * \return Returns the key for the given API, if present.
+     *         Returns an empty string, if no key is known.
+     */
+    std::string key(const ApiType api) const;
+
+
     /** \brief Loads the configuration from a file.
      *
      * \param  fileName   file name of the configuration file
@@ -114,6 +124,7 @@ class Configuration
 
 
     std::vector<Task> tasksContainer; /**< container with all tasks */
+    std::map<ApiType, std::string> apiKeys; /**< API keys */
     ConnectionInformation connInfo; /**< database connection information */
     std::string tasksDirectory; /**< directory for tasks */
     std::string tasksExtension; /**< file extension (incl. dot) for task files */

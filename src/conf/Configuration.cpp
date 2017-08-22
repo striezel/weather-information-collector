@@ -32,6 +32,7 @@ const char Configuration::commentCharater = TaskManager::commentCharater;
 
 Configuration::Configuration()
 : tasksContainer(std::vector<Task>()),
+  apiKeys(std::map<ApiType, std::string>()),
   connInfo(ConnectionInformation("", "", "", "", 0)),
   tasksDirectory(""),
   tasksExtension("")
@@ -76,6 +77,15 @@ const std::string& Configuration::taskExtension() const
 const std::vector<Task>& Configuration::tasks() const
 {
   return tasksContainer;
+}
+
+std::string Configuration::key(const ApiType api) const
+{
+  const auto iter = apiKeys.find(api);
+  if (iter != apiKeys.end())
+    return iter->second;
+  else
+    return std::string();
 }
 
 void Configuration::findConfigurationFile(std::string& realName)
@@ -259,6 +269,26 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName)
       }
       connInfo.setPort(static_cast<uint16_t>(port));
     } //if db.port
+    else if ((name == "key.apixu") || (name == "key.Apixu"))
+    {
+      if (!key(ApiType::Apixu).empty())
+      {
+        std::cerr << "Error: API key for Apixu is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      apiKeys[ApiType::Apixu] = value;
+    } //if key.apixu
+    else if ((name == "key.OpenWeatherMap") || (name == "key.owm") || (name == "key.openweathermap"))
+    {
+      if (!key(ApiType::OpenWeatherMap).empty())
+      {
+        std::cerr << "Error: API key for OpenWeatherMap is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      apiKeys[ApiType::OpenWeatherMap] = value;
+    } //if key.owm
     else
     {
       std::cerr << "Error while reading configuration file " << fileName
@@ -279,6 +309,16 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName)
               << ") the port number!" << std::endl;
     return false;
   }
+  //If there are no API keys, then the collector won't be able to collect
+  // information later on.
+  if (apiKeys.empty())
+  {
+    std::cerr << "Error: There are no API keys in configuration file "
+              << fileName << ", and thus the weather-information-collector "
+              << "will not be able to work properly." << std::endl;
+    return false;
+  }
+  //Everything is good, so far.
   return true;
 }
 
