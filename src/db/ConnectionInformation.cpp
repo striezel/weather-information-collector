@@ -48,9 +48,19 @@ const std::string& ConnectionInformation::hostname() const
   return db_host;
 }
 
+void ConnectionInformation::setHostname(const std::string& host)
+{
+  db_host = host;
+}
+
 const std::string& ConnectionInformation::db() const
 {
   return db_name;
+}
+
+void ConnectionInformation::setDb(const std::string& database)
+{
+  db_name = database;
 }
 
 const std::string& ConnectionInformation::user() const
@@ -58,14 +68,29 @@ const std::string& ConnectionInformation::user() const
   return db_user;
 }
 
+void ConnectionInformation::setUser(const std::string& username)
+{
+  db_user = username;
+}
+
 const std::string& ConnectionInformation::password() const
 {
   return db_pass;
 }
 
+void ConnectionInformation::setPassword(const std::string& pw)
+{
+  db_pass = pw;
+}
+
 uint16_t ConnectionInformation::port() const
 {
   return db_port;
+}
+
+void ConnectionInformation::setPort(const uint16_t p)
+{
+  db_port = p;
 }
 
 bool ConnectionInformation::isComplete() const

@@ -5,13 +5,16 @@ project(weather_information_collector_tests)
 
 set(weather_information_collector_tests_sources
     ../src/api/Types.cpp
+    ../src/conf/Configuration.cpp
     ../src/data/Location.cpp
     ../src/data/Weather.cpp
     ../src/db/ConnectionInformation.cpp
     ../src/store/StoreCSV.cpp
     ../src/tasks/Task.cpp
+    ../src/tasks/TaskManager.cpp
     ../src/util/Strings.cpp
     api/Types.cpp
+    conf/Configuration.cpp
     data/Location.cpp
     data/Weather.cpp
     db/ConnectionInformation.cpp
@@ -28,6 +31,15 @@ endif (CMAKE_COMPILER_IS_GNUCC)
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather_information_collector_tests ${weather_information_collector_tests_sources})
+
+# find Boost library: filesystem (+ system as dependency)
+find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
+if (Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+  target_link_libraries(weather_information_collector_tests ${Boost_LIBRARIES})
+else ()
+  message ( FATAL_ERROR "Boost library was not found!" )
+endif (Boost_FOUND)
 
 # test run
 add_test(NAME test-suite

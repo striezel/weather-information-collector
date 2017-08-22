@@ -7,6 +7,7 @@ set(weather-information-collector_sources
     ../api/Apixu.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Types.cpp
+    ../conf/Configuration.cpp
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp

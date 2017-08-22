@@ -30,7 +30,6 @@ namespace wic
 class TaskManager
 {
   public:
-
     /** \brief character that indicates comment line in task file
      */
     static const char commentCharater;

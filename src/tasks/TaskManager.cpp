@@ -225,6 +225,12 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       loc.setCoordinates(lat, lon);
       task.setLocation(loc);
     } //if location.coordinates
+    else
+    {
+      std::cerr << "Error while reading task file " << fileName
+                << ": There is no setting named \"" << name << "\"!" << std::endl;
+        return false;
+    } //else (unrecognized setting name)
   } //while
   //No more data, done.
   return true;

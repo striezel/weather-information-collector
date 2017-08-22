@@ -60,11 +60,25 @@ class ConnectionInformation
     const std::string& hostname() const;
 
 
+    /** \brief sets the hostname for the database connection
+     *
+     * \param host  the new hostname
+     */
+    void setHostname(const std::string& host);
+
+
     /** \brief gets the database name
      *
      * \return Returns the database name.
      */
     const std::string& db() const;
+
+
+    /** \brief sets the database name for the database connection
+     *
+     * \param database  the new database name
+     */
+    void setDb(const std::string& database);
 
 
     /** \brief gets the name of the database user
@@ -74,6 +88,13 @@ class ConnectionInformation
     const std::string& user() const;
 
 
+    /** \brief sets the name of the database user
+     *
+     * \param username  the new user
+     */
+    void setUser(const std::string& username);
+
+
     /** \brief gets the password for the database user
      *
      * \return Returns the password for the database user.
@@ -81,11 +102,25 @@ class ConnectionInformation
     const std::string& password() const;
 
 
+    /** \brief sets the password for the database user
+     *
+     * \param pw  the new password
+     */
+    void setPassword(const std::string& pw);
+
+
     /** \brief gets the port of the database server
      *
      * \return Returns the port of the database server.
      */
     uint16_t port() const;
+
+
+    /** \brief sets the port of the database server
+     *
+     * \param p  the new port number
+     */
+    void setPort(const uint16_t p);
 
 
     /** \brief checks whether the connection information is complete

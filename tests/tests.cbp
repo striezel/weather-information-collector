@@ -25,8 +25,14 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Linker>
+			<Add library="boost_filesystem" />
+			<Add library="boost_system" />
+		</Linker>
 		<Unit filename="../src/api/Types.cpp" />
 		<Unit filename="../src/api/Types.hpp" />
+		<Unit filename="../src/conf/Configuration.cpp" />
+		<Unit filename="../src/conf/Configuration.hpp" />
 		<Unit filename="../src/data/Location.cpp" />
 		<Unit filename="../src/data/Location.hpp" />
 		<Unit filename="../src/data/Weather.cpp" />
@@ -38,9 +44,12 @@
 		<Unit filename="../src/store/StoreCSV.hpp" />
 		<Unit filename="../src/tasks/Task.cpp" />
 		<Unit filename="../src/tasks/Task.hpp" />
+		<Unit filename="../src/tasks/TaskManager.cpp" />
+		<Unit filename="../src/tasks/TaskManager.hpp" />
 		<Unit filename="../src/util/Strings.cpp" />
 		<Unit filename="../src/util/Strings.hpp" />
 		<Unit filename="api/Types.cpp" />
+		<Unit filename="conf/Configuration.cpp" />
 		<Unit filename="data/Location.cpp" />
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="db/ConnectionInformation.cpp" />
