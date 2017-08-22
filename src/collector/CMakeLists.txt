@@ -16,6 +16,7 @@ set(weather-information-collector_sources
     ../store/StoreMySQL.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
+    ../util/GitInfos.cpp
     ../util/Strings.cpp
     main.cpp)
 
@@ -59,3 +60,28 @@ if (Boost_FOUND)
 else ()
   message ( FATAL_ERROR "Boost library was not found!" )
 endif (Boost_FOUND)
+
+# create git-related constants
+# -- get the current commit hash
+execute_process(
+  COMMAND git rev-parse HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_HASH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# -- get the commit date
+execute_process(
+  COMMAND git show -s --format=%ci
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_TIME
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+message("GIT_HASH is ${GIT_HASH}.")
+message("GIT_TIME is ${GIT_TIME}.")
+
+# replace git-related constants in GitInfos.cpp
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../util/GitInfos.cpp.template
+               ${CMAKE_CURRENT_SOURCE_DIR}/../util/GitInfos.cpp
+               ESCAPE_QUOTES)

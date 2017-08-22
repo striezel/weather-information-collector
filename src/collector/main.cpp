@@ -21,67 +21,99 @@
 #include <iostream>
 #include <ctime>
 #include "../api/Apixu.hpp"
+#include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
-#include "../store/StoreCSV.hpp"
 #include "../store/StoreMySQL.hpp"
+#include "../util/GitInfos.hpp"
+
+/** \brief exit code for invalid command line parameters */
+const int rcInvalidParameter = 1;
+
+/** \brief exit code for invalid configuration data */
+const int rcConfigurationError = 2;
+
+void showVersion()
+{
+  wic::GitInfos info;
+  std::cout << "weather-information-collector, 0.4, 2017-08-22\n"
+            << "\n"
+            << "Version control commit: " << info.commit() << "\n"
+            << "Version control date:   " << info.date() << std::endl;
+}
+
+void showHelp()
+{
+  std::cout << "weather-information-collector [OPTIONS]\n"
+            << "\n"
+            << "options:\n"
+            << "  -? | --help    - shows this help message\n"
+            << "  -v | --version - shows version information\n";
+}
 
 int main(int argc, char** argv)
 {
-  std::cout << "Not implemented yet!" << std::endl;
+  std::string configurationFile; /**< path of configuration file */
 
-  if (argc > 2)
+  if ((argc > 1) && (argv != nullptr))
   {
-    const std::string apiKey = std::string(argv[1]);
-
-    wic::Location location;
-    location.setName(std::string(argv[2]));
-
-    wic::Weather weather;
-    wic::Apixu api(apiKey);
-
-    if (!api.currentWeather(location, weather))
+    for (int i = 1; i < argc; ++i)
     {
-      std::cout << "Failed to get current weather for " << location.name() << ".\n";
-      return 1;
-    }
+      if (argv[i] == nullptr)
+      {
+        std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
+        return rcInvalidParameter;
+      }
+      const std::string param(argv[i]);
+      if ((param == "-v") || (param == "--version"))
+      {
+        showVersion();
+        return 0;
+      } //if version
+      else if ((param == "-?") || (param == "/?") || (param == "--help"))
+      {
+        showHelp();
+        return 0;
+      } //if help
+      else if ((param == "--conf") || (param == "-c"))
+      {
+        if (!configurationFile.empty())
+        {
+          std::cerr << "Error: Configuration was already set to "
+                    << configurationFile << "!" << std::endl;
+          return rcInvalidParameter;
+        }
+        //enough parameters?
+        if ((i+1 < argc) && (argv[i+1] != nullptr))
+        {
+          configurationFile = std::string(argv[i+1]);
+          //Skip next parameter, because it's already used as file path.
+          ++i;
+        }
+        else
+        {
+          std::cerr << "Error: You have to enter a file path after \""
+                    << param <<"\"." << std::endl;
+          return rcInvalidParameter;
+        }
+      } //if configuration file
+      else
+      {
+        std::cerr << "Error: Unknown parameter " << param << "!\n"
+                  << "Use --help to show available parameters." << std::endl;
+        return rcInvalidParameter;
+      }
+    } //for i
+  } //if arguments are there
 
-    std::cout << "Current weather for " << location.name() << ":\n";
-    const auto kelvin = weather.temperatureKelvin();
-    std::cout << "Temperature: " << kelvin << " K (" << weather.hasTemperatureKelvin() << ")\n"
-              << "      in °C: " << (kelvin - 273.15) << " °C\n"
-              << "Temperature: " << weather.temperatureCelsius() << " °C (" << weather.hasTemperatureCelsius() << ")\n"
-              << "Pressure: " << weather.pressure() << " hPa (" << weather.hasPressure() << ")\n"
-              << "Humidity: " << static_cast<int>(weather.humidity()) << " % (" << weather.hasHumidity() << ")\n"
-              << "Wind speed: " << weather.windSpeed() << " m/s (" << weather.hasWindSpeed() << ")\n"
-              << "Wind direction: " << weather.windDegrees() << " ° (" << weather.hasWindDegrees() << ")\n"
-              << "Cloudiness: " << static_cast<int>(weather.cloudiness()) << " % (" << weather.hasCloudiness() << ")\n";
-    const std::time_t dt_c = std::chrono::system_clock::to_time_t(weather.dataTime());
-    std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
+  wic::Configuration config;
+  if (!config.load(configurationFile))
+  {
+    std::cerr << "Error: Could not load configuration!" << std::endl;
+    return rcConfigurationError;
+  }
 
-    wic::StoreCSV csv("data.csv");
-    if (csv.saveCurrentWeather(wic::ApiType::Apixu, location, weather))
-    {
-      std::cout << "Data saved to CSV file.\n";
-      csv.flush();
-    }
-    else
-    {
-      std::cerr << "Data could not be saved to CSV!\n";
-      return 1;
-    }
+  #warning Not completely implemented yet!
 
-    wic::ConnectionInformation ci("localhost", "weather_information_collector", "wic", "wic", 3306);
-    wic::StoreMySQL mysql(ci);
-    if (mysql.saveCurrentWeather(wic::ApiType::Apixu, location, weather))
-    {
-      std::cout << "Data saved to database.\n";
-    }
-    else
-    {
-      std::cerr << "Data could not be saved to database!\n";
-      return 1;
-    }
-  } //if
-
+  std::cout << "Not implemented yet!" << std::endl;
   return 0;
 }
