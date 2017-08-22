@@ -292,5 +292,33 @@ bool TaskManager::loadFromDirectory(const std::string& directory, const std::str
   }
 }
 
+bool TaskManager::hasDuplicates(const std::vector<Task>& tasks)
+{
+  const auto length = tasks.size();
+  for (unsigned int i = 0; i < length; ++i)
+  {
+    for (unsigned int j = i + 1; j < length; ++j)
+    {
+      if ((tasks[i].api() == tasks[j].api())
+        && (tasks[i].location() == tasks[i].location()))
+      {
+        std::cerr << "Error: There are duplicate / overlapping tasks for location ";
+        if (tasks[i].location().hasId())
+          std::cerr << " with id " << tasks[i].location().id();
+        if (tasks[i].location().hasName())
+          std::cerr << " with name " << tasks[i].location().name();
+        if (tasks[i].location().hasPostcode())
+          std::cerr << " with postcode " << tasks[i].location().postcode();
+        if (tasks[i].location().hasCoordinates())
+          std::cerr << " with coordinates " << tasks[i].location().latitude()
+                    << "° N, " << tasks[i].location().latitude() << " °E";
+        std::cerr << "!" << std::endl;
+        return true;
+      } //if
+    } //for j
+  } //for i
+  return false;
+}
+
 } //namespace
 

@@ -56,6 +56,15 @@ class TaskManager
      *         Returns false, if an error occurred.
      */
     static bool loadFromDirectory(const std::string& directory, const std::string& extension, std::vector<Task>& storage);
+
+
+    /** \brief checks whether a list of tasks has duplicate or overlapping tasks
+     *
+     * \param tasks  vector of tasks
+     * \return Returns true, if the vector of tasks has duplicate or overlapping
+     *         tasks. Returns false otherwise.
+     */
+    static bool hasDuplicates(const std::vector<Task>& tasks);
 }; //class
 
 } //namespace

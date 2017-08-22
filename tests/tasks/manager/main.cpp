@@ -152,6 +152,63 @@ int main(int argc, char** argv)
   }
   std::cout << "Info: Passed test for incomplete task data." << std::endl;
 
+  /* ************************* *
+   * tests for hasDuplicates() *
+   * ************************* */
+
+  tasks.clear();
+  //no duplicates in empty vector
+  if (tm.hasDuplicates(tasks))
+  {
+    std::cerr << "Error: There cannot be any duplicates in an empty vector!\n";
+    return 4;
+  }
+  if (!tm.loadFromDirectory(baseDirectory, ".conf", tasks))
+  {
+    std::cerr << "Error: Could not load tasks from directory " << baseDirectory
+              << "!\n";
+    return 4;
+  }
+  if (tasks.size() != 2)
+  {
+    std::cerr << "Error: Expected number of tasks from directory " << baseDirectory
+              << " to be two, but there were " << tasks.size() << " tasks!\n";
+    return 4;
+  }
+  //both tasks are identical, so there should be duplicates
+  if (!tm.hasDuplicates(tasks))
+  {
+    std::cerr << "Error: Duplicate detection failed!\n";
+    return 4;
+  }
+  std::cout << "Info: Passed test #1 for duplicate task data." << std::endl;
+
+  /* ************************************************* *
+   * tests for hasDuplicates() with different interval *
+   * ************************************************* */
+
+  tasks.clear();
+  const std::string overlapDirectory = baseDirectory + "/conf.d-overlap";
+  if (!tm.loadFromDirectory(overlapDirectory, ".conf", tasks))
+  {
+    std::cerr << "Error: Could not load tasks from directory " << overlapDirectory
+              << "!\n";
+    return 5;
+  }
+  if (tasks.size() != 2)
+  {
+    std::cerr << "Error: Expected number of tasks from directory " << overlapDirectory
+              << " to be two, but there were " << tasks.size() << " tasks!\n";
+    return 5;
+  }
+  //both tasks are identical, except for interval, so there should be duplicates
+  if (!tm.hasDuplicates(tasks))
+  {
+    std::cerr << "Error: Duplicate detection failed!\n";
+    return 5;
+  }
+  std::cout << "Info: Passed test #2 for duplicate task data." << std::endl;
+
   //all tests passed
   return 0;
 }
