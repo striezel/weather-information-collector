@@ -311,7 +311,7 @@ bool TaskManager::hasDuplicates(const std::vector<Task>& tasks)
           std::cerr << " with postcode " << tasks[i].location().postcode();
         if (tasks[i].location().hasCoordinates())
           std::cerr << " with coordinates " << tasks[i].location().latitude()
-                    << "° N, " << tasks[i].location().latitude() << " °E";
+                    << "° N, " << tasks[i].location().longitude() << " °E";
         std::cerr << "!" << std::endl;
         return true;
       } //if
