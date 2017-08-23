@@ -24,6 +24,7 @@
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
 #include "../store/StoreMySQL.hpp"
+#include "../tasks/TaskManager.hpp"
 #include "../util/GitInfos.hpp"
 
 /** \brief exit code for invalid command line parameters */
@@ -32,10 +33,13 @@ const int rcInvalidParameter = 1;
 /** \brief exit code for invalid configuration data */
 const int rcConfigurationError = 2;
 
+/** \brief exit code for when configured tasks exceed the request limit */
+const int rcTasksExceedApiRequestLimit = 3;
+
 void showVersion()
 {
   wic::GitInfos info;
-  std::cout << "weather-information-collector, 0.4, 2017-08-22\n"
+  std::cout << "weather-information-collector, 0.4.1, 2017-08-23\n"
             << "\n"
             << "Version control commit: " << info.commit() << "\n"
             << "Version control date:   " << info.date() << std::endl;
@@ -46,13 +50,15 @@ void showHelp()
   std::cout << "weather-information-collector [OPTIONS]\n"
             << "\n"
             << "options:\n"
-            << "  -? | --help    - shows this help message\n"
-            << "  -v | --version - shows version information\n";
+            << "  -? | --help            - shows this help message\n"
+            << "  -v | --version         - shows version information\n"
+            << "  -l | --ignore-limits   - ignore check for API limits during startup\n";
 }
 
 int main(int argc, char** argv)
 {
   std::string configurationFile; /**< path of configuration file */
+  bool checkApiLimits = true; /**< whether to check if tasks exceed API limits */
 
   if ((argc > 1) && (argv != nullptr))
   {
@@ -96,6 +102,16 @@ int main(int argc, char** argv)
           return rcInvalidParameter;
         }
       } //if configuration file
+      else if ((param == "--ignore-limits") || (param == "-l") || (param == "--do-not-check-limits"))
+      {
+        if (!checkApiLimits)
+        {
+          std::cerr << "Error: Parameter " << param << " was already specified!"
+                    << std::endl;
+          return rcInvalidParameter;
+        }
+        checkApiLimits = false;
+      } //if help
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
@@ -105,6 +121,7 @@ int main(int argc, char** argv)
     } //for i
   } //if arguments are there
 
+  //load configuration file + configured tasks
   wic::Configuration config;
   if (!config.load(configurationFile))
   {
@@ -112,7 +129,29 @@ int main(int argc, char** argv)
     return rcConfigurationError;
   }
 
+  //If there are no tasks, we can quit here.
+  if (config.tasks().empty())
+  {
+    std::cerr << "Error: No collection tasks have been configured!" << std::endl;
+    return rcConfigurationError;
+  }
+
+  if (checkApiLimits)
+  {
+    if (!wic::TaskManager::withinLimits(config.tasks()))
+    {
+      std::cerr << "Error: The configured collection tasks would exceed the "
+                << "request limits imposed by the free API plan! If you are on"
+                << " a different plan and are sure that the configured tasks "
+                << "will not exceed the request limits imposed by the API, "
+                << "then add the parameter --ignore-limits to the call of the "
+                << "application." << std::endl;
+      return rcTasksExceedApiRequestLimit;
+    }
+  } //if check shall be performed
+
   #warning Not completely implemented yet!
+  //TODO: Implement and start data collection.
 
   std::cout << "Not implemented yet!" << std::endl;
   return 0;

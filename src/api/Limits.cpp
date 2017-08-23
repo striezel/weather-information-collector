@@ -28,12 +28,31 @@ namespace wic
 const Limit Limit::apixu = Limit(5000, std::chrono::hours(24 * 31));
 
 /* Limit for OpenWeatherMap is 60 calls per minute on the free plan. */
-const Limit Limit::own = Limit(60, std::chrono::minutes(1));
+const Limit Limit::owm = Limit(60, std::chrono::minutes(1));
+
+/* There's no limit here for "none" API, but set it to zero. */
+const Limit Limit::none = Limit(0, std::chrono::hours(1));
 
 Limit::Limit(const uint_least32_t _requests, const std::chrono::seconds& _timespan)
 : requests(_requests),
   timespan(_timespan)
 {
+}
+
+const Limit& Limit::forApi(const ApiType api)
+{
+  switch(api)
+  {
+    case ApiType::Apixu:
+         return Limit::apixu;
+    case ApiType::OpenWeatherMap:
+         return Limit::owm;
+    case ApiType::none:
+         //no limit
+         return Limit::none;
+  }
+  //Fallback, just in case there might be more APIs in the future.
+  return Limit::none;
 }
 
 } //namespace

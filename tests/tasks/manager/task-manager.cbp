@@ -30,6 +30,8 @@
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
 		</Linker>
+		<Unit filename="../../../src/api/Limits.cpp" />
+		<Unit filename="../../../src/api/Limits.hpp" />
 		<Unit filename="../../../src/api/Types.cpp" />
 		<Unit filename="../../../src/api/Types.hpp" />
 		<Unit filename="../../../src/data/Location.cpp" />

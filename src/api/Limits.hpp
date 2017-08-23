@@ -23,10 +23,12 @@
 
 #include <chrono>
 #include <cstdint>
+#include "Types.hpp"
 
 namespace wic
 {
 
+/** \brief structure for request limits of an API */
 struct Limit
 {
   /** \brief constructor
@@ -44,7 +46,20 @@ struct Limit
 
   /** \brief contains the limit for OpenWeatherMap API calls
    */
-  static const Limit own;
+  static const Limit owm;
+
+
+  /** \brief contains the limit for unknown API - always zero
+   */
+  static const Limit none;
+
+
+  /** \brief returns a limit for a particular API
+   *
+   * \param api  the corresponding API
+   * \return Returns the request limit for the specified API.
+   */
+  static const Limit& forApi(const ApiType api);
 
 
   uint_least32_t requests; /**< number of allowed requests */

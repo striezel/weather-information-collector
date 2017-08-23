@@ -4,6 +4,7 @@ cmake_minimum_required (VERSION 2.8)
 project(task_manager_tests)
 
 set(task_manager_tests_sources
+    ../../../src/api/Limits.cpp
     ../../../src/api/Types.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp

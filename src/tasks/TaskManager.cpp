@@ -21,7 +21,9 @@
 #include "TaskManager.hpp"
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <boost/filesystem.hpp>
+#include "../api/Limits.hpp"
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -324,6 +326,48 @@ bool TaskManager::hasDuplicates(const std::vector<Task>& tasks)
     } //for j
   } //for i
   return false;
+}
+
+bool TaskManager::withinLimits(const std::vector<Task>& tasks, const bool silent)
+{
+  std::map<ApiType, uint_least32_t> requests;
+  for (const Task& t : tasks)
+  {
+    //Interval of zero seconds or less can never be within limit.
+    if (t.interval() <= std::chrono::seconds::zero())
+      return false;
+
+    //cast duration to seconds, for better comparability
+    const auto duration_seconds = std::chrono::duration_cast<std::chrono::seconds>(Limit::forApi(t.api()).timespan);
+    //Pessimistic number of requests for that task:
+    //  n = limit's duration / task's interval, rounded up to the next nearest integer
+    const uint_least32_t numberOfRequests = static_cast<uint_least32_t>(std::ceil(duration_seconds.count() / static_cast<double>(t.interval().count())));
+
+    requests[t.api()] += numberOfRequests;
+  } //for (range-based)
+
+  if (!requests.empty() && !silent)
+  {
+    std::cout << "Info: Requests consumed via configured tasks for APIs:\n";
+    for (const auto& kv : requests)
+    {
+      const auto& l = Limit::forApi(kv.first);
+      std::cout << "    " << toString(kv.first) << ": " << kv.second << " of "
+                << l.requests << " possible requests within "
+                << std::chrono::duration_cast<std::chrono::seconds>(l.timespan).count()
+                << " seconds\n";
+    } //for (range-based)
+  } //if requests are not empty
+
+  //Check whether there are more requests than the limit allows.
+  for (const auto& kv : requests)
+  {
+    if (kv.second > Limit::forApi(kv.first).requests)
+      return false;
+  } //for (range-based)
+
+  // Everything seems to be within the request limits.
+  return true;
 }
 
 } //namespace

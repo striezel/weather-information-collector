@@ -29,6 +29,8 @@
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
 		</Linker>
+		<Unit filename="../src/api/Limits.cpp" />
+		<Unit filename="../src/api/Limits.hpp" />
 		<Unit filename="../src/api/Types.cpp" />
 		<Unit filename="../src/api/Types.hpp" />
 		<Unit filename="../src/conf/Configuration.cpp" />
@@ -56,6 +58,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="store/StoreCSV.cpp" />
 		<Unit filename="tasks/Task.cpp" />
+		<Unit filename="tasks/TaskManager.cpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Extensions>
 			<envvars />

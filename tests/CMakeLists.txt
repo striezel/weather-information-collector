@@ -4,6 +4,7 @@ cmake_minimum_required (VERSION 2.8)
 project(weather_information_collector_tests)
 
 set(weather_information_collector_tests_sources
+    ../src/api/Limits.cpp
     ../src/api/Types.cpp
     ../src/conf/Configuration.cpp
     ../src/data/Location.cpp
@@ -20,6 +21,7 @@ set(weather_information_collector_tests_sources
     db/ConnectionInformation.cpp
     store/StoreCSV.cpp
     tasks/Task.cpp
+    tasks/TaskManager.cpp
     util/Strings.cpp
     main.cpp)
 

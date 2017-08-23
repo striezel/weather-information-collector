@@ -64,6 +64,17 @@ class TaskManager
      *         tasks. Returns false otherwise.
      */
     static bool hasDuplicates(const std::vector<Task>& tasks);
+
+
+    /** \brief checks whether the tasks can be executed within API request limits
+     *
+     * \param tasks   vector of tasks
+     * \param silent  if true, then request statistics will not be shown on
+     *                standard output
+     * \return Returns true, if the tasks can be executed within the API request limits.
+     *         Returns false otherwise.
+     */
+    static bool withinLimits(const std::vector<Task>& tasks, const bool silent = false);
 }; //class
 
 } //namespace

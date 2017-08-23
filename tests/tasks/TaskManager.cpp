@@ -1,0 +1,213 @@
+/*
+ -------------------------------------------------------------------------------
+    This file is part of the test suite for weather-information-collector.
+    Copyright (C) 2017  Dirk Stolle
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -------------------------------------------------------------------------------
+*/
+
+#include <catch.hpp>
+#include "../../src/tasks/TaskManager.hpp"
+
+TEST_CASE("Class TaskManager")
+{
+  /* Note:
+
+     The tests for loading configuration files are part of a separate test
+     application. It can be found in the manger/ subdirectory.
+  */
+
+  using namespace wic;
+
+  Location loc;
+  loc.setName("London");
+  loc.setId(123456789);
+
+  SECTION("withinLimit")
+  {
+    std::vector<Task> tasks;
+
+    SECTION("empty task list")
+    {
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("API none is never within limits")
+    {
+      tasks.push_back(Task(loc, ApiType::none, std::chrono::seconds(3600)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Interval zero (or less) is never within limits")
+    {
+      tasks.push_back(Task(loc, ApiType::none, std::chrono::seconds(0)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      tasks.push_back(Task(loc, ApiType::none, std::chrono::seconds(-3)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(0)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(-5)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(0)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(-5)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("OpenWeatherMap only: two tasks within limits")
+    {
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(900)));
+
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("OpenWeatherMap only: two tasks with too much requests")
+    {
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(1)));
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(1)));
+
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("OpenWeatherMap only: multitude of tasks within limits")
+    {
+      for (int i = 1; i <= 60; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(60)));
+      }
+      REQUIRE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      for (int i = 1; i <= 2; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(2)));
+      }
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("OpenWeatherMap only: multitude of tasks with too much requests")
+    {
+      for (int i = 1; i <= 61; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(60)));
+      }
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+
+    SECTION("Apixu only: two tasks within limits")
+    {
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(1800)));
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(1800)));
+
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Apixu only: two tasks with too much requests")
+    {
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
+
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Apixu only: multitude of tasks within limits")
+    {
+      for (int i = 1; i <= 6; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(3600)));
+      }
+      REQUIRE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      for (int i = 1; i <= 2; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(1200)));
+      }
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Apixu only: multitude of tasks with too much requests")
+    {
+      for (int i = 1; i <= 60; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(60)));
+      }
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+
+    SECTION("Apixu + OpenWeatherMap: two tasks within limits")
+    {
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(900)));
+
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Apixu + OpenWeatherMap: few tasks with too much requests")
+    {
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(60)));
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(1)));
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(1)));
+
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Apixu + OpenWeatherMap: multitude of tasks within limits")
+    {
+      for (int i = 1; i <= 30; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(60)));
+      }
+      for (int i = 1; i <= 2; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(2400)));
+      }
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Apixu + OpenWeatherMap: out of limit, even if only one API has too much requests")
+    {
+      //too much OWM requests, but Apixu requests within limit
+      for (int i = 1; i <= 61; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(1)));
+      }
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(3600)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+
+      //too much Apixu requests, but OWM requests within limit
+      tasks.clear();
+      for (int i = 1; i <= 7; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(3600)));
+      }
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(3600)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+  } //withinLimits
+}
