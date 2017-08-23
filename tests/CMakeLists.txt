@@ -52,5 +52,8 @@ add_subdirectory (api/apixu)
 # Recurse into subdirectory for OpenWeatherMap tests.
 add_subdirectory (api/owm)
 
+# Recurse into subdirectory for executable tests.
+add_subdirectory (collector)
+
 # Recurse into subdirectory for TaskManager tests.
 add_subdirectory (tasks/manager)
