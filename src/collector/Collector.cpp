@@ -23,6 +23,8 @@
 #include <memory>
 #include <thread>
 #include "../api/API.hpp"
+#include "../api/Apixu.hpp"
+#include "../api/OpenWeatherMap.hpp"
 #include "../data/Weather.hpp"
 #include "../store/StoreMySQL.hpp"
 
@@ -108,7 +110,6 @@ void Collector::collect()
   if (idx < 0)
     return;
 
-  std::unique_ptr<API> api = nullptr;
   while (true)
   {
     if (stopRequested())
@@ -117,6 +118,22 @@ void Collector::collect()
     }
     const Location& loc = tasksContainer[idx].task.location();
     Weather weather;
+    std::unique_ptr<API> api = nullptr;
+    const std::string key = apiKeys[tasksContainer[idx].task.api()];
+    switch (tasksContainer[idx].task.api())
+    {
+      case ApiType::OpenWeatherMap:
+           api.reset(new wic::OpenWeatherMap(key));
+           break;
+      case ApiType::Apixu:
+           api.reset(new wic::Apixu(key));
+           break;
+      case ApiType::none:
+      default:
+           std::cerr << "Error: Cannot collect data for unsupported API type "
+                     << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
+           return;
+    } //swi
     if (api->currentWeather(loc, weather))
     {
       StoreMySQL sql(connInfo);
@@ -129,6 +146,7 @@ void Collector::collect()
     {
       std::cerr << "Error: Could not get current weather data!" << std::endl;
     }
+    api = nullptr;
     //update time for next request
     tasksContainer[idx].nextRequest = tasksContainer[idx].nextRequest + tasksContainer[idx].task.interval();
     //find index for next request
