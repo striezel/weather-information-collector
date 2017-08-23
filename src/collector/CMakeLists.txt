@@ -82,6 +82,6 @@ message("GIT_HASH is ${GIT_HASH}.")
 message("GIT_TIME is ${GIT_TIME}.")
 
 # replace git-related constants in GitInfos.cpp
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../util/GitInfos.cpp.template
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../util/GitInfos.template.cpp
                ${CMAKE_CURRENT_SOURCE_DIR}/../util/GitInfos.cpp
                ESCAPE_QUOTES)
