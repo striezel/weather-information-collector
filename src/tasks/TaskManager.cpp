@@ -308,7 +308,7 @@ bool TaskManager::hasDuplicates(const std::vector<Task>& tasks)
     for (unsigned int j = i + 1; j < length; ++j)
     {
       if ((tasks[i].api() == tasks[j].api())
-        && (tasks[i].location() == tasks[i].location()))
+        && (tasks[i].location() == tasks[j].location()))
       {
         std::cerr << "Error: There are duplicate / overlapping tasks for location ";
         if (tasks[i].location().hasId())

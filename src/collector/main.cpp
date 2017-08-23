@@ -40,7 +40,7 @@ const int rcTasksExceedApiRequestLimit = 3;
 void showVersion()
 {
   wic::GitInfos info;
-  std::cout << "weather-information-collector, 0.5.1, 2017-08-23\n"
+  std::cout << "weather-information-collector, 0.5.2, 2017-08-23\n"
             << "\n"
             << "Version control commit: " << info.commit() << "\n"
             << "Version control date:   " << info.date() << std::endl;

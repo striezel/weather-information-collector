@@ -35,6 +35,42 @@ TEST_CASE("Class TaskManager")
   loc.setName("London");
   loc.setId(123456789);
 
+  SECTION("hasDuplicates")
+  {
+    std::vector<Task> tasks;
+
+    Location loc2;
+    loc.setName("Paris");
+    loc.setId(987654321);
+
+    SECTION("empty task list")
+    {
+      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks) );
+    }
+
+    SECTION("two tasks with same location but different API")
+    {
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(900)));
+      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks) );
+    }
+
+    SECTION("two tasks with same API but different location")
+    {
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc2, ApiType::OpenWeatherMap, std::chrono::seconds(900)));
+      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks) );
+    }
+
+    SECTION("two tasks with same API, same location, but different interval")
+    {
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(1801)));
+      REQUIRE( TaskManager::hasDuplicates(tasks) );
+    }
+  }
+
+
   SECTION("withinLimit")
   {
     std::vector<Task> tasks;
