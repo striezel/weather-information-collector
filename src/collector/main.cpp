@@ -26,6 +26,7 @@
 #include "../store/StoreMySQL.hpp"
 #include "../tasks/TaskManager.hpp"
 #include "../util/GitInfos.hpp"
+#include "Collector.hpp"
 
 /** \brief exit code for invalid command line parameters */
 const int rcInvalidParameter = 1;
@@ -39,7 +40,7 @@ const int rcTasksExceedApiRequestLimit = 3;
 void showVersion()
 {
   wic::GitInfos info;
-  std::cout << "weather-information-collector, 0.4.1, 2017-08-23\n"
+  std::cout << "weather-information-collector, 0.5, 2017-08-23\n"
             << "\n"
             << "Version control commit: " << info.commit() << "\n"
             << "Version control date:   " << info.date() << std::endl;
@@ -121,38 +122,50 @@ int main(int argc, char** argv)
     } //for i
   } //if arguments are there
 
-  //load configuration file + configured tasks
-  wic::Configuration config;
-  if (!config.load(configurationFile))
+  wic::Collector collector;
   {
-    std::cerr << "Error: Could not load configuration!" << std::endl;
-    return rcConfigurationError;
-  }
-
-  //If there are no tasks, we can quit here.
-  if (config.tasks().empty())
-  {
-    std::cerr << "Error: No collection tasks have been configured!" << std::endl;
-    return rcConfigurationError;
-  }
-
-  if (checkApiLimits)
-  {
-    if (!wic::TaskManager::withinLimits(config.tasks()))
+    //load configuration file + configured tasks
+    wic::Configuration config;
+    if (!config.load(configurationFile))
     {
-      std::cerr << "Error: The configured collection tasks would exceed the "
-                << "request limits imposed by the free API plan! If you are on"
-                << " a different plan and are sure that the configured tasks "
-                << "will not exceed the request limits imposed by the API, "
-                << "then add the parameter --ignore-limits to the call of the "
-                << "application." << std::endl;
-      return rcTasksExceedApiRequestLimit;
+      std::cerr << "Error: Could not load configuration!" << std::endl;
+      return rcConfigurationError;
     }
-  } //if check shall be performed
 
-  #warning Not completely implemented yet!
-  //TODO: Implement and start data collection.
+    //If there are no tasks, we can quit here.
+    if (config.tasks().empty())
+    {
+      std::cerr << "Error: No collection tasks have been configured!" << std::endl;
+      return rcConfigurationError;
+    }
 
-  std::cout << "Not implemented yet!" << std::endl;
+    if (checkApiLimits)
+    {
+      if (!wic::TaskManager::withinLimits(config.tasks()))
+      {
+        std::cerr << "Error: The configured collection tasks would exceed the "
+                  << "request limits imposed by the free API plan! If you are on"
+                  << " a different plan and are sure that the configured tasks "
+                  << "will not exceed the request limits imposed by the API, "
+                  << "then add the parameter --ignore-limits to the call of the "
+                  << "application." << std::endl;
+        return rcTasksExceedApiRequestLimit;
+      }
+    } //if check shall be performed
+
+    if (!collector.fromConfiguration(config))
+    {
+      std::cerr << "Error: Could not transfer configuration data to collector!" << std::endl;
+      return rcConfigurationError;
+    }
+  } //end of scope for configuration
+
+  /* collect() currently starts an endless loop that cannot be interrupted by
+     the user, yet. Future versions might use something like signal handling
+     (as in SIGINT or SIGTERM) to stop the collection.
+  */
+  collector.collect();
+
+  std::cout << "Done." << std::endl;
   return 0;
 }

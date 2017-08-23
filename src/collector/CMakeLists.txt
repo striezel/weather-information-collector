@@ -19,6 +19,7 @@ set(weather-information-collector_sources
     ../tasks/TaskManager.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
+    Collector.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)
