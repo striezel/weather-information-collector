@@ -40,7 +40,7 @@ const int rcTasksExceedApiRequestLimit = 3;
 void showVersion()
 {
   wic::GitInfos info;
-  std::cout << "weather-information-collector, 0.5, 2017-08-23\n"
+  std::cout << "weather-information-collector, 0.5.1, 2017-08-23\n"
             << "\n"
             << "Version control commit: " << info.commit() << "\n"
             << "Version control date:   " << info.date() << std::endl;
@@ -53,6 +53,10 @@ void showHelp()
             << "options:\n"
             << "  -? | --help            - shows this help message\n"
             << "  -v | --version         - shows version information\n"
+            << "  -c FILE | --conf FILE  - sets the file name of the configuration file to use\n"
+            << "                           during the program run. If this option is omitted,\n"
+            << "                           then the program will search for the configuration\n"
+            << "                           in some predefined locations.\n"
             << "  -l | --ignore-limits   - ignore check for API limits during startup\n";
 }
 
