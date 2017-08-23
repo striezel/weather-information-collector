@@ -48,6 +48,8 @@
 		<Unit filename="../api/API.hpp" />
 		<Unit filename="../api/Apixu.cpp" />
 		<Unit filename="../api/Apixu.hpp" />
+		<Unit filename="../api/Limits.cpp" />
+		<Unit filename="../api/Limits.hpp" />
 		<Unit filename="../api/OpenWeatherMap.cpp" />
 		<Unit filename="../api/OpenWeatherMap.hpp" />
 		<Unit filename="../api/Types.cpp" />
@@ -71,8 +73,8 @@
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />
 		<Unit filename="../tasks/TaskManager.hpp" />
-		<Unit filename="../util/GitInfos.template.cpp" />
 		<Unit filename="../util/GitInfos.hpp" />
+		<Unit filename="../util/GitInfos.template.cpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
 		<Unit filename="main.cpp" />
