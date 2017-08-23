@@ -1,0 +1,87 @@
+# Documentation for weather-information-collector
+
+(Note: This documentation is still incomplete.)
+
+weather-information-collector is a tool that collects weather information from
+various available ReST API services.
+
+# Preparations
+
+In order to use the full potential of weather-information-collector you need
+the compiled program (see the readme in the root directory for build
+instructions) and a MySQL database server - or any compatible database server
+like MariaDB or Percona Server.
+
+## MySQL server setup
+
+I assume that you know how to install such a database server, as it usually
+boils down to one of the following commands in a root terminal:
+
+    apt-get install mysql-server
+    # or
+    sudo apt-get install mysql-server
+
+and the configuration of a password for the root user. I'll leave that to you
+as an exercise.
+
+After that the database and table structure for weather-information-collector
+needs to be created. You can use the SQL dump file provided in
+[database/weather_information_collector.sql](../database/weather_information_collector.sql)
+to accomplish that.
+
+Additionally you should create a MySQL user that has full access to the created
+database tables. (Please do not just use the root user for any database access,
+that's ugly.) A database user named `wic' can be created with SQL commands like
+the following:
+
+    -- don't allow anything ("USAGE") to user wic
+    GRANT USAGE ON *.* TO 'wic'@'localhost' IDENTIFIED BY 'secret-password';
+    -- give the user wic all rights ("ALL PRIVILEGES") for tables of the database weather_information_collector
+    GRANT ALL PRIVILEGES ON weather_information_collector.* TO 'wic'@'localhost' IDENTIFIED BY 'secret-password';
+    -- flush database privilege cache to make changes effective immediately
+    FLUSH PRIVILEGES;
+
+For more details on GRANT and the complete syntax see the
+[MySQL documentation for GRANT](https://dev.mysql.com/doc/refman/5.7/en/grant.html).
+
+## Get API keys for a weather data provider of choice
+
+Since weather-information-collector gets the data via REST-API from a weather
+data provider and these providers require their users to provide an API key
+with every request, the next step is to sign up for a weather data provider of
+your choice. Currently, weather-information-collector only supports the
+following two providers:
+
+* [OpenWeatherMap](https://openweathermap.org/)
+* [Apixu](https://www.apixu.com/)
+
+Choose the one you like best (or maybe even both of them), and make sure you
+have the API key ready. It will be needed for the configuration file of
+weather-information-collector.
+
+# Configuration file
+
+_(This section is incomplete.)_
+
+The configuration file is the place where some of the core settings like the
+database connection information or the API keys are stored. Since this is some
+sensitive information, take precaution that no other users or only users who
+you trust can access the configuration file. This can usually be achieved by
+setting proper file permissions and file ownership for the configuration file.
+
+**TODO: Complete this section.**
+
+# Task files
+
+_(This section is incomplete.)_
+
+Another type of configuration files are the so-called task files. These files
+describe what weather information the program shall collect and in which
+intervals the collection takes places. Unlike the core configuration file from
+the previous section these files do not contains any credentials or similar
+confidential information.
+
+The directory where tasks files are located can be set via the core
+configuration file (see above).
+
+**TODO: Complete this section.**
