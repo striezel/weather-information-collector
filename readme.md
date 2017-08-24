@@ -1,7 +1,9 @@
 # weather-information-collector
 
-weather-information-collector will be a tool that collects weather information
-from various available ReST API services. It will be highly configurable.
+weather-information-collector is a tool that collects weather information from
+various available ReST API services (currently OpenWeatherMap and Apixu).
+It is highly configurable. See the [documentation](doc/readme.md) for more
+information.
 
 ## Build status
 
@@ -49,6 +51,19 @@ Starting in the root directory of the source, you can do the following steps:
     cd build
     cmake ../
     make -j4
+
+## Usage
+
+    weather-information-collector [OPTIONS]
+
+    options:
+      -? | --help            - shows this help message
+      -v | --version         - shows version information
+      -c FILE | --conf FILE  - sets the file name of the configuration file to use
+                               during the program run. If this option is omitted,
+                               then the program will search for the configuration
+                               in some predefined locations.
+      -l | --ignore-limits   - ignore check for API limits during startup
 
 ## Copyright and Licensing
 

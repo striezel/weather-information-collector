@@ -2,11 +2,32 @@
 
 The configuration file of weather-information-collector is the place where the
 core settings like the database connection information or the API keys are
-stored. Since this is sensitive information, take precaution that no other
-users or only users who you trust can access the configuration file. This can
+stored. **Since this is sensitive information, take precaution that no other
+users or only users who you trust can access the configuration file.** This can
 usually be achieved by setting proper file permissions and file ownership for
 the configuration file. (Something along the lines of `chmod 600 FILE_NAME` is
 the usual approach, together with `chown user:group FILE_NAME`.)
+
+# Location of the configuration file
+
+The location of the configuration file can be specified via the command line
+option `-c`. For example
+
+    /path/to/weather-information-collector -c /home/user/some/path/wic.conf
+
+will tell the program to look for the configuration file
+`/home/user/some/path/wic.conf`. If no such option is given, the program will
+look for the configuration file in these predefined locations, in the given
+order:
+
+* /etc/weather-information-collector/weather-information-collector.conf
+* /etc/weather-information-collector/wic.conf
+* /etc/wic/wic.conf
+* ./weather-information-collector.conf
+* ./wic.conf
+
+If none of these files exist and no location is given for the configuration
+file, then the program will exit with a non-zero exit code.
 
 # Configuration elements
 
@@ -23,7 +44,7 @@ sets the value of `db.host` to `localhost`.
 ## Comments
 
 The configuration file allows comment lines. Comment lines are lines where the
-first character is `#`. These lines are ignored by the application. A lines has
+first character is `#`. These lines are ignored by the application. A line has
 to be either a comment or configuration data, you cannot mix both on the same
 line.
 
@@ -85,7 +106,7 @@ Possible values of these settings could be:
 # Example of a complete configuration file
 
 The following example is a complete core configuration file for the
-weather-information-collector program:
+weather-information-collector program (as of version 0.5.3):
 
     # This line is a comment and will be ignored by the program.
     #And so is this line.
