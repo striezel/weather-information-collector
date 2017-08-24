@@ -57,5 +57,8 @@ add_subdirectory (api/owm)
 # Recurse into subdirectory for executable tests.
 add_subdirectory (collector)
 
+# Recurse into subdirectory for configtest executable tests.
+add_subdirectory (configtest)
+
 # Recurse into subdirectory for TaskManager tests.
 add_subdirectory (tasks/manager)

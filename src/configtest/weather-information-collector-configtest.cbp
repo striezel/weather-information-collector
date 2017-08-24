@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="weather-information-collector" />
+		<Option title="weather-information-collector-configtest" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/weather-information-collector" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/weather-information-collector-configtest" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -17,7 +17,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/weather-information-collector" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/weather-information-collector-configtest" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -35,42 +35,23 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
-			<Add directory="/usr/include/mysql/" />
-			<Add directory="/usr/include/mysql++" />
 		</Compiler>
 		<Linker>
-			<Add library="curl" />
-			<Add library="jsoncpp" />
-			<Add library="mysqlpp" />
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
-		<Unit filename="../api/API.hpp" />
-		<Unit filename="../api/Apixu.cpp" />
-		<Unit filename="../api/Apixu.hpp" />
 		<Unit filename="../api/Limits.cpp" />
 		<Unit filename="../api/Limits.hpp" />
-		<Unit filename="../api/OpenWeatherMap.cpp" />
-		<Unit filename="../api/OpenWeatherMap.hpp" />
 		<Unit filename="../api/Types.cpp" />
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
 		<Unit filename="../data/Location.cpp" />
 		<Unit filename="../data/Location.hpp" />
-		<Unit filename="../data/Weather.cpp" />
-		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
-		<Unit filename="../net/Curly.cpp" />
-		<Unit filename="../net/Curly.hpp" />
-		<Unit filename="../store/Store.hpp" />
-		<Unit filename="../store/StoreCSV.cpp" />
-		<Unit filename="../store/StoreCSV.hpp" />
-		<Unit filename="../store/StoreMySQL.cpp" />
-		<Unit filename="../store/StoreMySQL.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />
@@ -79,8 +60,6 @@
 		<Unit filename="../util/GitInfos.template.cpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
-		<Unit filename="Collector.cpp" />
-		<Unit filename="Collector.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

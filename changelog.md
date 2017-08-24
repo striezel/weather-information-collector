@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.5.4 (2017-08-24)
+
+Add a new program that performs configuration checks only. This way the user
+can check whether all configuration files are acceptable without having to start
+the data collection.
+
 ## Version 0.5.3 (2017-08-24)
 
 **This is the first working version of weather-information-collector.**

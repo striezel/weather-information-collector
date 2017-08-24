@@ -3,3 +3,6 @@ cmake_minimum_required (VERSION 2.8)
 
 # Recurse into subdirectory for the main executable.
 add_subdirectory (collector)
+
+# Recurse into subdirectory for the configuration test application.
+add_subdirectory (configtest)
