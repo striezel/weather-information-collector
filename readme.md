@@ -1,9 +1,17 @@
 # weather-information-collector
 
 weather-information-collector is a tool that collects weather information from
-various available ReST API services (currently OpenWeatherMap and Apixu).
-It is highly configurable. See the [documentation](doc/readme.md) for more
-information.
+various available ReST API services (currently OpenWeatherMap and Apixu) and
+stores the information in a database. (Currently only MySQL and compatible
+DBMS are supported.)
+
+Data collection tasks can be configured individually.
+weather-information-collector will check that these collection tasks do not
+overlap (i.e. that there are not two tasks which collect the same information
+from the same API). It will also check that any configured tasks do not exceed
+the request limits imposed by the APIs.
+
+See the [documentation](doc/readme.md) for more information.
 
 ## Build status
 
