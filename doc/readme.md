@@ -1,7 +1,5 @@
 # Documentation for weather-information-collector
 
-_(Note: This documentation is still incomplete.)_
-
 weather-information-collector is a tool that collects weather information from
 various available ReST API services.
 
@@ -72,15 +70,14 @@ Full details on the core configuration (supported settings, etc.) can be found
 
 # Task files
 
-_(This section is incomplete.)_
-
 Another type of configuration files are the so-called task files. These files
 describe what weather information the program shall collect and in which
 intervals the collection takes places. Unlike the core configuration file from
-the previous section these files do not contains any credentials or similar
+the previous section these files do not contain any credentials or similar
 confidential information.
 
 The directory where tasks files are located can be set via the core
 configuration file (see above).
 
-**TODO: Complete this section.**
+Full details on the task files (supported settings, etc.) can be found
+[here](task-files.md).
