@@ -1,6 +1,6 @@
 # Documentation for weather-information-collector
 
-(Note: This documentation is still incomplete.)
+_(Note: This documentation is still incomplete.)_
 
 weather-information-collector is a tool that collects weather information from
 various available ReST API services.
@@ -61,15 +61,14 @@ weather-information-collector.
 
 # Configuration file
 
-_(This section is incomplete.)_
-
 The configuration file is the place where some of the core settings like the
 database connection information or the API keys are stored. Since this is some
 sensitive information, take precaution that no other users or only users who
 you trust can access the configuration file. This can usually be achieved by
 setting proper file permissions and file ownership for the configuration file.
 
-**TODO: Complete this section.**
+Full details on the core configuration (supported settings, etc.) can be found
+[here](configuration-core.md).
 
 # Task files
 
