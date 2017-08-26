@@ -20,6 +20,7 @@
 
 #include "Configuration.hpp"
 #include <fstream>
+#include <iostream>
 #include <boost/filesystem.hpp>
 #include "../tasks/TaskManager.hpp"
 #include "../util/Strings.hpp"
