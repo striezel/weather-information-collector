@@ -104,9 +104,9 @@ class Weather
     void setTemperatureKelvin(const float newTempK);
 
 
-    /** \brief checks whether this instance has a temperature in Kelvin
+    /** \brief checks whether this instance has a temperature in °C
      *
-     * \return Returns true, if the instance has a temperature in Kelvin.
+     * \return Returns true, if the instance has a temperature in °C.
      *         Returns false otherwise.
      */
     bool hasTemperatureCelsius() const;
