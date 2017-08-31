@@ -36,6 +36,7 @@ TEST_CASE("WeatherClass")
     REQUIRE_FALSE( weather.hasTemperatureCelsius() );
     REQUIRE_FALSE( weather.hasTemperatureFahrenheit() );
     REQUIRE_FALSE( weather.hasHumidity() );
+    REQUIRE_FALSE( weather.hasRain() );
     REQUIRE_FALSE( weather.hasPressure() );
     REQUIRE_FALSE( weather.hasWindSpeed() );
     REQUIRE_FALSE( weather.hasWindDegrees() );
@@ -96,6 +97,21 @@ TEST_CASE("WeatherClass")
     weather.setHumidity(101);
     REQUIRE_FALSE( weather.hasHumidity() );
     REQUIRE( weather.humidity() == -1 );
+  }
+
+  SECTION("set, has + get rain amount")
+  {
+    weather.setRain(1.5f);
+    REQUIRE( weather.hasRain() );
+    REQUIRE( weather.rain() == 1.5 );
+  }
+
+  SECTION("out of range rain amount")
+  {
+    weather.setRain(-5);
+    REQUIRE_FALSE( weather.hasRain() );
+    const float r = weather.rain();
+    REQUIRE( r != r );
   }
 
   SECTION("set, has + get air pressure")

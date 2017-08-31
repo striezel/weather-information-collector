@@ -122,6 +122,10 @@ bool StoreCSV::saveCurrentWeather(const ApiType type, const Location& location, 
     dataLine += std::to_string(weather.humidity()) + separator;
   else
     dataLine += separator;
+  if (weather.hasRain())
+    dataLine += floatToString(weather.rain()) + separator;
+  else
+    dataLine += separator;
   if (weather.hasPressure())
     dataLine += intToString(weather.pressure()) + separator;
   else
@@ -156,9 +160,9 @@ std::string StoreCSV::header() const
        //weather data
        + std::string("DataTime") + separator + std::string("RequestTime") + separator
        + std::string("Kelvin") + separator + "°C" + separator + "°F" + separator
-       + std::string("RelativeHumidity") + separator + std::string("Pressure") + separator
-       + std::string("WindSpeed") + separator + std::string("Direction") + separator
-       + std::string("Cloudiness");
+       + std::string("RelativeHumidity") + separator + std::string("Rain") + separator
+       + std::string("Pressure") + separator + std::string("WindSpeed") + separator
+       + std::string("Direction") + separator + std::string("Cloudiness");
 }
 
 } //namespace

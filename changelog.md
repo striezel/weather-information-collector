@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.5.5 (2017-08-31)
+
+weather-information-collector will now parse the rain amount given in JSON
+files, too. This will also be written to the database.
+
 ## Version 0.5.4 (2017-08-24)
 
 Add a new program that performs configuration checks only. This way the user

@@ -104,6 +104,10 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
     v2 = val["humidity"];
     if (!v2.empty() && v2.isIntegral())
       weather.setHumidity(v2.asInt());
+    //rain
+    v2 = val["precip_mm"];
+    if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
+      weather.setRain(v2.asFloat());
     //pressure
     v2 = val["pressure_mb"];
     if (!v2.empty())

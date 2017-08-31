@@ -26,8 +26,8 @@
 namespace wic
 {
 
-/** \brief exit code for when configured tasks exceed the request limit */
-const std::string version = "version 0.5.4, 2017-08-24";
+/** \brief version information */
+const std::string version = "version 0.5.5, 2017-08-31";
 
 } //namespace
 

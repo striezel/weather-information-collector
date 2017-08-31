@@ -109,12 +109,19 @@ bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weath
     if (!v2.empty() && v2.isIntegral())
       weather.setCloudiness(v2.asInt());
   } //if clouds object
+  val = root["rain"];
+  if (!val.empty() && val.isObject())
+  {
+    Json::Value v2 = val["3h"];
+    if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
+      weather.setRain(v2.asFloat());
+  } //if rain object
   val = root["dt"];
   if (!val.empty() && val.isIntegral())
   {
     const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.asInt()));
     weather.setDataTime(dt);
-  }
+  } //if dt
   return foundValidParts;
 }
 

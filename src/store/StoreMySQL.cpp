@@ -161,6 +161,10 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
   {
     insertQuery << ", humidity=" << mysqlpp::quote << static_cast<int>(weather.humidity());
   }
+  if (weather.hasRain())
+  {
+    insertQuery << ", rain=" << mysqlpp::quote << weather.rain();
+  }
   if (weather.hasPressure())
   {
     insertQuery << ", pressure=" << mysqlpp::quote << weather.pressure();

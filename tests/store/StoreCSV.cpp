@@ -31,7 +31,7 @@ TEST_CASE("StoreCSV class")
   {
     {
       StoreCSV csv("test1.csv");
-      REQUIRE( csv.header() == "API;LocationID;Latitude;Longitude;City;Postcode;DataTime;RequestTime;Kelvin;°C;°F;RelativeHumidity;Pressure;WindSpeed;Direction;Cloudiness");
+      REQUIRE( csv.header() == "API;LocationID;Latitude;Longitude;City;Postcode;DataTime;RequestTime;Kelvin;°C;°F;RelativeHumidity;Rain;Pressure;WindSpeed;Direction;Cloudiness");
     }
 
     //remove file
@@ -43,7 +43,7 @@ TEST_CASE("StoreCSV class")
     {
       StoreCSV csv("test1.csv", '\t');
 
-      REQUIRE( csv.header() == "API\tLocationID\tLatitude\tLongitude\tCity\tPostcode\tDataTime\tRequestTime\tKelvin\t°C\t°F\tRelativeHumidity\tPressure\tWindSpeed\tDirection\tCloudiness");
+      REQUIRE( csv.header() == "API\tLocationID\tLatitude\tLongitude\tCity\tPostcode\tDataTime\tRequestTime\tKelvin\t°C\t°F\tRelativeHumidity\tRain\tPressure\tWindSpeed\tDirection\tCloudiness");
     }
 
     //remove file
@@ -83,6 +83,7 @@ TEST_CASE("StoreCSV class")
     weather.setTemperatureKelvin(232.15f);
     weather.setTemperatureFahrenheit(-41.8f);
     weather.setHumidity(65);
+    weather.setRain(12.5);
     weather.setPressure(981);
     weather.setWindSpeed(5.0);
     weather.setWindDegrees(240);
@@ -128,6 +129,8 @@ TEST_CASE("StoreCSV class")
     REQUIRE( line.find(";232.15;") != std::string::npos );
     // humidity
     REQUIRE( line.find(";65;") != std::string::npos );
+    // rain
+    REQUIRE( line.find(";12.5;") != std::string::npos );
     // pressure
     REQUIRE( line.find(";981;") != std::string::npos );
     // wind speed
@@ -138,6 +141,6 @@ TEST_CASE("StoreCSV class")
     REQUIRE( line.find(";95") != std::string::npos );
 
     //complete data set
-    REQUIRE( line == "OpenWeatherMap;12345;-89.5;178.25;Coldtown;ASDF5;;;232.15;-41;-41.8;65;981;5;240;95" );
+    REQUIRE( line == "OpenWeatherMap;12345;-89.5;178.25;Coldtown;ASDF5;;;232.15;-41;-41.8;65;12.5;981;5;240;95" );
   }
 }

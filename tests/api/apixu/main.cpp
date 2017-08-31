@@ -56,6 +56,7 @@ int main(int argc, char** argv)
             << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
             << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
             << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
+            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
             << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
             << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
             << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
@@ -66,6 +67,11 @@ int main(int argc, char** argv)
   if (!w.hasHumidity())
   {
     std::cerr << "Error: Weather object does not have humidity data!\n";
+    return 1;
+  }
+  if (!w.hasRain())
+  {
+    std::cerr << "Error: Weather object does not have rain amount information!\n";
     return 1;
   }
   if (!w.hasPressure())
@@ -109,6 +115,11 @@ int main(int argc, char** argv)
     std::cerr << "Humidity value is incorrect.\n";
     return 1;
   }
+  if (w.rain() != 0.8f)
+  {
+    std::cerr << "Rain amount is incorrect.\n";
+    return 1;
+  }
   if (w.pressure() != 1019)
   {
     std::cerr << "Pressure value is incorrect.\n";
@@ -137,6 +148,49 @@ int main(int argc, char** argv)
   if (w.cloudiness() != 0)
   {
     std::cerr << "Cloudiness is incorrect.\n";
+    return 1;
+  }
+
+  //test for rain data
+
+  std::string jsonRainFileName = jsonFileName;
+  jsonRainFileName.insert(jsonRainFileName.size() - 5, ".rain");
+  jsonStream.open(jsonRainFileName, std::ios_base::in | std::ios_base::binary);
+  if (!jsonStream.is_open())
+  {
+    std::cerr << "Error: JSON file " << jsonRainFileName << " could not be opened!\n";
+    return 1;
+  }
+
+  std::getline(jsonStream, json, '\0');
+  jsonStream.close();
+
+  const bool successRain = api.parseCurrentWeather(json, w);
+  if (!successRain)
+  {
+    std::cerr << "Error: JSON data could not be parsed!\n";
+    return 1;
+  }
+
+  std::cout << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
+            << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
+            << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
+            << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
+            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
+            << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
+            << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
+  const std::time_t dt_c2 = std::chrono::system_clock::to_time_t(w.dataTime());
+  std::cout << "Data time: " << std::ctime(&dt_c2) << "\n";
+
+  if (!w.hasRain())
+  {
+    std::cerr << "Error: Weather object does not have rain amount information!\n";
+    return 1;
+  }
+  if (w.rain() != 1.1f)
+  {
+    std::cerr << "Rain amount is incorrect.\n";
     return 1;
   }
 

@@ -173,6 +173,29 @@ class Weather
     void setHumidity(const int8_t newHumidity);
 
 
+    /** \brief checks whether this instance has information about rain
+     *
+     * \return Returns true, if the instance has rain information.
+     *         Returns false otherwise.
+     */
+    bool hasRain() const;
+
+
+    /** \brief gets the amount of rain in millimeters, if it was set
+     *
+     * \return Returns the amount of rain in millimeters.
+     *         Returns NaN, if no humidity is set.
+     */
+    float rain() const;
+
+
+    /** \brief sets the amount of rain in millimeters
+     *
+     * \param newRainMm  the new amount of rain in millimeters
+     */
+    void setRain(const float newRainMm);
+
+
     /** \brief checks whether this instance has air pressure information
      *
      * \return Returns true, if the instance has air pressure.
@@ -293,6 +316,7 @@ class Weather
     float m_tempC; /**< temperature in degrees Celsius */
     float m_tempF; /**< temperature in degrees Fahrenheit */
     int8_t m_humidity; /**< relative humidity in percent */
+    float m_rain; /**< amount of rain within the last three hours in mm */
     int16_t m_pressure; /**< air pressure in hPa */
     float m_windSpeed; /**< wind speed in meters per second */
     int16_t m_windDegrees; /**< wind direction in degrees */

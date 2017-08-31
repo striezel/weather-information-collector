@@ -31,6 +31,7 @@ Weather::Weather()
   m_tempC(std::numeric_limits<float>::quiet_NaN()),
   m_tempF(std::numeric_limits<float>::quiet_NaN()),
   m_humidity(-1),
+  m_rain(std::numeric_limits<float>::quiet_NaN()),
   m_pressure(-1),
   m_windSpeed(std::numeric_limits<float>::quiet_NaN()),
   m_windDegrees(-1),
@@ -131,6 +132,24 @@ void Weather::setHumidity(const int8_t newHumidity)
     m_humidity = -1;
   else
     m_humidity = newHumidity;
+}
+
+bool Weather::hasRain() const
+{
+  return (m_rain == m_rain);
+}
+
+float Weather::rain() const
+{
+  return m_rain;
+}
+
+void Weather::setRain(const float newRainMm)
+{
+  if (newRainMm >= 0.0f)
+    m_rain = newRainMm;
+  else
+    m_rain = 0.0f / 0.0f;
 }
 
 bool Weather::hasPressure() const

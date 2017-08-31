@@ -1,0 +1,38 @@
+{
+  "location":{
+    "name":"Dresden",
+    "region":"Sachsen",
+    "country":"Germany",
+    "lat":51.05,
+    "lon":13.75,
+    "tz_id":"Europe/Berlin",
+    "localtime_epoch":1504213916,
+    "localtime":"2017-08-31 23:11"
+  },
+  "current": {
+    "last_updated_epoch":1504213212,
+    "last_updated":"2017-08-31 23:00",
+    "temp_c":15.0,
+    "temp_f":59.0,
+    "is_day":0,
+    "condition": {
+      "text":"Light rain",
+      "icon":"//cdn.apixu.com/weather/64x64/night/296.png",
+      "code":1183
+    },
+    "wind_mph":4.3,
+    "wind_kph":6.8,
+    "wind_degree":270,
+    "wind_dir":"W",
+    "pressure_mb":1019.0,
+    "pressure_in":30.6,
+    "precip_mm":1.1,
+    "precip_in":0.04,
+    "humidity":94,
+    "cloud":75,
+    "feelslike_c":15.1,
+    "feelslike_f":59.1,
+    "vis_km":10.0,
+    "vis_miles":6.0
+  }
+}
