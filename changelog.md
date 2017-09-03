@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.5.6 (2017-09-03)
+
+Add a new program that performs database structure and data updates for older
+database variants (currently only version 0.5.4 and earlier) and brings them
+up to data with the current database structure.
+
 ## Version 0.5.5 (2017-08-31)
 
 weather-information-collector will now parse the rain amount given in JSON

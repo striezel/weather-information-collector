@@ -33,6 +33,9 @@ const int rcConfigurationError = 2;
 /** \brief exit code for when configured tasks exceed the request limit */
 const int rcTasksExceedApiRequestLimit = 3;
 
+/** \brief exit code for database schema / version update failure (update program only) */
+const int rcUpdateFailure = 4;
+
 } //namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_RETURNCODES_HPP

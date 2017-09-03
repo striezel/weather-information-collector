@@ -6,3 +6,6 @@ add_subdirectory (collector)
 
 # Recurse into subdirectory for the configuration test application.
 add_subdirectory (configtest)
+
+# Recurse into subdirectory for the database update application.
+add_subdirectory (update)
