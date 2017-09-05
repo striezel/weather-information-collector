@@ -141,7 +141,7 @@ void Configuration::findTaskDirectory(std::string& realName)
   } //if
 }
 
-bool Configuration::loadCoreConfiguration(const std::string& fileName)
+bool Configuration::loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed)
 {
   std::ifstream stream(fileName, std::ios_base::in | std::ios_base::binary);
   if (!stream.good())
@@ -149,6 +149,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName)
     std::cerr << "Error: Could not open configuration file " << fileName << "!" << std::endl;
     return false;
   }
+
   std::string line;
   while (std::getline(stream, line))
   {
@@ -310,20 +311,25 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName)
               << ") the port number!" << std::endl;
     return false;
   }
-  //If there are no API keys, then the collector won't be able to collect
-  // information later on.
-  if (apiKeys.empty())
+
+  //Only check key presence, if missing keys are not allowed
+  if (!missingKeysAllowed)
   {
-    std::cerr << "Error: There are no API keys in configuration file "
-              << fileName << ", and thus the weather-information-collector "
-              << "will not be able to work properly." << std::endl;
-    return false;
-  }
+    //If there are no API keys, then the collector won't be able to collect
+    // information later on.
+    if (apiKeys.empty())
+    {
+      std::cerr << "Error: There are no API keys in configuration file "
+                << fileName << ", and thus the weather-information-collector "
+                << "will not be able to work properly." << std::endl;
+      return false;
+    } //if keys are missing
+  } //if keys must be present
   //Everything is good, so far.
   return true;
 }
 
-bool Configuration::load(const std::string& fileName)
+bool Configuration::load(const std::string& fileName, const bool skipTasks, const bool missingKeysAllowed)
 {
   namespace fs = boost::filesystem;
 
@@ -350,8 +356,19 @@ bool Configuration::load(const std::string& fileName)
               << realName << ": " << ex.what() << std::endl;
   } //try-catch
 
-  if (!loadCoreConfiguration(realName))
+  //clear any existing information
+  clear();
+
+  //load core configuration file
+  if (!loadCoreConfiguration(realName, missingKeysAllowed))
     return false;
+
+  tasksContainer.clear();
+  //If we do not want task data, exit here.
+  if (skipTasks)
+  {
+    return true;
+  }
 
   findTaskDirectory(tasksDirectory);
   if (tasksDirectory.empty())
@@ -375,7 +392,6 @@ bool Configuration::load(const std::string& fileName)
               << taskDirectory() << ": " << ex.what() << std::endl;
   } //try-catch
 
-  tasksContainer.clear();
   if (!TaskManager::loadFromDirectory(taskDirectory(), taskExtension(), tasksContainer))
     return false;
   //check for duplicates
@@ -389,6 +405,16 @@ bool Configuration::load(const std::string& fileName)
   }
 
   return true;
+}
+
+void Configuration::clear()
+{
+  //clear information
+  tasksContainer.clear();
+  apiKeys.clear();
+  connInfo.clear();
+  tasksDirectory.erase();
+  tasksExtension.erase();
 }
 
 } //namespace

@@ -97,4 +97,16 @@ TEST_CASE("ConnectionInformation class for db")
     REQUIRE_FALSE( connInfo.isComplete() );
   }
 
+  SECTION("clear")
+  {
+    ConnectionInformation connInfo("db-server", "db_one", "foo", "bar", 3307);
+
+    connInfo.clear();
+    REQUIRE( connInfo.hostname().empty() );
+    REQUIRE( connInfo.db().empty() );
+    REQUIRE( connInfo.user().empty() );
+    REQUIRE( connInfo.password().empty() );
+    REQUIRE( connInfo.port() == 0 );
+  }
+
 }

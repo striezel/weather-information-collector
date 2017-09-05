@@ -96,10 +96,17 @@ class Configuration
     /** \brief Loads the configuration from a file.
      *
      * \param  fileName   file name of the configuration file
+     * \param  skipTasks  whether to skip the loading of task files
+     * \param  missingKeysAllowed  whether configuration file without API keys is allowed
      * \return Returns true, if configuration was loaded successfully.
      *         Returns false otherwise.
      */
-    bool load(const std::string& fileName = std::string());
+    bool load(const std::string& fileName = std::string(), const bool skipTasks = false, const bool missingKeysAllowed = false);
+
+
+    /** \brief clears all configuration information
+     */
+    void clear();
   private:
     /** \brief finds the first existing configuration file from a preset list
      *
@@ -111,9 +118,10 @@ class Configuration
     /** \brief loads the configuration file with "core" settings
      *
      * \param fileName  file name of the configuration file
+     * \param  missingKeysAllowed  whether configuration file without API keys is allowed
      * \return Returns true, if file was loaded successfully.
      */
-    bool loadCoreConfiguration(const std::string& fileName);
+    bool loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed = false);
 
 
     /** \brief finds the first existing task directory from a preset list

@@ -102,4 +102,13 @@ bool ConnectionInformation::isComplete() const
   return !db_host.empty() && !db_name.empty() && !db_user.empty() && (db_port != 0);
 }
 
+void ConnectionInformation::clear()
+{
+  db_host.erase();
+  db_name.erase();
+  db_user.erase();
+  db_pass.erase();
+  db_port = 0;
+}
+
 } //namespace

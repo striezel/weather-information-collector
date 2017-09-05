@@ -129,6 +129,11 @@ class ConnectionInformation
      *         connect to a MySQL database. Returns false otherwise.
      */
     bool isComplete() const;
+
+
+    /** \brief clears all information from this object
+     */
+    void clear();
   private:
     std::string db_host; /**< hostname of the SQL server */
     std::string db_name; /**< database name */

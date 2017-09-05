@@ -104,7 +104,7 @@ int main(int argc, char** argv)
 
   //load configuration file + configured tasks
   wic::Configuration config;
-  if (!config.load(configurationFile))
+  if (!config.load(configurationFile, true, true))
   {
     std::cerr << "Error: Could not load configuration!" << std::endl;
     return wic::rcConfigurationError;

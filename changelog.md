@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.5.7 (2017-09-05)
+
+The update program does not need to load task information or API keys, so the
+configuration loading procedure is changed to skip such information for the
+update program only.
+
 ## Version 0.5.6 (2017-09-03)
 
 Add a new program that performs database structure and data updates for older
