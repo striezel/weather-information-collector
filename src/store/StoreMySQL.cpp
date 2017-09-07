@@ -110,6 +110,7 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
   if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
                     connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()))
   {
+    std::cerr << "Could not connect to database: " << conn.error() << "\n";
     return false;
   }
   //get API id
