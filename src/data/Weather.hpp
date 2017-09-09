@@ -184,7 +184,7 @@ class Weather
     /** \brief gets the amount of rain in millimeters, if it was set
      *
      * \return Returns the amount of rain in millimeters.
-     *         Returns NaN, if no humidity is set.
+     *         Returns NaN, if no rain information is set.
      */
     float rain() const;
 
