@@ -13,8 +13,4 @@ build:
     - cd ./build
     - cmake ../
     - make -j4
-test:
-  stage: test
-  script:
     - ctest -V
-
