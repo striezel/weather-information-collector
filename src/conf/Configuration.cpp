@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 namespace wic
 {
 
-//use same comment character as in task files: '#'
+// use same comment character as in task files: '#'
 const char Configuration::commentCharater = TaskManager::commentCharater;
 
 Configuration::Configuration()
@@ -110,9 +110,9 @@ void Configuration::findConfigurationFile(std::string& realName)
       {
         std::cerr << "File system error while checking existence of file "
                   << file << ": " << ex.what() << std::endl;
-      } //try-catch
-    } //for
-  } //if
+      } // try-catch
+    } // for
+  } // if
 }
 
 void Configuration::findTaskDirectory(std::string& realName)
@@ -136,9 +136,9 @@ void Configuration::findTaskDirectory(std::string& realName)
       {
         std::cerr << "File system error while checking existence of directory "
                   << dir << ": " << ex.what() << std::endl;
-      } //try-catch
-    } //for
-  } //if
+      } // try-catch
+    } // for
+  } // if
 }
 
 bool Configuration::loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed)
@@ -154,15 +154,15 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
   while (std::getline(stream, line))
   {
     trim(line);
-    //skip empty lines and comment lines
+    // skip empty lines and comment lines
     if (line.empty() || line[0] == commentCharater)
       continue;
 
-    //check for possible carriage return at end (happens on Windows systems)
+    // check for possible carriage return at end (happens on Windows systems)
     if (line.at(line.length() - 1) == '\r')
     {
       line.erase(line.length() - 1);
-    }//if
+    } // if
 
     const auto sepPos = line.find('=');
     if (sepPos == std::string::npos)
@@ -178,9 +178,9 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
     trim(value);
     if (value.empty() && (name != "task.extension") && (name != "tasks.extension"))
     {
-      //Only useful empty value is the file extension for task files (empty
+      // Only useful empty value is the file extension for task files (empty
       // extension means all files are matched).
-      //Someone might have an "empty" database password, i.e. no password, but
+      // Someone might have an "empty" database password, i.e. no password, but
       // that is not really helpful, from a security standpoint. So there's no
       // exception for that here.
       std::cerr << "Error: Empty values are not allowed in configuration file "
@@ -197,7 +197,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       tasksDirectory = value;
-    } //if tasks.directory
+    } // if tasks.directory
     else if ((name == "task.extension") || (name == "tasks.extension"))
     {
       if (!tasksExtension.empty())
@@ -207,7 +207,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       tasksExtension = value;
-    } //if tasks.extension
+    } // if tasks.extension
     else if ((name == "db.host") || (name == "database.host"))
     {
       if (!connInfo.hostname().empty())
@@ -217,7 +217,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       connInfo.setHostname(value);
-    } //if db.host
+    } // if db.host
     else if ((name == "db.name") || (name == "database.name"))
     {
       if (!connInfo.db().empty())
@@ -227,7 +227,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       connInfo.setDb(value);
-    } //if db.name
+    } // if db.name
     else if ((name == "db.user") || (name == "database.user") )
     {
       if (!connInfo.user().empty())
@@ -237,7 +237,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       connInfo.setUser(value);
-    } //if db.user
+    } // if db.user
     else if ((name == "db.password") || (name == "database.password"))
     {
       if (!connInfo.password().empty())
@@ -247,7 +247,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       connInfo.setPassword(value);
-    } //if db.password
+    } // if db.password
     else if ((name == "db.port") || (name == "database.port"))
     {
       if (connInfo.port() != 0)
@@ -270,7 +270,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       connInfo.setPort(static_cast<uint16_t>(port));
-    } //if db.port
+    } // if db.port
     else if ((name == "key.apixu") || (name == "key.Apixu"))
     {
       if (!key(ApiType::Apixu).empty())
@@ -280,7 +280,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       apiKeys[ApiType::Apixu] = value;
-    } //if key.apixu
+    } // if key.apixu
     else if ((name == "key.OpenWeatherMap") || (name == "key.owm") || (name == "key.openweathermap"))
     {
       if (!key(ApiType::OpenWeatherMap).empty())
@@ -290,15 +290,25 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
         return false;
       }
       apiKeys[ApiType::OpenWeatherMap] = value;
-    } //if key.owm
+    } // if key.owm
+    else if ((name == "key.DarkSky") || (name == "key.darksky") || (name == "key.darkskynet"))
+    {
+      if (!key(ApiType::DarkSky).empty())
+      {
+        std::cerr << "Error: API key for DarkSky is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      apiKeys[ApiType::DarkSky] = value;
+    } // if key.darksky
     else
     {
       std::cerr << "Error while reading configuration file " << fileName
                 << ": There is no setting named \"" << name << "\"!" << std::endl;
       return false;
-    } //else (unrecognized setting name)
-  } //while
-  //Set database port to default for MySQL, if it has not been set yet.
+    } // else (unrecognized setting name)
+  } // while
+  // Set database port to default for MySQL, if it has not been set yet.
   if (connInfo.port() == 0)
   {
     connInfo.setPort(ConnectionInformation::defaultMySqlPort);
@@ -312,10 +322,10 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
     return false;
   }
 
-  //Only check key presence, if missing keys are not allowed
+  // Only check key presence, if missing keys are not allowed.
   if (!missingKeysAllowed)
   {
-    //If there are no API keys, then the collector won't be able to collect
+    // If there are no API keys, then the collector won't be able to collect
     // information later on.
     if (apiKeys.empty())
     {
@@ -323,9 +333,10 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
                 << fileName << ", and thus the weather-information-collector "
                 << "will not be able to work properly." << std::endl;
       return false;
-    } //if keys are missing
-  } //if keys must be present
-  //Everything is good, so far.
+    } // if keys are missing
+  } // if keys must be present
+
+  // Everything is good, so far.
   return true;
 }
 
@@ -354,17 +365,17 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   {
     std::cerr << "File system error while checking existence of file "
               << realName << ": " << ex.what() << std::endl;
-  } //try-catch
+  } // try-catch
 
-  //clear any existing information
+  // clear any existing information
   clear();
 
-  //load core configuration file
+  // load core configuration file
   if (!loadCoreConfiguration(realName, missingKeysAllowed))
     return false;
 
   tasksContainer.clear();
-  //If we do not want task data, exit here.
+  // If we do not want task data, exit here.
   if (skipTasks)
   {
     return true;
@@ -375,7 +386,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   {
     std::cerr << "Error: No task directory was found!" << std::endl;
     return false;
-  } //if
+  } // if
   try
   {
     fs::path p(taskDirectory());
@@ -390,15 +401,15 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   {
     std::cerr << "File system error while checking existence of directory "
               << taskDirectory() << ": " << ex.what() << std::endl;
-  } //try-catch
+  } // try-catch
 
   if (!TaskManager::loadFromDirectory(taskDirectory(), taskExtension(), tasksContainer))
     return false;
-  //check for duplicates
+  // check for duplicates
   if (TaskManager::hasDuplicates(tasksContainer))
     return false;
 
-  //Warn, if task container is empty.
+  // Warn, if task container is empty.
   if (tasksContainer.empty())
   {
     std::clog << "Warning: Task list is empty!" << std::endl;
@@ -409,7 +420,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
 
 void Configuration::clear()
 {
-  //clear information
+  // clear information
   tasksContainer.clear();
   apiKeys.clear();
   connInfo.clear();
@@ -417,4 +428,4 @@ void Configuration::clear()
   tasksExtension.erase();
 }
 
-} //namespace
+} // namespace

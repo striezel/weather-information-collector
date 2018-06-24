@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ namespace wic
 
 /** \brief enumeration type for supported APIs
  */
-enum class ApiType { none, Apixu, OpenWeatherMap };
+enum class ApiType { none, Apixu, OpenWeatherMap, DarkSky };
 
 
 /** \brief converts a name / string to a supported API type
@@ -47,6 +47,6 @@ ApiType toApiType(const std::string& apiName);
  */
 std::string toString(const ApiType type);
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_TYPES_HPP

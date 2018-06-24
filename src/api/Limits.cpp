@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,10 @@ const Limit Limit::apixu = Limit(5000, std::chrono::hours(24 * 31));
 /* Limit for OpenWeatherMap is 60 calls per minute on the free plan. */
 const Limit Limit::owm = Limit(60, std::chrono::minutes(1));
 
+/* Limit for DarkSky is 1000 calls per day on the free plan,
+   which is ca. 41.667 requests per hour. */
+const Limit Limit::darksky = Limit(1000, std::chrono::hours(24));
+
 /* There's no limit here for "none" API, but set it to zero. */
 const Limit Limit::none = Limit(0, std::chrono::hours(1));
 
@@ -47,12 +51,14 @@ const Limit& Limit::forApi(const ApiType api)
          return Limit::apixu;
     case ApiType::OpenWeatherMap:
          return Limit::owm;
+    case ApiType::DarkSky:
+         return Limit::darksky;
     case ApiType::none:
          //no limit
          return Limit::none;
   }
-  //Fallback, just in case there might be more APIs in the future.
+  // Fallback, just in case there might be more APIs in the future.
   return Limit::none;
 }
 
-} //namespace
+} // namespace

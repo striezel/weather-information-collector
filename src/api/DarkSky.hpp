@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
-#define WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_DARKSKY_HPP
+#define WEATHER_INFORMATION_COLLECTOR_DARKSKY_HPP
 
 #include <string>
 #include "API.hpp"
@@ -27,14 +27,14 @@
 namespace wic
 {
 
-class OpenWeatherMap: public API
+class DarkSky: public API
 {
   public:
     /** \brief Constructor.
      *
      * \param key  the API key for requests
      */
-    OpenWeatherMap(const std::string& key = "");
+    DarkSky(const std::string& key = "");
 
 
     /** \brief Set the API key for API requests.
@@ -44,7 +44,7 @@ class OpenWeatherMap: public API
     virtual void setApiKey(const std::string& key);
 
 
-    /** \brief checks whether the given location can be used for a request
+    /** \brief Checks whether the given location can be used for a request.
      *
      * \param location  the location information
      * \return Returns true, if the location can be used for a request.
@@ -53,7 +53,7 @@ class OpenWeatherMap: public API
     virtual bool validLocation(const Location& location) const;
 
 
-    /** \brief retrieves the current weather for a given location
+    /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
      * \param weather   variable where result of the request will be stored
@@ -63,7 +63,7 @@ class OpenWeatherMap: public API
     virtual bool currentWeather(const Location& location, Weather& weather);
 
 
-    /** \brief parses the current weather information from JSON into the Weather object
+    /** \brief Parses the current weather information from JSON into the Weather object.
      *
      * \param json     string containing the JSON
      * \param weather  variable where result of the parsing process will be stored
@@ -75,15 +75,15 @@ class OpenWeatherMap: public API
     std::string m_apiKey; /**< the API key for requests */
 
 
-    /** \brief turns info of a location to a request string
+    /** \brief Turns info of a location to a request string.
      *
      * \param location  the location information
      * \return Returns part of URL that can be used for a request.
      *         Returns empty string, if an error occurred.
      */
     std::string toRequestString(const Location& location) const;
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_DARKSKY_HPP

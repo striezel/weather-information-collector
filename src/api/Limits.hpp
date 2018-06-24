@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,6 +49,11 @@ struct Limit
   static const Limit owm;
 
 
+  /** \brief contains the limit for DarkSky API calls
+   */
+  static const Limit darksky;
+
+
   /** \brief contains the limit for unknown API - always zero
    */
   static const Limit none;
@@ -64,8 +69,8 @@ struct Limit
 
   uint_least32_t requests; /**< number of allowed requests */
   std::chrono::seconds timespan; /**< corresponding time frame */
-}; //struct
+}; // struct
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_LIMITS_HPP

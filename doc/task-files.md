@@ -51,14 +51,16 @@ The following settings are recognized in a task file:
   are recognized:
   * **OpenWeatherMap** - data is fetched from OpenWeatherMap
   * **Apixu** - data is fetched from Apixu
+  * **DarkSky** - data is fetched from DarkSky
 * **location.id** - _(optional)_ numeric ID of the location for which the
   weather shall be requested (only supported by OpenWeatherMap)
 * **location.name** - name of the location / city, e.g. `London`
 * **location.postcode** - _(optional)_ postcode of the location / city; make
   sure that this is a format supported by the corresponding API, or otherwise
   you might get unexpected results / data
-* **location.coordinates** - _(optional)_ geographical coordinates (latitude and
-  longitude) of the location, e.g. `51.5,-1.2`
+* **location.coordinates** - _(optional for Apixu and OpenWeatherMap)_
+  geographical coordinates (latitude and  longitude) of the location, e.g.
+  `51.5,-1.2` - **required for DarkSky tasks**
 * **interval** - the interval in seconds after which the next request for the
   same location and the same API will be performed, e.g. `3600`
   (Request intervals below 15 seconds are rejected.)
@@ -101,6 +103,15 @@ Another example would be:
     location.coordinates=51.5,-1.2
     # one request every 30 minutes, e.g. every 1800 seconds
     interval=1800
+
+An example for the third API would be:
+
+    # use DarkSky API
+    api=DarkSky
+    # location: Alcatraz Island
+    location.coordinates=37.8267,-122.4233
+    # one request every 20 minutes, e.g. every 1200 seconds
+    interval=1200
 
 Remember that you can create multiple task files to define multiple collection
 tasks.

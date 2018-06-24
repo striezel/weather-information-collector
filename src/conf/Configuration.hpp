@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,49 +42,49 @@ class Configuration
     static const char commentCharater;
 
 
-    /** \brief gets a list of potential configuration file names
+    /** \brief Gets a list of potential configuration file names.
      *
      * \return Returns a list of potential configuration file names.
      */
     static std::vector<std::string> potentialFileNames();
 
 
-    /** \brief gets a list of potential task directory names
+    /** \brief Gets a list of potential task directory names.
      *
      * \return Returns a list of potential task directory names.
      */
     static std::vector<std::string> potentialTaskDirectories();
 
 
-    /** \brief gets the connection information
+    /** \brief Gets the connection information.
      *
      * \return Returns the database connection information.
      */
     const ConnectionInformation& connectionInfo() const;
 
 
-    /** \brief gets the current directory for tasks
+    /** \brief Gets the current directory for tasks.
      *
      * \return Returns the current directory for tasks.
      */
     const std::string& taskDirectory() const;
 
 
-    /** \brief gets the current file extension for task files
+    /** \brief Gets the current file extension for task files.
      *
      * \return Returns the current file extension for task files.
      */
     const std::string& taskExtension() const;
 
 
-    /** \brief gets a container with all tasks
+    /** \brief Gets a container with all tasks.
      *
      * \return Returns a container containing all tasks.
      */
     const std::vector<Task>& tasks() const;
 
 
-    /** \brief gets the API key for the given API
+    /** \brief Gets the API key for the given API.
      *
      * \param api   the API for which the key shall be retrieved
      * \return Returns the key for the given API, if present.
@@ -104,18 +104,18 @@ class Configuration
     bool load(const std::string& fileName = std::string(), const bool skipTasks = false, const bool missingKeysAllowed = false);
 
 
-    /** \brief clears all configuration information
+    /** \brief Clears all configuration information.
      */
     void clear();
   private:
-    /** \brief finds the first existing configuration file from a preset list
+    /** \brief Finds the first existing configuration file from a preset list.
      *
      * \param realName  name of the configuration file, if any
      */
     void findConfigurationFile(std::string& realName);
 
 
-    /** \brief loads the configuration file with "core" settings
+    /** \brief Loads the configuration file with "core" settings.
      *
      * \param fileName  file name of the configuration file
      * \param  missingKeysAllowed  whether configuration file without API keys is allowed
@@ -124,7 +124,7 @@ class Configuration
     bool loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed = false);
 
 
-    /** \brief finds the first existing task directory from a preset list
+    /** \brief Finds the first existing task directory from a preset list.
      *
      * \param realName  directory name, if any
      */
@@ -136,8 +136,8 @@ class Configuration
     ConnectionInformation connInfo; /**< database connection information */
     std::string tasksDirectory; /**< directory for tasks */
     std::string tasksExtension; /**< file extension (incl. dot) for task files */
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_CONFIGURATION_HPP
