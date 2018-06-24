@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,10 +65,14 @@ TEST_CASE("Class Task")
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::OpenWeatherMap, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::DarkSky, std::chrono::seconds::zero());
+    REQUIRE_FALSE( t.complete() );
 
     t = Task(Location(), ApiType::Apixu, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::OpenWeatherMap, std::chrono::seconds(36));
+    REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::DarkSky, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
 
     t = Task(loc);
@@ -81,13 +85,17 @@ TEST_CASE("Class Task")
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::OpenWeatherMap);
     REQUIRE_FALSE( t.complete() );
+    t = Task(loc, ApiType::DarkSky);
+    REQUIRE_FALSE( t.complete() );
 
     t = Task(loc, ApiType::Apixu, std::chrono::seconds(36));
     REQUIRE( t.complete() );
     t = Task(loc, ApiType::OpenWeatherMap, std::chrono::seconds(36));
     REQUIRE( t.complete() );
+    t = Task(loc, ApiType::DarkSky, std::chrono::seconds(36));
+    REQUIRE( t.complete() );
 
-    //negative duration shall not count
+    // negative duration shall not count
     t = Task(loc, ApiType::Apixu, std::chrono::seconds(-3600));
     REQUIRE_FALSE( t.complete() );
   }

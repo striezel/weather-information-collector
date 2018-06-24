@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,6 +39,14 @@ TEST_CASE("API types")
     REQUIRE( wic::toApiType("\t  OpEnWEaTHeRmAp \t\t  ") == wic::ApiType::OpenWeatherMap );
   }
 
+  SECTION("to API type: DarkSky")
+  {
+    REQUIRE( wic::toApiType("darksky") == wic::ApiType::DarkSky );
+    REQUIRE( wic::toApiType("DarkSky") == wic::ApiType::DarkSky );
+    REQUIRE( wic::toApiType("DARKSKY") == wic::ApiType::DarkSky );
+    REQUIRE( wic::toApiType("\t  DaRkSkY  ") == wic::ApiType::DarkSky );
+  }
+
   SECTION("to API type: none")
   {
     REQUIRE( wic::toApiType("none") == wic::ApiType::none );
@@ -59,6 +67,7 @@ TEST_CASE("API types")
   {
     REQUIRE( wic::toString(wic::ApiType::Apixu) == "Apixu" );
     REQUIRE( wic::toString(wic::ApiType::OpenWeatherMap) == "OpenWeatherMap" );
+    REQUIRE( wic::toString(wic::ApiType::DarkSky) == "DarkSky" );
     REQUIRE( wic::toString(wic::ApiType::none) == "none" );
   }
 
@@ -66,6 +75,7 @@ TEST_CASE("API types")
   {
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::Apixu)) == wic::ApiType::Apixu );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::OpenWeatherMap)) == wic::ApiType::OpenWeatherMap );
+    REQUIRE( wic::toApiType(wic::toString(wic::ApiType::DarkSky)) == wic::ApiType::DarkSky );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::none)) == wic::ApiType::none );
   }
 

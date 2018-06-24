@@ -70,9 +70,6 @@ bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) con
   if (root.empty())
     return false;
 
-  // TODO: implement!
-  return false;
-
   // Current weather data is located in the currently object below the root.
   const Json::Value currently = root["currently"];
   if (currently.empty() || !currently.isObject())
@@ -89,6 +86,10 @@ bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) con
   if (!val.empty() && (val.isDouble() || val.isIntegral()))
   {
     weather.setTemperatureCelsius(val.asDouble());
+    // Since there are no other values (Fahrenheit or Kelvin), we can just
+    // calculate them on the fly.
+    weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32);
+    weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15);
   }
   // relative humidity, [0;1]
   val = currently["humidity"];
