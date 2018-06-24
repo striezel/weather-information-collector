@@ -68,4 +68,4 @@ bool Structure::columnExists(const ConnectionInformation& ci, const std::string&
   return (num > 0);
 }
 
-} //namespace
+} // namespace

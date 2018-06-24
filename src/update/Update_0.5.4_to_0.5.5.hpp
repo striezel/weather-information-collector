@@ -27,7 +27,16 @@ namespace wic
 {
 
 /** Manages update of databases before version 0.5.5 of
-    weather-information-collector to version 0.5.5. */
+    weather-information-collector to version 0.5.5.
+
+    This class basically does two things to the database:
+    * It adds the column `rain` to the table `weatherdata`, if it does not
+      exist yet.
+    * Existing data sets in the table `weatherdata` that do not have any rain
+      data yet but still have the original JSON response will get their rain
+      data set by re-parsing the JSON data and setting it to the value from the
+      JSON content.
+*/
 class Update054_055
 {
   public:
@@ -56,8 +65,8 @@ class Update054_055
      *         Returns false otherwise.
      */
     static bool updateData(const ConnectionInformation& ci);
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_UPDATE_0_5_4_TO_0_5_5_HPP

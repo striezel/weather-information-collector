@@ -308,6 +308,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
       return false;
     } // else (unrecognized setting name)
   } // while
+
   // Set database port to default for MySQL, if it has not been set yet.
   if (connInfo.port() == 0)
   {
@@ -350,7 +351,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   {
     std::cerr << "Error: No configuration file was found!" << std::endl;
     return false;
-  } //if
+  }
   try
   {
     fs::path p(realName);

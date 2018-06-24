@@ -65,12 +65,12 @@ int main(int argc, char** argv)
       {
         showVersion();
         return 0;
-      } //if version
+      } // if version
       else if ((param == "-?") || (param == "/?") || (param == "--help"))
       {
         showHelp();
         return 0;
-      } //if help
+      } // if help
       else if ((param == "--conf") || (param == "-c"))
       {
         if (!configurationFile.empty())
@@ -79,11 +79,11 @@ int main(int argc, char** argv)
                     << configurationFile << "!" << std::endl;
           return wic::rcInvalidParameter;
         }
-        //enough parameters?
+        // Are there enough parameters?
         if ((i+1 < argc) && (argv[i+1] != nullptr))
         {
           configurationFile = std::string(argv[i+1]);
-          //Skip next parameter, because it's already used as file path.
+          // Skip next parameter, because it's already used as file path.
           ++i;
         }
         else
@@ -92,17 +92,17 @@ int main(int argc, char** argv)
                     << param <<"\"." << std::endl;
           return wic::rcInvalidParameter;
         }
-      } //if configuration file
+      } // if configuration file
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
                   << "Use --help to show available parameters." << std::endl;
         return wic::rcInvalidParameter;
       }
-    } //for i
-  } //if arguments are there
+    } // for i
+  } // if arguments are there
 
-  //load configuration file + configured tasks
+  // load configuration file, but skip configured tasks
   wic::Configuration config;
   if (!config.load(configurationFile, true, true))
   {

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,8 +32,6 @@ int API::getId(const ConnectionInformation& ci, const ApiType type)
   if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
                     ci.password().c_str(), ci.port()))
   {
-    //Should not happen, because previous connection attempts were successful,
-    // but better be safe than sorry.
     std::cerr << "Error: Could not connect to database!" << std::endl;
     return false;
   }
@@ -42,10 +40,10 @@ int API::getId(const ConnectionInformation& ci, const ApiType type)
 
 int API::getId(mysqlpp::Connection& conn, const ApiType type)
 {
-  //get API id
+  // get API id
   const std::string apiName = toString(type);
   mysqlpp::Query query(&conn);
-  query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << toString(type) << " LIMIT 1";
+  query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << apiName << " LIMIT 1";
   mysqlpp::StoreQueryResult result = query.store();
   if (!result)
   {
@@ -60,6 +58,6 @@ int API::getId(mysqlpp::Connection& conn, const ApiType type)
   return apiId;
 }
 
-} //namespace
+} // namespace
 
-} //namespace
+} // namespace
