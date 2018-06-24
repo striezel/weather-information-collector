@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ Collector::Collector()
 
 bool Collector::fromConfiguration(const Configuration& conf)
 {
-  //API keys
+  // API keys
   apiKeys[ApiType::none] = "";
   apiKeys[ApiType::Apixu] = conf.key(ApiType::Apixu);
   apiKeys[ApiType::OpenWeatherMap] = conf.key(ApiType::OpenWeatherMap);
@@ -57,7 +57,7 @@ bool Collector::fromConfiguration(const Configuration& conf)
     std::cerr << "Error: No API keys are set!\n";
     return false;
   }
-  //copy tasks
+  // copy tasks
   const auto now = std::chrono::steady_clock::now();
   tasksContainer.clear();
   for (const auto& t : conf.tasks())
@@ -65,17 +65,17 @@ bool Collector::fromConfiguration(const Configuration& conf)
     tasksContainer.push_back(TaskData(t, now));
     if (apiKeys[t.api()].empty())
     {
-      std::cerr << "Error: API key for " << toString(t.api()) << "is not set, "
+      std::cerr << "Error: API key for " << toString(t.api()) << " is not set, "
                 << "but there is a task for that API!\n";
       return false;
-    } //if
-  } //for
+    } // if
+  } // for
   if (tasksContainer.empty())
   {
     std::cerr << "Error: There are no tasks in the configuration!\n";
     return false;
   }
-  //get connection information
+  // get connection information
   connInfo = conf.connectionInfo();
   if (!connInfo.isComplete())
   {
@@ -100,7 +100,7 @@ int_least32_t Collector::nextIndex() const
       minTime = tasksContainer[i].nextRequest;
       minIndex = i;
     }
-  } //for
+  } // for
   return minIndex;
 }
 
@@ -133,32 +133,32 @@ void Collector::collect()
            std::cerr << "Error: Cannot collect data for unsupported API type "
                      << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
            return;
-    } //swi
+    } // switch
     if (api->currentWeather(loc, weather))
     {
       StoreMySQL sql(connInfo);
       if (!sql.saveCurrentWeather(tasksContainer[idx].task.api(), loc, weather))
       {
         std::cerr << "Error: Could not save weather data to database!" << std::endl;
-      } //if
-    } //if
+      } // if
+    } // if
     else
     {
       std::cerr << "Error: Could not get current weather data!" << std::endl;
     }
     api = nullptr;
-    //update time for next request
+    // update time for next request
     tasksContainer[idx].nextRequest = tasksContainer[idx].nextRequest + tasksContainer[idx].task.interval();
-    //find index for next request
+    // find index for next request
     idx = nextIndex();
-    //check stop flag again
+    // check stop flag again
     if (stopRequested())
     {
       return;
     }
     // wait until next request is due
     std::this_thread::sleep_until(tasksContainer[idx].nextRequest);
-  } //while
+  } // while
 }
 
 void Collector::stop()
@@ -171,4 +171,4 @@ bool Collector::stopRequested() const
   return stopFlag;
 }
 
-} //namespace
+} // namespace
