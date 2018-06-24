@@ -13,11 +13,12 @@ CREATE TABLE IF NOT EXISTS `api` (
 `apiID` int(10) unsigned NOT NULL COMMENT 'primary key',
   `name` varchar(255) NOT NULL COMMENT 'name of the API',
   `baseURL` varchar(255) NOT NULL COMMENT 'base URL for API calls'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
 (1, 'Apixu', 'https://api.apixu.com/v1/'),
-(2, 'OpenWeatherMap', 'http://api.openweathermap.org/data/2.5/');
+(2, 'OpenWeatherMap', 'http://api.openweathermap.org/data/2.5/'),
+(3, 'DarkSky', 'https://api.darksky.net/');
 
 CREATE TABLE IF NOT EXISTS `location` (
 `locationID` int(10) unsigned NOT NULL COMMENT 'primary key',
@@ -58,7 +59,7 @@ ALTER TABLE `weatherdata`
 
 
 ALTER TABLE `api`
-MODIFY `apiID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',AUTO_INCREMENT=3;
+MODIFY `apiID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',AUTO_INCREMENT=4;
 ALTER TABLE `location`
 MODIFY `locationID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key';
 ALTER TABLE `weatherdata`

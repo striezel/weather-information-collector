@@ -26,6 +26,9 @@
 namespace wic
 {
 
+/**
+ * Contains utility functions to handle database structure.
+ */
 class Structure
 {
   public:
@@ -50,8 +53,8 @@ class Structure
      *         Returns false otherwise.
      */
     static bool columnExists(const ConnectionInformation& ci, const std::string& tableName, const std::string& column);
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_DB_STRUCTURE_HPP

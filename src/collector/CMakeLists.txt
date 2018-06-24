@@ -5,6 +5,7 @@ project(weather-information-collector)
 
 set(weather-information-collector_sources
     ../api/Apixu.cpp
+    ../api/DarkSky.cpp
     ../api/Limits.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Types.cpp

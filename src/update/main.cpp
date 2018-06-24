@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
 #include "Update_0.5.4_to_0.5.5.hpp"
+#include "Update_0.5.7_to_0.6.0.hpp"
 
 void showVersion()
 {
@@ -65,12 +66,12 @@ int main(int argc, char** argv)
       {
         showVersion();
         return 0;
-      } //if version
+      } // if version
       else if ((param == "-?") || (param == "/?") || (param == "--help"))
       {
         showHelp();
         return 0;
-      } //if help
+      } // if help
       else if ((param == "--conf") || (param == "-c"))
       {
         if (!configurationFile.empty())
@@ -79,11 +80,11 @@ int main(int argc, char** argv)
                     << configurationFile << "!" << std::endl;
           return wic::rcInvalidParameter;
         }
-        //enough parameters?
+        // Are there enough parameters?
         if ((i+1 < argc) && (argv[i+1] != nullptr))
         {
           configurationFile = std::string(argv[i+1]);
-          //Skip next parameter, because it's already used as file path.
+          // Skip next parameter, because it's already used as file path.
           ++i;
         }
         else
@@ -92,17 +93,17 @@ int main(int argc, char** argv)
                     << param <<"\"." << std::endl;
           return wic::rcInvalidParameter;
         }
-      } //if configuration file
+      } // if configuration file
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
                   << "Use --help to show available parameters." << std::endl;
         return wic::rcInvalidParameter;
       }
-    } //for i
-  } //if arguments are there
+    } // for i
+  } // if arguments are there
 
-  //load configuration file + configured tasks
+  // load configuration file, but skip configured tasks
   wic::Configuration config;
   if (!config.load(configurationFile, true, true))
   {
@@ -113,7 +114,13 @@ int main(int argc, char** argv)
   std::cout << "Update for database of version 0.5.4 (and earlier) to version 0.5.5..." << std::endl;
   if (!wic::Update054_055::perform(config.connectionInfo()))
   {
-    std::cerr << "Error: Update failed!\n";
+    std::cerr << "Error: Database update failed!\n";
+    return wic::rcUpdateFailure;
+  }
+  std::cout << "Update for database of version 0.5.7 (and earlier) to version 0.6.0..." << std::endl;
+  if (!wic::Update057_060::perform(config.connectionInfo()))
+  {
+    std::cerr << "Error: Database update failed!\n";
     return wic::rcUpdateFailure;
   }
 

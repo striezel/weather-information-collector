@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,26 +18,22 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_UPDATE_0_5_4_TO_0_5_5_HPP
-#define WEATHER_INFORMATION_COLLECTOR_UPDATE_0_5_4_TO_0_5_5_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_UPDATE_0_5_7_TO_0_6_0_HPP
+#define WEATHER_INFORMATION_COLLECTOR_UPDATE_0_5_7_TO_0_6_0_HPP
 
 #include "../db/ConnectionInformation.hpp"
 
 namespace wic
 {
 
-/** Manages update of databases before version 0.5.5 of
-    weather-information-collector to version 0.5.5.
+/** Manages update of databases before version 0.6.0 of
+    weather-information-collector to version 0.6.0.
 
-    This class basically does two things to the database:
-    * It adds the column `rain` to the table `weatherdata`, if it does not
+    This class basically does just one thing in the database:
+    * It adds the the API entry for DarkSky to the table `api`, if it does not
       exist yet.
-    * Existing data sets in the table `weatherdata` that do not have any rain
-      data yet but still have the original JSON response will get their rain
-      data set by re-parsing the JSON data and setting it to the value from the
-      JSON content.
 */
-class Update054_055
+class Update057_060
 {
   public:
     /** \brief Performs the update.
@@ -47,17 +43,7 @@ class Update054_055
      *         Returns false otherwise.
      */
     static bool perform(const ConnectionInformation& ci);
-
-
-    /** \brief Performs the database structure changes of the update.
-     *
-     * \param ci   database connection information
-     * \return Returns true, if the update was successful.
-     *         Returns false otherwise.
-     */
-    static bool updateStructure(const ConnectionInformation& ci);
-
-
+  private:
     /** \brief Performs the data changes of the update.
      *
      * \param ci   database connection information
@@ -69,4 +55,4 @@ class Update054_055
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_UPDATE_0_5_4_TO_0_5_5_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_UPDATE_0_5_7_TO_0_6_0_HPP

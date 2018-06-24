@@ -1,9 +1,9 @@
 # weather-information-collector
 
 weather-information-collector is a tool that collects weather information from
-various available ReST API services (currently OpenWeatherMap and Apixu) and
-stores the information in a database. (Currently only MySQL and compatible
-DBMS are supported.)
+various available ReST API services (currently OpenWeatherMap, Apixu and
+DarkSky) and stores the information in a database. Currently only MySQL and
+compatible DBMS like MariaDB are supported.
 
 Data collection tasks can be configured individually.
 weather-information-collector will check that these collection tasks do not
@@ -75,7 +75,7 @@ Starting in the root directory of the source, you can do the following steps:
 
 ## Copyright and Licensing
 
-Copyright 2017  Dirk Stolle
+Copyright 2017, 2018  Dirk Stolle
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

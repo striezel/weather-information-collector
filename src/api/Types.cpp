@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,6 +34,9 @@ ApiType toApiType(const std::string& apiName)
   // OpenWeatherMap
   if (name == "openweathermap")
     return ApiType::OpenWeatherMap;
+  // DarkSky
+  if (name == "darksky")
+    return ApiType::DarkSky;
   // unknown / none
   return ApiType::none;
 }
@@ -46,10 +49,12 @@ std::string toString(const ApiType type)
          return "Apixu";
     case ApiType::OpenWeatherMap:
          return "OpenWeatherMap";
+    case ApiType::DarkSky:
+         return "DarkSky";
     case ApiType::none:
     default:
          return "none";
-  } //switch
+  } // switch
 }
 
-} //namespace
+} // namespace

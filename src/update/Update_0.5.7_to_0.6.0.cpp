@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,46 +18,47 @@
  -------------------------------------------------------------------------------
 */
 
-#include "API.hpp"
+#include "Update_0.5.7_to_0.6.0.hpp"
+#include <map>
+#include <mysql++/mysql++.h>
+#include "../api/API.hpp"
+#include "../api/Types.hpp"
+#include "../db/API.hpp"
+#include "../db/Structure.hpp"
 
 namespace wic
 {
 
-namespace db
+bool Update057_060::perform(const ConnectionInformation& ci)
 {
+  return updateData(ci);
+}
 
-int API::getId(const ConnectionInformation& ci, const ApiType type)
+bool Update057_060::updateData(const ConnectionInformation& ci)
 {
+  const int id = db::API::getId(ci, ApiType::DarkSky);
+  if (id > 0)
+  {
+    // Nothing to do here.
+    std::cout << "Info: API entry for DarkSky already exists." << std::endl;
+    return true;
+  }
+
   mysqlpp::Connection conn(false);
   if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
                     ci.password().c_str(), ci.port()))
   {
+    // Should not happen, because previous connection attempts were successful,
+    // but better be safe than sorry.
     std::cerr << "Error: Could not connect to database!" << std::endl;
     return false;
   }
-  return getId(conn, type);
-}
-
-int API::getId(mysqlpp::Connection& conn, const ApiType type)
-{
-  // get API id
-  const std::string apiName = toString(type);
   mysqlpp::Query query(&conn);
-  query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << apiName << " LIMIT 1";
-  mysqlpp::StoreQueryResult result = query.store();
-  if (!result)
-  {
-    std::cerr << "Failed to get query result: " << query.error() << "\n";
-    return -1;
-  }
-  if (result.num_rows() == 0)
-  {
-    return -1;
-  }
-  const int apiId = result[0]["apiID"];
-  return apiId;
+  query << "INSERT INTO `api` (`name`, `baseURL`) VALUES ('DarkSky', 'https://api.darksky.net/');";
+  if (!query.exec())
+    return false;
+  // Done.
+  return query.insert_id() > 0;
 }
-
-} // namespace
 
 } // namespace

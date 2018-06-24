@@ -52,10 +52,10 @@ class API
      *         Returns -1, if an error occurred.
      */
     static int getId(mysqlpp::Connection& conn, const ApiType type);
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_DB_API_HPP

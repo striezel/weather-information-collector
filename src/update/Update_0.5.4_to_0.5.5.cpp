@@ -46,15 +46,15 @@ bool Update054_055::updateStructure(const ConnectionInformation& ci)
               << ci.db() << "! Update cannot be performed." << std::endl;
     return false;
   }
-  //If column already exists, structure is already up to date.
+  // If column already exists, structure is already up to date.
   if (Structure::columnExists(ci, "weatherdata", "rain"))
     return true;
-  //Add new column rain.
+  // Add new column rain.
   mysqlpp::Connection conn(false);
   if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
                     ci.password().c_str(), ci.port()))
   {
-    //Should not happen, because previous connection attempts were successful,
+    // Should not happen, because previous connection attempts were successful,
     // but better be safe than sorry.
     std::cerr << "Error: Could not connect to database!" << std::endl;
     return false;
@@ -66,14 +66,15 @@ bool Update054_055::updateStructure(const ConnectionInformation& ci)
     std::cerr << "Error: Could not add new column \"rain\" to table weatherdata.\n";
     return false;
   }
-  //ALTER TABLE was successful.
+  // ALTER TABLE was successful.
   return true;
 }
 
 bool Update054_055::updateData(const ConnectionInformation& ci)
 {
   std::map<int, ApiType> id_to_type;
-
+  // Note: ApiType::DarkSky is not handled here, because that API was not
+  // supported in version 0.5.4. DarkSky has only been added in version 0.6.0.
   for (const ApiType type : { ApiType::Apixu, ApiType::OpenWeatherMap})
   {
     const int id = db::API::getId(ci, type);
@@ -84,13 +85,13 @@ bool Update054_055::updateData(const ConnectionInformation& ci)
       return false;
     }
     id_to_type[id] = type;
-  } //for
+  } // for
 
   mysqlpp::Connection conn(false);
   if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
                     ci.password().c_str(), ci.port()))
   {
-    //Should not happen, because previous connection attempts were successful,
+    // Should not happen, because previous connection attempts were successful,
     // but better be safe than sorry.
     std::cerr << "Error: Could not connect to database!" << std::endl;
     return false;
@@ -106,7 +107,7 @@ bool Update054_055::updateData(const ConnectionInformation& ci)
   const auto rows = result.num_rows();
   if (rows == 0)
   {
-    //Nothing to do here.
+    // Nothing to do here.
     return true;
   }
 
@@ -116,7 +117,7 @@ bool Update054_055::updateData(const ConnectionInformation& ci)
     const auto iter = id_to_type.find(apiID);
     if (iter == id_to_type.end())
     {
-      //Probably a newer API type, so skip it.
+      // Probably a newer API type, so skip it.
       continue;
     }
     std::unique_ptr<API> api = nullptr;
@@ -129,10 +130,10 @@ bool Update054_055::updateData(const ConnectionInformation& ci)
            api.reset(new wic::OpenWeatherMap());
            break;
       default:
-           //Newer or unsupported API, go on.
+           // Newer or unsupported API, go on.
            continue;
            break;
-    } //switch
+    } // switch
     Weather w;
     const unsigned int dataId = result[i]["dataID"];
     if (!api->parseCurrentWeather(result[i]["json"].c_str(), w))
@@ -154,10 +155,10 @@ bool Update054_055::updateData(const ConnectionInformation& ci)
       }
       std::clog << "Info: Updated rain amount for data ID " << dataId << " to "
                 << w.rain() << " mm." << std::endl;
-    } //if data set has rain data
-  } //for
-  //Done.
+    } // if data set has rain data
+  } // for
+  // Done.
   return true;
 }
 
-} //namespace
+} // namespace
