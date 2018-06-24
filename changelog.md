@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.6.0-pre (2018-06-24)
+## Version 0.6.0 (2018-06-25)
 
 The program is now able to collect data from the DarkSky API, too.
 
