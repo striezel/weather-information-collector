@@ -24,6 +24,7 @@
 #include <thread>
 #include "../api/API.hpp"
 #include "../api/Apixu.hpp"
+#include "../api/DarkSky.hpp"
 #include "../api/OpenWeatherMap.hpp"
 #include "../data/Weather.hpp"
 #include "../store/StoreMySQL.hpp"
@@ -52,7 +53,11 @@ bool Collector::fromConfiguration(const Configuration& conf)
   apiKeys[ApiType::none] = "";
   apiKeys[ApiType::Apixu] = conf.key(ApiType::Apixu);
   apiKeys[ApiType::OpenWeatherMap] = conf.key(ApiType::OpenWeatherMap);
-  if (apiKeys[ApiType::Apixu].empty() && apiKeys[ApiType::OpenWeatherMap].empty())
+  apiKeys[ApiType::DarkSky] = conf.key(ApiType::DarkSky);
+
+  if (apiKeys[ApiType::Apixu].empty()
+      && apiKeys[ApiType::OpenWeatherMap].empty()
+      && apiKeys[ApiType::DarkSky].empty())
   {
     std::cerr << "Error: No API keys are set!\n";
     return false;
@@ -128,6 +133,9 @@ void Collector::collect()
       case ApiType::Apixu:
            api.reset(new wic::Apixu(key));
            break;
+      case ApiType::DarkSky:
+           api.reset(new wic::DarkSky(key));
+           break;
       case ApiType::none:
       default:
            std::cerr << "Error: Cannot collect data for unsupported API type "
@@ -144,7 +152,8 @@ void Collector::collect()
     } // if
     else
     {
-      std::cerr << "Error: Could not get current weather data!" << std::endl;
+      std::cerr << "Error: Could not get current weather data from API "
+                << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
     }
     api = nullptr;
     // update time for next request
