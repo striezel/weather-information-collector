@@ -23,8 +23,8 @@ INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
 CREATE TABLE IF NOT EXISTS `location` (
 `locationID` int(10) unsigned NOT NULL COMMENT 'primary key',
   `id` int(10) unsigned DEFAULT NULL COMMENT 'ID of the location in the API',
-  `longitude` float DEFAULT NULL COMMENT 'longitude of the location',
   `latitude` float DEFAULT NULL COMMENT 'latitude of the location',
+  `longitude` float DEFAULT NULL COMMENT 'longitude of the location',
   `name` varchar(255) DEFAULT NULL COMMENT 'name of the location / city',
   `postcode` varchar(25) DEFAULT NULL COMMENT 'postal code of the location'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
