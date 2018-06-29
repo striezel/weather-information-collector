@@ -52,8 +52,14 @@ else ()
 endif (LIBJSONCPP_FOUND)
 
 # libmysql++
-include_directories(/usr/include/mysql /usr/include/mysql++)
-target_link_libraries (weather-information-collector mysqlpp)
+set(LibMySQLPP_DIR "../../cmake/" )
+find_package(LibMySQLPP)
+if (MYSQLPP_FOUND)
+  include_directories(${MYSQLPP_INCLUDE_DIR})
+  target_link_libraries (weather-information-collector ${MYSQLPP_LIBRARIES})
+else ()
+  message ( FATAL_ERROR "libmysqlpp was not found!" )
+endif (MYSQLPP_FOUND)
 
 # find Boost library: filesystem (+ system as dependency)
 find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
