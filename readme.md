@@ -32,7 +32,7 @@ system to get the latest source code directly from the Git repository.
 
 All of that can usually be installed be typing
 
-    apt-get install catch cmake g++ git libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmysql++dev pkg-config
+    apt-get install catch cmake g++ git libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev pkg-config
 
 or
 
