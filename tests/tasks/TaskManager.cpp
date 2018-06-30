@@ -165,16 +165,16 @@ TEST_CASE("Class TaskManager")
 
     SECTION("Apixu only: two tasks within limits")
     {
-      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(1800)));
-      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(1800)));
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
 
       REQUIRE( TaskManager::withinLimits(tasks) );
     }
 
     SECTION("Apixu only: two tasks with too much requests")
     {
-      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
-      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(450)));
+      tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(450)));
 
       REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
     }
@@ -291,7 +291,7 @@ TEST_CASE("Class TaskManager")
 
       // too much Apixu requests, but OWM + DarkSky requests within limit
       tasks.clear();
-      for (int i = 1; i <= 7; ++i)
+      for (int i = 1; i <= 14; ++i)
       {
         tasks.push_back(Task(loc, ApiType::Apixu, std::chrono::seconds(3600)));
       }

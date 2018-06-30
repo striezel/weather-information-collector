@@ -23,9 +23,9 @@
 namespace wic
 {
 
-/* Limit for Apixu is 5000 calls per month on the free plan,
-   which is ca. 6.7 requests per hour. */
-const Limit Limit::apixu = Limit(5000, std::chrono::hours(24 * 31));
+/* Limit for Apixu is 10000 calls per month on the free plan,
+   which is ca. 13.4 requests per hour. */
+const Limit Limit::apixu = Limit(10000, std::chrono::hours(24 * 31));
 
 /* Limit for OpenWeatherMap is 60 calls per minute on the free plan. */
 const Limit Limit::owm = Limit(60, std::chrono::minutes(1));

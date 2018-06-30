@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.6.1 (2018-06-30)
+
+Adjust request limit for Apixu to 10000 requests per month, since they changed
+the limit from 5000 to 10000 requests.
+
 ## Version 0.6.0 (2018-06-25)
 
 The program is now able to collect data from the DarkSky API, too.
