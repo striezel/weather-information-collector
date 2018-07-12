@@ -109,7 +109,7 @@ int main(int argc, char** argv)
           return wic::rcInvalidParameter;
         }
         checkApiLimits = false;
-      } //if help
+      } //if ignore limits
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
