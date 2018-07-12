@@ -1,5 +1,9 @@
 # Version history of weather-information-collector
 
+## Version 0.6.2 (2018-07-12)
+
+Fix wrong return value of API::getId() when an error occurred.
+
 ## Version 0.6.1 (2018-06-30)
 
 Adjust request limit for Apixu to 10000 requests per month, since they changed

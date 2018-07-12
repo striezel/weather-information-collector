@@ -33,7 +33,7 @@ int API::getId(const ConnectionInformation& ci, const ApiType type)
                     ci.password().c_str(), ci.port()))
   {
     std::cerr << "Error: Could not connect to database!" << std::endl;
-    return false;
+    return -1;
   }
   return getId(conn, type);
 }
