@@ -20,6 +20,7 @@
 
 #include "StoreMySQL.hpp"
 #include <mysql++/mysql++.h>
+#include "../db/Utilities.hpp"
 
 namespace wic
 {
@@ -31,77 +32,6 @@ StoreMySQL::StoreMySQL(const ConnectionInformation& ci)
 
 StoreMySQL::~StoreMySQL()
 {
-}
-
-int getLocationId(mysqlpp::Connection& conn, const Location& location)
-{
-  mysqlpp::Query query(&conn);
-  query << "SELECT * FROM location WHERE ";
-  if (location.hasId())
-  {
-    query << "id=" << mysqlpp::quote << location.id();
-  }
-  else if (location.hasName())
-  {
-    query << "name=" << mysqlpp::quote << location.name();
-  }
-  else if (location.hasCoordinates())
-  {
-    query << "latitude=" << mysqlpp::quote << location.latitude()
-          << " AND longitude=" << mysqlpp::quote << location.longitude();
-  }
-  else if (location.hasPostcode())
-  {
-    query << "postcode=" << mysqlpp::quote << location.postcode();
-  }
-  else
-    return -1;
-  mysqlpp::StoreQueryResult result = query.store();
-  if (!result)
-  {
-    std::cerr << "Failed to get query result: " << query.error() << "\n";
-    return -1;
-  }
-  if (result.num_rows() > 0)
-  {
-    return result[0]["locationID"];
-  }
-  //insert location
-  mysqlpp::Query insertQuery(&conn);
-  insertQuery << "INSERT INTO location SET ";
-  bool previousData = false;
-  if (location.hasId())
-  {
-    insertQuery << "id=" << mysqlpp::quote << location.id();
-    previousData = true;
-  }
-  if (location.hasName())
-  {
-    if (previousData)
-      insertQuery << ", ";
-    insertQuery << "name=" << mysqlpp::quote << location.name();
-    previousData = true;
-  }
-  if (location.hasCoordinates())
-  {
-    if (previousData)
-      insertQuery << ", ";
-    insertQuery << "latitude=" << mysqlpp::quote << location.latitude()
-                << ", longitude=" << mysqlpp::quote << location.longitude();
-    previousData = true;
-  }
-  if (location.hasPostcode())
-  {
-    if (previousData)
-      insertQuery << ", ";
-    insertQuery << "postcode=" << mysqlpp::quote << location.postcode();
-    previousData = true;
-  }
-  if (!previousData)
-    return -1;
-  if (!insertQuery.exec())
-    return -1;
-  return insertQuery.insert_id();
 }
 
 bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather)

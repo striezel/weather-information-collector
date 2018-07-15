@@ -1,5 +1,9 @@
 # Version history of weather-information-collector
 
+## Version 0.6.3 (2018-07-15)
+
+Add utilitly program to synchronize data between two databases.
+
 ## Version 0.6.2 (2018-07-12)
 
 Fix wrong return value of API::getId() when an error occurred.

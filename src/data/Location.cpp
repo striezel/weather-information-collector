@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -133,6 +133,39 @@ bool Location::empty() const
 {
   return (!hasId() && !hasName()
        && !hasCoordinates() && !hasPostcode());
+}
+
+std::string Location::toString() const
+{
+  if (empty()) {
+    return "<empty location>";
+  }
+  if (hasName())
+  {
+    if (hasCoordinates())
+    {
+      return name() + " (" + std::to_string(latitude()) + "°, "
+                           + std::to_string(longitude()) + "°)";
+    }
+    // name only
+    return name();
+  }
+  if (hasCoordinates())
+  {
+    return std::to_string(latitude()) + "°, "
+         + std::to_string(longitude()) + "°";
+  }
+  if (hasId())
+  {
+    return "ID " + std::to_string(id());
+  }
+  // Postcode?
+  if (hasPostcode())
+  {
+    return "Postcode " + postcode();
+  }
+  // No data? Should not happen, because empty locations are caught earlier.
+  return "unknown location";
 }
 
 } //namespace

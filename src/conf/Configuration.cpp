@@ -22,17 +22,22 @@
 #include <fstream>
 #include <iostream>
 #include <boost/filesystem.hpp>
+#ifndef wic_sync
 #include "../tasks/TaskManager.hpp"
+#endif // wic_sync
 #include "../util/Strings.hpp"
 
 namespace wic
 {
 
 // use same comment character as in task files: '#'
-const char Configuration::commentCharater = TaskManager::commentCharater;
+const char Configuration::commentCharater = '#';
 
 Configuration::Configuration()
-: tasksContainer(std::vector<Task>()),
+:
+  #ifndef wic_sync
+  tasksContainer(std::vector<Task>()),
+  #endif // wic_sync
   apiKeys(std::map<ApiType, std::string>()),
   connInfo(ConnectionInformation("", "", "", "", 0)),
   tasksDirectory(""),
@@ -65,6 +70,7 @@ const ConnectionInformation& Configuration::connectionInfo() const
   return connInfo;
 }
 
+#ifndef wic_sync
 const std::string& Configuration::taskDirectory() const
 {
   return tasksDirectory;
@@ -79,6 +85,7 @@ const std::vector<Task>& Configuration::tasks() const
 {
   return tasksContainer;
 }
+#endif // wic_sync
 
 std::string Configuration::key(const ApiType api) const
 {
@@ -375,6 +382,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   if (!loadCoreConfiguration(realName, missingKeysAllowed))
     return false;
 
+  #ifndef wic_sync
   tasksContainer.clear();
   // If we do not want task data, exit here.
   if (skipTasks)
@@ -415,6 +423,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   {
     std::clog << "Warning: Task list is empty!" << std::endl;
   }
+  #endif // wic_sync
 
   return true;
 }
@@ -422,7 +431,9 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
 void Configuration::clear()
 {
   // clear information
+  #ifndef wic_sync
   tasksContainer.clear();
+  #endif // wic_sync
   apiKeys.clear();
   connInfo.clear();
   tasksDirectory.erase();

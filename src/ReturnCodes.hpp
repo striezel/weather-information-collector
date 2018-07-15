@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,6 +36,9 @@ const int rcTasksExceedApiRequestLimit = 3;
 /** \brief exit code for database schema / version update failure (update program only) */
 const int rcUpdateFailure = 4;
 
-} //namespace
+/** \brief exit code for general database failure (sync program only) */
+const int rcDatabaseError = 5;
+
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_RETURNCODES_HPP

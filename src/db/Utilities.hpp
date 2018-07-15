@@ -18,17 +18,35 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_DB_UTILITIES_HPP
+#define WEATHER_INFORMATION_COLLECTOR_DB_UTILITIES_HPP
 
-#include <string>
+#include <mysql++/mysql++.h>
+#include "../data/Location.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.6.3, 2018-07-15";
+/** \brief Gets the ID of a location from the database. If no such location
+ * exists, it will be created.
+ *
+ * \param conn      MySQL database connection
+ * \param location  the location to look for
+ * \return Returns the ID of the location in case of success.
+ * Returns -1, if an error occurred.
+ */
+int getLocationId(mysqlpp::Connection& conn, const Location& location);
+
+
+/** \brief Gets a location by ID from the database.
+ *
+ * \param conn MySQL database connection
+ * \param locationId ID of the location
+ * \return Returns the location with the given ID, if it was found.
+ *         Returns an empty location otherwise.
+ */
+Location getLocation(mysqlpp::Connection& conn, const int locationId);
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_DB_UTILITIES_HPP

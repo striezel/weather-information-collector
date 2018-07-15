@@ -63,6 +63,7 @@ class Configuration
     const ConnectionInformation& connectionInfo() const;
 
 
+    #ifndef wic_sync
     /** \brief Gets the current directory for tasks.
      *
      * \return Returns the current directory for tasks.
@@ -82,6 +83,7 @@ class Configuration
      * \return Returns a container containing all tasks.
      */
     const std::vector<Task>& tasks() const;
+    #endif // wic_sync
 
 
     /** \brief Gets the API key for the given API.
@@ -131,7 +133,9 @@ class Configuration
     void findTaskDirectory(std::string& realName);
 
 
+    #ifndef wic_sync
     std::vector<Task> tasksContainer; /**< container with all tasks */
+    #endif // wic_sync
     std::map<ApiType, std::string> apiKeys; /**< API keys */
     ConnectionInformation connInfo; /**< database connection information */
     std::string tasksDirectory; /**< directory for tasks */

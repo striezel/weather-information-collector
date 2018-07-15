@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -161,6 +161,13 @@ class Location
      *         Returns false otherwise.
      */
     bool empty() const;
+
+
+    /** \brief Gets a human-readable representation of the location.
+     *
+     * \return Returns a human-readable representation of the location.
+     */
+    std::string toString() const;
   private:
     uint32_t m_id; /**< id of the location */
     float m_latitude; /**< latitude of the location */
