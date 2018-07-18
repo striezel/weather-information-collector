@@ -1,5 +1,9 @@
 # Version history of weather-information-collector
 
+## Version 0.6.4-next (2018-07-xx)
+
+Improve speed of synchronization program.
+
 ## Version 0.6.3 (2018-07-15)
 
 Add utilitly program to synchronize data between two databases.

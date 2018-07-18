@@ -65,7 +65,8 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
 
   mysqlpp::Query selectQuery(&conn);
   selectQuery << "SELECT DISTINCT * FROM weatherdata WHERE apiID=" << mysqlpp::quote << apiId
-              << " AND locationID=" << mysqlpp::quote << locationId << " ORDER BY dataTime ASC;";
+              << " AND locationID=" << mysqlpp::quote << locationId
+              << " ORDER BY dataTime ASC, requestTime ASC;";
   std::vector<weatherdata> queryData;
   selectQuery.storein(queryData);
   weather.clear();
@@ -203,35 +204,6 @@ int SourceMySQL::getLocationId(const Location& location)
     return -1;
   }
   return wic::getLocationId(conn, location);
-}
-
-bool SourceMySQL::hasEntry(int apiId, int locationId,
-         const std::chrono::time_point<std::chrono::system_clock>& dt,
-         const std::chrono::time_point<std::chrono::system_clock>& rt)
-{
-  mysqlpp::Connection conn(false);
-  if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
-                    connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()))
-  {
-    std::cerr << "Could not connect to database: " << conn.error() << "\n";
-    return false;
-  }
-  mysqlpp::Query query(&conn);
-  const mysqlpp::sql_datetime dataTime(std::chrono::system_clock::to_time_t(dt));
-  const mysqlpp::sql_datetime requestTime(std::chrono::system_clock::to_time_t(rt));
-  query << "SELECT dataID FROM weatherdata "
-        << "WHERE apiID = " << mysqlpp::quote << apiId
-        << " AND locationID = " << mysqlpp::quote << locationId
-        << " AND dataTime = " << mysqlpp::quote << dataTime
-        << " AND requestTime = " << mysqlpp::quote << requestTime
-        << " LIMIT 1;";
-  mysqlpp::StoreQueryResult result = query.store();
-  if (!result)
-  {
-    std::cerr << "Failed to get query result: " << query.error() << "\n";
-    return false;
-  }
-  return result.num_rows() > 0;
 }
 
 } // namespace

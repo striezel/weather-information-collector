@@ -86,21 +86,6 @@ class SourceMySQL
      * Returns -1, if an error occurred.
      */
     virtual int getLocationId(const Location& location);
-
-
-    /** \brief Checks whether there is a database entry for the given api,
-     *         location, data time and request time.
-     *
-     * \param apiId  id of the api
-     * \param locationId id of the location
-     * \param dt         time of the weather data ("data time")
-     * \param rt         time of the data request ("request time")
-     * \return Returns true, if the entry is present.
-     *         Returns false, if there is no such entry or there was an error.
-     */
-    virtual bool hasEntry(int apiId, int locationId,
-                          const std::chrono::time_point<std::chrono::system_clock>& dt,
-                          const std::chrono::time_point<std::chrono::system_clock>& rt);
   private:
     ConnectionInformation connInfo; /**< MySQL connection information */
 }; // class
