@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 */
 
 #include "StoreMySQL.hpp"
-#include <mysql++/mysql++.h>
 #include "../db/Utilities.hpp"
 
 namespace wic
@@ -63,6 +62,11 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
   if (locationId <= 0)
     return false;
 
+  return saveCurrentWeather(conn, apiId, locationId, weather);
+}
+
+bool StoreMySQL::saveCurrentWeather(mysqlpp::Connection& conn, const int apiId, const int locationId, const Weather& weather)
+{
   mysqlpp::Query insertQuery(&conn);
   insertQuery << "INSERT INTO weatherdata SET apiID=" << mysqlpp::quote << apiId
               << ", locationID=" << mysqlpp::quote << locationId;
