@@ -18,8 +18,8 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_STOREMYSQL_HPP
-#define WEATHER_INFORMATION_COLLECTOR_STOREMYSQL_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_STOREMYSQLBATCH_HPP
+#define WEATHER_INFORMATION_COLLECTOR_STOREMYSQLBATCH_HPP
 
 #include "Store.hpp"
 #include <fstream>
@@ -29,47 +29,40 @@
 namespace wic
 {
 
-/** \brief class to store data in a MySQL database */
-class StoreMySQL: public Store
+/** \brief Class to store data in a MySQL database in batches.  */
+class StoreMySQLBatch
 {
   public:
-    /** \brief constructor
+    /** \brief Constructor.
      *
      * \param ci  information for connection to the database
      */
-    StoreMySQL(const ConnectionInformation& ci);
+    StoreMySQLBatch(const ConnectionInformation& ci);
 
 
     /** \brief destructor
      */
-    virtual ~StoreMySQL();
+    virtual ~StoreMySQLBatch();
 
 
     /** \brief Saves a current weather entry for a given location and API.
      *
-     * \param type      API that was used to gather the information
-     * \param location  location for the weather information
-     * \param weather   weather information
-     * \return Returns true, if the data was saved.
-     *         Returns false, if an error occurred.
-     */
-    virtual bool saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather);
-
-
-    /** \brief Saves a current weather entry for a given location and API.
-     *
-     * \param conn        open connection to MySQL database
      * \param apiId       id of the API that was used to gather the information
      * \param locationId  id of the location for the weather information
      * \param weather     weather information
      * \return Returns true, if the data was saved.
      *         Returns false, if an error occurred.
      */
-    virtual bool saveCurrentWeather(mysqlpp::Connection& conn, const int apiId, const int locationId, const Weather& weather);
+    virtual bool saveCurrentWeather(const int apiId, const int locationId, const Weather& weather);
   private:
+    bool commit();
     ConnectionInformation connInfo; /**< MySQL connection information */
+    unsigned int records;
+    unsigned int batchLimit;
+    mysqlpp::Connection conn;
+    mysqlpp::Query insertQuery;
 }; // class
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_STOREMYSQL_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_STOREMYSQLBATCH_HPP

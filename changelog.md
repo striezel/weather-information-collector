@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.6.4-next (2018-07-xx)
+## Version 0.6.4 (2018-07-19)
 
 Improve speed of synchronization program.
 

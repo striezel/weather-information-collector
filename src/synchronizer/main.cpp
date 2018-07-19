@@ -23,7 +23,7 @@
 #include "../db/Utilities.hpp"
 #include "../conf/Configuration.hpp"
 #include "../retrieve/SourceMySQL.hpp"
-#include "../store/StoreMySQL.hpp"
+#include "../store/StoreMySQLBatch.hpp"
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
@@ -189,7 +189,6 @@ int main(int argc, char** argv)
     return wic::rcDatabaseError;
   }
 
-  wic::StoreMySQL destinationStore = wic::StoreMySQL(destConfig.connectionInfo());
   // connection to destination database
   mysqlpp::Connection destinationConn(false);
   if (!destinationConn.connect(destConfig.connectionInfo().db().c_str(),
@@ -201,6 +200,7 @@ int main(int argc, char** argv)
     std::cerr << "Could not connect to destination database: " << destinationConn.error() << "\n";
     return wic::rcDatabaseError;
   }
+  wic::StoreMySQLBatch destinationStore = wic::StoreMySQLBatch(destConfig.connectionInfo());
   for(const auto& item : locations)
   {
     std::cout << "Synchronizing data for " << item.first.toString() << ", " << wic::toString(item.second) << "..." << std::endl;
@@ -254,7 +254,7 @@ int main(int argc, char** argv)
           || (destinationIterator->requestTime() != sourceIterator->requestTime()))
       {
         // Insert data set.
-        if (!destinationStore.saveCurrentWeather(destinationConn, apiId, locationId, *sourceIterator))
+        if (!destinationStore.saveCurrentWeather(apiId, locationId, *sourceIterator))
         {
           std::cerr << "Error: Could insert weather data into destination database!" << std::endl;
           return wic::rcDatabaseError;
