@@ -36,8 +36,9 @@ class StoreMySQLBatch
     /** \brief Constructor.
      *
      * \param ci  information for connection to the database
+     * \param batchSize  number of records per insert statement
      */
-    StoreMySQLBatch(const ConnectionInformation& ci);
+    StoreMySQLBatch(const ConnectionInformation& ci, const unsigned int batchSize);
 
 
     /** \brief destructor

@@ -24,10 +24,10 @@
 namespace wic
 {
 
-StoreMySQLBatch::StoreMySQLBatch(const ConnectionInformation& ci)
+StoreMySQLBatch::StoreMySQLBatch(const ConnectionInformation& ci, const unsigned int batchSize)
 : connInfo(ci),
   records(0),
-  batchLimit(25),
+  batchLimit(batchSize),
   conn(false),
   insertQuery(&conn)
 {

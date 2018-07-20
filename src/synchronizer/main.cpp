@@ -25,8 +25,11 @@
 #include "../retrieve/SourceMySQL.hpp"
 #include "../store/StoreMySQLBatch.hpp"
 #include "../util/GitInfos.hpp"
+#include "../util/Strings.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
+
+const int defaultBatchSize = 125;
 
 void showVersion()
 {
@@ -53,7 +56,12 @@ void showHelp()
             << "  -c2 FILE | --dest-conf FILE\n"
             << "                         - sets the file name of the configuration file that\n"
             << "                           contains the database connection settings for the\n"
-            << "                           destination database.\n";
+            << "                           destination database.\n"
+            << "  -b N | --batch-size N  - sets the number of records per batch insert to N.\n"
+            << "                           Higher numbers mean increased performance, but it\n"
+            << "                           could also result in hitting MySQL's limit for the\n"
+            << "                           maximum packet size, called max_allowed_packet.\n"
+            << "                           Defaults to " << defaultBatchSize << ", if no value is given.\n" ;
 }
 
 bool isLess(const wic::Weather& lhs, const wic::Weather& rhs)
@@ -66,6 +74,7 @@ int main(int argc, char** argv)
 {
   std::string srcConfigurationFile;
   std::string destConfigurationFile;
+  int batchSize = -1;
   if ((argc > 1) && (argv != nullptr))
   {
     for (int i = 1; i < argc; ++i)
@@ -104,7 +113,7 @@ int main(int argc, char** argv)
         else
         {
           std::cerr << "Error: You have to enter a file path after \""
-                    << param <<"\"." << std::endl;
+                    << param << "\"." << std::endl;
           return wic::rcInvalidParameter;
         }
       } //if source configuration file
@@ -126,7 +135,42 @@ int main(int argc, char** argv)
         else
         {
           std::cerr << "Error: You have to enter a file path after \""
-                    << param <<"\"." << std::endl;
+                    << param << "\"." << std::endl;
+          return wic::rcInvalidParameter;
+        }
+      } //if destination configuration file
+      else if ((param == "--batch-size") || (param == "-b"))
+      {
+        if (batchSize >= 0)
+        {
+          std::cerr << "Error: Batch size was already set to "
+                    << batchSize << "!" << std::endl;
+          return wic::rcInvalidParameter;
+        }
+        // enough parameters?
+        if ((i+1 < argc) && (argv[i+1] != nullptr))
+        {
+          const std::string bsString = std::string(argv[i+1]);
+          if (!wic::stringToInt(bsString, batchSize) || (batchSize <=0 ))
+          {
+            std::cerr << "Error: Batch size must be a positive integer!"
+                      << std::endl;
+            return wic::rcInvalidParameter;
+          }
+          if (batchSize > 1000)
+          {
+            std::cout << "Info: Batch size " << batchSize << " will be reduced "
+                      << " to 1000, because too large batch sizes might cause "
+                      << "the database server to reject inserts." << std::endl;
+            batchSize = 1000;
+          }
+          // Skip next parameter, because it's already used as batch size.
+          ++i;
+        }
+        else
+        {
+          std::cerr << "Error: You have to enter a number after \""
+                    << param << "\"." << std::endl;
           return wic::rcInvalidParameter;
         }
       } //if destination configuration file
@@ -148,6 +192,13 @@ int main(int argc, char** argv)
   {
     std::cerr << "Error: No destination configuration file was specified!" << std::endl;
     return wic::rcInvalidParameter;
+  }
+  // If there is no batch size, use 25 as default value.
+  if (batchSize < 0)
+  {
+    std::cout << "Info: Using default batch size value of " << defaultBatchSize
+              << "." << std::endl;
+    batchSize = defaultBatchSize;
   }
 
   // load source configuration file
@@ -200,7 +251,7 @@ int main(int argc, char** argv)
     std::cerr << "Could not connect to destination database: " << destinationConn.error() << "\n";
     return wic::rcDatabaseError;
   }
-  wic::StoreMySQLBatch destinationStore = wic::StoreMySQLBatch(destConfig.connectionInfo());
+  wic::StoreMySQLBatch destinationStore = wic::StoreMySQLBatch(destConfig.connectionInfo(), batchSize);
   for(const auto& item : locations)
   {
     std::cout << "Synchronizing data for " << item.first.toString() << ", " << wic::toString(item.second) << "..." << std::endl;

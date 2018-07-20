@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.6.5 (2018-07-20)
+
+Add command line parameter to synchronization tool that allows to set the size
+of batch inserts to tweak performance or work around server limitations. The
+(default) batch size increases from 25 to 125.
+
 ## Version 0.6.4 (2018-07-19)
 
 Improve speed of synchronization program.
