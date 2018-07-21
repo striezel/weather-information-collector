@@ -21,6 +21,7 @@ set(weather-information-collector-update_sources
     ../util/Strings.cpp
     Update_0.5.4_to_0.5.5.cpp
     Update_0.5.7_to_0.6.0.cpp
+    Update_0.6.5_to_0.6.6.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)

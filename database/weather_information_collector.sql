@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `weatherdata` (
   `wind_speed` float DEFAULT NULL COMMENT 'wind speed in meters per second',
   `wind_degrees` smallint(5) unsigned DEFAULT NULL COMMENT 'wind direction in degrees',
   `cloudiness` tinyint(3) unsigned NOT NULL COMMENT 'cloudiness in percent',
-  `json` text COMMENT 'raw JSON data'
+  `json` mediumtext COMMENT 'raw JSON data'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

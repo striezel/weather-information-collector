@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `weatherdata` (
   `wind_speed` float DEFAULT NULL COMMENT 'wind speed in meters per second',
   `wind_degrees` smallint(5) unsigned DEFAULT NULL COMMENT 'wind direction in degrees',
   `cloudiness` tinyint(3) unsigned NOT NULL COMMENT 'cloudiness in percent',
-  `json` text COMMENT 'raw JSON data'
+  `json` mediumtext COMMENT 'raw JSON data'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 */
@@ -67,7 +67,7 @@ sql_create_15(weatherdata,
     mysqlpp::Null<mysqlpp::sql_float>, wind_speed,
     mysqlpp::Null<mysqlpp::sql_smallint_unsigned>, wind_degrees,
     mysqlpp::Null<mysqlpp::sql_tinyint_unsigned>, cloudiness,
-    mysqlpp::Null<mysqlpp::sql_varchar>, json)
+    mysqlpp::Null<mysqlpp::sql_mediumtext>, json)
 
 } // namespace
 

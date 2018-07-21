@@ -1,5 +1,12 @@
 # Version history of weather-information-collector
 
+## Version 0.6.6 (2018-07-21)
+
+Due to the fact that some APIs can return quite lengthy JSON data, the database
+table for the current weather data has been adjusted so that it now can hold
+raw JSON data of up to 16777215 characters per entry instead of only 65535
+characters in previous versions.
+
 ## Version 0.6.5 (2018-07-20)
 
 Add command line parameter to synchronization tool that allows to set the size
