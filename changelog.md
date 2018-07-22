@@ -1,5 +1,21 @@
 # Version history of weather-information-collector
 
+## Version 0.6.7 (2018-07-22)
+
+Use HTTPS instead of HTTP for requests to OpenWeatherMap API.
+(Requests to other APIs, i.e. Apixu and DarkSky, used HTTPS from the very
+beginning of their implementation in weather-information-collector.)
+
+It would have been there earlier, but since OpenWeatherMap initially did not
+support HTTPS for all plans (an example can be seen at e.g.
+<https://web.archive.org/web/20150312223316/https://openweathermap.org/price>)
+where it still says "No SSL" for the free plan) it first was not implemented to
+use HTTPS for weather-information-collectors requests to OpenWeatherMap.
+Fortunately that has changed and all plans now support HTTPS for API requests,
+so weather-information-collector can now safely use HTTPS for OpenWeatherMap.
+With that being said: Thank you, OpenWeatherMap, for providing that additinal
+safety feature for free plan users, too!
+
 ## Version 0.6.6 (2018-07-21)
 
 Due to the fact that some APIs can return quite lengthy JSON data, the database

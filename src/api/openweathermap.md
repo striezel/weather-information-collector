@@ -3,15 +3,15 @@
 ## Authentication
 
 Authentication is achieved by passing an API key as request parameter "appid",
-e.g. http://api.openweathermap.org/data/2.5/weather?id=12345&appid=API-key-here.
+e.g. https://api.openweathermap.org/data/2.5/weather?id=12345&appid=API-key-here.
 
 ## Formats
 
 The API provides two formats, JSON and XML. JSON is the default, but it can be
 changed to XML by providing an appropriate `mode` parameter:
 
-* JSON: http://api.openweathermap.org/data/2.5/weather?id=2643743&appid=API-key-here
-* XML:  http://api.openweathermap.org/data/2.5/weather?id=2643743&appid=API-key-here&mode=xml
+* JSON: https://api.openweathermap.org/data/2.5/weather?id=2643743&appid=API-key-here
+* XML:  https://api.openweathermap.org/data/2.5/weather?id=2643743&appid=API-key-here&mode=xml
 
 ## Error codes
 
@@ -28,7 +28,7 @@ The `cod` element usually contains the HTTP status code.
 ## Current weather information
 
 Curent weather information can be requested via the
-<http://api.openweathermap.org/data/2.5/weather?id=city-id-here&appid=API-key-here>
+<https://api.openweathermap.org/data/2.5/weather?id=city-id-here&appid=API-key-here>
 endpoint.
 
 ### Location specifier
@@ -36,13 +36,13 @@ endpoint.
 The location can be specified in several ways:
 
 * city name, e.g. `q=London` or `q=London,UK`
-  (http://api.openweathermap.org/data/2.5/weather?q=London&appid=API-key-here)
+  (https://api.openweathermap.org/data/2.5/weather?q=London&appid=API-key-here)
 * by city ID (preferred way), e.g. `id=2643743`
-  (http://api.openweathermap.org/data/2.5/weather?id=2643743&appid=API-key-here)
+  (https://api.openweathermap.org/data/2.5/weather?id=2643743&appid=API-key-here)
 * latitude and longitude in degrees, e.g. `lat=51.5&lon=-0.13`
-  (http://api.openweathermap.org/data/2.5/weather?lon=-0.13&lat=51.51&appid=API-key-here)
+  (https://api.openweathermap.org/data/2.5/weather?lon=-0.13&lat=51.51&appid=API-key-here)
 * zip code, e.g. `zip=90210,us`
-  (http://api.openweathermap.org/data/2.5/weather?zip=90210,US&appid=API-key-here)
+  (https://api.openweathermap.org/data/2.5/weather?zip=90210,US&appid=API-key-here)
   * Note: If no country code is given, it defaults to USA.
 
 ### Example output (JSON format)

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -130,7 +130,7 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
   weather = Weather();
   if (m_apiKey.empty())
     return false;
-  const std::string url = "http://api.openweathermap.org/data/2.5/weather?appid="
+  const std::string url = "https://api.openweathermap.org/data/2.5/weather?appid="
                         + m_apiKey + "&" + toRequestString(location);
   std::string response;
   {
