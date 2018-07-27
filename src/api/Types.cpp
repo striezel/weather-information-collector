@@ -57,4 +57,37 @@ std::string toString(const ApiType type)
   } // switch
 }
 
+DataType toDataType(const std::string& dataName)
+{
+  auto name = toLowerString(dataName);
+  trim(name);
+  // current
+  if (name == "current")
+    return DataType::Current;
+  // forecast
+  if (name == "forecast")
+    return DataType::Forecast;
+  // current and forecast
+  if ((name == "currentandforecast") || (name == "current+forecast"))
+    return DataType::CurrentAndForecast;
+  // unknown / none
+  return DataType::none;
+}
+
+std::string toString(const DataType type)
+{
+  switch (type)
+  {
+    case DataType::Current:
+         return "current";
+    case DataType::Forecast:
+         return "forecast";
+    case DataType::CurrentAndForecast:
+         return "current+forecast";
+    case DataType::none:
+    default:
+         return "none";
+  } // switch
+}
+
 } // namespace
