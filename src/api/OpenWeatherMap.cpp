@@ -43,7 +43,7 @@ bool OpenWeatherMap::validLocation(const Location& location) const
       || location.hasName() || location.hasPostcode());
 }
 
-bool OpenWeatherMap::supportedDataType(const DataType data) const
+bool OpenWeatherMap::supportsDataType(const DataType data) const
 {
   // At the moment only current weather data can be retrieved.
   return (data == DataType::Current);

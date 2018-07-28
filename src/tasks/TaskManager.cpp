@@ -24,6 +24,7 @@
 #include <iostream>
 #include <map>
 #include <boost/filesystem.hpp>
+#include "../api/Factory.hpp"
 #include "../api/Limits.hpp"
 #include "../util/Strings.hpp"
 
@@ -313,6 +314,34 @@ bool TaskManager::loadFromDirectory(const std::string& directory, const std::str
                       << " is incomplete!" << std::endl;
             return false;
           }
+          // Check whether the specified API can handle the task.
+          const auto api = Factory::create(t.api());
+          if (!api)
+          {
+            std::cerr << "Error: The API " << toString(t.api())
+                      << " specified in the task file " << x.string()
+                      << " is not supported!" << std::endl;
+            return false;
+          }
+          // -- Location must be valid.
+          if (!(api->validLocation(t.location())))
+          {
+            std::cerr << "Error: The location " << t.location().toString()
+                      << " specified in the task file " << x.string()
+                      << " is not a valid location for the API "
+                      << toString(t.api()) << "!" << std::endl;
+            return false;
+          }
+          // -- Data type must be supported.
+          if (!(api->supportsDataType(t.data())))
+          {
+            std::cerr << "Error: The data type " << toString(t.data())
+                      << " specified in the task file " << x.string()
+                      << " is not supported by the API "
+                      << toString(t.api()) << "!" << std::endl;
+            return false;
+          }
+          // Tests passed, push it to the task vector.
           storage.push_back(t);
         } // if extension check passed
         else

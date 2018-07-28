@@ -21,16 +21,26 @@
 		</Build>
 		<Compiler>
 			<Add option="-Weffc++" />
-			<Add option="-Wall" />
 			<Add option="-std=c++11" />
+			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Linker>
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
+			<Add library="jsoncpp" />
+			<Add library="curl" />
 		</Linker>
+		<Unit filename="../src/api/Apixu.cpp" />
+		<Unit filename="../src/api/Apixu.hpp" />
+		<Unit filename="../src/api/DarkSky.cpp" />
+		<Unit filename="../src/api/DarkSky.hpp" />
+		<Unit filename="../src/api/Factory.cpp" />
+		<Unit filename="../src/api/Factory.hpp" />
 		<Unit filename="../src/api/Limits.cpp" />
 		<Unit filename="../src/api/Limits.hpp" />
+		<Unit filename="../src/api/OpenWeatherMap.cpp" />
+		<Unit filename="../src/api/OpenWeatherMap.hpp" />
 		<Unit filename="../src/api/Types.cpp" />
 		<Unit filename="../src/api/Types.hpp" />
 		<Unit filename="../src/conf/Configuration.cpp" />
@@ -41,6 +51,8 @@
 		<Unit filename="../src/data/Weather.hpp" />
 		<Unit filename="../src/db/ConnectionInformation.cpp" />
 		<Unit filename="../src/db/ConnectionInformation.hpp" />
+		<Unit filename="../src/net/Curly.cpp" />
+		<Unit filename="../src/net/Curly.hpp" />
 		<Unit filename="../src/store/Store.hpp" />
 		<Unit filename="../src/store/StoreCSV.cpp" />
 		<Unit filename="../src/store/StoreCSV.hpp" />

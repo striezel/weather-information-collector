@@ -2,10 +2,14 @@
 
 ## Version 0.7.0-pre (2018-07-xx)
 
-Collection tasks definitions can now contain a `data` setting that defines the
+* Collection tasks definitions can now contain a `data` setting that defines the
 type of weather data that shall be collected. With that setting the collection
 of current weather data, weather forecast data, or the combination of both can
 be specified. Note that not all APIs might support every of those data types.
+* The weather information collector and the configuration test utility will now
+check whether the location data and the data types given in the tasks files are
+actually supported by the corresponding API. If not, they will exit with a 
+non-zero exit code.
 
 ## Version 0.6.7 (2018-07-22)
 

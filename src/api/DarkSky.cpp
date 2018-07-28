@@ -44,7 +44,7 @@ bool DarkSky::validLocation(const Location& location) const
   return location.hasCoordinates();
 }
 
-bool DarkSky::supportedDataType(const DataType data) const
+bool DarkSky::supportsDataType(const DataType data) const
 {
   // At the moment only current weather data can be retrieved.
   return (data == DataType::Current);

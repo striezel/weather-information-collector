@@ -32,26 +32,41 @@
 		<Compiler>
 			<Add option="-Weffc++" />
 			<Add option="-pedantic" />
-			<Add option="-Wall" />
 			<Add option="-std=c++11" />
+			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Linker>
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
+			<Add library="jsoncpp" />
+			<Add library="curl" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
+		<Unit filename="../api/API.hpp" />
+		<Unit filename="../api/Apixu.cpp" />
+		<Unit filename="../api/Apixu.hpp" />
+		<Unit filename="../api/DarkSky.cpp" />
+		<Unit filename="../api/DarkSky.hpp" />
+		<Unit filename="../api/Factory.cpp" />
+		<Unit filename="../api/Factory.hpp" />
 		<Unit filename="../api/Limits.cpp" />
 		<Unit filename="../api/Limits.hpp" />
+		<Unit filename="../api/OpenWeatherMap.cpp" />
+		<Unit filename="../api/OpenWeatherMap.hpp" />
 		<Unit filename="../api/Types.cpp" />
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
 		<Unit filename="../data/Location.cpp" />
 		<Unit filename="../data/Location.hpp" />
+		<Unit filename="../data/Weather.cpp" />
+		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../net/Curly.cpp" />
+		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />

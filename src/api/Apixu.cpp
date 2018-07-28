@@ -43,7 +43,7 @@ bool Apixu::validLocation(const Location& location) const
        || location.hasPostcode());
 }
 
-bool Apixu::supportedDataType(const DataType data) const
+bool Apixu::supportsDataType(const DataType data) const
 {
   // At the moment only current weather data can be retrieved.
   return (data == DataType::Current);

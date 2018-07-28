@@ -56,7 +56,7 @@ class API
      * \return Returns true, if the data type is supported.
      *         Returns false otherwise.
      */
-    virtual bool supportedDataType(const DataType data) const = 0;
+    virtual bool supportsDataType(const DataType data) const = 0;
 
 
     /** \brief Retrieves the current weather for a given location.

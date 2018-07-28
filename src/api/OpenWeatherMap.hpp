@@ -59,7 +59,7 @@ class OpenWeatherMap: public API
      * \return Returns true, if the data type is supported.
      *         Returns false otherwise.
      */
-    virtual bool supportedDataType(const DataType data) const;
+    virtual bool supportsDataType(const DataType data) const;
 
 
     /** \brief Retrieves the current weather for a given location.
