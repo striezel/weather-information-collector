@@ -52,6 +52,13 @@ The following settings are recognized in a task file:
   * **OpenWeatherMap** - data is fetched from OpenWeatherMap
   * **Apixu** - data is fetched from Apixu
   * **DarkSky** - data is fetched from DarkSky
+* **data** - the type of data that will be collected via the API. If this is not
+  set, it will default to `current` for backwards compatibility. Furthermore,
+  not every API will support every data type. Currently the following values
+  are available:
+  * **current** - collect data about the current weather
+  * **forecast** - collect weather forecast data
+  * **current+forecast** - collect data about current weather and forecast data
 * **location.id** - _(optional)_ numeric ID of the location for which the
   weather shall be requested (only supported by OpenWeatherMap)
 * **location.name** - name of the location / city, e.g. `London`
@@ -68,7 +75,8 @@ The following settings are recognized in a task file:
 Although every location-related element itself is optional, each task file must
 have _at least one valid location-related setting_ to define the location.
 So basically three settings are enough to define a task: api, one
-location-related setting and a request interval.
+location-related setting and a request interval. The `data` setting will get the
+default value `current`, if not set, so it must not be specified in that case.
 
 # Defining multiple tasks
 
@@ -83,13 +91,15 @@ not exceed the API limit by accident.
 # Example of a complete task file
 
 The following example is a complete task file for the
-weather-information-collector program (as of version 0.5.3):
+weather-information-collector program (as of version 0.7.0):
 
     # This line is a comment and will be ignored by the program.
     #And so is this line.
 
     # use OpenWeatherMap API
     api=OpenWeatherMap
+    # collect data about current weather
+    data=current
     # city of London, UK
     location.name=London
     # one request every hour, e.g. every 3600 seconds
@@ -99,6 +109,8 @@ Another example would be:
 
     # use Apixu API
     api=Apixu
+    # collect data of weather forecast
+    data=forecast
     # location somewhere in England, near the town of Newbury
     location.coordinates=51.5,-1.2
     # one request every 30 minutes, e.g. every 1800 seconds
@@ -108,6 +120,8 @@ An example for the third API would be:
 
     # use DarkSky API
     api=DarkSky
+    # collect current and forecast data
+    data=current+forecast
     # location: Alcatraz Island
     location.coordinates=37.8267,-122.4233
     # one request every 20 minutes, e.g. every 1200 seconds

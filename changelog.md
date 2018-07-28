@@ -1,5 +1,12 @@
 # Version history of weather-information-collector
 
+## Version 0.7.0-pre (2018-07-xx)
+
+Collection tasks definitions can now contains a `data` setting that defines the
+type of weather data that shall be collected. With that setting the collection
+of current weather data, weather forecast data, or the combination of both can
+be specified. Note that not all APIs might support every of those data types.
+
 ## Version 0.6.7 (2018-07-22)
 
 Use HTTPS instead of HTTP for requests to OpenWeatherMap API.

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -43,6 +43,12 @@ bool Apixu::validLocation(const Location& location) const
        || location.hasPostcode());
 }
 
+bool Apixu::supportedDataType(const DataType data) const
+{
+  // At the moment only current weather data can be retrieved.
+  return (data == DataType::Current);
+}
+
 std::string Apixu::toRequestString(const Location& location) const
 {
   if (location.hasCoordinates())
@@ -52,7 +58,7 @@ std::string Apixu::toRequestString(const Location& location) const
     return std::string("q=") + location.name();
   if (location.hasPostcode())
     return std::string("q=") + location.postcode();
-  //no required data set
+  // no required data set
   return std::string();
 }
 
@@ -75,7 +81,7 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
   Json::Value val = root["current"];
   if (!val.empty() && val.isObject())
   {
-    //temperature
+    // temperature
     Json::Value v2 = val["temp_c"];
     if (!v2.empty())
     {
@@ -87,7 +93,7 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
     v2 = val["temp_f"];
     if (!v2.empty() && v2.isDouble())
       weather.setTemperatureFahrenheit(v2.asFloat());
-    //wind
+    // wind
     v2 = val["wind_degree"];
     if (!v2.empty() && v2.isIntegral())
       weather.setWindDegrees(v2.asInt());
@@ -100,15 +106,15 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
       if (!v2.empty() && v2.isDouble())
         weather.setWindSpeed(v2.asFloat() * 1.609344 / 3.6);
     }
-    //humidity
+    // humidity
     v2 = val["humidity"];
     if (!v2.empty() && v2.isIntegral())
       weather.setHumidity(v2.asInt());
-    //rain
+    // rain
     v2 = val["precip_mm"];
     if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
       weather.setRain(v2.asFloat());
-    //pressure
+    // pressure
     v2 = val["pressure_mb"];
     if (!v2.empty())
     {
@@ -117,11 +123,11 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
       else if (v2.isIntegral())
         weather.setPressure(v2.asInt());
     }
-    //cloudiness
+    // cloudiness
     v2 = val["cloud"];
     if (!v2.empty() && v2.isIntegral())
       weather.setCloudiness(v2.asInt());
-    //date of data update
+    // date of data update
     v2 = val["last_updated_epoch"];
     if (!v2.empty() && v2.isIntegral())
     {
@@ -129,8 +135,9 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
       weather.setDataTime(dt);
     }
     return true;
-  } //if current object
-  //No current object - return false to indicate failure.
+  } // if current object
+
+  // No current object - return false to indicate failure.
   return false;
 }
 
@@ -162,9 +169,9 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
       }
       return false;
     }
-  } //scope of curly
+  } // scope of curly
 
   return parseCurrentWeather(response, weather);
 }
 
-} //namespace
+} // namespace

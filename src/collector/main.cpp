@@ -72,12 +72,12 @@ int main(int argc, char** argv)
       {
         showVersion();
         return 0;
-      } //if version
+      } // if version
       else if ((param == "-?") || (param == "/?") || (param == "--help"))
       {
         showHelp();
         return 0;
-      } //if help
+      } // if help
       else if ((param == "--conf") || (param == "-c"))
       {
         if (!configurationFile.empty())
@@ -86,11 +86,11 @@ int main(int argc, char** argv)
                     << configurationFile << "!" << std::endl;
           return wic::rcInvalidParameter;
         }
-        //enough parameters?
+        // enough parameters?
         if ((i+1 < argc) && (argv[i+1] != nullptr))
         {
           configurationFile = std::string(argv[i+1]);
-          //Skip next parameter, because it's already used as file path.
+          // Skip next parameter, because it's already used as file path.
           ++i;
         }
         else
@@ -99,7 +99,7 @@ int main(int argc, char** argv)
                     << param <<"\"." << std::endl;
           return wic::rcInvalidParameter;
         }
-      } //if configuration file
+      } // if configuration file
       else if ((param == "--ignore-limits") || (param == "-l") || (param == "--do-not-check-limits"))
       {
         if (!checkApiLimits)
@@ -109,19 +109,19 @@ int main(int argc, char** argv)
           return wic::rcInvalidParameter;
         }
         checkApiLimits = false;
-      } //if ignore limits
+      } // if ignore limits
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
                   << "Use --help to show available parameters." << std::endl;
         return wic::rcInvalidParameter;
       }
-    } //for i
-  } //if arguments are there
+    } // for i
+  } // if arguments are there
 
   wic::Collector collector;
   {
-    //load configuration file + configured tasks
+    // load configuration file + configured tasks
     wic::Configuration config;
     if (!config.load(configurationFile))
     {
@@ -129,7 +129,7 @@ int main(int argc, char** argv)
       return wic::rcConfigurationError;
     }
 
-    //If there are no tasks, we can quit here.
+    // If there are no tasks, we can quit here.
     if (config.tasks().empty())
     {
       std::cerr << "Error: No collection tasks have been configured!" << std::endl;
@@ -148,14 +148,14 @@ int main(int argc, char** argv)
                   << "application." << std::endl;
         return wic::rcTasksExceedApiRequestLimit;
       }
-    } //if check shall be performed
+    } // if check shall be performed
 
     if (!collector.fromConfiguration(config))
     {
       std::cerr << "Error: Could not transfer configuration data to collector!" << std::endl;
       return wic::rcConfigurationError;
     }
-  } //end of scope for configuration
+  } // end of scope for configuration
 
   /* collect() currently starts an endless loop that cannot be interrupted by
      the user, yet. Future versions might use something like signal handling

@@ -37,7 +37,7 @@ class DarkSky: public API
     DarkSky(const std::string& key = "");
 
 
-    /** \brief Set the API key for API requests.
+    /** \brief Sets the API key for API requests.
      *
      * \param key  the API key
      */
@@ -51,6 +51,15 @@ class DarkSky: public API
      *         Returns false otherwise.
      */
     virtual bool validLocation(const Location& location) const;
+
+
+    /** \brief Checks whether the given data type is supported by the API.
+     *
+     * \param data  the data type to check
+     * \return Returns true, if the data type is supported.
+     *         Returns false otherwise.
+     */
+    virtual bool supportedDataType(const DataType data) const;
 
 
     /** \brief Retrieves the current weather for a given location.

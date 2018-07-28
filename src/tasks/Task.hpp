@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,62 +28,76 @@
 namespace wic
 {
 
-/** \brief holds information about a collection task */
+/** \brief Holds information about a collection task. */
 class Task
 {
   public:
-    /** \brief default constructor
+    /** \brief Constructor.
      *
      * \param loc       location of the task
      * \param a         the API type to use for requests
      * \param _interval interval between two consecutive API requests
      */
-    Task(const Location& loc = Location(), const ApiType a = ApiType::none, const std::chrono::seconds& _interval = std::chrono::seconds::zero());
+    Task(const Location& loc = Location(), const ApiType a = ApiType::none, const DataType d = DataType::none, const std::chrono::seconds& _interval = std::chrono::seconds::zero());
 
 
-    /** \brief gets the location of the collection task
+    /** \brief Gets the location of the collection task.
      *
      * \return Returns the location of the collection task.
      */
     const Location& location() const;
 
 
-    /** \brief sets a new location for the task
+    /** \brief Sets a new location for the task.
      *
      * \param loc  the new location of the task
      */
     void setLocation(const Location& loc);
 
 
-    /** \brief gets the type of the API that is used for requests
+    /** \brief Gets the type of the API that is used for requests.
      *
      * \return Returns the type of the API that is used for requests.
      */
     ApiType api() const;
 
 
-    /** \brief sets a new API for the task
+    /** \brief Sets a new API for the task.
      *
      * \param a  the new API of the task
      */
     void setApi(const ApiType a);
 
 
-    /** \brief gets the interval between two consecutive API requests
+    /** \brief Gets the type of data that the task collects.
+     *
+     * \return Returns the type of data that the task collects.
+     */
+    DataType data() const;
+
+
+    /** \brief Sets a new data type for the task.
+     *
+     * \param d  the new data type of the task
+     */
+    void setData(const DataType d);
+
+
+    /** \brief Gets the interval between two consecutive API requests.
      *
      * \return Returns the interval between two consecutive API requests.
      */
     std::chrono::seconds interval() const;
 
 
-    /** \brief sets a new interval between two consecutive API requests
+    /** \brief Sets a new interval between two consecutive API requests.
      *
      * \param _interval  the new interval
      */
     void setInterval(const std::chrono::seconds& _interval);
 
 
-    /** \brief checks whether this instance has all required information
+    /** \brief Checks whether this instance has all required information.
      *
      * \return Returns true, if all required data is set.
      */
@@ -91,9 +105,10 @@ class Task
   private:
     Location m_loc; /**< location for which data will be collected */
     ApiType m_api; /**< API that is used for requests */
+    DataType m_data; /**< type of data that this tasks collects */
     std::chrono::seconds m_interval; /**< interval between two consecutive API requests */
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_TASK_HPP

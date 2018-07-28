@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@
 namespace wic
 {
 
-Task::Task(const Location& loc, const ApiType a, const std::chrono::seconds& _interval)
+Task::Task(const Location& loc, const ApiType a, const DataType d, const std::chrono::seconds& _interval)
 : m_loc(loc),
   m_api(a),
+  m_data(d),
   m_interval(_interval)
 {
 }
@@ -50,6 +51,16 @@ void Task::setApi(const ApiType a)
   m_api = a;
 }
 
+DataType Task::data() const
+{
+  return m_data;
+}
+
+void Task::setData(const DataType d)
+{
+  m_data = d;
+}
+
 std::chrono::seconds Task::interval() const
 {
   return m_interval;
@@ -65,7 +76,8 @@ void Task::setInterval(const std::chrono::seconds& _interval)
 bool Task::complete() const
 {
   return (!m_loc.empty() && (m_api != ApiType::none)
+      && (m_data != DataType::none)
       && (m_interval > std::chrono::seconds::zero()));
 }
 
-} //namespace
+} // namespace

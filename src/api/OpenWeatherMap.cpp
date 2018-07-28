@@ -43,6 +43,12 @@ bool OpenWeatherMap::validLocation(const Location& location) const
       || location.hasName() || location.hasPostcode());
 }
 
+bool OpenWeatherMap::supportedDataType(const DataType data) const
+{
+  // At the moment only current weather data can be retrieved.
+  return (data == DataType::Current);
+}
+
 std::string OpenWeatherMap::toRequestString(const Location& location) const
 {
   if (location.hasId())
@@ -54,7 +60,7 @@ std::string OpenWeatherMap::toRequestString(const Location& location) const
     return std::string("q=") + location.name();
   if (location.hasPostcode())
     return std::string("zip=") + location.postcode();
-  //no required data set
+  // no required data set
   return std::string();
 }
 
@@ -91,7 +97,7 @@ bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weath
     if (!v2.empty() && v2.isIntegral())
       weather.setHumidity(v2.asInt());
     foundValidParts = true;;
-  } //if main object
+  } // if main object
   val = root["wind"];
   if (!val.empty() && val.isObject())
   {
@@ -101,27 +107,27 @@ bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weath
     v2 = val["deg"];
     if (!v2.empty() && v2.isIntegral())
       weather.setWindDegrees(v2.asInt());
-  } //if wind object
+  } // if wind object
   val = root["clouds"];
   if (!val.empty() && val.isObject())
   {
     Json::Value v2 = val["all"];
     if (!v2.empty() && v2.isIntegral())
       weather.setCloudiness(v2.asInt());
-  } //if clouds object
+  } // if clouds object
   val = root["rain"];
   if (!val.empty() && val.isObject())
   {
     Json::Value v2 = val["3h"];
     if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
       weather.setRain(v2.asFloat());
-  } //if rain object
+  } // if rain object
   val = root["dt"];
   if (!val.empty() && val.isIntegral())
   {
     const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.asInt()));
     weather.setDataTime(dt);
-  } //if dt
+  } // if dt
   return foundValidParts;
 }
 
@@ -153,10 +159,10 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
       }
       return false;
     }
-  } //scope of curly
+  } // scope of curly
 
-  //Parsing is done here.
+  // Parsing is done here.
   return parseCurrentWeather(response, weather);
 }
 
-} //namespace
+} // namespace

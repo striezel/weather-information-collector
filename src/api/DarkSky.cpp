@@ -44,6 +44,12 @@ bool DarkSky::validLocation(const Location& location) const
   return location.hasCoordinates();
 }
 
+bool DarkSky::supportedDataType(const DataType data) const
+{
+  // At the moment only current weather data can be retrieved.
+  return (data == DataType::Current);
+}
+
 std::string DarkSky::toRequestString(const Location& location) const
 {
   if (location.hasCoordinates())
@@ -170,4 +176,4 @@ bool DarkSky::currentWeather(const Location& location, Weather& weather)
   return parseCurrentWeather(response, weather);
 }
 
-} //namespace
+} // namespace
