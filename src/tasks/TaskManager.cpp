@@ -90,6 +90,10 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       {
         std::cerr << "Error: API type \"" << value << "\" in file " << fileName
                   << " is not a recognized API!" << std::endl;
+        std::cerr << "Hint: Recognized API types are:" << std::endl
+                  << "\t" << toString(ApiType::Apixu) << std::endl
+                  << "\t" << toString(ApiType::DarkSky) << std::endl
+                  << "\t" << toString(ApiType::OpenWeatherMap) << std::endl;
         return false;
       }
       task.setApi(api);
@@ -106,7 +110,11 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       if (data == DataType::none)
       {
         std::cerr << "Error: Data type \"" << value << "\" in file " << fileName
-                  << " is not a recognized value!" << std::endl;
+                  << " is not a recognized type!" << std::endl;
+        std::cerr << "Hint: Recognized data types are:" << std::endl
+                  << "\t" << toString(DataType::Current) << std::endl
+                  << "\t" << toString(DataType::Forecast) << std::endl
+                  << "\t" << toString(DataType::CurrentAndForecast) << std::endl;
         return false;
       }
       task.setData(data);
@@ -253,8 +261,9 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
     } // else (unrecognized setting name)
   } // while
 
-  // For backwards compatibility of files, set the data type to Current, if
-  // none has been given.
+  // For backwards compatibility of task files before the introduction of
+  // forecast data in 0.7.0-pre, set the data type to Current, if none has
+  // been given.
   if (task.data() == DataType::none)
     task.setData(DataType::Current);
 
@@ -335,15 +344,15 @@ bool TaskManager::hasDuplicates(const std::vector<Task>& tasks)
         && (tasks[i].data() == tasks[j].data())
         && (tasks[i].location() == tasks[j].location()))
       {
-        std::cerr << "Error: There are duplicate / overlapping tasks for location ";
+        std::cerr << "Error: There are duplicate / overlapping tasks for the location";
         if (tasks[i].location().hasId())
-          std::cerr << " with id " << tasks[i].location().id();
+          std::cerr << " with the id " << tasks[i].location().id();
         if (tasks[i].location().hasName())
-          std::cerr << " with name " << tasks[i].location().name();
+          std::cerr << " with the name " << tasks[i].location().name();
         if (tasks[i].location().hasPostcode())
-          std::cerr << " with postcode " << tasks[i].location().postcode();
+          std::cerr << " with the postcode " << tasks[i].location().postcode();
         if (tasks[i].location().hasCoordinates())
-          std::cerr << " with coordinates " << tasks[i].location().latitude()
+          std::cerr << " with the coordinates " << tasks[i].location().latitude()
                     << "° N, " << tasks[i].location().longitude() << " °E";
         std::cerr << "!" << std::endl;
         return true;

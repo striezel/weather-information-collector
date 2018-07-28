@@ -112,18 +112,18 @@ bool Location::equalCoordinates(const Location& other) const
 {
   const bool hll_this = hasCoordinates();
   const bool hll_other = other.hasCoordinates();
-  //If one has long/lat, but the other not, then it is not equal.
+  // If one has long/lat, but the other not, then it is not equal.
   if (hll_this != hll_other)
     return false;
-  //If both instances have no longitude and latitude, they are equal.
+  // If both instances have no longitude and latitude, they are equal.
   if (!hll_other && !hll_this)
     return true;
-  //Both instances have latitude and longitude: compare them.
-  //Instead of comparing the values directly, we only check whether they are
-  //within a 0.01° range of each other, because direct floating point comparison
-  //will not always yield the results one might naively expect.
-  //Furthermore, 0.01 ° corresponds to approx. 1.1 km, so they are usually in
-  //the same city.
+  // Both instances have latitude and longitude: compare them.
+  // Instead of comparing the values directly, we only check whether they are
+  // within a 0.01° range of each other, because direct floating point comparison
+  // will not always yield the results one might naively expect.
+  // Furthermore, 0.01 ° corresponds to approx. 1.1 km, so they are usually in
+  // the same city.
   const float epsilon = 0.01f;
   return (std::abs(m_latitude - other.m_latitude) < epsilon)
       && (std::abs(m_longitude - other.m_longitude) < epsilon);
@@ -168,4 +168,4 @@ std::string Location::toString() const
   return "unknown location";
 }
 
-} //namespace
+} // namespace
