@@ -68,7 +68,8 @@ DataType toDataType(const std::string& dataName)
   if (name == "forecast")
     return DataType::Forecast;
   // current and forecast
-  if ((name == "currentandforecast") || (name == "current+forecast"))
+  if ((name == "currentandforecast") || (name == "current+forecast")
+       || (name == "forecast+current"))
     return DataType::CurrentAndForecast;
   // unknown / none
   return DataType::none;

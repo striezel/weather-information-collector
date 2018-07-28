@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `api` (
 
 INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
 (1, 'Apixu', 'https://api.apixu.com/v1/'),
-(2, 'OpenWeatherMap', 'http://api.openweathermap.org/data/2.5/'),
+(2, 'OpenWeatherMap', 'https://api.openweathermap.org/data/2.5/'),
 (3, 'DarkSky', 'https://api.darksky.net/');
 
 CREATE TABLE IF NOT EXISTS `location` (
