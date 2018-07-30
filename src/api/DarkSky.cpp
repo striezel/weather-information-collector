@@ -176,4 +176,39 @@ bool DarkSky::currentWeather(const Location& location, Weather& weather)
   return parseCurrentWeather(response, weather);
 }
 
+bool DarkSky::forecastWeather(const Location& location, Forecast& forecast)
+{
+  forecast = Forecast();
+  if (m_apiKey.empty())
+    return false;
+  const std::string url = "https://api.darksky.net/forecast/" + m_apiKey
+                        + "/" + toRequestString(location) + "?units=si"
+                        + "&exclude=minutely";
+  std::string response;
+  {
+    Curly curly;
+    curly.setURL(url);
+
+    if (!curly.perform(response))
+    {
+      return false;
+    }
+    if (curly.getResponseCode() != 200)
+    {
+      std::cerr << "Error in DarkSky::forecastWeather(): Unexpected HTTP status code "
+                << curly.getResponseCode() << "!" << std::endl;
+      const auto & rh = curly.responseHeaders();
+      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
+      for (const auto & s : rh)
+      {
+        std::cerr << "    " << s << std::endl;
+      }
+      return false;
+    }
+  } // scope of curly
+
+  // TODO: parsing
+  return false;
+}
+
 } // namespace

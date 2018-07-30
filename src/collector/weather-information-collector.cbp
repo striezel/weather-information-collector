@@ -63,6 +63,8 @@
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
+		<Unit filename="../data/Forecast.cpp" />
+		<Unit filename="../data/Forecast.hpp" />
 		<Unit filename="../data/Location.cpp" />
 		<Unit filename="../data/Location.hpp" />
 		<Unit filename="../data/Weather.cpp" />

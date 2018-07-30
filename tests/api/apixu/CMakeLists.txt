@@ -5,6 +5,7 @@ project(apixu_parsing_tests)
 
 set(apixu_parsing_tests_sources
     ../../../src/api/Apixu.cpp
+    ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/net/Curly.cpp

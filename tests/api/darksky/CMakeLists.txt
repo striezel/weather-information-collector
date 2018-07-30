@@ -5,6 +5,7 @@ project(darksky_parsing_tests)
 
 set(darksky_parsing_tests_sources
     ../../../src/api/DarkSky.cpp
+    ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/net/Curly.cpp

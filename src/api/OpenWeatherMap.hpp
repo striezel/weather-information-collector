@@ -22,6 +22,7 @@
 #define WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
 
 #include <string>
+#include <jsoncpp/json/reader.h>
 #include "API.hpp"
 
 namespace wic
@@ -80,8 +81,39 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const;
+
+
+    /** \brief Retrieves the weather forecast for a given location.
+     *
+     * \param location  the location for which the forecast is requested
+     * \param forecast  variable where the result of the request will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool forecastWeather(const Location& location, Forecast& forecast);
+
+
+    /** \brief Parses the weather forecast information from JSON into Weather objects.
+     *
+     * \param json     string containing the JSON
+     * \param forecast variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
   private:
     std::string m_apiKey; /**< the API key for requests */
+
+
+    /** \brief Parses weather data from a single JSON weather item into an
+     * instance of Weather class.
+     *
+     * \param value  the JSON value to parse
+     * \param weather the Weather item where the data shall be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    bool parseSingleWeatherItem(const Json::Value& value, Weather& weather) const;
 
 
     /** \brief Turns info of a location to a request string.

@@ -23,6 +23,7 @@
 
 #include <string>
 #include "Types.hpp"
+#include "../data/Forecast.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
 
@@ -77,6 +78,16 @@ class API
      *         Returns false, if an error occurred.
      */
     virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const = 0;
+
+
+    /** \brief Retrieves the weather forecast for a given location.
+     *
+     * \param location  the location for which the forecast is requested
+     * \param forecast  variable where the result of the request will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool forecastWeather(const Location& location, Forecast& forecast) = 0;
 
 
     /** \brief Destructor.

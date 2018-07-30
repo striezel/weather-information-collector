@@ -174,4 +174,14 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
   return parseCurrentWeather(response, weather);
 }
 
+bool Apixu::forecastWeather(const Location& location, Forecast& forecast)
+{
+  forecast = Forecast();
+  if (m_apiKey.empty())
+    return false;
+
+  // TODO: implement it!
+  return false;
+}
+
 } // namespace

@@ -11,6 +11,7 @@ set(weather-information-collector-configtest_sources
     ../api/OpenWeatherMap.cpp
     ../api/Types.cpp
     ../conf/Configuration.cpp
+    ../data/Forecast.cpp
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
