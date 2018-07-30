@@ -243,7 +243,7 @@ forecasted time.
   (e.g. "2018-07-30 03:00:00")
 * list\[].main.temp: (float) temperature in Kelvin
 * list\[].main.temp_min: (float) minimum temperature in Kelvin
-* list\[].main.temp:max: (float) maximum temperature in Kelvin
+* list\[].main.temp_max: (float) maximum temperature in Kelvin
 * list\[].main.pressure: (float) pressure in hPa
 * list\[].main.sea_level: (float) pressure at the sea level in hPa
 * list\[].main.grnd_level: (float) pressure on the ground level in hPa
