@@ -24,9 +24,9 @@
 
 int main(int argc, char** argv)
 {
-  if ((argc < 2) || (argv[1] == nullptr))
+  if ((argc < 3) || (argv[1] == nullptr))
   {
-    std::cerr << "Error: No JSON file name was specified!\n";
+    std::cerr << "Error: No JSON file names were specified!\n";
     return 1;
   }
   const std::string jsonFileName = std::string(argv[1]);
@@ -191,6 +191,26 @@ int main(int argc, char** argv)
   if (w.rain() != 1.1f)
   {
     std::cerr << "Rain amount is incorrect.\n";
+    return 1;
+  }
+
+  // Read forecast data file.
+  const std::string jsonForecastFileName = std::string(argv[2]);
+  jsonStream.open(jsonForecastFileName, std::ios_base::in | std::ios_base::binary);
+  if (!jsonStream.is_open())
+  {
+    std::cerr << "Error: JSON file " << jsonForecastFileName << " could not be opened!\n";
+    return 1;
+  }
+  json.clear();
+  std::getline(jsonStream, json, '\0');
+  jsonStream.close();
+
+  wic::Forecast forecast;
+  if (!api.parseForecast(json, forecast))
+  {
+    std::cerr << "Error: JSON forecast data from " << jsonForecastFileName
+              << " could not be parsed!" << std::endl;
     return 1;
   }
 

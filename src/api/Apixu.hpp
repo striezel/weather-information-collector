@@ -90,6 +90,16 @@ class Apixu: public API
      *         Returns false, if an error occurred.
      */
     virtual bool forecastWeather(const Location& location, Forecast& forecast);
+
+
+    /** \brief Parses the weather forecast information from JSON into Weather objects.
+     *
+     * \param json     string containing the JSON
+     * \param forecast variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
   private:
     std::string m_apiKey; /**< the API key for requests */
 

@@ -45,8 +45,16 @@ bool Apixu::validLocation(const Location& location) const
 
 bool Apixu::supportsDataType(const DataType data) const
 {
-  // At the moment only current weather data can be retrieved.
-  return (data == DataType::Current);
+  // Only current weather data and forecast can be retrieved, not both together.
+  switch (data)
+  {
+    case DataType::Current:
+    case DataType::Forecast:
+         return true;
+    case DataType::CurrentAndForecast:
+    default:
+         return false;
+  }
 }
 
 std::string Apixu::toRequestString(const Location& location) const
@@ -174,12 +182,113 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
   return parseCurrentWeather(response, weather);
 }
 
+bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
+{
+  Json::Value root; // will contain the root value after parsing.
+  Json::Reader jsonReader;
+  const bool success = jsonReader.parse(json, root, false);
+  if (!success)
+  {
+    std::cerr << "Error in Apixu::parseForecast(): Unable to parse JSON data!" << std::endl;
+    return false;
+  }
+
+  forecast.setJson(json);
+  if (root.empty())
+    return false;
+
+  const Json::Value jsForecast = root["forecast"];
+  if (jsForecast.empty())
+    return false;
+  const Json::Value forecastday = jsForecast["forecastday"];
+  // forecastday must be a non-empty array.
+  if (forecastday.empty() || !forecastday.isArray())
+    return false;
+  forecast.setData({ });
+  auto data = forecast.data();
+  for (const Json::Value& value : forecastday)
+  {
+    Weather w_min;
+    const Json::Value date_epoch = value["date_epoch"];
+    if (date_epoch.empty() || !date_epoch.isIntegral())
+      return false;
+    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.asInt()));
+    w_min.setDataTime(dt);
+    const Json::Value day = value["day"];
+    // day must be a non-empty object.
+    if (day.empty() || !day.isObject())
+      return false;
+    Json::Value val = day["mintemp_c"];
+    if (val.empty() || !val.isNumeric())
+    {
+      w_min.setTemperatureCelsius(val.asFloat());
+    }
+    val = day["mintemp_f"];
+    if (val.empty() || !val.isNumeric())
+    {
+      w_min.setTemperatureFahrenheit(val.asFloat());
+    }
+    const Json::Value avghumidity = day["avghumidity"];
+    if (avghumidity.empty() || !avghumidity.isNumeric())
+      w_min.setHumidity(avghumidity.asInt());
+    const Json::Value totalprecip_mm = day["totalprecip_mm"];
+    if (totalprecip_mm.empty() || !totalprecip_mm.isNumeric())
+      w_min.setRain(totalprecip_mm.asFloat());
+    data.push_back(w_min);
+
+    Weather w_max;
+    w_max.setDataTime(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.asInt() + 3600 * 12)));
+    val = day["maxtemp_c"];
+    if (val.empty() || !val.isNumeric())
+    {
+      w_max.setTemperatureCelsius(val.asFloat());
+    }
+    val = day["maxtemp_f"];
+    if (val.empty() || !val.isNumeric())
+    {
+      w_max.setTemperatureFahrenheit(val.asFloat());
+    }
+    if (avghumidity.empty() || !avghumidity.isNumeric())
+      w_max.setHumidity(avghumidity.asInt());
+    if (totalprecip_mm.empty() || !totalprecip_mm.isNumeric())
+      w_max.setRain(totalprecip_mm.asFloat());
+    data.push_back(w_max);
+  } // for (range-based)
+
+  forecast.setData(data);
+  return true;
+}
+
 bool Apixu::forecastWeather(const Location& location, Forecast& forecast)
 {
   forecast = Forecast();
   if (m_apiKey.empty())
     return false;
 
+  const std::string url = "https://api.apixu.com/v1/forecast.json?days=7&key="
+                        + m_apiKey + "&" + toRequestString(location);
+  std::string response;
+  {
+    Curly curly;
+    curly.setURL(url);
+
+    if (!curly.perform(response))
+    {
+      return false;
+    }
+    if (curly.getResponseCode() != 200)
+    {
+      std::cerr << "Error in Apixu::forecastWeather(): Unexpected HTTP status code "
+                << curly.getResponseCode() << "!" << std::endl;
+      const auto & rh = curly.responseHeaders();
+      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
+      for (const auto & s : rh)
+      {
+        std::cerr << "    " << s << std::endl;
+      }
+      return false;
+    }
+  } // scope of curly
   // TODO: implement it!
   return false;
 }

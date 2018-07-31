@@ -44,4 +44,4 @@ endif (LIBJSONCPP_FOUND)
 
 # test run
 add_test(NAME Apixu-parsing
-         COMMAND $<TARGET_FILE:apixu_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/apixu.current.json")
+         COMMAND $<TARGET_FILE:apixu_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/apixu.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/apixu.forecast.json")
