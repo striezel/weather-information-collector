@@ -194,7 +194,10 @@ bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) 
 
   const Json::Value list = root["list"];
   if (list.empty() || !list.isArray())
+  {
+    std::cerr << "Error in OpenWeatherMap::parseForecast(): list is either empty or not an array!" << std::endl;
     return false;
+  }
   forecast.setData({ });
   auto data = forecast.data();
   for (const Json::Value val : list)
@@ -206,12 +209,16 @@ bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) 
     }
     else
     {
+      std::cerr << "Error in OpenWeatherMap::parseForecast(): Parsing single item failed!" << std::endl;
       return false;
     }
   } // for (range-based)
   const auto val = root["cnt"];
-  if (val.empty() || !val.isUInt())
+  if (val.empty() || !val.isIntegral())
+  {
+    std::cerr << "Error in OpenWeatherMap::parseForecast(): cnt is empty or not an integer!" << std::endl;
     return false;
+  }
   const decltype(data.size()) cnt = val.asUInt();
   // Number of data items should be the number given in "cnt".
   if (data.size() != cnt)
