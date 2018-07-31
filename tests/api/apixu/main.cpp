@@ -22,6 +22,21 @@
 #include <iostream>
 #include "../../../src/api/Apixu.hpp"
 
+
+void printWeather(const wic::Weather& w)
+{
+  std::cout << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
+            << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
+            << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
+            << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
+            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
+            << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
+            << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
+  const std::time_t dt_c = std::chrono::system_clock::to_time_t(w.dataTime());
+  std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
+}
+
 int main(int argc, char** argv)
 {
   if ((argc < 3) || (argv[1] == nullptr))
@@ -52,17 +67,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  std::cout << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
-            << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
-            << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
-            << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
-            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
-            << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
-            << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
-            << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
-  const std::time_t dt_c = std::chrono::system_clock::to_time_t(w.dataTime());
-  std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
-
+  printWeather(w);
 
   if (!w.hasHumidity())
   {
@@ -172,16 +177,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  std::cout << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
-            << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
-            << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
-            << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
-            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
-            << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
-            << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
-            << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
-  const std::time_t dt_c2 = std::chrono::system_clock::to_time_t(w.dataTime());
-  std::cout << "Data time: " << std::ctime(&dt_c2) << "\n";
+  printWeather(w);
 
   if (!w.hasRain())
   {
@@ -213,7 +209,62 @@ int main(int argc, char** argv)
               << " could not be parsed!" << std::endl;
     return 1;
   }
+  if (forecast.data().size() != 14)
+  {
+    std::cerr << "Error: Forecast data should contain 14 entries, but there are "
+              << forecast.data().size() << " entries instead!" << std::endl;
+    return 1;
+  }
+  {
+    const auto& w1 = forecast.data().at(0);
+    std::cout << "Data of 1st forecast item:" << std::endl;
+    printWeather(w1);
+    if (w1.temperatureCelsius() != 17.0f)
+    {
+      std::cerr << "Temperature (°C) of 1st forecast item is incorrect.\n";
+      return 1;
+    }
+    if (w1.temperatureFahrenheit() != 62.6f)
+    {
+      std::cerr << "Temperature (°F) of 1st forecast item is incorrect.\n";
+      return 1;
+    }
+    if (w1.rain() != 0.1f)
+    {
+      std::cerr << "Rain amount of 1st forecast item is incorrect.\n";
+      return 1;
+    }
+    if (w1.humidity() != 53)
+    {
+      std::cerr << "Relative humidity of 1st forecast item is incorrect.\n";
+      return 1;
+    }
 
-  //all tests passed
+    const auto& w2 = forecast.data().at(1);
+    std::cout << "Data of 2nd forecast item:" << std::endl;
+    printWeather(w2);
+    if (w2.temperatureCelsius() != 26.0f)
+    {
+      std::cerr << "Temperature (°C) of 2nd forecast item is incorrect.\n";
+      return 1;
+    }
+    if (w2.temperatureFahrenheit() != 78.8f)
+    {
+      std::cerr << "Temperature (°F) of 2nd forecast item is incorrect.\n";
+      return 1;
+    }
+    if (w2.rain() != 0.1f)
+    {
+      std::cerr << "Rain amount of 2nd forecast item is incorrect.\n";
+      return 1;
+    }
+    if (w2.humidity() != 53)
+    {
+      std::cerr << "Relative humidity of 2nd forecast item is incorrect.\n";
+      return 1;
+    }
+  } // scope
+
+  // All tests passed.
   return 0;
 }

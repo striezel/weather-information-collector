@@ -219,38 +219,38 @@ bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
     if (day.empty() || !day.isObject())
       return false;
     Json::Value val = day["mintemp_c"];
-    if (val.empty() || !val.isNumeric())
+    if (!val.empty() && val.isNumeric())
     {
       w_min.setTemperatureCelsius(val.asFloat());
     }
     val = day["mintemp_f"];
-    if (val.empty() || !val.isNumeric())
+    if (!val.empty() && val.isNumeric())
     {
       w_min.setTemperatureFahrenheit(val.asFloat());
     }
     const Json::Value avghumidity = day["avghumidity"];
-    if (avghumidity.empty() || !avghumidity.isNumeric())
+    if (!avghumidity.empty() && avghumidity.isNumeric())
       w_min.setHumidity(avghumidity.asInt());
     const Json::Value totalprecip_mm = day["totalprecip_mm"];
-    if (totalprecip_mm.empty() || !totalprecip_mm.isNumeric())
+    if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
       w_min.setRain(totalprecip_mm.asFloat());
     data.push_back(w_min);
 
     Weather w_max;
     w_max.setDataTime(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.asInt() + 3600 * 12)));
     val = day["maxtemp_c"];
-    if (val.empty() || !val.isNumeric())
+    if (!val.empty() && val.isNumeric())
     {
       w_max.setTemperatureCelsius(val.asFloat());
     }
     val = day["maxtemp_f"];
-    if (val.empty() || !val.isNumeric())
+    if (!val.empty() && val.isNumeric())
     {
       w_max.setTemperatureFahrenheit(val.asFloat());
     }
-    if (avghumidity.empty() || !avghumidity.isNumeric())
+    if (!avghumidity.empty() && avghumidity.isNumeric())
       w_max.setHumidity(avghumidity.asInt());
-    if (totalprecip_mm.empty() || !totalprecip_mm.isNumeric())
+    if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
       w_max.setRain(totalprecip_mm.asFloat());
     data.push_back(w_max);
   } // for (range-based)
