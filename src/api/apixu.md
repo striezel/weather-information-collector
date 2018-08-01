@@ -59,7 +59,7 @@ The location can be specified in several ways:
 * IP address
   * automatic IP geolocation lookup: `q=auto:ip`
   * IP address, e.g. `q=123.45.67.89`
-* two other codes: metar code ad 3 digit airport code
+* two other codes: metar code and 3 digit airport code
 
 ### Example output (JSON format)
 
@@ -144,7 +144,7 @@ weather data:
 * IP address
   * automatic IP geolocation lookup: `q=auto:ip`
   * IP address, e.g. `q=123.45.67.89`
-* two other codes: metar code ad 3 digit airport code
+* two other codes: metar code and 3 digit airport code
 
 ### Example output of forecast data (JSON format) on the free plan
 
