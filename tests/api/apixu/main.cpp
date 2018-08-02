@@ -39,7 +39,7 @@ void printWeather(const wic::Weather& w)
 
 int main(int argc, char** argv)
 {
-  if ((argc < 3) || (argv[1] == nullptr))
+  if ((argc < 4) || (argv[1] == nullptr))
   {
     std::cerr << "Error: No JSON file names were specified!\n";
     return 1;
@@ -264,6 +264,83 @@ int main(int argc, char** argv)
       return 1;
     }
   } // scope
+
+
+  // Read forecast data file with hourly forecast.
+  const std::string jsonForecastHourlyFileName = std::string(argv[3]);
+  jsonStream.open(jsonForecastHourlyFileName, std::ios_base::in | std::ios_base::binary);
+  if (!jsonStream.is_open())
+  {
+    std::cerr << "Error: JSON file " << jsonForecastHourlyFileName << " could not be opened!\n";
+    return 1;
+  }
+  json.clear();
+  std::getline(jsonStream, json, '\0');
+  jsonStream.close();
+
+  forecast = wic::Forecast();
+  if (!api.parseForecast(json, forecast))
+  {
+    std::cerr << "Error: JSON forecast data from " << jsonForecastHourlyFileName
+              << " could not be parsed!" << std::endl;
+    return 1;
+  }
+  if (forecast.data().size() != 24)
+  {
+    std::cerr << "Error: Hourly forecast data should contain 24 entries, but there are "
+              << forecast.data().size() << " entries instead!" << std::endl;
+    return 1;
+  }
+
+  std::cout << "First hourly forecast data:" << std::endl;
+  const auto& w3 = forecast.data().at(0);
+  printWeather(w3);
+  if (!w3.hasDataTime())
+  {
+    std::cerr << "Hourly forecast item has no timestamp.\n";
+    return 1;
+  }
+  if (w3.temperatureCelsius() != 1.2f)
+  {
+    std::cerr << "Temperature (°C) of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.temperatureFahrenheit() != 34.2f)
+  {
+    std::cerr << "Temperature (°F) of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.windSpeed() < 3.694f || w3.windSpeed() > 3.6945f)
+  {
+    std::cerr << "Wind speed of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.windDegrees() != 86)
+  {
+    std::cerr << "Wind direction of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.pressure() != 993.0f)
+  {
+    std::cerr << "Air pressure of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.rain() != 0.6f)
+  {
+    std::cerr << "Rain amount of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.humidity() != 98)
+  {
+    std::cerr << "Humidity of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.cloudiness() != 100)
+  {
+    std::cerr << "Cloudiness of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+
 
   // All tests passed.
   return 0;

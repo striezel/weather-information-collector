@@ -199,11 +199,17 @@ bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
 
   const Json::Value jsForecast = root["forecast"];
   if (jsForecast.empty())
+  {
+    std::cerr << "Error in Apixu::parseForecast(): forecast element is empty!" << std::endl;
     return false;
+  }
   const Json::Value forecastday = jsForecast["forecastday"];
   // forecastday must be a non-empty array.
   if (forecastday.empty() || !forecastday.isArray())
+  {
+    std::cerr << "Error in Apixu::parseForecast(): forecastday element is empty!" << std::endl;
     return false;
+  }
   forecast.setData({ });
   auto data = forecast.data();
   for (const Json::Value& value : forecastday)
@@ -211,48 +217,105 @@ bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
     Weather w_min;
     const Json::Value date_epoch = value["date_epoch"];
     if (date_epoch.empty() || !date_epoch.isIntegral())
+    {
+      std::cerr << "Error in Apixu::parseForecast(): date_epoch element is empty or not an integer!" << std::endl;
       return false;
+    }
     const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.asInt()));
     w_min.setDataTime(dt);
-    const Json::Value day = value["day"];
-    // day must be a non-empty object.
-    if (day.empty() || !day.isObject())
-      return false;
-    Json::Value val = day["mintemp_c"];
-    if (!val.empty() && val.isNumeric())
+    const Json::Value hour = value["hour"];
+    if (!hour.empty() && hour.isArray())
     {
-      w_min.setTemperatureCelsius(val.asFloat());
-    }
-    val = day["mintemp_f"];
-    if (!val.empty() && val.isNumeric())
+      // hourly data is present, use that.
+      for (const Json::Value& elem: hour)
+      {
+        Weather w;
+        Json::Value val = elem["time_epoch"];
+        if (val.empty() || !val.isNumeric())
+        {
+          std::cerr << "Error: Hourly forecast data has no timestamp!" << std::endl;
+          return false;
+        }
+        w.setDataTime(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.asInt())));
+        // temperature
+        val = elem["temp_c"];
+        if (!val.empty() && val.isNumeric())
+          w.setTemperatureCelsius(val.asFloat());
+        val = elem["temp_f"];
+        if (!val.empty() && val.isNumeric())
+          w.setTemperatureFahrenheit(val.asFloat());
+        // wind
+        val = elem["wind_kph"];
+        if (!val.empty() && val.isNumeric())
+          w.setWindSpeed(val.asFloat() / 3.6f);
+        val = elem["wind_degree"];
+        if (!val.empty() && val.isNumeric())
+          w.setWindDegrees(val.asInt());
+        // air pressure: pressure_mb
+        val = elem["pressure_mb"];
+        if (!val.empty() && val.isNumeric())
+          w.setPressure(val.asInt());
+        // rain: precip_mm
+        val = elem["precip_mm"];
+        if (!val.empty() && val.isNumeric())
+          w.setRain(val.asFloat());
+        // humidity
+        val = elem["humidity"];
+        if (!val.empty() && val.isNumeric())
+          w.setHumidity(val.asInt());
+        // cloudiness
+        val = elem["cloud"];
+        if (!val.empty() && val.isNumeric())
+          w.setCloudiness(val.asInt());
+        // Push data of current element onto result.
+        data.push_back(w);
+      } // for (range-based)
+    } // if (hourly data)
+    else
     {
-      w_min.setTemperatureFahrenheit(val.asFloat());
-    }
-    const Json::Value avghumidity = day["avghumidity"];
-    if (!avghumidity.empty() && avghumidity.isNumeric())
-      w_min.setHumidity(avghumidity.asInt());
-    const Json::Value totalprecip_mm = day["totalprecip_mm"];
-    if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
-      w_min.setRain(totalprecip_mm.asFloat());
-    data.push_back(w_min);
+      const Json::Value day = value["day"];
+      // day must be a non-empty object.
+      if (day.empty() || !day.isObject())
+      {
+        std::cout << "Error: JSON element 'day' is empty or not an object!" << std::endl;
+        return false;
+      }
+      Json::Value val = day["mintemp_c"];
+      if (!val.empty() && val.isNumeric())
+      {
+        w_min.setTemperatureCelsius(val.asFloat());
+      }
+      val = day["mintemp_f"];
+      if (!val.empty() && val.isNumeric())
+      {
+        w_min.setTemperatureFahrenheit(val.asFloat());
+      }
+      const Json::Value avghumidity = day["avghumidity"];
+      if (!avghumidity.empty() && avghumidity.isNumeric())
+        w_min.setHumidity(avghumidity.asInt());
+      const Json::Value totalprecip_mm = day["totalprecip_mm"];
+      if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
+        w_min.setRain(totalprecip_mm.asFloat());
+      data.push_back(w_min);
 
-    Weather w_max;
-    w_max.setDataTime(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.asInt() + 3600 * 12)));
-    val = day["maxtemp_c"];
-    if (!val.empty() && val.isNumeric())
-    {
-      w_max.setTemperatureCelsius(val.asFloat());
-    }
-    val = day["maxtemp_f"];
-    if (!val.empty() && val.isNumeric())
-    {
-      w_max.setTemperatureFahrenheit(val.asFloat());
-    }
-    if (!avghumidity.empty() && avghumidity.isNumeric())
-      w_max.setHumidity(avghumidity.asInt());
-    if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
-      w_max.setRain(totalprecip_mm.asFloat());
-    data.push_back(w_max);
+      Weather w_max;
+      w_max.setDataTime(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.asInt() + 3600 * 12)));
+      val = day["maxtemp_c"];
+      if (!val.empty() && val.isNumeric())
+      {
+        w_max.setTemperatureCelsius(val.asFloat());
+      }
+      val = day["maxtemp_f"];
+      if (!val.empty() && val.isNumeric())
+      {
+        w_max.setTemperatureFahrenheit(val.asFloat());
+      }
+      if (!avghumidity.empty() && avghumidity.isNumeric())
+        w_max.setHumidity(avghumidity.asInt());
+      if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
+        w_max.setRain(totalprecip_mm.asFloat());
+      data.push_back(w_max);
+    } // else (daily data)
   } // for (range-based)
 
   forecast.setData(data);
