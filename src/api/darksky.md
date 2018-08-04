@@ -34,7 +34,7 @@ on the free plan).
 
 ## Current weather information
 
-Curent weather information can be requested via the
+Current weather information can be requested via the
 <https://api.darksky.net/forecast/API-key-here/[latitude],[longitude].>
 endpoint.
 
@@ -220,7 +220,7 @@ the query string, i.e. all values use SI units.
   in millimeters per m² and hour
 * currently.precipProbability: (float) probability of precipitation occurring,
   within [0;1]
-* currently.temperature: (float) text current temperature in °C
+* currently.temperature: (float) current temperature in °C
 * currently.apparentTemperature: (float) what the temperature feels like, in °C
 * currently.dewPoint: (float) the dew point in °C
 * currently.humidity: (float) relative humidity, within [0;1]
@@ -231,3 +231,279 @@ the query string, i.e. all values use SI units.
 * currently.cloudCover: (float) ratio of sky occluded by clouds, within [0;1]
 * currently.visibility: (float) visibility in km
 
+## Weather forecast information
+
+Data for weater forecasts can be requested via the
+<https://api.darksky.net/forecast/API-key-here/[latitude],[longitude].>
+endpoint. (Yes, that is the same as for the current weather.)
+
+### Location specifier
+
+The location can be specified by giving latitude and longitude of the location
+in degrees as part of the request URL, e.g.:
+
+    https://api.darksky.net/forecast/API-key-here/51.5,12.3
+
+### Specification of units for response
+
+These are the same as for the current weather information. See the paragraph
+about the current weather information above for details.
+
+### Example output of forecast data (JSON format, shortened)
+
+    {
+        "latitude": 52.516,
+        "longitude": 13.378,
+        "timezone": "Europe/Berlin",
+        "currently": {
+            "time": 1533403488,
+            "summary": "Partly Cloudy",
+            "icon": "partly-cloudy-day",
+            "precipIntensity": 0.061,
+            "precipProbability": 0.02,
+            "precipType": "rain",
+            "temperature": 30.49,
+            "apparentTemperature": 30.49,
+            "dewPoint": 15.21,
+            "humidity": 0.4,
+            "pressure": 1015.35,
+            "windSpeed": 2.8,
+            "windGust": 4.63,
+            "windBearing": 329,
+            "cloudCover": 0.33,
+            "uvIndex": 0,
+            "visibility": 14.48,
+            "ozone": 290.79
+        },
+        "hourly": {
+            "summary": "Partly cloudy until tomorrow evening.",
+            "icon": "partly-cloudy-day",
+            "data": [
+                {
+                    "time": 1533402000,
+                    "summary": "Partly Cloudy",
+                    "icon": "partly-cloudy-day",
+                    "precipIntensity": 0.0686,
+                    "precipProbability": 0.02,
+                    "precipType": "rain",
+                    "temperature": 31.18,
+                    "apparentTemperature": 31.18,
+                    "dewPoint": 14.78,
+                    "humidity": 0.37,
+                    "pressure": 1015.28,
+                    "windSpeed": 3.1,
+                    "windGust": 4.37,
+                    "windBearing": 320,
+                    "cloudCover": 0.34,
+                    "uvIndex": 1,
+                    "visibility": 12.67,
+                    "ozone": 290.85
+                },
+                {
+                    "time": 1533405600,
+                    "summary": "Partly Cloudy",
+                    "icon": "partly-cloudy-day",
+                    "precipIntensity": 0.0508,
+                    "precipProbability": 0.02,
+                    "precipType": "rain",
+                    "temperature": 29.51,
+                    "apparentTemperature": 29.51,
+                    "dewPoint": 15.69,
+                    "humidity": 0.43,
+                    "pressure": 1015.46,
+                    "windSpeed": 2.53,
+                    "windGust": 4.99,
+                    "windBearing": 345,
+                    "cloudCover": 0.3,
+                    "uvIndex": 0,
+                    "visibility": 16.09,
+                    "ozone": 290.69
+                },
+                ...
+                {
+                    "time": 1533574800,
+                    "summary": "Clear",
+                    "icon": "clear-day",
+                    "precipIntensity": 0,
+                    "precipProbability": 0,
+                    "temperature": 28.3,
+                    "apparentTemperature": 28.3,
+                    "dewPoint": 8.79,
+                    "humidity": 0.29,
+                    "pressure": 1014.95,
+                    "windSpeed": 1.19,
+                    "windGust": 1.63,
+                    "windBearing": 194,
+                    "cloudCover": 0,
+                    "uvIndex": 1,
+                    "visibility": 16.09,
+                    "ozone": 306.61
+                }
+            ]
+        },
+        "daily": {
+            "summary": "Rain on Thursday, with high temperatures peaking at 35°C on Wednesday.",
+            "icon": "rain",
+            "data": [
+                {
+                    "time": 1533333600,
+                    "summary": "Partly cloudy starting in the afternoon.",
+                    "icon": "partly-cloudy-day",
+                    "sunriseTime": 1533353543,
+                    "sunsetTime": 1533408922,
+                    "moonPhase": 0.74,
+                    "precipIntensity": 0.0254,
+                    "precipIntensityMax": 0.1118,
+                    "precipIntensityMaxTime": 1533416400,
+                    "precipProbability": 0.08,
+                    "precipType": "rain",
+                    "temperatureHigh": 33.02,
+                    "temperatureHighTime": 1533387600,
+                    "temperatureLow": 20.03,
+                    "temperatureLowTime": 1533445200,
+                    "apparentTemperatureHigh": 33.02,
+                    "apparentTemperatureHighTime": 1533387600,
+                    "apparentTemperatureLow": 20.04,
+                    "apparentTemperatureLowTime": 1533445200,
+                    "dewPoint": 13.31,
+                    "humidity": 0.44,
+                    "pressure": 1016.96,
+                    "windSpeed": 0.37,
+                    "windGust": 7.93,
+                    "windGustTime": 1533416400,
+                    "windBearing": 13,
+                    "cloudCover": 0.23,
+                    "uvIndex": 5,
+                    "uvIndexTime": 1533380400,
+                    "visibility": 11.8,
+                    "ozone": 288.13,
+                    "temperatureMin": 21.07,
+                    "temperatureMinTime": 1533351600,
+                    "temperatureMax": 33.02,
+                    "temperatureMaxTime": 1533387600,
+                    "apparentTemperatureMin": 21.07,
+                    "apparentTemperatureMinTime": 1533351600,
+                    "apparentTemperatureMax": 33.02,
+                    "apparentTemperatureMaxTime": 1533387600
+                },
+                {
+                    "time": 1533420000,
+                    "summary": "Partly cloudy throughout the day.",
+                    "icon": "partly-cloudy-day",
+                    "sunriseTime": 1533440040,
+                    "sunsetTime": 1533495215,
+                    "moonPhase": 0.78,
+                    "precipIntensity": 0.0102,
+                    "precipIntensityMax": 0.0914,
+                    "precipIntensityMaxTime": 1533420000,
+                    "precipProbability": 0.11,
+                    "precipType": "rain",
+                    "temperatureHigh": 25.34,
+                    "temperatureHighTime": 1533484800,
+                    "temperatureLow": 15.46,
+                    "temperatureLowTime": 1533528000,
+                    "apparentTemperatureHigh": 25.34,
+                    "apparentTemperatureHighTime": 1533484800,
+                    "apparentTemperatureLow": 15.46,
+                    "apparentTemperatureLowTime": 1533528000,
+                    "dewPoint": 13.01,
+                    "humidity": 0.56,
+                    "pressure": 1018.45,
+                    "windSpeed": 3.56,
+                    "windGust": 7.26,
+                    "windGustTime": 1533420000,
+                    "windBearing": 320,
+                    "cloudCover": 0.47,
+                    "uvIndex": 4,
+                    "uvIndexTime": 1533463200,
+                    "visibility": 16.09,
+                    "ozone": 301.58,
+                    "temperatureMin": 20.03,
+                    "temperatureMinTime": 1533445200,
+                    "temperatureMax": 25.34,
+                    "temperatureMaxTime": 1533484800,
+                    "apparentTemperatureMin": 20.04,
+                    "apparentTemperatureMinTime": 1533445200,
+                    "apparentTemperatureMax": 25.34,
+                    "apparentTemperatureMaxTime": 1533484800
+                },
+                ...
+                {
+                    "time": 1533938400,
+                    "summary": "Partly cloudy overnight.",
+                    "icon": "partly-cloudy-night",
+                    "sunriseTime": 1533959032,
+                    "sunsetTime": 1534012937,
+                    "moonPhase": 0,
+                    "precipIntensity": 0,
+                    "precipIntensityMax": 0,
+                    "precipProbability": 0,
+                    "temperatureHigh": 24.73,
+                    "temperatureHighTime": 1534003200,
+                    "temperatureLow": 15.18,
+                    "temperatureLowTime": 1534042800,
+                    "apparentTemperatureHigh": 24.73,
+                    "apparentTemperatureHighTime": 1534003200,
+                    "apparentTemperatureLow": 15.18,
+                    "apparentTemperatureLowTime": 1534042800,
+                    "dewPoint": 7.29,
+                    "humidity": 0.46,
+                    "pressure": 1023.1,
+                    "windSpeed": 1.86,
+                    "windGust": 9,
+                    "windGustTime": 1533938400,
+                    "windBearing": 247,
+                    "cloudCover": 0.04,
+                    "uvIndex": 5,
+                    "uvIndexTime": 1533981600,
+                    "visibility": 16.09,
+                    "ozone": 331.1,
+                    "temperatureMin": 13.58,
+                    "temperatureMinTime": 1533956400,
+                    "temperatureMax": 24.73,
+                    "temperatureMaxTime": 1534003200,
+                    "apparentTemperatureMin": 13.58,
+                    "apparentTemperatureMinTime": 1533956400,
+                    "apparentTemperatureMax": 24.73,
+                    "apparentTemperatureMaxTime": 1534003200
+                }
+            ]
+        },
+        "flags": {
+            "sources": [
+                "dwdpa",
+                "cmc",
+                "gfs",
+                "icon",
+                "isd",
+                "madis"
+            ],
+            "nearest-station": 5.095,
+            "units": "si"
+        },
+        "offset": 2
+    }
+
+### Relevant forecast information
+
+The element `hourly` contains the relevant information. Other elements (e.g.
+`currently` or `daily`) can be ignored. Furthermore, we assume that `units=si`
+has been passed as part of the query string, i.e. all values use SI units.
+
+* hourly.data\[].time: (int) time of forecasted weather condition as Unix
+  timestamp according to the local time zone
+* hourly.data\[].temperature: (float) predicted temperature in °C
+* hourly.data\[].apparentTemperature: (float) what the predicted temperature
+  feels like, in °C
+* hourly.data\[].precipIntensity: (float) precipitation occurring at the given
+  time in millimeters per square meter and hour
+* hourly.data\[].precipProbability: (float) probability of precipitation
+  occurring, within [0;1]
+* hourly.data\[].humidity: (float) relative humidity, within [0;1]
+* hourly.data\[].pressure: (float) pressure in hPa
+* hourly.data\[].windSpeed: (float) wind speed in meters per seconds
+* hourly.data\[].windBearing: (int / float?) direction where the wind is coming
+  from in degrees, with 0=N,90=E,180=S,270=W
+* hourly.data\[].cloudCover: (float) ratio of sky occluded by clouds,
+  within [0;1]
+* hourly.data\[].visibility: (float) visibility in km

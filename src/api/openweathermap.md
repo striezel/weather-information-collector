@@ -27,7 +27,7 @@ The `cod` element usually contains the HTTP status code.
 
 ## Current weather information
 
-Curent weather information can be requested via the
+Current weather information can be requested via the
 <https://api.openweathermap.org/data/2.5/weather?id=city-id-here&appid=API-key-here>
 endpoint.
 

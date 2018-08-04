@@ -24,9 +24,18 @@
 #include <string>
 #include "API.hpp"
 
+// forward declaration of Json::Value
+namespace Json
+{
+  class Value;
+}
+
+
 namespace wic
 {
 
+/** \brief Handles API requests for DarkSky.net.
+ */
 class DarkSky: public API
 {
   public:
@@ -90,8 +99,29 @@ class DarkSky: public API
      *         Returns false, if an error occurred.
      */
     virtual bool forecastWeather(const Location& location, Forecast& forecast);
+
+
+    /** \brief Parses the weather forecast information from JSON into Weather objects.
+     *
+     * \param json     string containing the JSON
+     * \param forecast variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
   private:
     std::string m_apiKey; /**< the API key for requests */
+
+
+    /** \brief Parses weather data from a single JSON weather item into an
+     * instance of Weather class.
+     *
+     * \param value  the JSON value to parse
+     * \param weather the Weather item where the data shall be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    bool parseSingleDataPoint(const Json::Value& value, Weather& weather) const;
 
 
     /** \brief Turns info of a location to a request string.

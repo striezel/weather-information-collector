@@ -22,12 +22,20 @@
 #define WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
 
 #include <string>
-#include <jsoncpp/json/reader.h>
 #include "API.hpp"
+
+// forward declaration of Json::Value
+namespace Json
+{
+  class Value;
+}
+
 
 namespace wic
 {
 
+/** \brief Handles API requests for OpenWeatherMap.org.
+ */
 class OpenWeatherMap: public API
 {
   public:

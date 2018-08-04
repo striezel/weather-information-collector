@@ -335,6 +335,7 @@ bool Apixu::forecastWeather(const Location& location, Forecast& forecast)
     Curly curly;
     curly.setURL(url);
 
+    forecast.setRequestTime(std::chrono::system_clock::now());
     if (!curly.perform(response))
     {
       return false;
@@ -352,8 +353,9 @@ bool Apixu::forecastWeather(const Location& location, Forecast& forecast)
       return false;
     }
   } // scope of curly
-  // TODO: implement it!
-  return false;
+
+  // Parsing is done in separate method.
+  return parseForecast(response, forecast);
 }
 
 } // namespace

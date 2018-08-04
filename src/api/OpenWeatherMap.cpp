@@ -20,6 +20,7 @@
 
 #include "OpenWeatherMap.hpp"
 #include <iostream>
+#include <jsoncpp/json/reader.h>
 #include "../net/Curly.hpp"
 #include "../util/Strings.hpp"
 

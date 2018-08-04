@@ -42,7 +42,7 @@ Possible HTTP status and error codes are:
 
 ## Current weather information
 
-Curent weather information can be requested via the
+Current weather information can be requested via the
 <https://api.apixu.com/v1/current.json?key=API-key-here&q=location-here>
 endpoint.
 
