@@ -10,6 +10,8 @@ be specified. Note that not all APIs might support every of those data types.
 check whether the location data and the data types given in the tasks files are
 actually supported by the corresponding API. If not, they will exit with a 
 non-zero exit code.
+* The update program will now create MySQL tables for forecast data, if they do
+  not exist.
 
 ## Version 0.6.7 (2018-07-22)
 

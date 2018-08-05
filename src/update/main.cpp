@@ -26,6 +26,7 @@
 #include "Update_0.5.4_to_0.5.5.hpp"
 #include "Update_0.5.7_to_0.6.0.hpp"
 #include "Update_0.6.5_to_0.6.6.hpp"
+#include "UpdateTo_0.7.0.hpp"
 
 void showVersion()
 {
@@ -116,22 +117,28 @@ int main(int argc, char** argv)
   std::cout << "Update for database of version 0.5.4 (and earlier) to version 0.5.5..." << std::endl;
   if (!wic::Update054_055::perform(config.connectionInfo()))
   {
-    std::cerr << "Error: Database update failed!\n";
+    std::cerr << "Error: Database update failed!" << std::endl;
     return wic::rcUpdateFailure;
   }
   std::cout << "Update for database of version 0.5.7 (and earlier) to version 0.6.0..." << std::endl;
   if (!wic::Update057_060::perform(config.connectionInfo()))
   {
-    std::cerr << "Error: Database update failed!\n";
+    std::cerr << "Error: Database update failed!" << std::endl;
     return wic::rcUpdateFailure;
   }
   std::cout << "Update for database of version 0.6.5 (and earlier) to version 0.6.6..." << std::endl;
   if (!wic::Update065_066::perform(config.connectionInfo()))
   {
-    std::cerr << "Error: Database update failed!\n";
+    std::cerr << "Error: Database update failed!" << std::endl;
+    return wic::rcUpdateFailure;
+  }
+  std::cout << "Update for database of version 0.6.7 (and earlier) to version 0.7.0..." << std::endl;
+  if (!wic::UpdateTo070::perform(config.connectionInfo()))
+  {
+    std::cerr << "Error: Database update failed!" << std::endl;
     return wic::rcUpdateFailure;
   }
 
-  std::cout << "OK." << std::endl;
+  std::cout << "OK. All updates succeeded." << std::endl;
   return 0;
 }

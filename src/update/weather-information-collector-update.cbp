@@ -70,6 +70,8 @@
 		<Unit filename="../util/GitInfos.template.cpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
+		<Unit filename="UpdateTo_0.7.0.cpp" />
+		<Unit filename="UpdateTo_0.7.0.hpp" />
 		<Unit filename="Update_0.5.4_to_0.5.5.cpp" />
 		<Unit filename="Update_0.5.4_to_0.5.5.hpp" />
 		<Unit filename="Update_0.5.7_to_0.6.0.cpp" />
