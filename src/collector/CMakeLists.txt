@@ -17,7 +17,6 @@ set(weather-information-collector_sources
     ../db/ConnectionInformation.cpp
     ../db/Utilities.cpp
     ../net/Curly.cpp
-    ../store/StoreCSV.cpp
     ../store/StoreMySQL.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp

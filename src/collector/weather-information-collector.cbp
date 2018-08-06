@@ -76,8 +76,6 @@
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../store/Store.hpp" />
-		<Unit filename="../store/StoreCSV.cpp" />
-		<Unit filename="../store/StoreCSV.hpp" />
 		<Unit filename="../store/StoreMySQL.cpp" />
 		<Unit filename="../store/StoreMySQL.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
