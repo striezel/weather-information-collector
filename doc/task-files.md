@@ -56,9 +56,11 @@ The following settings are recognized in a task file:
   set, it will default to `current` for backwards compatibility. Furthermore,
   not every API will support every data type. Currently the following values
   are available:
-  * **current** - collect data about the current weather
-  * **forecast** - collect weather forecast data
+  * **current** - collect data about the current weather (supported by all
+    three APIs)
+  * **forecast** - collect weather forecast data (supported by all three APIs)
   * **current+forecast** - collect data about current weather and forecast data
+    (supported by Apixu and DarkSky)
 * **location.id** - _(optional)_ numeric ID of the location for which the
   weather shall be requested (only supported by OpenWeatherMap)
 * **location.name** - name of the location / city, e.g. `London`

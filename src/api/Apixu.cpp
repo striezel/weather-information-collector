@@ -45,13 +45,14 @@ bool Apixu::validLocation(const Location& location) const
 
 bool Apixu::supportsDataType(const DataType data) const
 {
-  // Only current weather data and forecast can be retrieved, not both together.
+  // All three data types are supported.
   switch (data)
   {
     case DataType::Current:
     case DataType::Forecast:
-         return true;
     case DataType::CurrentAndForecast:
+         return true;
+    case DataType::none:
     default:
          return false;
   }
@@ -82,7 +83,6 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
   }
 
   weather.setJson(json);
-  weather.setRequestTime(std::chrono::system_clock::now());
 
   if (root.empty())
     return false;
@@ -161,6 +161,7 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
     Curly curly;
     curly.setURL(url);
 
+    weather.setRequestTime(std::chrono::system_clock::now());
     if (!curly.perform(response))
     {
       return false;
@@ -355,6 +356,46 @@ bool Apixu::forecastWeather(const Location& location, Forecast& forecast)
   } // scope of curly
 
   // Parsing is done in separate method.
+  return parseForecast(response, forecast);
+}
+
+bool Apixu::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
+{
+  weather = Weather();
+  forecast = Forecast();
+  if (m_apiKey.empty())
+    return false;
+
+  const std::string url = "https://api.apixu.com/v1/forecast.json?days=7&key="
+                        + m_apiKey + "&" + toRequestString(location);
+  std::string response;
+  {
+    Curly curly;
+    curly.setURL(url);
+
+    weather.setRequestTime(std::chrono::system_clock::now());
+    forecast.setRequestTime(weather.requestTime());
+    if (!curly.perform(response))
+    {
+      return false;
+    }
+    if (curly.getResponseCode() != 200)
+    {
+      std::cerr << "Error in Apixu::currentAndForecastWeather(): Unexpected HTTP status code "
+                << curly.getResponseCode() << "!" << std::endl;
+      const auto & rh = curly.responseHeaders();
+      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
+      for (const auto & s : rh)
+      {
+        std::cerr << "    " << s << std::endl;
+      }
+      return false;
+    }
+  } // scope of curly
+
+  // Parsing is done in separate methods.
+  if (!parseCurrentWeather(response, weather))
+    return false;
   return parseForecast(response, forecast);
 }
 

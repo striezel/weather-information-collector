@@ -182,11 +182,33 @@ void Collector::collect()
            }
            break;
       case DataType::CurrentAndForecast:
+           {
+             Weather weather;
+             Forecast forecast;
+             if (api->currentAndForecastWeather(loc, weather, forecast))
+             {
+               StoreMySQL sql(connInfo);
+               if (!sql.saveCurrentWeather(tasksContainer[idx].task.api(), loc, weather))
+               {
+                 std::cerr << "Error: Could not save weather data to database!" << std::endl;
+               } // if
+               if (!sql.saveForecast(tasksContainer[idx].task.api(), loc, forecast))
+               {
+                 std::cerr << "Error: Could not save forecast data to database!" << std::endl;
+               } // if
+             } // if
+             else
+             {
+               std::cerr << "Error: Could not get current weather and forecast data from API "
+                         << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
+             }
+           }
+           break;
       case DataType::none:
       default:
            std::cerr << "Error: Request for data type "
                      << toString(tasksContainer[idx].task.data())
-                     << " cannot be handled yet!" << std::endl;
+                     << " cannot be handled!" << std::endl;
            break;
     } // switch
     api = nullptr;

@@ -267,4 +267,11 @@ bool OpenWeatherMap::forecastWeather(const Location& location, Forecast& forecas
   return parseForecast(response, forecast);
 }
 
+bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
+{
+  std::cerr << "Error: Getting both current weather and forecast data in a "
+            << "single request is not supported by OpenWeatherMap!" << std::endl;
+  return false;
+}
+
 } // namespace

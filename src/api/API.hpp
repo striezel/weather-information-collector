@@ -90,6 +90,17 @@ class API
     virtual bool forecastWeather(const Location& location, Forecast& forecast) = 0;
 
 
+    /** \brief Retrieves the current weather and the forecast for a given location.
+     *
+     * \param location  the location for which the forecast is requested
+     * \param weather  variable where current weather result of the request will be stored
+     * \param forecast  variable where the forecast result of the request will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast) = 0;
+
+
     /** \brief Destructor.
      */
     virtual ~API() { }
