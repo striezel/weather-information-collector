@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@ StoreCSV::StoreCSV(const std::string& fileName, const char separator)
 : stream(fileName, std::ios_base::out | std::ios_base::app | std::ios_base::ate),
   separator(separator)
 {
-  //Separator must be a printable character or tabulator.
+  // Separator must be a printable character or tabulator.
   if (!std::isprint(this->separator) && (separator != '\t'))
     this->separator = defaultSeparator;
-  //Check if we have a header yet. If not, write it to file.
+  // Check if we have a header yet. If not, write it to file.
   if (stream.is_open())
   {
     const auto pos = stream.tellp();
@@ -45,7 +45,7 @@ StoreCSV::StoreCSV(const std::string& fileName, const char separator)
       stream.write(h.c_str(), h.size());
       stream.write("\n", 1);
     }
-  } //if stream is open.
+  } // if stream is open.
 }
 
 StoreCSV::~StoreCSV()
@@ -58,7 +58,7 @@ bool StoreCSV::saveCurrentWeather(const ApiType type, const Location& location, 
 {
   if (!stream.is_open())
     return false;
-  //Construct CSV entry.
+  // Construct CSV entry.
   // -- API
   std::string dataLine = toString(type) + separator;
   // -- location information
@@ -140,11 +140,19 @@ bool StoreCSV::saveCurrentWeather(const ApiType type, const Location& location, 
     dataLine += separator;
   if (weather.hasCloudiness())
     dataLine += std::to_string(weather.cloudiness());
-  //append new line character
+  // append new line character
   dataLine += "\n";
-  //write to stream
+  // write to stream
   stream.write(dataLine.c_str(), dataLine.size());
   return stream.good();
+}
+
+bool StoreCSV::saveForecast(const ApiType type, const Location& location, const Forecast& forecast)
+{
+  // TODO: Implement it.
+
+  // Currently not implemented, so return false always.
+  return false;
 }
 
 void StoreCSV::flush()
@@ -157,7 +165,7 @@ std::string StoreCSV::header() const
   return std::string("API") + separator + std::string("LocationID") + separator
        + std::string("Latitude") + separator + std::string("Longitude") + separator
        + std::string("City") + separator + std::string("Postcode") + separator
-       //weather data
+       // weather data
        + std::string("DataTime") + separator + std::string("RequestTime") + separator
        + std::string("Kelvin") + separator + "°C" + separator + "°F" + separator
        + std::string("RelativeHumidity") + separator + std::string("Rain") + separator
@@ -165,4 +173,4 @@ std::string StoreCSV::header() const
        + std::string("Direction") + separator + std::string("Cloudiness");
 }
 
-} //namespace
+} // namespace

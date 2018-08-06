@@ -168,10 +168,10 @@ void Collector::collect()
              Forecast forecast;
              if (api->forecastWeather(loc, forecast))
              {
-               // TODO: Save data.
-               if (true)
+               StoreMySQL sql(connInfo);
+               if (!sql.saveForecast(tasksContainer[idx].task.api(), loc, forecast))
                {
-                 std::cerr << "Error: Could not save weather forecast data to database!" << std::endl;
+                 std::cerr << "Error: Could not save forecast data to database!" << std::endl;
                } // if
              } // if
              else
