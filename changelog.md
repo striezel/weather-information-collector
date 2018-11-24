@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.7.0-pre (2018-07-xx)
+## Version 0.7.0 (2018-11-24)
 
 * Collection tasks definitions can now contain a `data` setting that defines the
 type of weather data that shall be collected. With that setting the collection
@@ -12,7 +12,7 @@ actually supported by the corresponding API. If not, they will exit with a
 non-zero exit code.
 * The update program will now create MySQL tables for forecast data, if they do
   not exist.
-* The synchronization tool will now synchronize forcast data, too.
+* The synchronization tool will now synchronize forecast data, too.
 
 ## Version 0.6.7 (2018-07-22)
 
