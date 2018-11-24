@@ -22,6 +22,8 @@
 #include <mysql++/mysql++.h>
 #include "../db/Utilities.hpp"
 #include "../db/SSQLS_weatherdata.hpp"
+#include "../db/SSQLS_forecast.hpp"
+#include "../db/SSQLS_forecastdata.hpp"
 
 namespace wic
 {
@@ -124,6 +126,113 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
   return true;
 }
 
+bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast)
+{
+  mysqlpp::Connection conn(false);
+  if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
+                    connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()))
+  {
+    std::cerr << "Could not connect to database: " << conn.error() << "\n";
+    return false;
+  }
+  // get API id
+  const std::string apiName = toString(type);
+  mysqlpp::Query query(&conn);
+  query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << apiName << " LIMIT 1";
+  mysqlpp::StoreQueryResult result = query.store();
+  if (!result)
+  {
+    std::cerr << "Failed to get query result: " << query.error() << "\n";
+    return false;
+  }
+  if (result.num_rows() == 0)
+  {
+    return false;
+  }
+  const int apiId = result[0]["apiID"];
+  const int locationId = wic::getLocationId(conn, location);
+  if (locationId <= 0)
+    return false;
+
+  mysqlpp::Query selectQueryForecasts(&conn);
+  selectQueryForecasts << "SELECT DISTINCT * FROM forecast WHERE apiID=" << mysqlpp::quote << apiId
+              << " AND locationID=" << mysqlpp::quote << locationId
+              << " ORDER BY requestTime ASC;";
+  std::vector<forecast_db> dbForecasts;
+  selectQueryForecasts.storein(dbForecasts);
+  forecast.clear();
+  forecast.reserve(dbForecasts.size());
+
+  for (const auto& elem : dbForecasts)
+  {
+    Forecast current;
+    current.setRequestTime(std::chrono::system_clock::from_time_t(elem.requestTime));
+    if (!elem.json.is_null)
+    {
+      current.setJson(elem.json.data);
+    }
+    const uint_least32_t forecastId = elem.forecastID;
+
+    // Get weather elements in forecast data.
+    mysqlpp::Query selectForecastData(&conn);
+    selectForecastData << "SELECT DISTINCT * FROM forecastdata WHERE forecastID=" << mysqlpp::quote << forecastId
+              << " ORDER BY dataTime ASC;";
+    std::vector<forecastdata> forecastDataPoints;
+    selectForecastData.storein(forecastDataPoints);
+    std::vector<Weather> fcData;
+    fcData.reserve(forecastDataPoints.size());
+    for (const auto& dp : forecastDataPoints)
+    {
+      Weather w;
+      w.setDataTime(std::chrono::system_clock::from_time_t(dp.dataTime));
+      if (!dp.temperature_K.is_null)
+      {
+        w.setTemperatureKelvin(dp.temperature_K.data);
+      }
+      if (!dp.temperature_C.is_null)
+      {
+        w.setTemperatureCelsius(dp.temperature_C.data);
+      }
+      if (!dp.temperature_F.is_null)
+      {
+        w.setTemperatureFahrenheit(dp.temperature_F.data);
+      }
+      if (!dp.humidity.is_null)
+      {
+        const uint8_t hum = dp.humidity.data;
+        w.setHumidity(static_cast<int8_t>(hum));
+      }
+      if (!dp.rain.is_null)
+      {
+        w.setRain(dp.rain.data);
+      }
+      if (!dp.pressure.is_null)
+      {
+        w.setPressure(dp.pressure.data);
+      }
+      if (!dp.wind_speed.is_null)
+      {
+        w.setWindSpeed(dp.wind_speed.data);
+      }
+      if (!dp.wind_degrees.is_null)
+      {
+        w.setWindDegrees(dp.wind_degrees.data);
+      }
+      if (!dp.cloudiness.is_null)
+      {
+        const uint8_t cloudy = dp.cloudiness.data;
+        w.setCloudiness(static_cast<int8_t>(cloudy));
+      }
+      fcData.push_back(w);
+    } // for (range-based, forecastDataPoints
+
+    current.setData(fcData);
+    forecast.push_back(current);
+  } // for (range-based, dbForecasts)
+
+  return true;
+}
+
 bool SourceMySQL::listApis(std::map<ApiType, int>& apis)
 {
   mysqlpp::Connection conn(false);
@@ -158,7 +267,7 @@ bool SourceMySQL::listApis(std::map<ApiType, int>& apis)
   return true;
 }
 
-bool SourceMySQL::listLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations)
+bool SourceMySQL::listWeatherLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations)
 {
   mysqlpp::Connection conn(false);
   if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
@@ -171,6 +280,42 @@ bool SourceMySQL::listLocationsWithApi(std::vector<std::pair<Location, ApiType> 
   query << "SELECT DISTINCT api.name AS apiName, location.locationID AS locID, location.name AS locName FROM weatherdata "
         << "LEFT JOIN api ON api.apiID = weatherdata.apiID "
         << "LEFT JOIN location ON weatherdata.locationID = location.locationID "
+        << "ORDER BY location.name ASC;";
+  mysqlpp::StoreQueryResult result = query.store();
+  if (!result)
+  {
+    std::cerr << "Failed to get query result: " << query.error() << "\n";
+    return false;
+  }
+  locations.clear();
+  const auto rows = result.num_rows();
+  std::map<int, Location> locationLookup;
+
+  for (std::size_t i = 0; i < rows; ++i)
+  {
+    const ApiType api = toApiType(result[i]["apiName"].c_str());
+    const int locId = result[i]["locID"];
+    const Location loc = getLocation(conn, locId);
+    if (api == ApiType::none || loc.empty())
+      return false;
+    locations.push_back(std::pair<Location, ApiType>(loc, api));
+  } // for
+  return true;
+}
+
+bool SourceMySQL::listForecastLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations)
+{
+  mysqlpp::Connection conn(false);
+  if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
+                    connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()))
+  {
+    std::cerr << "Could not connect to database: " << conn.error() << "\n";
+    return false;
+  }
+  mysqlpp::Query query(&conn);
+  query << "SELECT DISTINCT api.name AS apiName, location.locationID AS locID, location.name AS locName FROM forecast "
+        << "LEFT JOIN api ON api.apiID = forecast.apiID "
+        << "LEFT JOIN location ON forecast.locationID = location.locationID "
         << "ORDER BY location.name ASC;";
   mysqlpp::StoreQueryResult result = query.store();
   if (!result)

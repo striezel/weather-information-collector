@@ -48,12 +48,16 @@
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
+		<Unit filename="../data/Forecast.cpp" />
+		<Unit filename="../data/Forecast.hpp" />
 		<Unit filename="../data/Location.cpp" />
 		<Unit filename="../data/Location.hpp" />
 		<Unit filename="../data/Weather.cpp" />
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../db/SSQLS_forecast.hpp" />
+		<Unit filename="../db/SSQLS_forecastdata.hpp" />
 		<Unit filename="../db/SSQLS_location.hpp" />
 		<Unit filename="../db/SSQLS_weatherdata.hpp" />
 		<Unit filename="../db/Utilities.cpp" />

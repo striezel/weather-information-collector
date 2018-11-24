@@ -220,7 +220,7 @@ int main(int argc, char** argv)
   // Get list of location-API pairs that need to be synchronized.
   wic::SourceMySQL dataSource = wic::SourceMySQL(srcConfig.connectionInfo());
   std::vector<std::pair<wic::Location, wic::ApiType> > locations;
-  if (!dataSource.listLocationsWithApi(locations))
+  if (!dataSource.listWeatherLocationsWithApi(locations))
   {
     std::cerr << "Error: Could not load locations from source database!" << std::endl;
     return wic::rcDatabaseError;
@@ -251,69 +251,74 @@ int main(int argc, char** argv)
     std::cerr << "Could not connect to destination database: " << destinationConn.error() << "\n";
     return wic::rcDatabaseError;
   }
-  wic::StoreMySQLBatch destinationStore = wic::StoreMySQLBatch(destConfig.connectionInfo(), batchSize);
-  for(const auto& item : locations)
-  {
-    std::cout << "Synchronizing data for " << item.first.toString() << ", " << wic::toString(item.second) << "..." << std::endl;
-    if (apis.find(item.second) == apis.end())
-    {
-      std::cerr << "Error: Destination database has no API entry for "
-                << wic::toString(item.second) << "!" << std::endl;
-      return wic::rcDatabaseError;
-    }
-    const int apiId = apis[item.second];
-    std::vector<wic::Weather> sourceWeather;
-    if (!dataSource.getCurrentWeather(item.second, item.first, sourceWeather))
-    {
-      std::cerr << "Error: Could not load weather data for " << item.first.toString()
-                << ", " << wic::toString(item.second) << " from source database!" << std::endl;
-      return wic::rcDatabaseError;
-    }
-    // Get corresponding location ID in destination database.
-    // If it does not exist, it will be created.
-    const int locationId = dataDest.getLocationId(item.first);
-    if (locationId <= 0)
-    {
-      std::cerr << "Error: Could find or create location " << item.first.toString()
-                << ", " << wic::toString(item.second) << " in destination database!" << std::endl;
-      return wic::rcDatabaseError;
-    }
-    // Get existing entries in destination database.
-    std::vector<wic::Weather> destinationWeather;
-    if (!dataDest.getCurrentWeather(item.second, item.first, destinationWeather))
-    {
-      std::cerr << "Error: Could not load weather data for " << item.first.toString()
-                << ", " << wic::toString(item.second) << " from destination database!" << std::endl;
-      return wic::rcDatabaseError;
-    }
 
-    // Iterate over data.
-    auto sourceIterator = sourceWeather.begin();
-    const auto sourceEnd = sourceWeather.end();
-    auto destinationIterator = destinationWeather.begin();
-    auto destinationEnd = destinationWeather.end();
-    while (sourceIterator != sourceEnd)
+  // scope for synchronization of weather data
+  {
+    wic::StoreMySQLBatch destinationStore = wic::StoreMySQLBatch(destConfig.connectionInfo(), batchSize);
+    for(const auto& item : locations)
     {
-      while (destinationIterator != destinationEnd && isLess(*destinationIterator, *sourceIterator))
+      std::cout << "Synchronizing weather data for " << item.first.toString()
+                << ", " << wic::toString(item.second) << "..." << std::endl;
+      if (apis.find(item.second) == apis.end())
       {
-        ++destinationIterator;
-      } // while (inner)
-      // Element was not found in destination, if we are at the end of the
-      // container or if the dereferenced iterator is not equal to the source.
-      if ((destinationIterator == destinationEnd)
-          || (destinationIterator->dataTime() != sourceIterator->dataTime())
-          || (destinationIterator->requestTime() != sourceIterator->requestTime()))
+        std::cerr << "Error: Destination database has no API entry for "
+                  << wic::toString(item.second) << "!" << std::endl;
+        return wic::rcDatabaseError;
+      }
+      const int apiId = apis[item.second];
+      std::vector<wic::Weather> sourceWeather;
+      if (!dataSource.getCurrentWeather(item.second, item.first, sourceWeather))
       {
-        // Insert data set.
-        if (!destinationStore.saveCurrentWeather(apiId, locationId, *sourceIterator))
+        std::cerr << "Error: Could not load weather data for " << item.first.toString()
+                  << ", " << wic::toString(item.second) << " from source database!" << std::endl;
+        return wic::rcDatabaseError;
+      }
+      // Get corresponding location ID in destination database.
+      // If it does not exist, it will be created.
+      const int locationId = dataDest.getLocationId(item.first);
+      if (locationId <= 0)
+      {
+        std::cerr << "Error: Could find or create location " << item.first.toString()
+                  << ", " << wic::toString(item.second) << " in destination database!" << std::endl;
+        return wic::rcDatabaseError;
+      }
+      // Get existing entries in destination database.
+      std::vector<wic::Weather> destinationWeather;
+      if (!dataDest.getCurrentWeather(item.second, item.first, destinationWeather))
+      {
+        std::cerr << "Error: Could not load weather data for " << item.first.toString()
+                  << ", " << wic::toString(item.second) << " from destination database!" << std::endl;
+        return wic::rcDatabaseError;
+      }
+
+      // Iterate over data.
+      auto sourceIterator = sourceWeather.begin();
+      const auto sourceEnd = sourceWeather.end();
+      auto destinationIterator = destinationWeather.begin();
+      auto destinationEnd = destinationWeather.end();
+      while (sourceIterator != sourceEnd)
+      {
+        while (destinationIterator != destinationEnd && isLess(*destinationIterator, *sourceIterator))
         {
-          std::cerr << "Error: Could insert weather data into destination database!" << std::endl;
-          return wic::rcDatabaseError;
-        }
-      } // if
-      ++sourceIterator;
-    } // while
-  } // range-based for (locations)
+          ++destinationIterator;
+        } // while (inner)
+        // Element was not found in destination, if we are at the end of the
+        // container or if the dereferenced iterator is not equal to the source.
+        if ((destinationIterator == destinationEnd)
+            || (destinationIterator->dataTime() != sourceIterator->dataTime())
+            || (destinationIterator->requestTime() != sourceIterator->requestTime()))
+        {
+          // Insert data set.
+          if (!destinationStore.saveCurrentWeather(apiId, locationId, *sourceIterator))
+          {
+            std::cerr << "Error: Could insert weather data into destination database!" << std::endl;
+            return wic::rcDatabaseError;
+          }
+        } // if
+        ++sourceIterator;
+      } // while
+    } // range-based for (locations)
+  } // scope for weather data sync
 
   // All is done.
   std::cout << "Done." << std::endl;
