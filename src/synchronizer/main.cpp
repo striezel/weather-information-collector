@@ -116,7 +116,7 @@ int main(int argc, char** argv)
                     << param << "\"." << std::endl;
           return wic::rcInvalidParameter;
         }
-      } //if source configuration file
+      } // if source configuration file
       else if ((param == "--dest-conf") || (param == "-c2"))
       {
         if (!destConfigurationFile.empty())
@@ -138,7 +138,7 @@ int main(int argc, char** argv)
                     << param << "\"." << std::endl;
           return wic::rcInvalidParameter;
         }
-      } //if destination configuration file
+      } // if destination configuration file
       else if ((param == "--batch-size") || (param == "-b"))
       {
         if (batchSize >= 0)
@@ -173,7 +173,7 @@ int main(int argc, char** argv)
                     << param << "\"." << std::endl;
           return wic::rcInvalidParameter;
         }
-      } //if destination configuration file
+      } // if batch size
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
@@ -298,7 +298,7 @@ int main(int argc, char** argv)
       {
         ++destinationIterator;
       } // while (inner)
-      // Element was not found in destination. if we are at the end of the
+      // Element was not found in destination, if we are at the end of the
       // container or if the dereferenced iterator is not equal to the source.
       if ((destinationIterator == destinationEnd)
           || (destinationIterator->dataTime() != sourceIterator->dataTime())
