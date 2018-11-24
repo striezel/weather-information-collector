@@ -41,7 +41,7 @@ class StoreMySQLBatch
     StoreMySQLBatch(const ConnectionInformation& ci, const unsigned int batchSize);
 
 
-    /** \brief destructor
+    /** \brief Destructor.
      */
     virtual ~StoreMySQLBatch();
 

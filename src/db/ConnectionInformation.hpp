@@ -27,7 +27,7 @@
 namespace wic
 {
 
-/** \brief holds information to connect to a database server
+/** \brief Holds information to connect to a database server.
  */
 class ConnectionInformation
 {
@@ -37,12 +37,12 @@ class ConnectionInformation
     static const uint16_t defaultMySqlPort;
 
 
-    /** \brief default constructor
+    /** \brief Default constructor.
      */
     ConnectionInformation();
 
 
-    /** \brief constructor
+    /** \brief Constructor.
      *
      * \param host  hostname of the database server
      * \param db    database name
@@ -53,77 +53,77 @@ class ConnectionInformation
     ConnectionInformation(const std::string& host, const std::string& db, const std::string& user, const std::string& pass, const uint16_t port = defaultMySqlPort);
 
 
-    /** \brief gets the hostname of the database server
+    /** \brief Gets the hostname of the database server.
      *
      * \return Returns the hostname of the database server.
      */
     const std::string& hostname() const;
 
 
-    /** \brief sets the hostname for the database connection
+    /** \brief Sets the hostname for the database connection.
      *
      * \param host  the new hostname
      */
     void setHostname(const std::string& host);
 
 
-    /** \brief gets the database name
+    /** \brief Gets the database name.
      *
      * \return Returns the database name.
      */
     const std::string& db() const;
 
 
-    /** \brief sets the database name for the database connection
+    /** \brief Sets the database name for the database connection.
      *
      * \param database  the new database name
      */
     void setDb(const std::string& database);
 
 
-    /** \brief gets the name of the database user
+    /** \brief Gets the name of the database user.
      *
      * \return Returns the name of the database user.
      */
     const std::string& user() const;
 
 
-    /** \brief sets the name of the database user
+    /** \brief Sets the name of the database user.
      *
      * \param username  the new user
      */
     void setUser(const std::string& username);
 
 
-    /** \brief gets the password for the database user
+    /** \brief Gets the password for the database user.
      *
      * \return Returns the password for the database user.
      */
     const std::string& password() const;
 
 
-    /** \brief sets the password for the database user
+    /** \brief Sets the password for the database user.
      *
      * \param pw  the new password
      */
     void setPassword(const std::string& pw);
 
 
-    /** \brief gets the port of the database server
+    /** \brief Gets the port of the database server.
      *
      * \return Returns the port of the database server.
      */
     uint16_t port() const;
 
 
-    /** \brief sets the port of the database server
+    /** \brief Sets the port of the database server.
      *
      * \param p  the new port number
      */
     void setPort(const uint16_t p);
 
 
-    /** \brief checks whether the connection information is complete
+    /** \brief Checks whether the connection information is complete.
      *
      * \return Returns true, if the object has all information required to
      *         connect to a MySQL database. Returns false otherwise.
@@ -131,7 +131,7 @@ class ConnectionInformation
     bool isComplete() const;
 
 
-    /** \brief clears all information from this object
+    /** \brief Clears all information from this object.
      */
     void clear();
   private:
