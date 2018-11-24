@@ -167,7 +167,8 @@ bool StoreMySQLBatch::commit()
   const bool success = insertQuery.exec();
   if (!success)
   {
-    std::cerr << "Could not insert " << records << " record(s) into database!" << conn.error() << "\n";
+    std::cerr << "Could not insert " << records << " record(s) into database!\n"
+              << conn.error() << "\n";
   }
   records = 0;
   return success;

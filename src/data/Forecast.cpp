@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,66 +18,56 @@
  -------------------------------------------------------------------------------
 */
 
-#include "Task.hpp"
+#include "Forecast.hpp"
 
 namespace wic
 {
 
-Task::Task(const Location& loc, const ApiType a, const DataType d, const std::chrono::seconds& _interval)
-: m_loc(loc),
-  m_api(a),
-  m_data(d),
-  m_interval(_interval)
+Forecast::Forecast()
+: m_requestTime(std::chrono::time_point<std::chrono::system_clock>()),
+  m_json(std::string("")),
+  m_forecast(std::vector<Weather>())
 {
 }
 
-const Location& Task::location() const
+bool Forecast::hasRequestTime() const
 {
-  return m_loc;
+  return (m_requestTime != std::chrono::time_point<std::chrono::system_clock>());
 }
 
-void Task::setLocation(const Location& loc)
+void Forecast::setRequestTime(const std::chrono::time_point<std::chrono::system_clock>& rt)
 {
-  m_loc = loc;
+  m_requestTime = rt;
 }
 
-ApiType Task::api() const
+const std::chrono::time_point<std::chrono::system_clock>& Forecast::requestTime() const
 {
-  return m_api;
+  return m_requestTime;
 }
 
-void Task::setApi(const ApiType a)
+bool Forecast::hasJson() const
 {
-  m_api = a;
+  return !m_json.empty();
 }
 
-DataType Task::data() const
+const std::string& Forecast::json() const
 {
-  return m_data;
+  return m_json;
 }
 
-void Task::setData(const DataType d)
+void Forecast::setJson(const std::string& newJson)
 {
-  m_data = d;
+  m_json = newJson;
 }
 
-std::chrono::seconds Task::interval() const
+const std::vector<Weather>& Forecast::data() const
 {
-  return m_interval;
+  return m_forecast;
 }
 
-void Task::setInterval(const std::chrono::seconds& _interval)
+void Forecast::setData(const std::vector<Weather>& newData)
 {
-  m_interval = _interval;
-  if (_interval < std::chrono::seconds::zero())
-    m_interval = std::chrono::seconds::zero();
-}
-
-bool Task::complete() const
-{
-  return (!m_loc.empty() && (m_api != ApiType::none)
-      && (m_data != DataType::none)
-      && (m_interval > std::chrono::seconds::zero()));
+  m_forecast = newData;
 }
 
 } // namespace

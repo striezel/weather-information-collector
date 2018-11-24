@@ -42,7 +42,7 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
     std::cerr << "Could not connect to database: " << conn.error() << "\n";
     return false;
   }
-  //get API id
+  // get API id
   const std::string apiName = toString(type);
   mysqlpp::Query query(&conn);
   query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << toString(type) << " LIMIT 1";
@@ -54,7 +54,8 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
   }
   if (result.num_rows() == 0)
   {
-    //TODO: Insert API!
+    std::cerr << "Error: Could not find database record for API "
+              << toString(type) << "!" << std::endl;
     return false;
   }
   const int apiId = result[0]["apiID"];
@@ -124,6 +125,166 @@ bool StoreMySQL::saveCurrentWeather(mysqlpp::Connection& conn, const int apiId, 
   return insertQuery.exec();
 }
 
+bool StoreMySQL::saveForecast(const ApiType type, const Location& location, const Forecast& forecast)
+{
+  if (forecast.data().empty())
+  {
+    // No data, nothing to save here.
+    std::cerr << "Error: Forecast data is empty!" << std::endl;
+    return false;
+  }
 
+  mysqlpp::Connection conn(false);
+  if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
+                    connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()))
+  {
+    std::cerr << "Could not connect to database: " << conn.error() << "\n";
+    return false;
+  }
+  // get API id
+  const std::string apiName = toString(type);
+  mysqlpp::Query query(&conn);
+  query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << toString(type) << " LIMIT 1";
+  mysqlpp::StoreQueryResult result = query.store();
+  if (!result)
+  {
+    std::cerr << "Failed to get query result: " << query.error() << "\n";
+    return false;
+  }
+  if (result.num_rows() == 0)
+  {
+    std::cerr << "Error: Could not find database record for API "
+              << toString(type) << "!" << std::endl;
+    return false;
+  }
+  const int apiId = result[0]["apiID"];
+  const int locationId = getLocationId(conn, location);
+  if (locationId <= 0)
+    return false;
+  // Insert general forecast record.
+  mysqlpp::Query insertQuery(&conn);
+  const mysqlpp::sql_datetime reqT(std::chrono::system_clock::to_time_t(forecast.requestTime()));
+  insertQuery << "INSERT INTO forecast SET apiID=" << mysqlpp::quote << apiId
+              << ", locationID=" << mysqlpp::quote << locationId
+              << ", requestTime=" << mysqlpp::quote << reqT
+              << ",json=";
+  if (forecast.hasJson())
+  {
+    insertQuery << mysqlpp::quote << forecast.json() << ";";
+  }
+  else
+  {
+    insertQuery << "NULL;";
+  }
+  if (!insertQuery.exec())
+  {
+    std::cerr << "Error: INSERT of forecast data failed. "
+              << insertQuery.error() << std::endl;
+    return false;
+  }
+  const unsigned int forecastId = insertQuery.insert_id();
 
-} //namespace
+  // Insert data elements.
+  mysqlpp::Query dataInsert(&conn);
+  dataInsert << "INSERT INTO forecastdata (forecastID, dataTime, "
+             << "temperature_K, temperature_C, temperature_F, humidity, rain, "
+             << "pressure, wind_speed, wind_degrees, cloudiness) VALUES ";
+  bool hasPreviousEntries = false;
+  for (const Weather& weather: forecast.data())
+  {
+    if (hasPreviousEntries)
+      dataInsert << ", ";
+    hasPreviousEntries = true;
+    dataInsert << "(" << mysqlpp::quote << forecastId;
+    // dataTime
+    {
+      mysqlpp::sql_datetime dt(std::chrono::system_clock::to_time_t(weather.dataTime()));
+      dataInsert << ", " << mysqlpp::quote << dt;
+    }
+    // temperatures (K, °C, °F)
+    if (weather.hasTemperatureKelvin())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.temperatureKelvin();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasTemperatureCelsius())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.temperatureCelsius();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasTemperatureFahrenheit())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.temperatureFahrenheit();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasHumidity())
+    {
+      dataInsert << ", " << mysqlpp::quote << static_cast<int>(weather.humidity());
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasRain())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.rain();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasPressure())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.pressure();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    // wind
+    if (weather.hasWindSpeed())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.windSpeed();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasWindDegrees())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.windDegrees();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasCloudiness())
+    {
+      dataInsert << ", " << mysqlpp::quote << static_cast<int>(weather.cloudiness()) << ")";
+    }
+    else
+    {
+      dataInsert << ", NULL)";
+    }
+  } // for (range-based)
+
+  if (!dataInsert.exec())
+  {
+    std::cerr << "Error: Forecast data INSERT into database failed. "
+              << dataInsert.error() << std::endl;
+    return false;
+  }
+  // All is fine.
+  return true;
+}
+
+} // namespace

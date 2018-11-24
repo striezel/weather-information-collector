@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ class TaskManager
     static const char commentCharater;
 
 
-    /** \brief loads a task from a given file
+    /** \brief Loads a task from a given file.
      *
      * \param fileName  name of the file where task shall be loaded from
      * \param task      Task instance that will store the loaded information
@@ -45,7 +45,7 @@ class TaskManager
     static bool loadFromFile(const std::string& fileName, Task& task);
 
 
-    /** \brief loads all task files from a given directory
+    /** \brief Loads all task files from a given directory.
      *
      * \param directory  path of the directory where task files reside
      * \param extension   extension (including dot) of file names that shall be
@@ -57,7 +57,7 @@ class TaskManager
     static bool loadFromDirectory(const std::string& directory, const std::string& extension, std::vector<Task>& storage);
 
 
-    /** \brief checks whether a list of tasks has duplicate or overlapping tasks
+    /** \brief Checks whether a list of tasks has duplicate or overlapping tasks.
      *
      * \param tasks  vector of tasks
      * \return Returns true, if the vector of tasks has duplicate or overlapping
@@ -66,7 +66,7 @@ class TaskManager
     static bool hasDuplicates(const std::vector<Task>& tasks);
 
 
-    /** \brief checks whether the tasks can be executed within API request limits
+    /** \brief Checks whether the tasks can be executed within API request limits.
      *
      * \param tasks   vector of tasks
      * \param silent  if true, then request statistics will not be shown on
@@ -75,8 +75,8 @@ class TaskManager
      *         Returns false otherwise.
      */
     static bool withinLimits(const std::vector<Task>& tasks, const bool silent = false);
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_TASKMANAGER_HPP

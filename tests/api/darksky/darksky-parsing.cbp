@@ -31,6 +31,8 @@
 		<Unit filename="../../../src/api/API.hpp" />
 		<Unit filename="../../../src/api/DarkSky.cpp" />
 		<Unit filename="../../../src/api/DarkSky.hpp" />
+		<Unit filename="../../../src/data/Forecast.cpp" />
+		<Unit filename="../../../src/data/Forecast.hpp" />
 		<Unit filename="../../../src/data/Location.cpp" />
 		<Unit filename="../../../src/data/Location.hpp" />
 		<Unit filename="../../../src/data/Weather.cpp" />

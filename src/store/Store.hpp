@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,17 +22,18 @@
 #define WEATHER_INFORMATION_COLLECTOR_STORE_HPP
 
 #include "../api/Types.hpp"
+#include "../data/Forecast.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
 
 namespace wic
 {
 
-/** \brief interface for data storage */
+/** \brief Interface for weather data storage. */
 class Store
 {
   public:
-    /** \brief saves a current weather entry for a given location and API
+    /** \brief Saves a current weather entry for a given location and API.
      *
      * \param type      API that was used to gather the information
      * \param location  location for the weather information
@@ -43,11 +44,22 @@ class Store
     virtual bool saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather) = 0;
 
 
-    /** \brief destructor
+    /** \brief Saves weather forecast data for a given location and API.
+     *
+     * \param type      API that was used to gather the information
+     * \param location  location for the weather information
+     * \param forecast  weather forecast information
+     * \return Returns true, if the data was saved.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool saveForecast(const ApiType type, const Location& location, const Forecast& forecast) = 0;
+
+
+    /** \brief Virtual destructor, because of derived classes.
      */
     virtual ~Store() { }
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_STORE_HPP

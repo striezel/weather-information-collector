@@ -29,18 +29,18 @@
 namespace wic
 {
 
-/** \brief class to store data in a MySQL database */
+/** \brief Stores weather data in a MySQL database. */
 class StoreMySQL: public Store
 {
   public:
-    /** \brief constructor
+    /** \brief Constructor.
      *
      * \param ci  information for connection to the database
      */
     StoreMySQL(const ConnectionInformation& ci);
 
 
-    /** \brief destructor
+    /** \brief Destructor.
      */
     virtual ~StoreMySQL();
 
@@ -66,6 +66,17 @@ class StoreMySQL: public Store
      *         Returns false, if an error occurred.
      */
     virtual bool saveCurrentWeather(mysqlpp::Connection& conn, const int apiId, const int locationId, const Weather& weather);
+
+
+    /** \brief Saves weather forecast data for a given location and API.
+     *
+     * \param type      API that was used to gather the information
+     * \param location  location for the weather information
+     * \param forecast  weather forecast information
+     * \return Returns true, if the data was saved.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool saveForecast(const ApiType type, const Location& location, const Forecast& forecast);
   private:
     ConnectionInformation connInfo; /**< MySQL connection information */
 }; // class

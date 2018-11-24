@@ -82,3 +82,8 @@ configuration file (see above).
 
 Full details on the task files (supported settings, etc.) can be found
 [here](task-files.md).
+
+# Troubleshooting
+
+Should you encounter any problems with weather-information-collector's programs,
+take a look at the [troubleshooting guide](troubleshooting.md).

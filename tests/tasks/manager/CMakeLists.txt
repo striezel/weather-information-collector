@@ -4,10 +4,16 @@ cmake_minimum_required (VERSION 2.8)
 project(task_manager_tests)
 
 set(task_manager_tests_sources
+    ../../../src/api/Apixu.cpp
+    ../../../src/api/DarkSky.cpp
+    ../../../src/api/Factory.cpp
     ../../../src/api/Limits.cpp
+    ../../../src/api/OpenWeatherMap.cpp
     ../../../src/api/Types.cpp
+    ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
+    ../../../src/net/Curly.cpp
     ../../../src/tasks/Task.cpp
     ../../../src/tasks/TaskManager.cpp
     ../../../src/util/Strings.cpp
@@ -30,6 +36,25 @@ if (Boost_FOUND)
 else ()
   message ( FATAL_ERROR "Boost library was not found!" )
 endif (Boost_FOUND)
+
+# find cURL library
+find_package (CURL)
+if (CURL_FOUND)
+  include_directories(${CURL_INCLUDE_DIRS})
+  target_link_libraries (task_manager_tests ${CURL_LIBRARIES})
+else ()
+  message ( FATAL_ERROR "cURL was not found!" )
+endif (CURL_FOUND)
+
+# find jsoncpp library
+set(LibJsonCpp_DIR "../../../cmake/" )
+find_package (LibJsonCpp)
+if (LIBJSONCPP_FOUND)
+  include_directories(${LIBJSONCPP_INCLUDE_DIRS})
+  target_link_libraries (task_manager_tests ${LIBJSONCPP_LIBRARIES})
+else ()
+  message ( FATAL_ERROR "libjsoncpp was not found!" )
+endif (LIBJSONCPP_FOUND)
 
 
 # test run

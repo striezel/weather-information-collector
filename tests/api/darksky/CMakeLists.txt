@@ -5,6 +5,7 @@ project(darksky_parsing_tests)
 
 set(darksky_parsing_tests_sources
     ../../../src/api/DarkSky.cpp
+    ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/net/Curly.cpp
@@ -43,4 +44,4 @@ endif (LIBJSONCPP_FOUND)
 
 # test run
 add_test(NAME DarkSky-parsing
-         COMMAND $<TARGET_FILE:darksky_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/darksky.current.json")
+         COMMAND $<TARGET_FILE:darksky_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/darksky.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/darksky.forecast.json")

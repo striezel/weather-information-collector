@@ -78,5 +78,64 @@ TEST_CASE("API types")
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::DarkSky)) == wic::ApiType::DarkSky );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::none)) == wic::ApiType::none );
   }
+}
 
+
+TEST_CASE("Data types")
+{
+  SECTION("to data type: current")
+  {
+    REQUIRE( wic::toDataType("current") == wic::DataType::Current );
+    REQUIRE( wic::toDataType("Current") == wic::DataType::Current );
+    REQUIRE( wic::toDataType("CURRENT") == wic::DataType::Current );
+    REQUIRE( wic::toDataType("\t  cUrReNt   ") == wic::DataType::Current );
+  }
+
+  SECTION("to data type: forecast")
+  {
+    REQUIRE( wic::toDataType("forecast") == wic::DataType::Forecast );
+    REQUIRE( wic::toDataType("Forecast") == wic::DataType::Forecast );
+    REQUIRE( wic::toDataType("FORECAST") == wic::DataType::Forecast );
+    REQUIRE( wic::toDataType("\t  FoReCaSt \t\t  ") == wic::DataType::Forecast );
+  }
+
+  SECTION("to data type: current+forecast")
+  {
+    REQUIRE( wic::toDataType("current+forecast") == wic::DataType::CurrentAndForecast );
+    REQUIRE( wic::toDataType("Current+Forecast") == wic::DataType::CurrentAndForecast );
+    REQUIRE( wic::toDataType("CURRENT+FORECAST") == wic::DataType::CurrentAndForecast );
+    REQUIRE( wic::toDataType("\t  CuRrEnT+FoReCaSt  ") == wic::DataType::CurrentAndForecast );
+  }
+
+  SECTION("to data type: none")
+  {
+    REQUIRE( wic::toDataType("none") == wic::DataType::none );
+    REQUIRE( wic::toDataType("None") == wic::DataType::none );
+    REQUIRE( wic::toDataType("NONE") == wic::DataType::none );
+    REQUIRE( wic::toDataType("\t  NoNe  ") == wic::DataType::none );
+  }
+
+  SECTION("to data type: invalid names")
+  {
+    REQUIRE( wic::toDataType("foobar") == wic::DataType::none );
+    REQUIRE( wic::toDataType("blablablahhhhh!") == wic::DataType::none );
+    REQUIRE( wic::toDataType("this is none of our supported apis") == wic::DataType::none );
+    REQUIRE( wic::toDataType("") == wic::DataType::none );
+  }
+
+  SECTION("to string")
+  {
+    REQUIRE( wic::toString(wic::DataType::Current) == "current" );
+    REQUIRE( wic::toString(wic::DataType::Forecast) == "forecast" );
+    REQUIRE( wic::toString(wic::DataType::CurrentAndForecast) == "current+forecast" );
+    REQUIRE( wic::toString(wic::DataType::none) == "none" );
+  }
+
+  SECTION("to string - to data type - roundtrip")
+  {
+    REQUIRE( wic::toDataType(wic::toString(wic::DataType::Current)) == wic::DataType::Current );
+    REQUIRE( wic::toDataType(wic::toString(wic::DataType::Forecast)) == wic::DataType::Forecast );
+    REQUIRE( wic::toDataType(wic::toString(wic::DataType::CurrentAndForecast)) == wic::DataType::CurrentAndForecast );
+    REQUIRE( wic::toDataType(wic::toString(wic::DataType::none)) == wic::DataType::none );
+  }
 }

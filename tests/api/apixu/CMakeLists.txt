@@ -5,6 +5,7 @@ project(apixu_parsing_tests)
 
 set(apixu_parsing_tests_sources
     ../../../src/api/Apixu.cpp
+    ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/net/Curly.cpp
@@ -43,4 +44,4 @@ endif (LIBJSONCPP_FOUND)
 
 # test run
 add_test(NAME Apixu-parsing
-         COMMAND $<TARGET_FILE:apixu_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/apixu.current.json")
+         COMMAND $<TARGET_FILE:apixu_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/apixu.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/apixu.forecast.json" "${CMAKE_CURRENT_SOURCE_DIR}/apixu.forecast.hour.json")

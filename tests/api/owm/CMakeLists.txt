@@ -5,6 +5,7 @@ project(owm_parsing_tests)
 
 set(owm_parsing_tests_sources
     ../../../src/api/OpenWeatherMap.cpp
+    ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/net/Curly.cpp
@@ -43,4 +44,4 @@ endif (LIBJSONCPP_FOUND)
 
 # test run
 add_test(NAME OpenWeatherMap-parsing
-         COMMAND $<TARGET_FILE:owm_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/owm.current.json")
+         COMMAND $<TARGET_FILE:owm_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/owm.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/owm.forecast.json")

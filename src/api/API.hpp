@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,23 +22,27 @@
 #define WEATHER_INFORMATION_COLLECTOR_API_HPP
 
 #include <string>
+#include "Types.hpp"
+#include "../data/Forecast.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
 
 namespace wic
 {
 
+/** \brief Basic interface for all weather API classes.
+ */
 class API
 {
   public:
-    /** \brief set the APi key for API requests
+    /** \brief Sets the API key for API requests.
      *
      * \param key  the API key
      */
     virtual void setApiKey(const std::string& key) = 0;
 
 
-    /** \brief checks whether the given location can be used for a request
+    /** \brief Checks whether the given location can be used for a request.
      *
      * \param location  the location information
      * \return Returns true, if the location can be uses for a request.
@@ -47,7 +51,16 @@ class API
     virtual bool validLocation(const Location& location) const = 0;
 
 
-    /** \brief retrieves the current weather for a given location
+    /** \brief Checks whether the given data type is supported by the API.
+     *
+     * \param data  the data type to check
+     * \return Returns true, if the data type is supported.
+     *         Returns false otherwise.
+     */
+    virtual bool supportsDataType(const DataType data) const = 0;
+
+
+    /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
      * \param weather   variable where result of the request will be stored
@@ -57,7 +70,7 @@ class API
     virtual bool currentWeather(const Location& location, Weather& weather) = 0;
 
 
-    /** \brief parses the current weather information from JSON into the Weather object
+    /** \brief Parses the current weather information from JSON into the Weather object.
      *
      * \param json     string containing the JSON
      * \param weather  variable where result of the parsing process will be stored
@@ -67,11 +80,32 @@ class API
     virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const = 0;
 
 
-    /** \brief destructor
+    /** \brief Retrieves the weather forecast for a given location.
+     *
+     * \param location  the location for which the forecast is requested
+     * \param forecast  variable where the result of the request will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool forecastWeather(const Location& location, Forecast& forecast) = 0;
+
+
+    /** \brief Retrieves the current weather and the forecast for a given location.
+     *
+     * \param location  the location for which the forecast is requested
+     * \param weather  variable where current weather result of the request will be stored
+     * \param forecast  variable where the forecast result of the request will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast) = 0;
+
+
+    /** \brief Destructor.
      */
     virtual ~API() { }
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_API_HPP

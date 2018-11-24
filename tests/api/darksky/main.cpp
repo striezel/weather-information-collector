@@ -22,36 +22,8 @@
 #include <iostream>
 #include "../../../src/api/DarkSky.hpp"
 
-int main(int argc, char** argv)
+void printWeather(const wic::Weather& w)
 {
-  if ((argc < 2) || (argv[1] == nullptr))
-  {
-    std::cerr << "Error: No JSON file name was specified!" << std::endl;
-    return 1;
-  }
-  const std::string jsonFileName = std::string(argv[1]);
-
-  std::ifstream jsonStream;
-  jsonStream.open(jsonFileName, std::ios_base::in | std::ios_base::binary);
-  if (!jsonStream.is_open())
-  {
-    std::cerr << "Error: JSON file could not be opened!" << std::endl;
-    return 1;
-  }
-
-  std::string json;
-  std::getline(jsonStream, json, '\0');
-  jsonStream.close();
-
-  wic::DarkSky api;
-  wic::Weather w;
-  const bool success = api.parseCurrentWeather(json, w);
-  if (!success)
-  {
-    std::cerr << "Error: JSON data could not be parsed!" << std::endl;
-    return 1;
-  }
-
   std::cout << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
             << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
             << "Temperature: " << w.temperatureKelvin() << " K (" << w.hasTemperatureKelvin() << ")\n"
@@ -63,6 +35,39 @@ int main(int argc, char** argv)
             << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
   const std::time_t dt_c = std::chrono::system_clock::to_time_t(w.dataTime());
   std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
+}
+
+int main(int argc, char** argv)
+{
+  if ((argc < 3) || (argv[1] == nullptr) || (argv[2] == nullptr))
+  {
+    std::cerr << "Error: No JSON file name was specified!" << std::endl;
+    return 1;
+  }
+  const std::string jsonFileName = std::string(argv[1]);
+
+  std::ifstream jsonStream;
+  jsonStream.open(jsonFileName, std::ios_base::in | std::ios_base::binary);
+  if (!jsonStream.is_open())
+  {
+    std::cerr << "Error: JSON file " << jsonFileName << " could not be opened!" << std::endl;
+    return 1;
+  }
+
+  std::string json;
+  std::getline(jsonStream, json, '\0');
+  jsonStream.close();
+
+  wic::DarkSky api;
+  wic::Weather w;
+  bool success = api.parseCurrentWeather(json, w);
+  if (!success)
+  {
+    std::cerr << "Error: JSON data (current weather) could not be parsed!" << std::endl;
+    return 1;
+  }
+
+  printWeather(w);
 
   if (!w.hasHumidity())
   {
@@ -155,6 +160,83 @@ int main(int argc, char** argv)
     std::cerr << "Cloudiness is incorrect.\n";
     return 1;
   }
+
+  // Test forecast data.
+  const std::string jsonForecastFileName = std::string(argv[2]);
+
+  jsonStream.open(jsonForecastFileName, std::ios_base::in | std::ios_base::binary);
+  if (!jsonStream.is_open())
+  {
+    std::cerr << "Error: JSON file " << jsonForecastFileName << " could not be opened!" << std::endl;
+    return 1;
+  }
+  json.clear();
+  std::getline(jsonStream, json, '\0');
+  jsonStream.close();
+
+  wic::Forecast forecast;
+  success = api.parseForecast(json, forecast);
+  if (!success)
+  {
+    std::cerr << "Error: JSON data (current weather) could not be parsed!" << std::endl;
+    return 1;
+  }
+  if (forecast.data().size() != 49) // one entry per hour for the next 48 hours, + one for now
+  {
+    std::cerr << "Error: Hourly forecast data should contain 49 entries, but there are "
+              << forecast.data().size() << " entries instead!" << std::endl;
+    return 1;
+  }
+
+  std::cout << "First hourly forecast data:" << std::endl;
+  const auto& wf0 = forecast.data().at(0);
+  printWeather(wf0);
+  if (!wf0.hasDataTime())
+  {
+    std::cerr << "Hourly forecast item has no timestamp.\n";
+    return 1;
+  }
+  if (wf0.rain() != 0.0686f)
+  {
+    std::cerr << "Rain amount of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.temperatureCelsius() != 31.18f)
+  {
+    std::cerr << "Temperature (°C) of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.temperatureFahrenheit() != 88.124f)
+  {
+    std::cerr << "Temperature (°F) of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.humidity() != 37)
+  {
+    std::cerr << "Humidity of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.pressure() != 1015)
+  {
+    std::cerr << "Air pressure of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.windSpeed() < 3.099f || wf0.windSpeed() > 3.101f)
+  {
+    std::cerr << "Wind speed of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.windDegrees() != 320)
+  {
+    std::cerr << "Wind direction of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.cloudiness() != 34)
+  {
+    std::cerr << "Cloudiness of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+
   // All tests passed.
   return 0;
 }

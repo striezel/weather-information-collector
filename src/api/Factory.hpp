@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,33 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_FACTORY_HPP
+#define WEATHER_INFORMATION_COLLECTOR_FACTORY_HPP
 
-#include <string>
+#include <memory>
+#include "API.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.7.0-pre, 2018-07-28";
+/** \brief "Factory" for API instances.
+ */
+class Factory
+{
+  public:
+    /// no constructor needed
+    Factory() = delete;
+
+    /** \brief Creates an API instance based on the given API type.
+     *
+     * \param api  type of the API instance to create
+     * \param key  the API key for that instance (optional)
+     * \return Returns a unique_ptr to the created instance.
+     *         Returns nullptr, if api is ApiType::none or not supported.
+     */
+    static std::unique_ptr<API> create(const ApiType api, const std::string& key = std::string());
+}; // class
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_FACTORY_HPP

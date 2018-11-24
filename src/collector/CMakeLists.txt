@@ -6,16 +6,17 @@ project(weather-information-collector)
 set(weather-information-collector_sources
     ../api/Apixu.cpp
     ../api/DarkSky.cpp
+    ../api/Factory.cpp
     ../api/Limits.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Types.cpp
     ../conf/Configuration.cpp
+    ../data/Forecast.cpp
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
     ../db/Utilities.cpp
     ../net/Curly.cpp
-    ../store/StoreCSV.cpp
     ../store/StoreMySQL.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp

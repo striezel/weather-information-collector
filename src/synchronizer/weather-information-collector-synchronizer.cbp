@@ -48,12 +48,16 @@
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
+		<Unit filename="../data/Forecast.cpp" />
+		<Unit filename="../data/Forecast.hpp" />
 		<Unit filename="../data/Location.cpp" />
 		<Unit filename="../data/Location.hpp" />
 		<Unit filename="../data/Weather.cpp" />
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../db/SSQLS_forecast.hpp" />
+		<Unit filename="../db/SSQLS_forecastdata.hpp" />
 		<Unit filename="../db/SSQLS_location.hpp" />
 		<Unit filename="../db/SSQLS_weatherdata.hpp" />
 		<Unit filename="../db/Utilities.cpp" />
@@ -61,6 +65,8 @@
 		<Unit filename="../retrieve/SourceMySQL.cpp" />
 		<Unit filename="../retrieve/SourceMySQL.hpp" />
 		<Unit filename="../store/Store.hpp" />
+		<Unit filename="../store/StoreMySQL.cpp" />
+		<Unit filename="../store/StoreMySQL.hpp" />
 		<Unit filename="../store/StoreMySQLBatch.cpp" />
 		<Unit filename="../store/StoreMySQLBatch.hpp" />
 		<Unit filename="../util/GitInfos.cpp" />

@@ -25,6 +25,7 @@
 #include <map>
 #include <vector>
 #include "../api/Types.hpp"
+#include "../data/Forecast.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
 #include "../db/ConnectionInformation.hpp"
@@ -59,6 +60,17 @@ class SourceMySQL
     virtual bool getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather);
 
 
+    /** \brief Gets the weather forecast data for a given location and API.
+     *
+     * \param type      API that was used to gather the information
+     * \param location  location for the weather information
+     * \param forecast   container to store the retrieved information
+     * \return Returns true, if the data was retrieved.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast);
+
+
     /** \brief Lists all APIs that are present in the database.
      *
      * \param apis map to store the available apis; key is API, value is its ID
@@ -69,14 +81,27 @@ class SourceMySQL
     virtual bool listApis(std::map<ApiType, int>& apis);
 
 
-    /** \brief Lists all named locations together with the APIs from which data
-     * for that locations are present in the database.
+    /** \brief Lists all named locations together with the APIs from which
+     * weather data for that locations are present in the database. Does only
+     * include actual weather data. Forecast data is not considered.
      *
      * \param locations used to return location-api pairs
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool listLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations);
+    virtual bool listWeatherLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations);
+
+
+    /** \brief Lists all named locations together with the APIs from which
+     * forecast data for that locations are present in the database. Does only
+     * include forecast data. Actual weather data is not considered.
+     *
+     * \param locations used to return location-api pairs
+     * \return Returns true, if the data was retrieved.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool listForecastLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations);
+
 
     /** \brief Gets the ID of a location from the database. If no such location
      * exists, it will be created.

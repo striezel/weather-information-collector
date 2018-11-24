@@ -31,7 +31,7 @@ namespace wic
 enum class ApiType { none, Apixu, OpenWeatherMap, DarkSky };
 
 
-/** \brief converts a name / string to a supported API type
+/** \brief Converts a name / string to a supported API type.
  *
  * \param apiName  name of the API
  * \return Returns the enumeration value for the API type.
@@ -40,12 +40,34 @@ enum class ApiType { none, Apixu, OpenWeatherMap, DarkSky };
 ApiType toApiType(const std::string& apiName);
 
 
-/** \brief gets the name of the API
+/** \brief Gets the name of the API.
  *
  * \param type  the API type
  * \return Returns a string that identifies the API type.
  */
 std::string toString(const ApiType type);
+
+
+/** \brief enumeration type for requested weather data
+ */
+enum class DataType { none, Current, Forecast, CurrentAndForecast };
+
+
+/** \brief Converts a name / string to a supported data type.
+ *
+ * \param dataName  data name
+ * \return Returns the enumeration value for the data type.
+ *         Returns DataType::none, if no match could be found.
+ */
+DataType toDataType(const std::string& dataName);
+
+
+/** \brief Gets the name of the data type.
+ *
+ * \param type  the requested data type
+ * \return Returns a string that identifies the data type.
+ */
+std::string toString(const DataType type);
 
 } // namespace
 

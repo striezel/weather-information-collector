@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 namespace wic
 {
 
-/** \brief class to store data as CSV */
+/** \brief Stores weather data as CSV. */
 class StoreCSV: public Store
 {
   public:
@@ -36,7 +36,7 @@ class StoreCSV: public Store
     static const char defaultSeparator;
 
 
-    /** \brief constructor: initializes a file for CSV storage
+    /** \brief Constructor: initializes a file for CSV storage.
      *
      * \param fileName  name of the CSV file
      * \param separator the separator character, defaults to ';'
@@ -45,12 +45,12 @@ class StoreCSV: public Store
     StoreCSV(const std::string& fileName, const char separator = defaultSeparator);
 
 
-    /** \brief destructor
+    /** \brief Destructor.
      */
     virtual ~StoreCSV();
 
 
-    /** \brief saves a current weather entry for a given location and API
+    /** \brief Saves a current weather entry for a given location and API.
      *
      * \param type      API that was used to gather the information
      * \param location  location for the weather information
@@ -61,14 +61,25 @@ class StoreCSV: public Store
     virtual bool saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather);
 
 
-    /** \brief writes uncommitted changes / data to the underlying CSV file
+    /** \brief Saves weather forecast data for a given location and API.
+     *
+     * \param type      API that was used to gather the information
+     * \param location  location for the weather information
+     * \param forecast  weather forecast information
+     * \return Returns true, if the data was saved.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool saveForecast(const ApiType type, const Location& location, const Forecast& forecast);
+
+
+    /** \brief Writes uncommitted changes / data to the underlying CSV file.
      *
      * \throw May throw std::ios_base::failure.
      */
     virtual void flush();
 
 
-    /** \brief gets the CSV header line
+    /** \brief Gets the CSV header line.
      *
      * \return Returns a string that contains a suitable CSV header.
      */
@@ -76,8 +87,8 @@ class StoreCSV: public Store
   private:
     std::ofstream stream; /**< stream for the CSV file */
     char separator; /**< separator character */
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_STORECSV_HPP

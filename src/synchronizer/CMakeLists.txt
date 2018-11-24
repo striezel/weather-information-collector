@@ -6,6 +6,7 @@ project(weather-information-collector-synchronizer)
 set(weather-information-collector-synchronizer_sources
     ../api/Types.cpp
     ../conf/Configuration.cpp
+    ../data/Forecast.cpp
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
@@ -13,6 +14,7 @@ set(weather-information-collector-synchronizer_sources
     ../db/SSQLS_weatherdata.hpp
     ../db/Utilities.cpp
     ../retrieve/SourceMySQL.cpp
+    ../store/StoreMySQL.cpp
     ../store/StoreMySQLBatch.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp

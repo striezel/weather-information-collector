@@ -122,7 +122,6 @@ void Collector::collect()
       return;
     }
     const Location& loc = tasksContainer[idx].task.location();
-    Weather weather;
     std::unique_ptr<API> api = nullptr;
     const std::string key = apiKeys[tasksContainer[idx].task.api()];
     switch (tasksContainer[idx].task.api())
@@ -142,19 +141,76 @@ void Collector::collect()
                      << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
            return;
     } // switch
-    if (api->currentWeather(loc, weather))
+
+    // Retrieve data.
+    switch (tasksContainer[idx].task.data())
     {
-      StoreMySQL sql(connInfo);
-      if (!sql.saveCurrentWeather(tasksContainer[idx].task.api(), loc, weather))
-      {
-        std::cerr << "Error: Could not save weather data to database!" << std::endl;
-      } // if
-    } // if
-    else
-    {
-      std::cerr << "Error: Could not get current weather data from API "
-                << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
-    }
+      case DataType::Current:
+           {
+             Weather weather;
+             if (api->currentWeather(loc, weather))
+             {
+               StoreMySQL sql(connInfo);
+               if (!sql.saveCurrentWeather(tasksContainer[idx].task.api(), loc, weather))
+               {
+                 std::cerr << "Error: Could not save weather data to database!" << std::endl;
+               } // if
+             } // if
+             else
+             {
+               std::cerr << "Error: Could not get current weather data from API "
+                         << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
+             }
+           }
+           break;
+      case DataType::Forecast:
+           {
+             Forecast forecast;
+             if (api->forecastWeather(loc, forecast))
+             {
+               StoreMySQL sql(connInfo);
+               if (!sql.saveForecast(tasksContainer[idx].task.api(), loc, forecast))
+               {
+                 std::cerr << "Error: Could not save forecast data to database!" << std::endl;
+               } // if
+             } // if
+             else
+             {
+               std::cerr << "Error: Could not get weather forecast data from API "
+                         << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
+             }
+           }
+           break;
+      case DataType::CurrentAndForecast:
+           {
+             Weather weather;
+             Forecast forecast;
+             if (api->currentAndForecastWeather(loc, weather, forecast))
+             {
+               StoreMySQL sql(connInfo);
+               if (!sql.saveCurrentWeather(tasksContainer[idx].task.api(), loc, weather))
+               {
+                 std::cerr << "Error: Could not save weather data to database!" << std::endl;
+               } // if
+               if (!sql.saveForecast(tasksContainer[idx].task.api(), loc, forecast))
+               {
+                 std::cerr << "Error: Could not save forecast data to database!" << std::endl;
+               } // if
+             } // if
+             else
+             {
+               std::cerr << "Error: Could not get current weather and forecast data from API "
+                         << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
+             }
+           }
+           break;
+      case DataType::none:
+      default:
+           std::cerr << "Error: Request for data type "
+                     << toString(tasksContainer[idx].task.data())
+                     << " cannot be handled!" << std::endl;
+           break;
+    } // switch
     api = nullptr;
     // update time for next request
     tasksContainer[idx].nextRequest = tasksContainer[idx].nextRequest + tasksContainer[idx].task.interval();

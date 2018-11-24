@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,35 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-
-#include <string>
+#include "Factory.hpp"
+#include <iostream>
+#include "Apixu.hpp"
+#include "DarkSky.hpp"
+#include "OpenWeatherMap.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.7.0-pre, 2018-07-28";
+std::unique_ptr<API> Factory::create(const ApiType api, const std::string& key)
+{
+  std::unique_ptr<API> result = nullptr;
+  switch (api)
+  {
+    case ApiType::OpenWeatherMap:
+         result.reset(new wic::OpenWeatherMap(key));
+         break;
+    case ApiType::Apixu:
+         result.reset(new wic::Apixu(key));
+         break;
+    case ApiType::DarkSky:
+         result.reset(new wic::DarkSky(key));
+         break;
+    case ApiType::none:
+    default:
+         std::cerr << "Error: API type " << toString(api) << " is not supported by API factory!" << std::endl;
+         return nullptr;
+  } // switch
+  return result;
+}
 
 } // namespace
-
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP

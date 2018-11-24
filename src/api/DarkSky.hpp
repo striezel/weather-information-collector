@@ -24,9 +24,18 @@
 #include <string>
 #include "API.hpp"
 
+// forward declaration of Json::Value
+namespace Json
+{
+  class Value;
+}
+
+
 namespace wic
 {
 
+/** \brief Handles API requests for DarkSky.net.
+ */
 class DarkSky: public API
 {
   public:
@@ -37,7 +46,7 @@ class DarkSky: public API
     DarkSky(const std::string& key = "");
 
 
-    /** \brief Set the API key for API requests.
+    /** \brief Sets the API key for API requests.
      *
      * \param key  the API key
      */
@@ -51,6 +60,15 @@ class DarkSky: public API
      *         Returns false otherwise.
      */
     virtual bool validLocation(const Location& location) const;
+
+
+    /** \brief Checks whether the given data type is supported by the API.
+     *
+     * \param data  the data type to check
+     * \return Returns true, if the data type is supported.
+     *         Returns false otherwise.
+     */
+    virtual bool supportsDataType(const DataType data) const;
 
 
     /** \brief Retrieves the current weather for a given location.
@@ -71,8 +89,50 @@ class DarkSky: public API
      *         Returns false, if an error occurred.
      */
     virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const;
+
+
+    /** \brief Retrieves the weather forecast for a given location.
+     *
+     * \param location  the location for which the forecast is requested
+     * \param forecast  variable where the result of the request will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool forecastWeather(const Location& location, Forecast& forecast);
+
+
+    /** \brief Parses the weather forecast information from JSON into Weather objects.
+     *
+     * \param json     string containing the JSON
+     * \param forecast variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
+
+
+    /** \brief Retrieves the current weather and the forecast for a given location.
+     *
+     * \param location  the location for which the forecast is requested
+     * \param weather  variable where current weather result of the request will be stored
+     * \param forecast  variable where the forecast result of the request will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
   private:
     std::string m_apiKey; /**< the API key for requests */
+
+
+    /** \brief Parses weather data from a single JSON weather item into an
+     * instance of Weather class.
+     *
+     * \param value  the JSON value to parse
+     * \param weather the Weather item where the data shall be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    bool parseSingleDataPoint(const Json::Value& value, Weather& weather) const;
 
 
     /** \brief Turns info of a location to a request string.

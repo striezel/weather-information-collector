@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,10 +21,11 @@
 #include <fstream>
 #include <iostream>
 #include "../../../src/api/OpenWeatherMap.hpp"
+#include "../../../src/data/Forecast.hpp"
 
 int main(int argc, char** argv)
 {
-  if ((argc < 2) || (argv[1] == nullptr))
+  if ((argc < 3) || (argv[1] == nullptr) || (argv[2] == nullptr))
   {
     std::cerr << "Error: No JSON file name was specified!\n";
     return 1;
@@ -164,7 +165,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  //test for rain data
+  // test for rain data
 
   std::string jsonRainFileName = jsonFileName;
   jsonRainFileName.insert(jsonRainFileName.size() - 5, ".rain");
@@ -181,7 +182,7 @@ int main(int argc, char** argv)
   const bool successRain = api.parseCurrentWeather(json, w);
   if (!successRain)
   {
-    std::cerr << "Error: JSON data could not be parsed!\n";
+    std::cerr << "Error: JSON data with rain could not be parsed!\n";
     return 1;
   }
 
@@ -208,6 +209,79 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  //all tests passed
+
+  // Read forecast file.
+  std::string jsonForecastFile = std::string(argv[2]);
+  jsonStream.open(jsonForecastFile, std::ios_base::in | std::ios_base::binary);
+  if (!jsonStream.is_open())
+  {
+    std::cerr << "Error: JSON file with forecast data could not be opened!\n";
+    return 1;
+  }
+
+  json.clear();
+  std::getline(jsonStream, json, '\0');
+  jsonStream.close();
+
+  wic::Forecast forecast;
+  if (!api.parseForecast(json, forecast))
+  {
+    std::cerr << "Error: JSON forecast data could not be parsed!\n";
+    return 1;
+  }
+
+  if (forecast.data().size() != 40)
+  {
+    std::cerr << "Error: JSON forecast data contains " << forecast.data().size()
+              << "elements, but 40 elements were expected!\n";
+    return 1;
+  }
+
+  w = forecast.data().at(0);
+  std::cout << "Temperature: " << w.temperatureKelvin() << " K (" << w.hasTemperatureKelvin() << ")\n"
+            << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
+            << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
+            << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
+            << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
+            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
+            << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
+            << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
+  const std::time_t dt_fc = std::chrono::system_clock::to_time_t(w.dataTime());
+  std::cout << "Data time: " << std::ctime(&dt_fc) << "\n";
+  std::cout << "Data time (UTC): " << std::asctime(std::gmtime(&dt_fc)) << "\n";
+
+  if (w.temperatureKelvin() != 300.38f)
+  {
+    std::cerr << "Temperature (Kelvin) is incorrect.\n";
+    return 1;
+  }
+  if ((w.temperatureCelsius() > 27.231f) || (w.temperatureCelsius() < 27.229f))
+  {
+    std::cerr << "Temperature (°C) is incorrect. Should be 27.23 °C, but it is " << w.temperatureCelsius() << " °C!\n";
+    return 1;
+  }
+  if (w.pressure() != 993)
+  {
+    std::cerr << "Pressure value is incorrect.\n";
+    return 1;
+  }
+  if (w.humidity() != 58)
+  {
+    std::cerr << "Humidity value is incorrect.\n";
+    return 1;
+  }
+  if (w.windSpeed() != 2.06f)
+  {
+    std::cerr << "Wind speed is incorrect.\n";
+    return 1;
+  }
+  if (w.windDegrees() != 92)
+  {
+    std::cerr << "Wind direction is incorrect.\n";
+    return 1;
+  }
+
+  // All tests passed.
   return 0;
 }

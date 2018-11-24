@@ -43,6 +43,20 @@ bool OpenWeatherMap::validLocation(const Location& location) const
       || location.hasName() || location.hasPostcode());
 }
 
+bool OpenWeatherMap::supportsDataType(const DataType data) const
+{
+  // Only current weather data and forecast can be retrieved, not both together.
+  switch (data)
+  {
+    case DataType::Current:
+    case DataType::Forecast:
+         return true;
+    case DataType::CurrentAndForecast:
+    default:
+         return false;
+  }
+}
+
 std::string OpenWeatherMap::toRequestString(const Location& location) const
 {
   if (location.hasId())
@@ -54,8 +68,63 @@ std::string OpenWeatherMap::toRequestString(const Location& location) const
     return std::string("q=") + location.name();
   if (location.hasPostcode())
     return std::string("zip=") + location.postcode();
-  //no required data set
+  // no required data set
   return std::string();
+}
+
+bool OpenWeatherMap::parseSingleWeatherItem(const Json::Value& value, Weather& weather) const
+{
+  if (value.empty())
+    return false;
+  Json::Value val = value["main"];
+  bool foundValidParts = false;
+  if (!val.empty() && val.isObject())
+  {
+    Json::Value v2 = val["temp"];
+    if (!v2.empty() && v2.isDouble())
+    {
+      weather.setTemperatureKelvin(v2.asFloat());
+      weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
+    }
+    v2 = val["pressure"];
+    if (!v2.empty() && v2.isNumeric())
+      weather.setPressure(static_cast<int16_t>(v2.asFloat()));
+    v2 = val["humidity"];
+    if (!v2.empty() && v2.isIntegral())
+      weather.setHumidity(v2.asInt());
+    foundValidParts = true;;
+  } // if main object
+  val = value["wind"];
+  if (!val.empty() && val.isObject())
+  {
+    Json::Value v2 = val["speed"];
+    if (!v2.empty() && v2.isDouble())
+      weather.setWindSpeed(v2.asFloat());
+    v2 = val["deg"];
+    if (!v2.empty() && v2.isNumeric())
+      weather.setWindDegrees(static_cast<int16_t>(v2.asFloat()));
+  } // if wind object
+  val = value["clouds"];
+  if (!val.empty() && val.isObject())
+  {
+    Json::Value v2 = val["all"];
+    if (!v2.empty() && v2.isIntegral())
+      weather.setCloudiness(v2.asInt());
+  } // if clouds object
+  val = value["rain"];
+  if (!val.empty() && val.isObject())
+  {
+    Json::Value v2 = val["3h"];
+    if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
+      weather.setRain(v2.asFloat());
+  } // if rain object
+  val = value["dt"];
+  if (!val.empty() && val.isIntegral())
+  {
+    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.asInt()));
+    weather.setDataTime(dt);
+  } // if dt
+  return foundValidParts;
 }
 
 bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weather) const
@@ -70,59 +139,8 @@ bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weath
   }
 
   weather.setJson(json);
-  weather.setRequestTime(std::chrono::system_clock::now());
 
-  if (root.empty())
-    return false;
-  Json::Value val = root["main"];
-  bool foundValidParts = false;
-  if (!val.empty() && val.isObject())
-  {
-    Json::Value v2 = val["temp"];
-    if (!v2.empty() && v2.isDouble())
-    {
-      weather.setTemperatureKelvin(v2.asFloat());
-      weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
-    }
-    v2 = val["pressure"];
-    if (!v2.empty() && v2.isIntegral())
-      weather.setPressure(v2.asInt());
-    v2 = val["humidity"];
-    if (!v2.empty() && v2.isIntegral())
-      weather.setHumidity(v2.asInt());
-    foundValidParts = true;;
-  } //if main object
-  val = root["wind"];
-  if (!val.empty() && val.isObject())
-  {
-    Json::Value v2 = val["speed"];
-    if (!v2.empty() && v2.isDouble())
-      weather.setWindSpeed(v2.asFloat());
-    v2 = val["deg"];
-    if (!v2.empty() && v2.isIntegral())
-      weather.setWindDegrees(v2.asInt());
-  } //if wind object
-  val = root["clouds"];
-  if (!val.empty() && val.isObject())
-  {
-    Json::Value v2 = val["all"];
-    if (!v2.empty() && v2.isIntegral())
-      weather.setCloudiness(v2.asInt());
-  } //if clouds object
-  val = root["rain"];
-  if (!val.empty() && val.isObject())
-  {
-    Json::Value v2 = val["3h"];
-    if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
-      weather.setRain(v2.asFloat());
-  } //if rain object
-  val = root["dt"];
-  if (!val.empty() && val.isIntegral())
-  {
-    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.asInt()));
-    weather.setDataTime(dt);
-  } //if dt
-  return foundValidParts;
+  return parseSingleWeatherItem(root, weather);
 }
 
 bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
@@ -137,6 +155,7 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
     Curly curly;
     curly.setURL(url);
 
+    weather.setRequestTime(std::chrono::system_clock::now());
     if (!curly.perform(response))
     {
       return false;
@@ -153,10 +172,106 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
       }
       return false;
     }
-  } //scope of curly
+  } // scope of curly
 
-  //Parsing is done here.
+  // Parsing is done here.
   return parseCurrentWeather(response, weather);
 }
 
-} //namespace
+bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) const
+{
+  Json::Value root; // will contain the root value after parsing.
+  Json::Reader jsonReader;
+  const bool success = jsonReader.parse(json, root, false);
+  if (!success)
+  {
+    std::cerr << "Error in OpenWeatherMap::parseForecast(): Unable to parse JSON data!" << std::endl;
+    return false;
+  }
+
+  forecast.setJson(json);
+  if (root.empty())
+    return false;
+
+  const Json::Value list = root["list"];
+  if (list.empty() || !list.isArray())
+  {
+    std::cerr << "Error in OpenWeatherMap::parseForecast(): list is either empty or not an array!" << std::endl;
+    return false;
+  }
+  forecast.setData({ });
+  auto data = forecast.data();
+  for (const Json::Value val : list)
+  {
+    Weather w;
+    if (parseSingleWeatherItem(val, w))
+    {
+      data.push_back(w);
+    }
+    else
+    {
+      std::cerr << "Error in OpenWeatherMap::parseForecast(): Parsing single item failed!" << std::endl;
+      return false;
+    }
+  } // for (range-based)
+  const auto val = root["cnt"];
+  if (val.empty() || !val.isIntegral())
+  {
+    std::cerr << "Error in OpenWeatherMap::parseForecast(): cnt is empty or not an integer!" << std::endl;
+    return false;
+  }
+  const decltype(data.size()) cnt = val.asUInt();
+  // Number of data items should be the number given in "cnt".
+  if (data.size() != cnt)
+  {
+    std::cerr << "Error in OpenWeatherMap::parseForecast(): Expected " << cnt
+              << " items, but only " << data.size() << " items were found!" << std::endl;
+    return false;
+  }
+  forecast.setData(data);
+  return true;
+}
+
+bool OpenWeatherMap::forecastWeather(const Location& location, Forecast& forecast)
+{
+  forecast = Forecast();
+  if (m_apiKey.empty() || location.empty())
+    return false;
+  const std::string url = "https://api.openweathermap.org/data/2.5/forecast?appid="
+                        + m_apiKey + "&" + toRequestString(location);
+  std::string response;
+  {
+    Curly curly;
+    curly.setURL(url);
+
+    forecast.setRequestTime(std::chrono::system_clock::now());
+    if (!curly.perform(response))
+    {
+      return false;
+    }
+    if (curly.getResponseCode() != 200)
+    {
+      std::cerr << "Error in OpenWeatherMap::forecastWeather(): Unexpected HTTP status code "
+                << curly.getResponseCode() << "!" << std::endl;
+      const auto & rh = curly.responseHeaders();
+      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
+      for (const auto & s : rh)
+      {
+        std::cerr << "    " << s << std::endl;
+      }
+      return false;
+    }
+  } // scope of curly
+
+  // Parsing is done here.
+  return parseForecast(response, forecast);
+}
+
+bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
+{
+  std::cerr << "Error: Getting both current weather and forecast data in a "
+            << "single request is not supported by OpenWeatherMap!" << std::endl;
+  return false;
+}
+
+} // namespace
