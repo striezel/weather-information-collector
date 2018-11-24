@@ -12,6 +12,7 @@ actually supported by the corresponding API. If not, they will exit with a
 non-zero exit code.
 * The update program will now create MySQL tables for forecast data, if they do
   not exist.
+* The synchronization tool will now synchronize forcast data, too.
 
 ## Version 0.6.7 (2018-07-22)
 
@@ -26,7 +27,7 @@ where it still says "No SSL" for the free plan) it first was not implemented to
 use HTTPS for weather-information-collectors requests to OpenWeatherMap.
 Fortunately that has changed and all plans now support HTTPS for API requests,
 so weather-information-collector can now safely use HTTPS for OpenWeatherMap.
-With that being said: Thank you, OpenWeatherMap, for providing that additinal
+With that being said: Thank you, OpenWeatherMap, for providing that additional
 safety feature for free plan users, too!
 
 ## Version 0.6.6 (2018-07-21)
