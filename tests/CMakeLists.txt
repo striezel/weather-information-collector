@@ -16,7 +16,6 @@ set(weather_information_collector_tests_sources
     ../src/data/Weather.cpp
     ../src/db/ConnectionInformation.cpp
     ../src/net/Curly.cpp
-    ../src/store/StoreCSV.cpp
     ../src/tasks/Task.cpp
     ../src/tasks/TaskManager.cpp
     ../src/util/Strings.cpp
@@ -25,7 +24,6 @@ set(weather_information_collector_tests_sources
     data/Location.cpp
     data/Weather.cpp
     db/ConnectionInformation.cpp
-    store/StoreCSV.cpp
     tasks/Task.cpp
     tasks/TaskManager.cpp
     util/Strings.cpp

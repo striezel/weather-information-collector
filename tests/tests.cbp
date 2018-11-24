@@ -56,8 +56,6 @@
 		<Unit filename="../src/net/Curly.cpp" />
 		<Unit filename="../src/net/Curly.hpp" />
 		<Unit filename="../src/store/Store.hpp" />
-		<Unit filename="../src/store/StoreCSV.cpp" />
-		<Unit filename="../src/store/StoreCSV.hpp" />
 		<Unit filename="../src/tasks/Task.cpp" />
 		<Unit filename="../src/tasks/Task.hpp" />
 		<Unit filename="../src/tasks/TaskManager.cpp" />
@@ -70,7 +68,6 @@
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="db/ConnectionInformation.cpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="store/StoreCSV.cpp" />
 		<Unit filename="tasks/Task.cpp" />
 		<Unit filename="tasks/TaskManager.cpp" />
 		<Unit filename="util/Strings.cpp" />
