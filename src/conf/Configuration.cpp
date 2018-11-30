@@ -25,6 +25,7 @@
 #ifndef wic_sync
 #include "../tasks/TaskManager.hpp"
 #endif // wic_sync
+#include "../util/Directories.hpp"
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -47,22 +48,39 @@ Configuration::Configuration()
 
 std::vector<std::string> Configuration::potentialFileNames()
 {
-  return {
+  std::vector<std::string> result = {
       "/etc/weather-information-collector/weather-information-collector.conf",
       "/etc/weather-information-collector/wic.conf",
       "/etc/wic/wic.conf",
       "./weather-information-collector.conf",
       "./wic.conf"
   };
+  std::string home;
+  if (filesystem::getHome(home))
+  {
+    const auto delim = filesystem::pathDelimiter;
+    result.insert(result.begin(), home + delim + ".weather-information-collector" + delim + "weather-information-collector.conf");
+    result.insert(result.begin(), home + delim + ".weather-information-collector" + delim + "wic.conf");
+    result.insert(result.begin(), home + delim + ".wic" + delim + "wic.conf");
+  }
+  return result;
 }
 
 std::vector<std::string> Configuration::potentialTaskDirectories()
 {
-  return {
+  std::vector<std::string> result = {
       "/etc/weather-information-collector/task.d",
       "/etc/wic/task.d",
       "./task.d"
   };
+  std::string home;
+  if (filesystem::getHome(home))
+  {
+    const auto delim = filesystem::pathDelimiter;
+    result.insert(result.begin(), home + delim + ".weather-information-collector" + delim + "task.d");
+    result.insert(result.begin(), home + delim + ".wic" + delim + "task.d");
+  }
+  return result;
 }
 
 const ConnectionInformation& Configuration::connectionInfo() const

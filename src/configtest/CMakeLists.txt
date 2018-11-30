@@ -18,6 +18,7 @@ set(weather-information-collector-configtest_sources
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
+    ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
     main.cpp)

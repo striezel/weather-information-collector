@@ -18,6 +18,7 @@ set(weather_information_collector_tests_sources
     ../src/net/Curly.cpp
     ../src/tasks/Task.cpp
     ../src/tasks/TaskManager.cpp
+    ../src/util/Directories.cpp
     ../src/util/Strings.cpp
     api/Types.cpp
     conf/Configuration.cpp
@@ -26,6 +27,7 @@ set(weather_information_collector_tests_sources
     db/ConnectionInformation.cpp
     tasks/Task.cpp
     tasks/TaskManager.cpp
+    util/Directories.cpp
     util/Strings.cpp
     main.cpp)
 

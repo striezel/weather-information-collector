@@ -1,5 +1,20 @@
 # Version history of weather-information-collector
 
+## Version 0.7.1 (2018-11-30)
+
+The list of predefined paths to look for the configuration file (if it is not
+specified on the command line) has been extended by the following values:
+
+* <HOME>/.wic/wic.conf
+* <HOME>/.weather-information-collector/wic.conf
+* <HOME>/.weather-information-collector/weather-information-collector.conf
+
+The list of predefined paths to look for the task files (if it is not specified
+in the configuration file) has been extended by the following values:
+
+* <HOME>/.wic/task.d
+* <HOME>/.weather-information-collector/task.d
+
 ## Version 0.7.0 (2018-11-24)
 
 * Collection tasks definitions can now contain a `data` setting that defines the

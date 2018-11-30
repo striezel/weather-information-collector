@@ -69,6 +69,8 @@
 		<Unit filename="../store/StoreMySQL.hpp" />
 		<Unit filename="../store/StoreMySQLBatch.cpp" />
 		<Unit filename="../store/StoreMySQLBatch.hpp" />
+		<Unit filename="../util/Directories.cpp" />
+		<Unit filename="../util/Directories.hpp" />
 		<Unit filename="../util/GitInfos.cpp" />
 		<Unit filename="../util/GitInfos.hpp" />
 		<Unit filename="../util/Strings.cpp" />

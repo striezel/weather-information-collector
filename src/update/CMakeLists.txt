@@ -20,6 +20,7 @@ set(weather-information-collector-update_sources
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
+    ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
     Update_0.5.4_to_0.5.5.cpp

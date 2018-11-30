@@ -66,6 +66,8 @@
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />
 		<Unit filename="../tasks/TaskManager.hpp" />
+		<Unit filename="../util/Directories.cpp" />
+		<Unit filename="../util/Directories.hpp" />
 		<Unit filename="../util/GitInfos.hpp" />
 		<Unit filename="../util/GitInfos.template.cpp" />
 		<Unit filename="../util/Strings.cpp" />

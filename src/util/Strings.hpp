@@ -78,6 +78,6 @@ std::string floatToString(const float f);
  */
 bool stringToFloat(const std::string& str, float& value);
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_STRINGS_HPP

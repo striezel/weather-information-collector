@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,38 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_DIRECTORIES_HPP
+#define WEATHER_INFORMATION_COLLECTOR_DIRECTORIES_HPP
 
 #include <string>
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.7.1, 2018-11-30";
+namespace filesystem
+{
+
+#if defined(_WIN32)
+  const char pathDelimiter = '\\';
+#elif defined(__linux__) || defined(linux)
+  const char pathDelimiter = '/';
+#else
+  #error Unknown operating system!
+#endif
+
+/** \brief Tries to determine the absolute path to the current user's home directory
+ * and returns that path in the reference parameter in case of success. If the
+ * directory's path cannot be determined, the function returns false and the
+ * result string is unchanged.
+ *
+ * \param result the string that will hold the result, if successful
+ * \return Returns true, if the home directory could be retrieved.
+ *         Returns false otherwise.
+ */
+bool getHome(std::string& result);
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+} // namespace
+
+#endif // WEATHER_INFORMATION_COLLECTOR_DIRECTORIES_HPP

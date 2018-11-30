@@ -16,6 +16,7 @@ set(weather-information-collector-synchronizer_sources
     ../retrieve/SourceMySQL.cpp
     ../store/StoreMySQL.cpp
     ../store/StoreMySQLBatch.cpp
+    ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
     main.cpp)

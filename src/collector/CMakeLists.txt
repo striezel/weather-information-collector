@@ -20,6 +20,7 @@ set(weather-information-collector_sources
     ../store/StoreMySQL.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
+    ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
     Collector.cpp
