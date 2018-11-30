@@ -128,6 +128,8 @@ void Configuration::findConfigurationFile(std::string& realName)
         if (fs::exists(path) && fs::is_regular_file(path))
         {
           realName = file;
+          std::cout << "Info: Using configuration file " << file
+                    << ", because none has been specified explicitly." << std::endl;
           break;
         }
       }
@@ -154,6 +156,8 @@ void Configuration::findTaskDirectory(std::string& realName)
         if (fs::exists(path) && fs::is_directory(path))
         {
           realName = dir;
+          std::cout << "Info: Using task directory " << dir << ", because none"
+                    << " has been specified explicitly." << std::endl;
           break;
         }
       }
