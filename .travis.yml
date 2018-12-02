@@ -3,7 +3,7 @@ compiler:
   - clang
   - gcc
 sudo: false
-dist: trusty
+dist: xenial
 os:
   - linux
 script:
