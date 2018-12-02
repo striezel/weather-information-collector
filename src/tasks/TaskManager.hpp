@@ -35,6 +35,11 @@ class TaskManager
     static const char commentCharater;
 
 
+    /** \brief The minimum interval for requests. Smaller intervals are rejected.
+     */
+    static const std::chrono::seconds minimumRequestInterval;
+
+
     /** \brief Loads a task from a given file.
      *
      * \param fileName  name of the file where task shall be loaded from

@@ -32,6 +32,7 @@ namespace wic
 {
 
 const char TaskManager::commentCharater = '#';
+const std::chrono::seconds TaskManager::minimumRequestInterval = std::chrono::seconds(15);
 
 bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
 {
@@ -135,13 +136,14 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
                   << " must be a positive integer value!" << std::endl;
         return false;
       }
-      if (seconds < 15)
+      const std::chrono::seconds interval = std::chrono::seconds(seconds);
+      if (interval < minimumRequestInterval)
       {
         std::cerr << "Error: Minimum request interval in file " << fileName
-                  << " must be 15 seconds!" << std::endl;
+                  << " must be " << minimumRequestInterval.count() << " seconds!" << std::endl;
         return false;
       }
-      task.setInterval(std::chrono::seconds(seconds));
+      task.setInterval(interval);
     } // if interval
     else if ((name == "location.id") || (name == "location_id"))
     {

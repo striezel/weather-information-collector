@@ -27,16 +27,16 @@
 namespace wic
 {
 
-/** \brief holds information about a location */
+/** \brief Holds information about a location. */
 class Location
 {
   public:
-    /** \brief default constructor
+    /** \brief Default constructor, creates an empty location.
      */
     Location();
 
 
-    /** \brief gets the API id of the location (if any)
+    /** \brief Gets the API id of the location (if any).
      *
      * \return Returns the API id of the location.
      *         Returns zero, if no id is set.
@@ -44,14 +44,14 @@ class Location
     uint32_t id() const;
 
 
-    /** \brief sets the API id of the location
+    /** \brief Sets the API id of the location.
      *
      * \param newId  the new API id of the location
      */
     void setId(const uint32_t newId);
 
 
-    /** \brief checks whether the location has an API id
+    /** \brief Checks whether the location has an API id.
      *
      * \return Returns true, if the location has an API id.
      *         Returns false otherwise.
@@ -59,7 +59,7 @@ class Location
     bool hasId() const;
 
 
-    /** \brief gets the latitude of the location
+    /** \brief Gets the latitude of the location.
      *
      * \return Returns the latitude of the location (in degrees).
      *         Returns NaN, if no latitude is set.
@@ -67,7 +67,7 @@ class Location
     float latitude() const;
 
 
-    /** \brief gets the longitude of the location
+    /** \brief Gets the longitude of the location.
      *
      * \return Returns the longitude of the location (in degrees).
      *         Returns NaN, if no longitude is set.
@@ -75,7 +75,7 @@ class Location
     float longitude() const;
 
 
-    /** \brief sets the latitude and longitude of the location
+    /** \brief Sets the latitude and longitude of the location.
      *
      * \param lat  the new latitude [-90;90] of the location
      * \param lon  the new longitude [-180;180] of the location
@@ -83,7 +83,7 @@ class Location
     void setCoordinates(const float lat, const float lon);
 
 
-    /** \brief checks whether the location has valid latitude and longitude values
+    /** \brief Checks whether the location has valid latitude and longitude values.
      *
      * \return Returns true, if the location has valid latitude and longitude
      *         values. Returns false otherwise.
@@ -91,7 +91,7 @@ class Location
     bool hasCoordinates() const;
 
 
-    /** \brief gets the name of the location (if any)
+    /** \brief Gets the name of the location (if any).
      *
      * \return Returns the name of the location.
      *         Returns an empty string, if no name is set.
@@ -99,14 +99,14 @@ class Location
     const std::string& name() const;
 
 
-    /** \brief sets the name of the location
+    /** \brief Sets the name of the location.
      *
      * \param newName  the new name of the location
      */
     void setName(const std::string& newName);
 
 
-    /** \brief checks whether the location has a name
+    /** \brief Checks whether the location has a name.
      *
      * \return Returns true, if the location has a name.
      *         Returns false otherwise.
@@ -114,7 +114,7 @@ class Location
     bool hasName() const;
 
 
-    /** \brief gets the postcode of the location (if any)
+    /** \brief Gets the postcode of the location (if any).
      *
      * \return Returns the postcode of the location.
      *         Returns an empty string, if no postcode is set.
@@ -122,14 +122,14 @@ class Location
     const std::string& postcode() const;
 
 
-    /** \brief sets the postcode of the location
+    /** \brief Sets the postcode of the location.
      *
      * \param newPostcode  the new postcode of the location
      */
     void setPostcode(const std::string& newPostcode);
 
 
-    /** \brief checks whether the location has a postcode
+    /** \brief Checks whether the location has a postcode.
      *
      * \return Returns true, if the location has a postcode.
      *         Returns false otherwise.
@@ -145,7 +145,7 @@ class Location
     bool operator==(const Location& other) const;
 
 
-    /** \brief checks whether two locations have the same latitude and longitude
+    /** \brief Checks whether two locations have the same latitude and longitude.
      *
      * \param other  the other location to compare to
      * \return Returns true, if both locations have equal latitude and longitude.
@@ -155,7 +155,7 @@ class Location
     bool equalCoordinates(const Location& other) const;
 
 
-    /** \brief checks whether this instance has no data at all
+    /** \brief Checks whether this instance has no data at all.
      *
      * \return Returns true, if this instance has no usable data yet.
      *         Returns false otherwise.
@@ -168,14 +168,21 @@ class Location
      * \return Returns a human-readable representation of the location.
      */
     std::string toString() const;
+
+
+    /** \brief Gets a human-readable representation of the location's coordinates.
+     *
+     * \return Returns a human-readable representation of the location's coordinates.
+     */
+    std::string coordinatesToString() const;
   private:
     uint32_t m_id; /**< id of the location */
     float m_latitude; /**< latitude of the location */
     float m_longitude; /**< longitude of the location */
     std::string m_name; /**< name of the location */
     std::string m_postcode; /**< postcode of the location */
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_DATA_LOCATION_HPP

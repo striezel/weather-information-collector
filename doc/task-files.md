@@ -14,6 +14,8 @@ The location of the collection task files can be specified via the
 program will look for the task files in these predefined directories, in the
 given order:
 
+* `user's home directory`/.wic/task.d
+* `user's home directory`/.weather-information-collector/task.d
 * /etc/weather-information-collector/task.d
 * /etc/wic/task.d
 * ./task.d

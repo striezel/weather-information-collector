@@ -20,6 +20,9 @@ will tell the program to look for the configuration file
 look for the configuration file in these predefined locations, in the given
 order:
 
+* `user's home directory`/.wic/wic.conf
+* `user's home directory`/.weather-information-collector/wic.conf
+* `user's home directory`/.weather-information-collector/weather-information-collector.conf
 * /etc/weather-information-collector/weather-information-collector.conf
 * /etc/weather-information-collector/wic.conf
 * /etc/wic/wic.conf

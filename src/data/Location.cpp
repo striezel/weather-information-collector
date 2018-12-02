@@ -144,16 +144,14 @@ std::string Location::toString() const
   {
     if (hasCoordinates())
     {
-      return name() + " (" + std::to_string(latitude()) + "°, "
-                           + std::to_string(longitude()) + "°)";
+      return name() + " (" + coordinatesToString() + ")";
     }
     // name only
     return name();
   }
   if (hasCoordinates())
   {
-    return std::to_string(latitude()) + "°, "
-         + std::to_string(longitude()) + "°";
+    return coordinatesToString();
   }
   if (hasId())
   {
@@ -166,6 +164,21 @@ std::string Location::toString() const
   }
   // No data? Should not happen, because empty locations are caught earlier.
   return "unknown location";
+}
+
+std::string Location::coordinatesToString() const
+{
+  if (!hasCoordinates())
+    return "<no coordinates present>";
+  std::string coords;
+  if (latitude() >= 0.0f)
+    coords = std::to_string(latitude()) + "°N, ";
+  else
+    coords = std::to_string(-1.0f * latitude()) + "°S, ";
+  if (longitude() >= 0.0f)
+    return coords + std::to_string(longitude()) + "°E";
+  else
+    return coords + std::to_string(-1.0f * longitude()) + "°W";
 }
 
 } // namespace

@@ -85,6 +85,7 @@ bool OpenWeatherMap::parseSingleWeatherItem(const Json::Value& value, Weather& w
     {
       weather.setTemperatureKelvin(v2.asFloat());
       weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
+      weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32.0f);
     }
     v2 = val["pressure"];
     if (!v2.empty() && v2.isNumeric())
