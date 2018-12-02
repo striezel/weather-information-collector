@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.8.0 (2018-12-02)
+
+A new program to aid in the creation of weather data collection tasks is added.
+It will create task files based on the user's choices.
+
 ## Version 0.7.1 (2018-11-30)
 
 The list of predefined paths to look for the configuration file (if it is not

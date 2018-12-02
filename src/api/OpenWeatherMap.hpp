@@ -22,6 +22,11 @@
 #define WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
 
 #include <string>
+#ifdef wic_task_creator
+#include <utility>
+#include <vector>
+#include "../data/LocationWithCountry.hpp"
+#endif
 #include "API.hpp"
 
 // forward declaration of Json::Value
@@ -120,6 +125,17 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
+
+    #ifdef wic_task_creator
+    /** \brief Finds matching locations by na,e.
+     *
+     * \param name  the name of the location to find
+     * \param location  variable where matching locations will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    bool findLocation(const std::string& name, std::vector<std::pair<LocationWithCountry, Weather> >& locations) const;
+    #endif
   private:
     std::string m_apiKey; /**< the API key for requests */
 

@@ -115,9 +115,14 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  if (w.hasTemperatureFahrenheit())
+  if (!w.hasTemperatureFahrenheit())
   {
-    std::cerr << "Error: Weather object does have temperature data in °F, but it should not!\n";
+    std::cerr << "Error: Weather object does not have temperature data in °F, but it should!\n";
+    return 1;
+  }
+  if ((w.temperatureFahrenheit() > 66.201f) || (w.temperatureFahrenheit() < 66.199f))
+  {
+    std::cerr << "Temperature (°F) is incorrect. Should be 19.0 °F, but it is " << w.temperatureFahrenheit() << "°F!\n";
     return 1;
   }
 

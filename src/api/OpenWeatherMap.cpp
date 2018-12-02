@@ -275,4 +275,133 @@ bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather
   return false;
 }
 
+#ifdef wic_task_creator
+std::string urlEncode(const std::string& str)
+{
+  static const char hexDigits[16] = {
+      '0', '1', '2', '3', '4', '5', '6', '7',
+      '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+  };
+  std::string encoded;
+  for (auto it = str.begin(); it != str.end(); ++it)
+  {
+    const char c = *it;
+    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')
+      || (c >= 'A' && c <= 'Z') || (c == '-') || (c == '_')
+      || (c == '.') || (c == '~'))
+    {
+      encoded.push_back(c);
+    }
+    else
+    {
+      // d
+      encoded.push_back('%');
+      encoded.push_back(hexDigits[c / 16]);
+      encoded.push_back(hexDigits[c % 16]);
+    }
+  } // for
+  return encoded;
+}
+
+bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair<LocationWithCountry, Weather> >& locations) const
+{
+  if (m_apiKey.empty() || name.empty())
+    return false;
+
+  const std::string url = "https://api.openweathermap.org/data/2.5/find?q=" + urlEncode(name) + "&appid=" + m_apiKey;
+  Curly curly;
+  curly.setURL(url);
+  std::string response;
+  if (!curly.perform(response))
+  {
+    return false;
+  }
+  if (curly.getResponseCode() != 200)
+  {
+    std::cerr << "Error in OpenWeatherMap::findLocation(): Unexpected HTTP status code "
+              << curly.getResponseCode() << "!" << std::endl;
+    const auto & rh = curly.responseHeaders();
+    std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
+    for (const auto & s : rh)
+    {
+      std::cerr << "    " << s << std::endl;
+    }
+    return false;
+  }
+
+  Json::Value root; // will contain the root value after parsing.
+  Json::Reader jsonReader;
+  const bool success = jsonReader.parse(response, root, false);
+  if (!success)
+  {
+    std::cerr << "Error in OpenWeatherMap::findLocation(): Unable to parse JSON data!" << std::endl;
+    return false;
+  }
+  Json::Value count = root["count"];
+  if (count.empty() || !count.isIntegral())
+  {
+    std::cerr << "Error in OpenWeatherMap::findLocation(): JSON element for count is missing!" << std::endl;
+    return false;
+  }
+  locations.clear();
+  if (count.asInt() == 0)
+    return true;
+
+  const Json::Value list = root["list"];
+  if (list.empty() || !list.isArray())
+  {
+    std::cerr << "Error in OpenWeatherMap::findLocation(): JSON list element is missing!" << std::endl;
+    return false;
+  }
+
+  for (const Json::Value elem : list)
+  {
+    LocationWithCountry loc;
+    Json::Value val = elem["id"];
+    if (!val.empty() && val.isUInt())
+      loc.setId(val.asUInt());
+    val = elem["name"];
+    if (!val.empty() && val.isString())
+      loc.setName(val.asString());
+    const Json::Value coord = elem["coord"];
+    if (!coord.empty() && coord.isObject())
+    {
+      val = coord["lat"];
+      Json::Value lon = coord["lon"];
+      if (!val.empty() && !lon.empty() && val.isNumeric() && lon.isNumeric())
+      {
+        loc.setCoordinates(val.asFloat(), lon.asFloat());
+      }
+    } // coord
+    if (loc.empty())
+    {
+      std::cerr << "Error in OpenWeatherMap::findLocation(): Location data is empty!" << std::endl;
+      return false;
+    }
+    val = elem["sys"];
+    if (!val.empty() && val.isObject())
+    {
+      val = val["country"];
+      if (!val.empty() && val.isString())
+        loc.setCountry(val.asString());
+    }
+    Weather w;
+    if (!parseSingleWeatherItem(elem, w))
+    {
+      std::cerr << "Error in OpenWeatherMap::findLocation(): Weather data for location is missing!" << std::endl;
+      return false;
+    }
+    if (loc.empty())
+    {
+      std::cerr << "Error in OpenWeatherMap::findLocation(): Location data is empty!" << std::endl;
+      return false;
+    }
+    // add element to result
+    locations.push_back(std::make_pair(loc, w));
+  } // for
+
+  return true;
+}
+#endif
+
 } // namespace

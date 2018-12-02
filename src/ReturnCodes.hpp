@@ -39,6 +39,12 @@ const int rcUpdateFailure = 4;
 /** \brief exit code for general database failure (sync program only) */
 const int rcDatabaseError = 5;
 
+/** \brief exit code for when created task would cause task duplicates / overlap (task creator only) */
+const int rcTaskOverlap = 6;
+
+/** \brief exit code for I/O-related errors */
+const int rcInputOutputError = 7;
+
 } // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_RETURNCODES_HPP

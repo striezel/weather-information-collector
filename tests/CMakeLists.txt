@@ -88,6 +88,9 @@ add_subdirectory (collector)
 # Recurse into subdirectory for configtest executable tests.
 add_subdirectory (configtest)
 
+# Recurse into subdirectory for creator executable tests.
+add_subdirectory (creator)
+
 # Recurse into subdirectory for update executable tests.
 add_subdirectory (update)
 

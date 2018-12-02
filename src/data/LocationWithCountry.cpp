@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,30 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-
-#include <string>
+#include "LocationWithCountry.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.8.0, 2018-12-02";
+LocationWithCountry::LocationWithCountry()
+: Location(), mCountry("")
+{
+}
+
+const std::string& LocationWithCountry::country() const
+{
+  return mCountry;
+}
+
+void LocationWithCountry::setCountry(const std::string& newCountry)
+{
+  mCountry = newCountry;
+}
+
+bool LocationWithCountry::hasCountry() const
+{
+  return !mCountry.empty();
+}
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP

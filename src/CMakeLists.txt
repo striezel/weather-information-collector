@@ -7,6 +7,9 @@ add_subdirectory (collector)
 # Recurse into subdirectory for the configuration test application.
 add_subdirectory (configtest)
 
+# Recurse into subdirectory for the task creator application.
+add_subdirectory (creator)
+
 # Recurse into subdirectory for the database synchronization application.
 add_subdirectory (synchronizer)
 
