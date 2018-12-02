@@ -65,10 +65,12 @@ class TaskManager
     /** \brief Checks whether a list of tasks has duplicate or overlapping tasks.
      *
      * \param tasks  vector of tasks
+     * \param silent  if true, then the duplicate tasks will not be shown on
+     *                standard output
      * \return Returns true, if the vector of tasks has duplicate or overlapping
      *         tasks. Returns false otherwise.
      */
-    static bool hasDuplicates(const std::vector<Task>& tasks);
+    static bool hasDuplicates(const std::vector<Task>& tasks, const bool silent);
 
 
     /** \brief Checks whether the tasks can be executed within API request limits.

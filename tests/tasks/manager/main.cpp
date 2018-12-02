@@ -157,8 +157,8 @@ int main(int argc, char** argv)
    * ************************* */
 
   tasks.clear();
-  //no duplicates in empty vector
-  if (tm.hasDuplicates(tasks))
+  // no duplicates in empty vector
+  if (tm.hasDuplicates(tasks, false))
   {
     std::cerr << "Error: There cannot be any duplicates in an empty vector!\n";
     return 4;
@@ -176,7 +176,7 @@ int main(int argc, char** argv)
     return 4;
   }
   //both tasks are identical, so there should be duplicates
-  if (!tm.hasDuplicates(tasks))
+  if (!tm.hasDuplicates(tasks, false))
   {
     std::cerr << "Error: Duplicate detection failed!\n";
     return 4;
@@ -201,14 +201,14 @@ int main(int argc, char** argv)
               << " to be two, but there were " << tasks.size() << " tasks!\n";
     return 5;
   }
-  //both tasks are identical, except for interval, so there should be duplicates
-  if (!tm.hasDuplicates(tasks))
+  // Both tasks are identical, except for interval, so there should be duplicates.
+  if (!tm.hasDuplicates(tasks, false))
   {
     std::cerr << "Error: Duplicate detection failed!\n";
     return 5;
   }
   std::cout << "Info: Passed test #2 for duplicate task data." << std::endl;
 
-  //all tests passed
+  // All tests passed.
   return 0;
 }

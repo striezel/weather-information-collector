@@ -437,7 +437,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   if (!TaskManager::loadFromDirectory(taskDirectory(), taskExtension(), tasksContainer))
     return false;
   // check for duplicates
-  if (TaskManager::hasDuplicates(tasksContainer))
+  if (TaskManager::hasDuplicates(tasksContainer, false))
     return false;
 
   // Warn, if task container is empty.

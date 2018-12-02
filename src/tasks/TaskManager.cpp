@@ -364,7 +364,7 @@ bool TaskManager::loadFromDirectory(const std::string& directory, const std::str
   }
 }
 
-bool TaskManager::hasDuplicates(const std::vector<Task>& tasks)
+bool TaskManager::hasDuplicates(const std::vector<Task>& tasks, const bool silent)
 {
   const auto length = tasks.size();
   for (unsigned int i = 0; i < length; ++i)
@@ -375,17 +375,20 @@ bool TaskManager::hasDuplicates(const std::vector<Task>& tasks)
         && (tasks[i].data() == tasks[j].data())
         && (tasks[i].location() == tasks[j].location()))
       {
-        std::cerr << "Error: There are duplicate / overlapping tasks for the location";
-        if (tasks[i].location().hasId())
-          std::cerr << " with the id " << tasks[i].location().id();
-        if (tasks[i].location().hasName())
-          std::cerr << " with the name " << tasks[i].location().name();
-        if (tasks[i].location().hasPostcode())
-          std::cerr << " with the postcode " << tasks[i].location().postcode();
-        if (tasks[i].location().hasCoordinates())
-          std::cerr << " with the coordinates " << tasks[i].location().latitude()
-                    << "° N, " << tasks[i].location().longitude() << " °E";
-        std::cerr << "!" << std::endl;
+        if (!silent)
+        {
+          std::cerr << "Error: There are duplicate / overlapping tasks for the location";
+          if (tasks[i].location().hasId())
+            std::cerr << " with the id " << tasks[i].location().id();
+          if (tasks[i].location().hasName())
+            std::cerr << " with the name " << tasks[i].location().name();
+          if (tasks[i].location().hasPostcode())
+            std::cerr << " with the postcode " << tasks[i].location().postcode();
+          if (tasks[i].location().hasCoordinates())
+            std::cerr << " with the coordinates " << tasks[i].location().latitude()
+                      << "° N, " << tasks[i].location().longitude() << " °E";
+          std::cerr << "!" << std::endl;
+        }
         return true;
       } // if
     } // for j

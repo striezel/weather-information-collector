@@ -45,7 +45,7 @@ TEST_CASE("Class TaskManager")
 
     SECTION("empty task list")
     {
-      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks) );
+      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks, false) );
     }
 
     SECTION("three tasks with same location and data type but different API")
@@ -53,14 +53,14 @@ TEST_CASE("Class TaskManager")
       tasks.push_back(Task(loc, ApiType::Apixu, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(900)));
-      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks) );
+      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks, false) );
     }
 
     SECTION("two tasks with same API and data type but different location")
     {
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc2, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
-      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks) );
+      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks, false) );
     }
 
     SECTION("three tasks with same API, same location, same interval, but different data type")
@@ -68,14 +68,14 @@ TEST_CASE("Class TaskManager")
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Forecast, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::CurrentAndForecast, std::chrono::seconds(900)));
-      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks) );
+      REQUIRE_FALSE( TaskManager::hasDuplicates(tasks, false) );
     }
 
     SECTION("two tasks with same API, same data type, same location, but different interval")
     {
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(1801)));
-      REQUIRE( TaskManager::hasDuplicates(tasks) );
+      REQUIRE( TaskManager::hasDuplicates(tasks, false) );
     }
   }
 
