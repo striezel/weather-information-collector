@@ -3,11 +3,28 @@
 # See https://hub.docker.com/_/gcc/ for more info.
 image: gcc
 
-build:
+build_gcc:
   stage: build
-  before_script: 
+  before_script:
     - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev
-  script: 
+  script:
+    - ./ci/cpplint.sh
+    - mkdir ./build
+    - cd ./build
+    - cmake ../
+    - make -j4
+    - ctest -V
+
+# There is no official clang image at Docker Hub, so we just install clang into
+# the GCC image. Oh, the irony...
+build_clang:
+  stage: build
+  before_script:
+    - apt-get update && apt-get -y install catch clang cmake libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev
+    - unlink /usr/bin/c++ && ln -s /usr/bin/clang++ /usr/bin/c++
+    - unlink /usr/bin/cc && ln -s /usr/bin/clang /usr/bin/cc
+    - export CC=clang && export CXX=clang++
+  script:
     - ./ci/cpplint.sh
     - mkdir ./build
     - cd ./build
