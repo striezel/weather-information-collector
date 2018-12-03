@@ -146,7 +146,7 @@ std::string Curly::getPostField(const std::string& name) const
   const auto iter = m_PostFields.find(name);
   if (iter != m_PostFields.end())
     return iter->second;
-  return std::move(std::string(""));
+  return std::string();
 }
 
 bool Curly::removePostField(const std::string& name)

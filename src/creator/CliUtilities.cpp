@@ -37,7 +37,7 @@ namespace creator
 
 double niceFloat(const float val)
 {
-  return std::round(val * 100.0d) / 100.0d;
+  return std::round(val * 100.0f) / 100.0f;
 }
 
 std::string dataTypeToHumanString(const DataType dt)
