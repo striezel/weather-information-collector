@@ -18,21 +18,23 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_UPDATE_TO_0_7_0_HPP
-#define WEATHER_INFORMATION_COLLECTOR_UPDATE_TO_0_7_0_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_UPDATETO_0_8_1_HPP
+#define WEATHER_INFORMATION_COLLECTOR_UPDATETO_0_8_1_HPP
 
 #include "../db/ConnectionInformation.hpp"
 
 namespace wic
 {
 
-/** Manages update of databases before version 0.7.0 of
-    weather-information-collector to version 0.7.0.
+/** Manages update of databases before version 0.8.1 of
+    weather-information-collector to version 0.8.1.
 
     This class basically does one thing to the database:
-    * It adds the tables `forecast` and `forecastdata` to the database.
+    * It round values in the column `temperature_C` and `temperature_F` in the
+      table `weatherdata`, where applicable. This is to avoid values like e.g.
+      6.99996 instead of 7.0 in the database.
 */
-class UpdateTo070
+class UpdateTo081
 {
   public:
     /** \brief Performs the update.
@@ -44,15 +46,15 @@ class UpdateTo070
     static bool perform(const ConnectionInformation& ci);
 
 
-    /** \brief Performs the database structure changes of the update.
+    /** \brief Performs the data changes of the update.
      *
      * \param ci   database connection information
      * \return Returns true, if the update was successful.
      *         Returns false otherwise.
      */
-    static bool updateStructure(const ConnectionInformation& ci);
+    static bool updateData(const ConnectionInformation& ci);
 }; // class
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_UPDATE_TO_0_7_0_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_UPDATETO_0_8_1_HPP

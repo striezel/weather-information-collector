@@ -109,6 +109,12 @@ bool DarkSky::parseSingleDataPoint(const Json::Value& dataPoint, Weather& weathe
     // Since there are no other values (Fahrenheit or Kelvin), we can just
     // calculate them on the fly.
     weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32);
+    // Avoid values like 6.9999... ° F by rounding, if appropriate.
+    const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
+    if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
+    {
+      weather.setTemperatureFahrenheit(fahrenheitRounded);
+    }
     weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15);
   }
   // relative humidity, [0;1]

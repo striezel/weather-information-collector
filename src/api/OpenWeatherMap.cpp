@@ -19,6 +19,7 @@
 */
 
 #include "OpenWeatherMap.hpp"
+#include <cmath>
 #include <iostream>
 #include <jsoncpp/json/reader.h>
 #include "../net/Curly.hpp"
@@ -85,7 +86,19 @@ bool OpenWeatherMap::parseSingleWeatherItem(const Json::Value& value, Weather& w
     {
       weather.setTemperatureKelvin(v2.asFloat());
       weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
+      // Avoid values like 6.9999... ° C by rounding, if appropriate.
+      const float celsiusRounded = std::round(weather.temperatureCelsius());
+      if (std::fabs(celsiusRounded - weather.temperatureCelsius()) < 0.005)
+      {
+        weather.setTemperatureCelsius(celsiusRounded);
+      }
       weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32.0f);
+      // Avoid values like 6.9999... ° F by rounding, if appropriate.
+      const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
+      if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
+      {
+        weather.setTemperatureFahrenheit(fahrenheitRounded);
+      }
     }
     v2 = val["pressure"];
     if (!v2.empty() && v2.isNumeric())

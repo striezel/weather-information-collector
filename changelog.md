@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.8.1 (2018-12-12)
+
+Avoid imprecise temperature values due to limited floating-point precision.
+Values like e.g. 6.9999 and 1.0003 are now rounded to 7.0 and 1.0, respectively.
+
 ## Version 0.8.0 (2018-12-02)
 
 A new program to aid in the creation of weather data collection tasks is added.
