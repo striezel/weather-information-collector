@@ -1,5 +1,14 @@
 # Version history of weather-information-collector
 
+## Version 0.8.2 (2018-12-22)
+
+The updater will now replaces NULL values in the column `temperature_F` in the
+tables `weatherdata` and `forecastdata` with their corresponding values,
+calculated from `temperature_K`, where applicable.
+
+This should have been there in version 0.8.0 already, but was missed due to an
+oversight.
+
 ## Version 0.8.1 (2018-12-12)
 
 Avoid imprecise temperature values due to limited floating-point precision.

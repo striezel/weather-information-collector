@@ -86,7 +86,7 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
 
   if (root.empty())
     return false;
-  Json::Value val = root["current"];
+  const Json::Value val = root["current"];
   if (!val.empty() && val.isObject())
   {
     // temperature
@@ -99,8 +99,13 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
         weather.setTemperatureCelsius(v2.asInt());
     }
     v2 = val["temp_f"];
-    if (!v2.empty() && v2.isDouble())
-      weather.setTemperatureFahrenheit(v2.asFloat());
+    if (!v2.empty())
+    {
+      if (v2.isDouble())
+        weather.setTemperatureFahrenheit(v2.asFloat());
+      else if (v2.isIntegral())
+        weather.setTemperatureFahrenheit(v2.asInt());
+    }
     // wind
     v2 = val["wind_degree"];
     if (!v2.empty() && v2.isIntegral())

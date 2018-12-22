@@ -27,6 +27,7 @@
 #include "Update_0.5.7_to_0.6.0.hpp"
 #include "Update_0.6.5_to_0.6.6.hpp"
 #include "UpdateTo_0.7.0.hpp"
+#include "UpdateTo_0.8.0.hpp"
 #include "UpdateTo_0.8.1.hpp"
 
 void showVersion()
@@ -135,6 +136,12 @@ int main(int argc, char** argv)
   }
   std::cout << "Update for database of version 0.6.7 (and earlier) to version 0.7.0..." << std::endl;
   if (!wic::UpdateTo070::perform(config.connectionInfo()))
+  {
+    std::cerr << "Error: Database update failed!" << std::endl;
+    return wic::rcUpdateFailure;
+  }
+  std::cout << "Update for database of version 0.7.1 (and earlier) to version 0.8.0..." << std::endl;
+  if (!wic::UpdateTo080::perform(config.connectionInfo()))
   {
     std::cerr << "Error: Database update failed!" << std::endl;
     return wic::rcUpdateFailure;

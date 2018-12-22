@@ -27,6 +27,7 @@ set(weather-information-collector-update_sources
     Update_0.5.7_to_0.6.0.cpp
     Update_0.6.5_to_0.6.6.cpp
     UpdateTo_0.7.0.cpp
+    UpdateTo_0.8.0.cpp
     UpdateTo_0.8.1.cpp
     main.cpp)
 

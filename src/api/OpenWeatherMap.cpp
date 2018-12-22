@@ -92,7 +92,7 @@ bool OpenWeatherMap::parseSingleWeatherItem(const Json::Value& value, Weather& w
       {
         weather.setTemperatureCelsius(celsiusRounded);
       }
-      weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32.0f);
+      weather.setTemperatureFahrenheit((weather.temperatureKelvin() - 273.15) * 1.8 + 32.0f);
       // Avoid values like 6.9999... ° F by rounding, if appropriate.
       const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
       if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)

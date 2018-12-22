@@ -18,18 +18,18 @@
  -------------------------------------------------------------------------------
 */
 
-#include "UpdateTo_0.8.1.hpp"
+#include "UpdateTo_0.8.0.hpp"
 #include <mysql++/mysql++.h>
 
 namespace wic
 {
 
-bool UpdateTo081::perform(const ConnectionInformation& ci)
+bool UpdateTo080::perform(const ConnectionInformation& ci)
 {
   return updateData(ci);
 }
 
-bool UpdateTo081::updateData(const ConnectionInformation& ci)
+bool UpdateTo080::updateData(const ConnectionInformation& ci)
 {
   mysqlpp::Connection conn(false);
   if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
@@ -40,40 +40,36 @@ bool UpdateTo081::updateData(const ConnectionInformation& ci)
     std::cerr << "Error: Could not connect to database!" << std::endl;
     return false;
   }
+
   for (const std::string& table : { "weatherdata", "forecastdata"})
   {
-    std::cout << "Updating table " << table << "..." << std::endl;
-    for (const std::string& column : { "temperature_C", "temperature_F", "temperature_K" })
+    std::cout << "Updating temperature (°F) in table " << table << "..." << std::endl;
+    mysqlpp::Query query(&conn);
+    query << "UPDATE " << table
+          << "  SET temperature_F = (temperature_K-273.15) * 1.8 + 32"
+          << "  WHERE ISNULL(temperature_F) AND NOT ISNULL(temperature_K);";
+    if (!query.exec())
     {
-      // Update temperature values.
-      std::cout << "  Updating column " << column << "..." << std::endl;
-      mysqlpp::Query query(&conn);
-      query << "UPDATE " << table
-            << "  SET " << column << " = ROUND(" << column << ")"
-            << "  WHERE ABS(ROUND(" << column << ")-" << column << ") < 0.005;";
-      if (!query.exec())
-      {
-        std::cerr << "Error: Could not adjust temperature data." << std::endl
-                  << "Internal error: " << query.error() << std::endl;
-        return false;
-      }
-      const auto rows = query.affected_rows();
-      std::cout << "  Info: ";
-      if (rows == 0)
-      {
-        std::cout << "No temperature data in column " << column << " needs updates.";
-      }
-      else if (rows == 1)
-      {
-        std::cout << "The temperature of one data set was updated.";
-      }
-      else
-      {
-        std::cout << "The temperature of " << rows << " data sets was updated.";
-      }
-      std::cout << std::endl;
-    } // for (range-based, inner, columns)
-  } // for (range-based, outer, tables)
+      std::cerr << "Error: Could not adjust temperature data." << std::endl
+                << "Internal error: " << query.error() << std::endl;
+      return false;
+    }
+    const auto rows = query.affected_rows();
+    std::cout << "  Info: ";
+    if (rows == 0)
+    {
+      std::cout << "No temperature data in table " << table << " needs updates.";
+    }
+    else if (rows == 1)
+    {
+      std::cout << "The temperature (°F) of one data set in table " << table << " was updated.";
+    }
+    else
+    {
+      std::cout << "The temperature (°F) of " << rows << " data sets in table " << table << " was updated.";
+    }
+    std::cout << std::endl;
+  } // for (range-based, tables)
 
   // All queries have been successful.
   return true;
