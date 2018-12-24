@@ -86,7 +86,7 @@ bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) con
     return false;
 
   // Current weather data is located in the currently object below the root.
-  const Json::Value currently = root["currently"];
+  const Json::Value& currently = root["currently"];
   return parseSingleDataPoint(currently, weather);
 }
 
@@ -124,13 +124,45 @@ bool DarkSky::parseSingleDataPoint(const Json::Value& dataPoint, Weather& weathe
     const long int humidity = std::lround(val.asDouble() * 100);
     weather.setHumidity(humidity);
   }
-  // rain (mm/m² in an hour)
+  // rain or snow (mm/m² in an hour)
   val = dataPoint["precipIntensity"];
   if (!val.empty() && (val.isDouble() || val.isIntegral()))
   {
     const double amount = val.asDouble();
-    weather.setRain(amount);
-  }
+    const Json::Value& type = dataPoint["precipType"];
+    if (!type.empty() && type.isString())
+    {
+      const auto typeStr = type.asString();
+      if (typeStr == "rain")
+      {
+        weather.setRain(amount);
+        weather.setSnow(0.0);
+      }
+      else if (typeStr == "snow")
+      {
+        weather.setRain(0.0);
+        weather.setSnow(amount);
+      }
+      else
+      {
+        std::cerr << "Error in DarkSky::parseCurrentWeather(): Unknown precipType "
+                  << typeStr << "!" << std::endl;
+        return false;
+      }
+    }
+    // precipType may not be present, if precipIntensity is zero.
+    else if (amount == 0.0)
+    {
+      weather.setRain(0.0);
+      weather.setSnow(0.0);
+    }
+    else
+    {
+      std::cerr << "Error in DarkSky::parseCurrentWeather(): Missing precipType!"
+                << std::endl;
+      return false;
+    }
+  } // if precipIntensity
   // pressure [hPa]
   val = dataPoint["pressure"];
   if (!val.empty() && (val.isDouble() || val.isIntegral()))
