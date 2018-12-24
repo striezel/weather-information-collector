@@ -29,6 +29,7 @@ set(weather-information-collector-update_sources
     UpdateTo_0.7.0.cpp
     UpdateTo_0.8.0.cpp
     UpdateTo_0.8.1.cpp
+    UpdateTo_0.8.3.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)
