@@ -128,7 +128,8 @@ bool DarkSky::parseSingleDataPoint(const Json::Value& dataPoint, Weather& weathe
   val = dataPoint["precipIntensity"];
   if (!val.empty() && (val.isDouble() || val.isIntegral()))
   {
-    weather.setRain(val.asDouble());
+    const double amount = val.asDouble();
+    weather.setRain(amount);
   }
   // pressure [hPa]
   val = dataPoint["pressure"];

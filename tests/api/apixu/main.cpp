@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ void printWeather(const wic::Weather& w)
             << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
             << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
             << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Snow: " << w.snow() << " mm (" << w.hasSnow() << ")\n"
             << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
             << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
             << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
@@ -77,6 +78,11 @@ int main(int argc, char** argv)
   if (!w.hasRain())
   {
     std::cerr << "Error: Weather object does not have rain amount information!\n";
+    return 1;
+  }
+  if (w.hasSnow())
+  {
+    std::cerr << "Error: Weather object has snow amount information, but it should not!\n";
     return 1;
   }
   if (!w.hasPressure())
@@ -156,7 +162,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  //test for rain data
+  // test for rain data
 
   std::string jsonRainFileName = jsonFileName;
   jsonRainFileName.insert(jsonRainFileName.size() - 5, ".rain");
@@ -187,6 +193,11 @@ int main(int argc, char** argv)
   if (w.rain() != 1.1f)
   {
     std::cerr << "Rain amount is incorrect.\n";
+    return 1;
+  }
+  if (w.hasSnow())
+  {
+    std::cerr << "Error: Weather object has snow amount information, but it should not!\n";
     return 1;
   }
 
@@ -256,6 +267,11 @@ int main(int argc, char** argv)
     if (w2.rain() != 0.1f)
     {
       std::cerr << "Rain amount of 2nd forecast item is incorrect.\n";
+      return 1;
+    }
+    if (w2.hasSnow())
+    {
+      std::cerr << "Error: 2nd forecast item has snow amount information, but it should not!\n";
       return 1;
     }
     if (w2.humidity() != 53)
@@ -328,6 +344,11 @@ int main(int argc, char** argv)
   if (w3.rain() != 0.6f)
   {
     std::cerr << "Rain amount of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (w3.hasSnow())
+  {
+    std::cerr << "Error: Hourly forecast item has snow amount information, but it should not!\n";
     return 1;
   }
   if (w3.humidity() != 98)

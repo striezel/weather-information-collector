@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,11 +31,11 @@ namespace wic
 class Weather
 {
   public:
-    /** \brief default constructor */
+    /** \brief Default constructor, creates instance without any data. */
     Weather();
 
 
-    /** \brief checks whether this instance has time when the data was received / measured
+    /** \brief Checks whether this instance has time when the data was received / measured.
      *
      * \return Returns true, if the instance has the time.
      *         Returns false otherwise.
@@ -43,7 +43,7 @@ class Weather
     bool hasDataTime() const;
 
 
-    /** \brief gets the time when the data was received / measured
+    /** \brief Gets the time when the data was received / measured.
      *
      * \return Returns the time when the data was received / measured.
      *         Returns the epoch, if no time is set.
@@ -51,14 +51,14 @@ class Weather
     const std::chrono::time_point<std::chrono::system_clock>& dataTime() const;
 
 
-    /** \brief sets the time when the data was received / measured
+    /** \brief Sets the time when the data was received / measured.
      *
      * \param dt  the new time when the data was received / measured
      */
     void setDataTime(const std::chrono::time_point<std::chrono::system_clock>& dt);
 
 
-    /** \brief checks whether this instance has time when the API request was performed
+    /** \brief Checks whether this instance has time when the API request was performed.
      *
      * \return Returns true, if the instance has the time when then API request was performed.
      *         Returns false otherwise.
@@ -66,14 +66,14 @@ class Weather
     bool hasRequestTime() const;
 
 
-    /** \brief sets the time when the API request was performed
+    /** \brief Sets the time when the API request was performed.
      *
      * \param rt  the new time when the API request was performed
      */
     void setRequestTime(const std::chrono::time_point<std::chrono::system_clock>& rt);
 
 
-    /** \brief gets the time when the API request was performed
+    /** \brief Gets the time when the API request was performed.
      *
      * \return Returns the time when the API request was performed.
      *         Returns the epoch, if no time is set.
@@ -81,7 +81,7 @@ class Weather
     const std::chrono::time_point<std::chrono::system_clock>& requestTime() const;
 
 
-    /** \brief checks whether this instance has a temperature in Kelvin
+    /** \brief Checks whether this instance has a temperature in Kelvin.
      *
      * \return Returns true, if the instance has a temperature in Kelvin.
      *         Returns false otherwise.
@@ -89,7 +89,7 @@ class Weather
     bool hasTemperatureKelvin() const;
 
 
-    /** \brief gets the temperature in Kelvin, if it was set
+    /** \brief Gets the temperature in Kelvin, if it was set.
      *
      * \return Returns the temperature in Kelvin.
      *         Returns NaN, if no temperature is set for that unit.
@@ -97,14 +97,14 @@ class Weather
     float temperatureKelvin() const;
 
 
-    /** \brief sets the temperature in Kelvin
+    /** \brief Sets the temperature in Kelvin.
      *
      * \param newTempK  the new temperature in Kelvin
      */
     void setTemperatureKelvin(const float newTempK);
 
 
-    /** \brief checks whether this instance has a temperature in °C
+    /** \brief Checks whether this instance has a temperature in °C.
      *
      * \return Returns true, if the instance has a temperature in °C.
      *         Returns false otherwise.
@@ -112,7 +112,7 @@ class Weather
     bool hasTemperatureCelsius() const;
 
 
-    /** \brief gets the temperature in °C, if it was set
+    /** \brief Gets the temperature in °C, if it was set.
      *
      * \return Returns the temperature in °C.
      *         Returns NaN, if no temperature is set for that unit.
@@ -120,14 +120,14 @@ class Weather
     float temperatureCelsius() const;
 
 
-    /** \brief sets the temperature in °C
+    /** \brief Sets the temperature in °C.
      *
      * \param newTempC  the new temperature in °C
      */
     void setTemperatureCelsius(const float newTempC);
 
 
-    /** \brief checks whether this instance has a temperature in °F
+    /** \brief Checks whether this instance has a temperature in °F.
      *
      * \return Returns true, if the instance has a temperature in °F.
      *         Returns false otherwise.
@@ -135,7 +135,7 @@ class Weather
     bool hasTemperatureFahrenheit() const;
 
 
-    /** \brief gets the temperature in °F, if it was set
+    /** \brief Gets the temperature in °F, if it was set.
      *
      * \return Returns the temperature in °F.
      *         Returns NaN, if no temperature is set for that unit.
@@ -143,14 +143,14 @@ class Weather
     float temperatureFahrenheit() const;
 
 
-    /** \brief sets the temperature in °F
+    /** \brief Sets the temperature in °F.
      *
      * \param newTempF  the new temperature in °F
      */
     void setTemperatureFahrenheit(const float newTempF);
 
 
-    /** \brief checks whether this instance has a relative humidity
+    /** \brief Checks whether this instance has a relative humidity.
      *
      * \return Returns true, if the instance has humidity information.
      *         Returns false otherwise.
@@ -158,7 +158,7 @@ class Weather
     bool hasHumidity() const;
 
 
-    /** \brief gets the relative humidity in percent, if it was set
+    /** \brief Gets the relative humidity in percent, if it was set.
      *
      * \return Returns the relative humidity in percent.
      *         Returns -1, if no humidity is set.
@@ -166,14 +166,14 @@ class Weather
     int8_t humidity() const;
 
 
-    /** \brief sets the humidity in percent
+    /** \brief Sets the humidity in percent.
      *
      * \param newHumidity  the new humidity in percent
      */
     void setHumidity(const int8_t newHumidity);
 
 
-    /** \brief checks whether this instance has information about rain
+    /** \brief Checks whether this instance has information about rain.
      *
      * \return Returns true, if the instance has rain information.
      *         Returns false otherwise.
@@ -181,7 +181,7 @@ class Weather
     bool hasRain() const;
 
 
-    /** \brief gets the amount of rain in millimeters, if it was set
+    /** \brief Gets the amount of rain in millimeters, if it was set.
      *
      * \return Returns the amount of rain in millimeters.
      *         Returns NaN, if no rain information is set.
@@ -189,14 +189,37 @@ class Weather
     float rain() const;
 
 
-    /** \brief sets the amount of rain in millimeters
+    /** \brief Sets the amount of rain in millimeters.
      *
      * \param newRainMm  the new amount of rain in millimeters
      */
     void setRain(const float newRainMm);
 
 
-    /** \brief checks whether this instance has air pressure information
+    /** \brief Checks whether this instance has information about snow.
+     *
+     * \return Returns true, if the instance has snow information.
+     *         Returns false otherwise.
+     */
+    bool hasSnow() const;
+
+
+    /** \brief Gets the amount of snow in millimeters, if it was set.
+     *
+     * \return Returns the amount of snow in millimeters.
+     *         Returns NaN, if no snow information is set.
+     */
+    float snow() const;
+
+
+    /** \brief Sets the amount of snow in millimeters.
+     *
+     * \param newSnowMm  the new amount of snow in millimeters
+     */
+    void setSnow(const float newSnowMm);
+
+
+    /** \brief Checks whether this instance has air pressure information.
      *
      * \return Returns true, if the instance has air pressure.
      *         Returns false otherwise.
@@ -204,7 +227,7 @@ class Weather
     bool hasPressure() const;
 
 
-    /** \brief gets the air pressure in hPa, if it was set
+    /** \brief Gets the air pressure in hPa, if it was set.
      *
      * \return Returns the pressure in hPa.
      *         Returns -1, if no pressure is set.
@@ -212,14 +235,14 @@ class Weather
     int16_t pressure() const;
 
 
-    /** \brief sets the pressure in hPa
+    /** \brief Sets the pressure in hPa.
      *
      * \param newPressure_hPa  the new pressure in hPa
      */
     void setPressure(const int16_t newPressure_hPa);
 
 
-    /** \brief checks whether this instance has a wind speed
+    /** \brief Checks whether this instance has a wind speed.
      *
      * \return Returns true, if the instance has a wind speed.
      *         Returns false otherwise.
@@ -227,7 +250,7 @@ class Weather
     bool hasWindSpeed() const;
 
 
-    /** \brief gets the wind speed in meters per second, if it was set
+    /** \brief Gets the wind speed in meters per second, if it was set.
      *
      * \return Returns the wind speed in meters per second.
      *         Returns NaN, if no wind speed is set.
@@ -235,14 +258,14 @@ class Weather
     float windSpeed() const;
 
 
-    /** \brief sets the temperature in m/s
+    /** \brief Sets the wind speed in m/s.
      *
      * \param newSpeed  the new wind speed in meters per second
      */
     void setWindSpeed(const float newSpeed);
 
 
-    /** \brief checks whether this instance has a wind direction
+    /** \brief Checks whether this instance has a wind direction.
      *
      * \return Returns true, if the instance has a wind direction.
      *         Returns false otherwise.
@@ -250,7 +273,7 @@ class Weather
     bool hasWindDegrees() const;
 
 
-    /** \brief gets the wind direction in degrees, if it was set
+    /** \brief Gets the wind direction in degrees, if it was set.
      *
      * \return Returns the wind direction in degrees.
      *         Returns -1, if no wind direction is set.
@@ -258,14 +281,14 @@ class Weather
     int16_t windDegrees() const;
 
 
-    /** \brief sets the wind direction degrees (0°=N, 90°=E,...)
+    /** \brief Sets the wind direction degrees (0°=N, 90°=E,...).
      *
      * \param newWindDegrees  the new wind direction in degrees
      */
     void setWindDegrees(const int16_t newWindDegrees);
 
 
-    /** \brief checks whether this instance has cloudiness information
+    /** \brief Checks whether this instance has cloudiness information.
      *
      * \return Returns true, if the instance has cloudiness information.
      *         Returns false otherwise.
@@ -273,7 +296,7 @@ class Weather
     bool hasCloudiness() const;
 
 
-    /** \brief gets the cloudiness in percent, if it was set
+    /** \brief Gets the cloudiness in percent, if it was set.
      *
      * \return Returns the cloudiness in percent.
      *         Returns -1, if no cloudiness is set.
@@ -281,14 +304,14 @@ class Weather
     int8_t cloudiness() const;
 
 
-    /** \brief sets the cloudiness in percent
+    /** \brief Sets the cloudiness in percent.
      *
      * \param newCloudiness  the new cloudiness in percent
      */
     void setCloudiness(const int8_t newCloudiness);
 
 
-    /** \brief checks whether this instance has raw JSON data
+    /** \brief Checks whether this instance has raw JSON data.
      *
      * \return Returns true, if the instance has raw JSON data.
      *         Returns false otherwise.
@@ -296,7 +319,7 @@ class Weather
     bool hasJson() const;
 
 
-    /** \brief gets the raw JSON data
+    /** \brief Gets the raw JSON data.
      *
      * \return Returns the raw JSON data as string.
      *         Returns an empty string, if no JSON data is set.
@@ -304,7 +327,7 @@ class Weather
     const std::string& json() const;
 
 
-    /** \brief sets the raw JSON data
+    /** \brief Sets the raw JSON data.
      *
      * \param newJson  the new JSON data
      */
@@ -317,6 +340,7 @@ class Weather
     float m_tempF; /**< temperature in degrees Fahrenheit */
     int8_t m_humidity; /**< relative humidity in percent */
     float m_rain; /**< amount of rain within the last three hours in mm */
+    float m_snow; /**< amount of snow within the last three hours in mm */
     int16_t m_pressure; /**< air pressure in hPa */
     float m_windSpeed; /**< wind speed in meters per second */
     int16_t m_windDegrees; /**< wind direction in degrees */

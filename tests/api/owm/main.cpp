@@ -58,6 +58,8 @@ int main(int argc, char** argv)
             << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
             << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
             << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
+            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Snow: " << w.snow() << " mm (" << w.hasSnow() << ")\n"
             << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
             << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
             << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
@@ -79,6 +81,12 @@ int main(int argc, char** argv)
   if (w.hasRain())
   {
     std::cerr << "Error: Weather object has rain data, but it should not!\n";
+    return 1;
+  }
+
+  if (w.hasSnow())
+  {
+    std::cerr << "Error: Weather object has snow data, but it should not!\n";
     return 1;
   }
 
@@ -197,6 +205,7 @@ int main(int argc, char** argv)
             << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
             << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
             << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Snow: " << w.snow() << " mm (" << w.hasSnow() << ")\n"
             << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
             << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
             << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
@@ -211,6 +220,11 @@ int main(int argc, char** argv)
   if (w.rain() != 17.08f)
   {
     std::cerr << "Rain amount is incorrect.\n";
+    return 1;
+  }
+  if (w.hasSnow())
+  {
+    std::cerr << "Error: Weather object has snow data, but it should not!\n";
     return 1;
   }
 
@@ -243,12 +257,14 @@ int main(int argc, char** argv)
   }
 
   w = forecast.data().at(0);
-  std::cout << "Temperature: " << w.temperatureKelvin() << " K (" << w.hasTemperatureKelvin() << ")\n"
+  std::cout << "1st data element of forecast:\n"
+            << "Temperature: " << w.temperatureKelvin() << " K (" << w.hasTemperatureKelvin() << ")\n"
             << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
             << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
             << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
             << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
             << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Snow: " << w.snow() << " mm (" << w.hasSnow() << ")\n"
             << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
             << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
             << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";

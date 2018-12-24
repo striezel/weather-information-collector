@@ -30,6 +30,7 @@ void printWeather(const wic::Weather& w)
             << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
             << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
             << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Snow: " << w.snow() << " mm (" << w.hasSnow() << ")\n"
             << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
             << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
             << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
@@ -199,6 +200,11 @@ int main(int argc, char** argv)
   if (wf0.rain() != 0.0686f)
   {
     std::cerr << "Rain amount of hourly forecast item is incorrect.\n";
+    return 1;
+  }
+  if (wf0.hasSnow())
+  {
+    std::cerr << "Snow amount of hourly forecast item is set, but it should not.\n";
     return 1;
   }
   if (wf0.temperatureCelsius() != 31.18f)

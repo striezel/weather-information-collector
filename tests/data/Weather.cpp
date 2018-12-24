@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
+#include <cmath>
 #include <catch.hpp>
 
 #include "../../src/data/Weather.hpp"
@@ -37,6 +38,7 @@ TEST_CASE("WeatherClass")
     REQUIRE_FALSE( weather.hasTemperatureFahrenheit() );
     REQUIRE_FALSE( weather.hasHumidity() );
     REQUIRE_FALSE( weather.hasRain() );
+    REQUIRE_FALSE( weather.hasSnow() );
     REQUIRE_FALSE( weather.hasPressure() );
     REQUIRE_FALSE( weather.hasWindSpeed() );
     REQUIRE_FALSE( weather.hasWindDegrees() );
@@ -111,7 +113,24 @@ TEST_CASE("WeatherClass")
     weather.setRain(-5);
     REQUIRE_FALSE( weather.hasRain() );
     const float r = weather.rain();
+    REQUIRE( std::isnan(r) );
     REQUIRE( r != r );
+  }
+
+  SECTION("set, has + get snow amount")
+  {
+    weather.setSnow(2.5f);
+    REQUIRE( weather.hasSnow() );
+    REQUIRE( weather.snow() == 2.5 );
+  }
+
+  SECTION("out of range snow amount")
+  {
+    weather.setSnow(-5);
+    REQUIRE_FALSE( weather.hasSnow() );
+    const float s = weather.snow();
+    REQUIRE( std::isnan(s) );
+    REQUIRE( s != s );
   }
 
   SECTION("set, has + get air pressure")
@@ -144,6 +163,7 @@ TEST_CASE("WeatherClass")
     weather.setWindSpeed(-10.0f);
     REQUIRE_FALSE( weather.hasWindSpeed() );
     const float ws = weather.windSpeed();
+    REQUIRE( std::isnan(ws) );
     REQUIRE( ws != ws );
   }
 
