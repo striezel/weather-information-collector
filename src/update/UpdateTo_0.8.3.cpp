@@ -41,6 +41,34 @@ bool UpdateTo083::perform(const ConnectionInformation& ci)
 
 bool UpdateTo083::updateStructure(const ConnectionInformation& ci)
 {
+  if (!Structure::tableExists(ci, "forecastdata"))
+  {
+    std::cerr << "Error: Table forecastdata does not exist in database "
+              << ci.db() << "! Update cannot be performed." << std::endl;
+    return false;
+  }
+  // If column does not exist, create it.
+  if (!Structure::columnExists(ci, "forecastdata", "snow"))
+  {
+    // Add new column snow.
+    mysqlpp::Connection conn(false);
+    if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
+                      ci.password().c_str(), ci.port()))
+    {
+      // Should not happen, because previous connection attempts were successful,
+      // but better be safe than sorry.
+      std::cerr << "Error: Could not connect to database!" << std::endl;
+      return false;
+    }
+    mysqlpp::Query query(&conn);
+    query << "ALTER TABLE `forecastdata`  ADD `snow` FLOAT NULL DEFAULT NULL COMMENT 'amount of snow in millimeters'  AFTER `rain`;";
+    if (!query.exec())
+    {
+      std::cerr << "Error: Could not add new column \"snow\" to table forecastdata.\n";
+      return false;
+    }
+  }
+
   if (!Structure::tableExists(ci, "weatherdata"))
   {
     std::cerr << "Error: Table weatherdata does not exist in database "
