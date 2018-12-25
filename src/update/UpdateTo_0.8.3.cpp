@@ -197,8 +197,6 @@ bool UpdateTo083::updateWeatherData(const ConnectionInformation& ci)
                   << dataId << "!" << std::endl;
         return false;
       }
-      std::clog << "Info: Updated snow amount for data ID " << dataId << " to "
-                << w.rain() << " mm." << std::endl;
     } // if data set has rain data
   } // for
   // Done.

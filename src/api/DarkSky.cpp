@@ -143,6 +143,12 @@ bool DarkSky::parseSingleDataPoint(const Json::Value& dataPoint, Weather& weathe
         weather.setRain(0.0);
         weather.setSnow(amount);
       }
+      else if (typeStr == "sleet")
+      {
+        // Sleet could be described as mixture of snow and rain.
+        weather.setRain(amount);
+        weather.setSnow(amount);
+      }
       else
       {
         std::cerr << "Error in DarkSky::parseCurrentWeather(): Unknown precipType "
