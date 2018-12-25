@@ -23,20 +23,23 @@ set(weather-information-collector-update_sources
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
+    ForecastDataUpdate_0.8.3.cpp
     Update_0.5.4_to_0.5.5.cpp
     Update_0.5.7_to_0.6.0.cpp
     Update_0.6.5_to_0.6.6.cpp
     UpdateTo_0.7.0.cpp
     UpdateTo_0.8.0.cpp
     UpdateTo_0.8.1.cpp
+    UpdateTo_0.8.3.cpp
+    WeatherDataUpdate_0.8.3.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++11)
+add_definitions(-std=c++11 -pthread)
 
-set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s -pthread" )
 
 add_executable(weather-information-collector-update ${weather-information-collector-update_sources})
 

@@ -101,6 +101,10 @@ bool StoreMySQL::saveCurrentWeather(mysqlpp::Connection& conn, const int apiId, 
   {
     insertQuery << ", rain=" << mysqlpp::quote << weather.rain();
   }
+  if (weather.hasSnow())
+  {
+    insertQuery << ", snow=" << mysqlpp::quote << weather.snow();
+  }
   if (weather.hasPressure())
   {
     insertQuery << ", pressure=" << mysqlpp::quote << weather.pressure();
@@ -187,7 +191,7 @@ bool StoreMySQL::saveForecast(const ApiType type, const Location& location, cons
   // Insert data elements.
   mysqlpp::Query dataInsert(&conn);
   dataInsert << "INSERT INTO forecastdata (forecastID, dataTime, "
-             << "temperature_K, temperature_C, temperature_F, humidity, rain, "
+             << "temperature_K, temperature_C, temperature_F, humidity, rain, snow, "
              << "pressure, wind_speed, wind_degrees, cloudiness) VALUES ";
   bool hasPreviousEntries = false;
   for (const Weather& weather: forecast.data())
@@ -237,6 +241,14 @@ bool StoreMySQL::saveForecast(const ApiType type, const Location& location, cons
     if (weather.hasRain())
     {
       dataInsert << ", " << mysqlpp::quote << weather.rain();
+    }
+    else
+    {
+      dataInsert << ", NULL";
+    }
+    if (weather.hasSnow())
+    {
+      dataInsert << ", " << mysqlpp::quote << weather.snow();
     }
     else
     {

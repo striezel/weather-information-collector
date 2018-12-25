@@ -44,4 +44,4 @@ endif (LIBJSONCPP_FOUND)
 
 # test run
 add_test(NAME OpenWeatherMap-parsing
-         COMMAND $<TARGET_FILE:owm_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/owm.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/owm.forecast.json")
+         COMMAND $<TARGET_FILE:owm_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/owm.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/owm.forecast.json" "${CMAKE_CURRENT_SOURCE_DIR}/owm.forecast.snow.json")

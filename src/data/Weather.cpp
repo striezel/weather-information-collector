@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2018  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ Weather::Weather()
   m_tempF(std::numeric_limits<float>::quiet_NaN()),
   m_humidity(-1),
   m_rain(std::numeric_limits<float>::quiet_NaN()),
+  m_snow(std::numeric_limits<float>::quiet_NaN()),
   m_pressure(-1),
   m_windSpeed(std::numeric_limits<float>::quiet_NaN()),
   m_windDegrees(-1),
@@ -150,6 +151,24 @@ void Weather::setRain(const float newRainMm)
     m_rain = newRainMm;
   else
     m_rain = 0.0f / 0.0f;
+}
+
+bool Weather::hasSnow() const
+{
+  return (m_snow == m_snow);
+}
+
+float Weather::snow() const
+{
+  return m_snow;
+}
+
+void Weather::setSnow(const float newSnowMm)
+{
+  if (newSnowMm >= 0.0f)
+    m_snow = newSnowMm;
+  else
+    m_snow = 0.0f / 0.0f;
 }
 
 bool Weather::hasPressure() const

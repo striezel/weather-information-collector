@@ -49,7 +49,7 @@ bool StoreMySQLBatch::saveCurrentWeather(const int apiId, const int locationId, 
   {
     insertQuery = mysqlpp::Query(&conn);
     insertQuery << "INSERT INTO weatherdata (apiID, locationID, dataTime, requestTime, "
-                << "temperature_K, temperature_C, temperature_F, humidity, rain, "
+                << "temperature_K, temperature_C, temperature_F, humidity, rain, snow, "
                 << "pressure, wind_speed, wind_degrees, cloudiness, json) VALUES ";
   }
   else
@@ -105,6 +105,14 @@ bool StoreMySQLBatch::saveCurrentWeather(const int apiId, const int locationId, 
   if (weather.hasRain())
   {
     insertQuery << ", " << mysqlpp::quote << weather.rain();
+  }
+  else
+  {
+    insertQuery << ", NULL";
+  }
+  if (weather.hasSnow())
+  {
+    insertQuery << ", " << mysqlpp::quote << weather.snow();
   }
   else
   {

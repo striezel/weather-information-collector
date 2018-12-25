@@ -1,0 +1,39 @@
+{
+   "location":{
+      "name":"Polyarka",
+      "region":"Sakha",
+      "country":"Russia",
+      "lat":71.64,
+      "lon":128.87,
+      "tz_id":"Asia/Yakutsk",
+      "localtime_epoch":1545697740,
+      "localtime":"2018-12-25 9:29"
+   },
+   "current":{
+      "last_updated_epoch":1545696604,
+      "last_updated":"2018-12-25 09:10",
+      "temp_c":-28.0,
+      "temp_f":-18.4,
+      "is_day":0,
+      "condition":{
+         "text":"Blowing snow",
+         "icon":"//cdn.apixu.com/weather/64x64/night/227.png",
+         "code":1114
+      },
+      "wind_mph":24.6,
+      "wind_kph":39.6,
+      "wind_degree":243,
+      "wind_dir":"WSW",
+      "pressure_mb":1021.0,
+      "pressure_in":30.6,
+      "precip_mm":0.1,
+      "precip_in":0.0,
+      "humidity":92,
+      "cloud":100,
+      "feelslike_c":-44.8,
+      "feelslike_f":-48.6,
+      "vis_km":14.5,
+      "vis_miles":9.0,
+      "uv":0.0
+   }
+}

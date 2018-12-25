@@ -16,6 +16,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="pthread" />
 				</Linker>
 			</Target>
 		</Build>
@@ -23,6 +24,7 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
+			<Add option="-pthread" />
 			<Add directory="/usr/include/mysql" />
 		</Compiler>
 		<Linker>
@@ -72,18 +74,24 @@
 		<Unit filename="../util/GitInfos.template.cpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
+		<Unit filename="ForecastDataUpdate_0.8.3.cpp" />
+		<Unit filename="ForecastDataUpdate_0.8.3.hpp" />
 		<Unit filename="UpdateTo_0.7.0.cpp" />
 		<Unit filename="UpdateTo_0.7.0.hpp" />
 		<Unit filename="UpdateTo_0.8.0.cpp" />
 		<Unit filename="UpdateTo_0.8.0.hpp" />
 		<Unit filename="UpdateTo_0.8.1.cpp" />
 		<Unit filename="UpdateTo_0.8.1.hpp" />
+		<Unit filename="UpdateTo_0.8.3.cpp" />
+		<Unit filename="UpdateTo_0.8.3.hpp" />
 		<Unit filename="Update_0.5.4_to_0.5.5.cpp" />
 		<Unit filename="Update_0.5.4_to_0.5.5.hpp" />
 		<Unit filename="Update_0.5.7_to_0.6.0.cpp" />
 		<Unit filename="Update_0.5.7_to_0.6.0.hpp" />
 		<Unit filename="Update_0.6.5_to_0.6.6.cpp" />
 		<Unit filename="Update_0.6.5_to_0.6.6.hpp" />
+		<Unit filename="WeatherDataUpdate_0.8.3.cpp" />
+		<Unit filename="WeatherDataUpdate_0.8.3.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

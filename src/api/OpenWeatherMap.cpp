@@ -126,11 +126,34 @@ bool OpenWeatherMap::parseSingleWeatherItem(const Json::Value& value, Weather& w
       weather.setCloudiness(v2.asInt());
   } // if clouds object
   val = value["rain"];
-  if (!val.empty() && val.isObject())
+  if (!val.isNull() && val.isObject())
   {
     Json::Value v2 = val["3h"];
-    if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
-      weather.setRain(v2.asFloat());
+    if (!v2.isNull())
+    {
+      if (v2.isDouble() || v2.isIntegral())
+        weather.setRain(v2.asFloat());
+    }
+    else
+    {
+      // Empty rain object means zero rain.
+      weather.setRain(0.0f);
+    }
+  } // if rain object
+  const Json::Value& snow = value["snow"];
+  if (!snow.isNull() && snow.isObject())
+  {
+    const Json::Value& v2 = snow["3h"];
+    if (!v2.isNull())
+    {
+      if (v2.isDouble() || v2.isIntegral())
+        weather.setSnow(v2.asFloat());
+    }
+    else
+    {
+      // Empty snow object means zero snow.
+      weather.setSnow(0.0f);
+    }
   } // if rain object
   val = value["dt"];
   if (!val.empty() && val.isIntegral())

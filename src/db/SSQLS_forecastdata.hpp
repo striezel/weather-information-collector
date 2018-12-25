@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `forecastdata` (
   `temperature_F` float DEFAULT NULL COMMENT 'temperature in degrees Fahrenheit',
   `humidity` tinyint(3) unsigned DEFAULT NULL COMMENT 'relative humidity in percent',
   `rain` float DEFAULT NULL COMMENT 'amount of rain in millimeters',
+  `snow` float DEFAULT NULL COMMENT 'amount of snow in millimeters',
   `pressure` smallint(5) unsigned DEFAULT NULL COMMENT 'air pressure in hPa',
   `wind_speed` float DEFAULT NULL COMMENT 'wind speed in meters per second',
   `wind_degrees` smallint(5) unsigned DEFAULT NULL COMMENT 'wind direction in degrees',
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `forecastdata` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
-sql_create_12(forecastdata,
+sql_create_13(forecastdata,
     3, // "COMPCOUNT"
     0, // "SETCOUNT" - zero means no setters
     mysqlpp::sql_int_unsigned, dataID,
@@ -60,6 +61,7 @@ sql_create_12(forecastdata,
     mysqlpp::Null<mysqlpp::sql_float>, temperature_F,
     mysqlpp::Null<mysqlpp::sql_tinyint_unsigned>, humidity,
     mysqlpp::Null<mysqlpp::sql_float>, rain,
+    mysqlpp::Null<mysqlpp::sql_float>, snow,
     mysqlpp::Null<mysqlpp::sql_smallint_unsigned>, pressure,
     mysqlpp::Null<mysqlpp::sql_float>, wind_speed,
     mysqlpp::Null<mysqlpp::sql_smallint_unsigned>, wind_degrees,
