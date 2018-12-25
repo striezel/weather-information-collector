@@ -19,7 +19,9 @@
 */
 
 #include "UpdateTo_0.8.3.hpp"
+#include <chrono>
 #include <map>
+#include <thread>
 #include <mysql++/mysql++.h>
 #include "../api/API.hpp"
 #include "../api/Apixu.hpp"
@@ -28,6 +30,7 @@
 #include "../api/Types.hpp"
 #include "../db/API.hpp"
 #include "../db/Structure.hpp"
+#include "WeatherDataUpdate_0.8.3.hpp"
 
 namespace wic
 {
@@ -51,6 +54,7 @@ bool UpdateTo083::updateStructure(const ConnectionInformation& ci)
   if (!Structure::columnExists(ci, "forecastdata", "snow"))
   {
     // Add new column snow.
+    const auto start = std::chrono::steady_clock::now();
     mysqlpp::Connection conn(false);
     if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
                       ci.password().c_str(), ci.port()))
@@ -67,6 +71,14 @@ bool UpdateTo083::updateStructure(const ConnectionInformation& ci)
       std::cerr << "Error: Could not add new column \"snow\" to table forecastdata.\n";
       return false;
     }
+    const auto end = std::chrono::steady_clock::now();
+    const std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    std::cout << "  Info: Structure of table forecastdata has been updated."
+              << " Took " << duration.count() << " milliseconds." << std::endl;
+  }
+  else
+  {
+    std::cout << "  Info: Structure of table forecastdata already seems to be up to date." << std::endl;
   }
 
   if (!Structure::tableExists(ci, "weatherdata"))
@@ -77,8 +89,13 @@ bool UpdateTo083::updateStructure(const ConnectionInformation& ci)
   }
   // If column already exists, structure is already up to date.
   if (Structure::columnExists(ci, "weatherdata", "snow"))
+  {
+    std::cout << "  Info: Structure of table weatherdata already seems to be up to date." << std::endl;
     return true;
+  }
+
   // Add new column snow.
+  const auto start = std::chrono::steady_clock::now();
   mysqlpp::Connection conn(false);
   if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
                     ci.password().c_str(), ci.port()))
@@ -95,7 +112,11 @@ bool UpdateTo083::updateStructure(const ConnectionInformation& ci)
     std::cerr << "Error: Could not add new column \"snow\" to table weatherdata.\n";
     return false;
   }
+  const auto end = std::chrono::steady_clock::now();
+  const std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
   // ALTER TABLE was successful.
+  std::cout << "  Info: Structure of table weatherdata has been updated."
+            << " Took " << duration.count() << " milliseconds." << std::endl;
   return true;
 }
 
@@ -143,62 +164,59 @@ bool UpdateTo083::updateWeatherData(const ConnectionInformation& ci)
     return true;
   }
 
-  for (unsigned long int i = 0; i < rows; ++i)
+  const unsigned int concurrent = std::thread::hardware_concurrency();
+  unsigned int threadsOfExecution = 4;
+  if (concurrent >= 16)
+    threadsOfExecution = 32;
+  if (concurrent >= 12)
+    threadsOfExecution = 24;
+  else if (concurrent >= 8)
+    threadsOfExecution = 16;
+  else if ((1 <= concurrent) && (concurrent < 4))
+    threadsOfExecution = 2;
+  std::cout << "  Info: Using " << threadsOfExecution << " thread(s) to update"
+            << " snow data in weatherdata. This may take a while." << std::endl;
+
+  const auto start = std::chrono::steady_clock::now();
+  std::vector<WeatherDataUpdate_083> updates;
+  for (unsigned int i = 0; i < threadsOfExecution; ++i)
   {
-    const int apiID = result[i]["apiID"];
-    const auto iter = id_to_type.find(apiID);
-    if (iter == id_to_type.end())
+    updates.push_back(WeatherDataUpdate_083(ci));
+  }
+
+  std::vector<unsigned int> startIndices;
+  for (unsigned int i = 0; i < threadsOfExecution; ++i)
+  {
+    startIndices.push_back(i * rows / threadsOfExecution);
+  }
+  // End index of last thread.
+  startIndices.push_back(rows - 1);
+
+  std::vector<std::thread> threads;
+  for (unsigned int i = 0; i < threadsOfExecution; ++i)
+  {
+    threads.push_back(std::thread(updates[i], startIndices[i], startIndices[i+1], id_to_type, result));
+  }
+
+  // Join all threads.
+  for (auto& t: threads)
+  {
+    t.join();
+  }
+
+  // Check for failures.
+  for (const WeatherDataUpdate_083& upd: updates)
+  {
+    if (upd.failed())
     {
-      // Probably a newer future API type, so skip it.
-      continue;
-    }
-    std::unique_ptr<API> api = nullptr;
-    switch (iter->second)
-    {
-      case ApiType::Apixu:
-           api.reset(new wic::Apixu());
-           break;
-      case ApiType::DarkSky:
-           api.reset(new wic::DarkSky());
-           break;
-      case ApiType::OpenWeatherMap:
-           api.reset(new wic::OpenWeatherMap());
-           break;
-      default:
-           // Newer or unsupported API, go on.
-           continue;
-           break;
-    } // switch
-    Weather w;
-    const unsigned int dataId = result[i]["dataID"];
-    if (!api->parseCurrentWeather(result[i]["json"].c_str(), w))
-    {
-      std::cerr << "Error: Could not parse JSON data for data ID " << dataId
-                << "!" << std::endl;
       return false;
     }
-    if (w.hasSnow())
-    {
-      mysqlpp::Query update(&conn);
-      if (!w.hasRain())
-      {
-        update << "UPDATE weatherdata SET snow=" << mysqlpp::quote << w.snow()
-               << " WHERE dataID=" << mysqlpp::quote << dataId << " LIMIT 1;";
-      }
-      else
-      {
-        update << "UPDATE weatherdata SET rain=" << mysqlpp::quote << w.rain()
-               << ", snow=" << mysqlpp::quote << w.snow()
-               << " WHERE dataID=" << mysqlpp::quote << dataId << " LIMIT 1;";
-      }
-      if (!update.exec())
-      {
-        std::cerr << "Error: Could not update snow amount for data ID "
-                  << dataId << "!" << std::endl;
-        return false;
-      }
-    } // if data set has rain data
-  } // for
+  }
+  const auto end = std::chrono::steady_clock::now();
+  const std::chrono::milliseconds duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+  std::cout << "  Info: Data of table weatherdata (" << rows << " rows) has been updated."
+            << " Took " << duration.count() << " milliseconds." << std::endl;
+
   // Done.
   return true;
 }
