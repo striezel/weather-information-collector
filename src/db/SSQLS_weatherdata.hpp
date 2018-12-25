@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `weatherdata` (
   `temperature_F` float DEFAULT NULL COMMENT 'temperature in degrees Fahrenheit',
   `humidity` tinyint(3) unsigned DEFAULT NULL COMMENT 'relative humidity in percent',
   `rain` float DEFAULT NULL COMMENT 'amount of rain in millimeters',
+  `snow` float DEFAULT NULL COMMENT 'amount of snow in millimeters',
   `pressure` smallint(5) unsigned DEFAULT NULL COMMENT 'air pressure in hPa',
   `wind_speed` float DEFAULT NULL COMMENT 'wind speed in meters per second',
   `wind_degrees` smallint(5) unsigned DEFAULT NULL COMMENT 'wind direction in degrees',
@@ -50,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `weatherdata` (
 
 */
 
-sql_create_15(weatherdata,
+sql_create_16(weatherdata,
     5, // "COMPCOUNT"
     0, // "SETCOUNT" - zero means no setters
     mysqlpp::sql_int_unsigned, dataID,
@@ -63,6 +64,7 @@ sql_create_15(weatherdata,
     mysqlpp::Null<mysqlpp::sql_float>, temperature_F,
     mysqlpp::Null<mysqlpp::sql_tinyint_unsigned>, humidity,
     mysqlpp::Null<mysqlpp::sql_float>, rain,
+    mysqlpp::Null<mysqlpp::sql_float>, snow,
     mysqlpp::Null<mysqlpp::sql_smallint_unsigned>, pressure,
     mysqlpp::Null<mysqlpp::sql_float>, wind_speed,
     mysqlpp::Null<mysqlpp::sql_smallint_unsigned>, wind_degrees,

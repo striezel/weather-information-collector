@@ -27,6 +27,35 @@
 namespace wic
 {
 
+void precipitationDistinction(const float amount, Weather& weather)
+{
+  // Apixu provides no direct distinction between rain and snow. There are
+  // the condition texts, but checking those is tedious and error prone,
+  // because they may change. Therefore we have to do something else.
+  // Basic idea: If temperature is above zero, it is rain. Below zero it
+  // is snow, because water freezes at zero °C.
+  if (weather.temperatureCelsius() >= 0.0f)
+  {
+    weather.setRain(amount);
+    weather.setSnow(0.0f);
+  }
+  else if (weather.temperatureCelsius() < 0.0f)
+  {
+    weather.setRain(0.0f);
+    weather.setSnow(amount);
+  }
+  else
+  {
+    // Temperature (°C) is NaN, so let's have a guess and go with rain.
+    weather.setRain(amount);
+    if (amount == 0.0f)
+    {
+      weather.setSnow(0.0f);
+    }
+  }
+}
+
+
 Apixu::Apixu(const std::string& key)
 : m_apiKey(key)
 {
@@ -128,30 +157,7 @@ bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
     if (!v2.empty() && (v2.isDouble() || v2.isIntegral()))
     {
       const float amount = v2.asFloat();
-      // Apixu provides no direct distinction between rain and snow. There are
-      // the condition texts, but checking those is tedious and error prone,
-      // because they may change. Therefore we have to do something else.
-      // Basic idea: If temperature is above zero, it is rain. Below zero it
-      // is snow, because water freezes at zero °C.
-      if (weather.temperatureCelsius() >= 0.0f)
-      {
-        weather.setRain(amount);
-        weather.setSnow(0.0f);
-      }
-      else if (weather.temperatureCelsius() < 0.0f)
-      {
-        weather.setRain(0.0f);
-        weather.setSnow(amount);
-      }
-      else
-      {
-        // Temperature (°C) is NaN, so let's have a guess and go with rain.
-        weather.setRain(amount);
-        if (amount == 0.0f)
-        {
-          weather.setSnow(0.0f);
-        }
-      }
+      precipitationDistinction(amount, weather);
     }
     // pressure
     v2 = val["pressure_mb"];
@@ -292,30 +298,7 @@ bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
         if (!val.empty() && val.isNumeric())
         {
           const float amount = val.asFloat();
-          // Apixu provides no direct distinction between rain and snow. There are
-          // the condition texts, but checking those is tedious and error prone,
-          // because they may change. Therefore we have to do something else.
-          // Basic idea: If temperature is above zero, it is rain. Below zero it
-          // is snow, because water freezes at zero °C.
-          if (w.temperatureCelsius() >= 0.0f)
-          {
-            w.setRain(amount);
-            w.setSnow(0.0f);
-          }
-          else if (w.temperatureCelsius() < 0.0f)
-          {
-            w.setRain(0.0f);
-            w.setSnow(amount);
-          }
-          else
-          {
-            // Temperature (°C) is NaN, so let's have a guess and go with rain.
-            w.setRain(amount);
-            if (amount == 0.0f)
-            {
-              w.setSnow(0.0f);
-            }
-          }
+          precipitationDistinction(amount, w);
         }
         // humidity
         val = elem["humidity"];
@@ -355,30 +338,7 @@ bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
       if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
       {
         const float amount = totalprecip_mm.asFloat();
-        // Apixu provides no direct distinction between rain and snow. There are
-        // the condition texts, but checking those is tedious and error prone,
-        // because they may change. Therefore we have to do something else.
-        // Basic idea: If temperature is above zero, it is rain. Below zero it
-        // is snow, because water freezes at zero °C.
-        if (w_min.temperatureCelsius() >= 0.0f)
-        {
-          w_min.setRain(amount);
-          w_min.setSnow(0.0f);
-        }
-        else if (w_min.temperatureCelsius() < 0.0f)
-        {
-          w_min.setRain(0.0f);
-          w_min.setSnow(amount);
-        }
-        else
-        {
-          // Temperature (°C) is NaN, so let's have a guess and go with rain.
-          w_min.setRain(amount);
-          if (amount == 0.0f)
-          {
-            w_min.setSnow(0.0f);
-          }
-        }
+        precipitationDistinction(amount, w_min);
       }
       data.push_back(w_min);
 
@@ -399,30 +359,7 @@ bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
       if (!totalprecip_mm.empty() && totalprecip_mm.isNumeric())
       {
         const float amount = totalprecip_mm.asFloat();
-        // Apixu provides no direct distinction between rain and snow. There are
-        // the condition texts, but checking those is tedious and error prone,
-        // because they may change. Therefore we have to do something else.
-        // Basic idea: If temperature is above zero, it is rain. Below zero it
-        // is snow, because water freezes at zero °C.
-        if (w_max.temperatureCelsius() >= 0.0f)
-        {
-          w_max.setRain(amount);
-          w_max.setSnow(0.0f);
-        }
-        else if (w_max.temperatureCelsius() < 0.0f)
-        {
-          w_max.setRain(0.0f);
-          w_max.setSnow(amount);
-        }
-        else
-        {
-          // Temperature (°C) is NaN, so let's have a guess and go with rain.
-          w_max.setRain(amount);
-          if (amount == 0.0f)
-          {
-            w_max.setSnow(0.0f);
-          }
-        }
+        precipitationDistinction(amount, w_max);
       }
       data.push_back(w_max);
     } // else (daily data)

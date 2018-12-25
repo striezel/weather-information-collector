@@ -100,6 +100,10 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
     {
       w.setRain(elem.rain.data);
     }
+    if (!elem.snow.is_null)
+    {
+      w.setSnow(elem.snow.data);
+    }
     if (!elem.pressure.is_null)
     {
       w.setPressure(elem.pressure.data);
@@ -205,6 +209,10 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
       if (!dp.rain.is_null)
       {
         w.setRain(dp.rain.data);
+      }
+      if (!dp.snow.is_null)
+      {
+        w.setSnow(dp.snow.data);
       }
       if (!dp.pressure.is_null)
       {
