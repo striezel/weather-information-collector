@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.8.3 (2018-12-25)
+
+Information about precipitation is now split into rain and snow amount.
+The Apixu API does not provide that information explicitly, so it is
+approximated (currently decided based on temperature).
+
 ## Version 0.8.2 (2018-12-22)
 
 The updater will now replaces NULL values in the column `temperature_F` in the
