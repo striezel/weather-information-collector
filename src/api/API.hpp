@@ -90,6 +90,16 @@ class API
     virtual bool forecastWeather(const Location& location, Forecast& forecast) = 0;
 
 
+    /** \brief Parses the weather forecast information from JSON into Weather objects.
+     *
+     * \param json     string containing the JSON
+     * \param forecast variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseForecast(const std::string& json, Forecast& forecast) const = 0;
+
+
     /** \brief Retrieves the current weather and the forecast for a given location.
      *
      * \param location  the location for which the forecast is requested

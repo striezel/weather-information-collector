@@ -73,6 +73,14 @@ class UpdateTo083
      *         Returns false otherwise.
      */
     static bool updateWeatherData(const ConnectionInformation& ci);
+
+    /** \brief Updates the snow information in the table forecastdata.
+     *
+     * \param ci   database connection information
+     * \return Returns true, if the update was successful.
+     *         Returns false otherwise.
+     */
+    static bool updateForecastData(const ConnectionInformation& ci);
 }; // class
 
 } // namespace

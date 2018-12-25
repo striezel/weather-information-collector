@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include "WeatherDataUpdate_0.8.3.hpp"
+#include "ForecastDataUpdate_0.8.3.hpp"
 #include <memory>
 #include "../api/API.hpp"
 #include "../api/Apixu.hpp"
@@ -28,12 +28,12 @@
 namespace wic
 {
 
-WeatherDataUpdate_083::WeatherDataUpdate_083(const ConnectionInformation& _ci)
+ForecastDataUpdate_083::ForecastDataUpdate_083(const ConnectionInformation& _ci)
 : m_failed(false), ci(_ci)
 {
 }
 
-void WeatherDataUpdate_083::operator()(const unsigned int startIdx, const unsigned int endIdx, const std::map<int, ApiType>& id_to_type, const mysqlpp::StoreQueryResult& result)
+void ForecastDataUpdate_083::operator()(const unsigned int startIdx, const unsigned int endIdx, const std::map<int, ApiType>& id_to_type, const mysqlpp::StoreQueryResult& result)
 {
   m_failed = false;
   mysqlpp::Connection conn(false);
@@ -73,26 +73,46 @@ void WeatherDataUpdate_083::operator()(const unsigned int startIdx, const unsign
            continue;
            break;
     } // switch
-    Weather w;
+    Forecast fc;
     const unsigned int dataId = result[i]["dataID"];
-    if (!api->parseCurrentWeather(result[i]["json"].c_str(), w))
+    if (!api->parseForecast(result[i]["json"].c_str(), fc))
     {
       std::cerr << "Error: Could not parse JSON data for data ID " << dataId
                 << "!" << std::endl;
       m_failed = true;
       return;
     }
+    const auto dataTime = std::chrono::system_clock::from_time_t(mysqlpp::DateTime(result[i]["dataTime"]));
+    // Find proper weather entry.
+    unsigned int idx = fc.data().size();
+    for (unsigned int i = 0; i < fc.data().size(); ++i)
+    {
+      if (dataTime == fc.data()[i].dataTime())
+      {
+        idx = i;
+        break;
+      }
+    } // for
+    if (idx >= fc.data().size())
+    {
+      std::cerr << "Error: Could not parse find matching entry for data ID " << dataId
+                << "!" << std::endl;
+      m_failed = true;
+      return;
+    }
+
+    const Weather& w = fc.data()[idx];
     if (w.hasSnow())
     {
       mysqlpp::Query update(&conn);
       if (!w.hasRain())
       {
-        update << "UPDATE weatherdata SET rain=NULL, snow=" << mysqlpp::quote << w.snow()
+        update << "UPDATE forecastdata SET rain=NULL, snow=" << mysqlpp::quote << w.snow()
                << " WHERE dataID=" << mysqlpp::quote << dataId << " LIMIT 1;";
       }
       else
       {
-        update << "UPDATE weatherdata SET rain=" << mysqlpp::quote << w.rain()
+        update << "UPDATE forecastdata SET rain=" << mysqlpp::quote << w.rain()
                << ", snow=" << mysqlpp::quote << w.snow()
                << " WHERE dataID=" << mysqlpp::quote << dataId << " LIMIT 1;";
       }
@@ -110,7 +130,7 @@ void WeatherDataUpdate_083::operator()(const unsigned int startIdx, const unsign
   return;
 }
 
-bool WeatherDataUpdate_083::failed() const
+bool ForecastDataUpdate_083::failed() const
 {
   return m_failed;
 }

@@ -23,6 +23,7 @@ set(weather-information-collector-update_sources
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
+    ForecastDataUpdate_0.8.3.cpp
     Update_0.5.4_to_0.5.5.cpp
     Update_0.5.7_to_0.6.0.cpp
     Update_0.6.5_to_0.6.6.cpp

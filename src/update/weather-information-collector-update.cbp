@@ -74,6 +74,8 @@
 		<Unit filename="../util/GitInfos.template.cpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
+		<Unit filename="ForecastDataUpdate_0.8.3.cpp" />
+		<Unit filename="ForecastDataUpdate_0.8.3.hpp" />
 		<Unit filename="UpdateTo_0.7.0.cpp" />
 		<Unit filename="UpdateTo_0.7.0.hpp" />
 		<Unit filename="UpdateTo_0.8.0.cpp" />
