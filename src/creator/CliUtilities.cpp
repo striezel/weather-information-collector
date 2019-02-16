@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ void writeLocationList(const std::vector<std::pair<LocationWithCountry, Weather>
   for (const auto & elem : locations)
   {
     // index for later use
-    std::cout << "["<<idx<<"]: "
+    std::cout << "[" << idx << "]: "
     // name of the location
               << elem.first.name();
     // country, if any
