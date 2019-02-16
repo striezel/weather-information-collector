@@ -32,8 +32,8 @@
 		<Compiler>
 			<Add option="-Weffc++" />
 			<Add option="-pedantic" />
-			<Add option="-std=c++11" />
 			<Add option="-Wall" />
+			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
 			<Add directory="/usr/include/mysql/" />
 			<Add directory="/usr/include/mysql++" />
@@ -73,6 +73,12 @@
 		<Unit filename="../db/ConnectionInformation.hpp" />
 		<Unit filename="../db/Utilities.cpp" />
 		<Unit filename="../db/Utilities.hpp" />
+		<Unit filename="../json/JsonCppApixu.cpp" />
+		<Unit filename="../json/JsonCppApixu.hpp" />
+		<Unit filename="../json/JsonCppDarkSky.cpp" />
+		<Unit filename="../json/JsonCppDarkSky.hpp" />
+		<Unit filename="../json/JsonCppOwm.cpp" />
+		<Unit filename="../json/JsonCppOwm.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../store/Store.hpp" />

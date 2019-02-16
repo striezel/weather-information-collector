@@ -37,6 +37,8 @@
 		<Unit filename="../../../src/data/Location.hpp" />
 		<Unit filename="../../../src/data/Weather.cpp" />
 		<Unit filename="../../../src/data/Weather.hpp" />
+		<Unit filename="../../../src/json/JsonCppOwm.cpp" />
+		<Unit filename="../../../src/json/JsonCppOwm.hpp" />
 		<Unit filename="../../../src/net/Curly.cpp" />
 		<Unit filename="../../../src/net/Curly.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />

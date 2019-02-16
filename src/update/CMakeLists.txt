@@ -17,6 +17,9 @@ set(weather-information-collector-update_sources
     ../db/API.cpp
     ../db/ConnectionInformation.cpp
     ../db/Structure.cpp
+    ../json/JsonCppApixu.cpp
+    ../json/JsonCppDarkSky.cpp
+    ../json/JsonCppOwm.cpp
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,13 +28,6 @@
 #include "../data/LocationWithCountry.hpp"
 #endif
 #include "API.hpp"
-
-// forward declaration of Json::Value
-namespace Json
-{
-  class Value;
-}
-
 
 namespace wic
 {
@@ -138,17 +131,6 @@ class OpenWeatherMap: public API
     #endif
   private:
     std::string m_apiKey; /**< the API key for requests */
-
-
-    /** \brief Parses weather data from a single JSON weather item into an
-     * instance of Weather class.
-     *
-     * \param value  the JSON value to parse
-     * \param weather the Weather item where the data shall be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    bool parseSingleWeatherItem(const Json::Value& value, Weather& weather) const;
 
 
     /** \brief Turns info of a location to a request string.

@@ -53,6 +53,12 @@
 		<Unit filename="../src/data/Weather.hpp" />
 		<Unit filename="../src/db/ConnectionInformation.cpp" />
 		<Unit filename="../src/db/ConnectionInformation.hpp" />
+		<Unit filename="../src/json/JsonCppApixu.cpp" />
+		<Unit filename="../src/json/JsonCppApixu.hpp" />
+		<Unit filename="../src/json/JsonCppDarkSky.cpp" />
+		<Unit filename="../src/json/JsonCppDarkSky.hpp" />
+		<Unit filename="../src/json/JsonCppOwm.cpp" />
+		<Unit filename="../src/json/JsonCppOwm.hpp" />
 		<Unit filename="../src/net/Curly.cpp" />
 		<Unit filename="../src/net/Curly.hpp" />
 		<Unit filename="../src/store/Store.hpp" />

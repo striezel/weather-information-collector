@@ -15,6 +15,9 @@ set(weather_information_collector_tests_sources
     ../src/data/Location.cpp
     ../src/data/Weather.cpp
     ../src/db/ConnectionInformation.cpp
+    ../src/json/JsonCppApixu.cpp
+    ../src/json/JsonCppDarkSky.cpp
+    ../src/json/JsonCppOwm.cpp
     ../src/net/Curly.cpp
     ../src/tasks/Task.cpp
     ../src/tasks/TaskManager.cpp

@@ -16,6 +16,9 @@ set(weather-information-collector-task-creator_sources
     ../data/LocationWithCountry.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
+    ../json/JsonCppApixu.cpp
+    ../json/JsonCppDarkSky.cpp
+    ../json/JsonCppOwm.cpp
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp

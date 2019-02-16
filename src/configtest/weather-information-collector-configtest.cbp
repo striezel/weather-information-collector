@@ -67,6 +67,12 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../json/JsonCppApixu.cpp" />
+		<Unit filename="../json/JsonCppApixu.hpp" />
+		<Unit filename="../json/JsonCppDarkSky.cpp" />
+		<Unit filename="../json/JsonCppDarkSky.hpp" />
+		<Unit filename="../json/JsonCppOwm.cpp" />
+		<Unit filename="../json/JsonCppOwm.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
