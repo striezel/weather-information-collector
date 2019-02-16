@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,9 +22,9 @@
 #include <fstream>
 #include <iostream>
 #include <boost/filesystem.hpp>
-#ifndef wic_sync
+#ifndef wic_no_tasks_in_config
 #include "../tasks/TaskManager.hpp"
-#endif // wic_sync
+#endif // wic_no_tasks_in_config
 #include "../util/Directories.hpp"
 #include "../util/Strings.hpp"
 
@@ -36,9 +36,9 @@ const char Configuration::commentCharater = '#';
 
 Configuration::Configuration()
 :
-  #ifndef wic_sync
+  #ifndef wic_no_tasks_in_config
   tasksContainer(std::vector<Task>()),
-  #endif // wic_sync
+  #endif // wic_no_tasks_in_config
   apiKeys(std::map<ApiType, std::string>()),
   connInfo(ConnectionInformation("", "", "", "", 0)),
   tasksDirectory(""),
@@ -88,7 +88,7 @@ const ConnectionInformation& Configuration::connectionInfo() const
   return connInfo;
 }
 
-#ifndef wic_sync
+#ifndef wic_no_tasks_in_config
 const std::string& Configuration::taskDirectory() const
 {
   return tasksDirectory;
@@ -103,7 +103,7 @@ const std::vector<Task>& Configuration::tasks() const
 {
   return tasksContainer;
 }
-#endif // wic_sync
+#endif // wic_no_tasks_in_config
 
 std::string Configuration::key(const ApiType api) const
 {
@@ -404,7 +404,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   if (!loadCoreConfiguration(realName, missingKeysAllowed))
     return false;
 
-  #ifndef wic_sync
+  #ifndef wic_no_tasks_in_config
   tasksContainer.clear();
   // If we do not want task data, exit here.
   if (skipTasks)
@@ -445,7 +445,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   {
     std::clog << "Warning: Task list is empty!" << std::endl;
   }
-  #endif // wic_sync
+  #endif // wic_no_tasks_in_config
 
   return true;
 }
@@ -453,9 +453,9 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
 void Configuration::clear()
 {
   // clear information
-  #ifndef wic_sync
+  #ifndef wic_no_tasks_in_config
   tasksContainer.clear();
-  #endif // wic_sync
+  #endif // wic_no_tasks_in_config
   apiKeys.clear();
   connInfo.clear();
   tasksDirectory.erase();
