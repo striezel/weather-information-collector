@@ -31,7 +31,7 @@ set(weather-information-collector-task-creator_sources
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++11 -Dwic_task_creator)
+add_definitions(-std=c++11 -Dwic_owm_find_location)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 

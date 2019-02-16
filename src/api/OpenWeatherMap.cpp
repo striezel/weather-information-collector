@@ -21,9 +21,9 @@
 #include "OpenWeatherMap.hpp"
 #include <cmath>
 #include <iostream>
-#ifdef wic_task_creator
+#ifdef wic_owm_find_location
 #include <jsoncpp/json/reader.h>
-#endif // wic_task_creator
+#endif // wic_owm_find_location
 #include "../json/JsonCppOwm.hpp"
 #include "../net/Curly.hpp"
 #include "../util/Strings.hpp"
@@ -163,7 +163,7 @@ bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather
   return false;
 }
 
-#ifdef wic_task_creator
+#ifdef wic_owm_find_location
 std::string urlEncode(const std::string& str)
 {
   static const char hexDigits[16] = {
@@ -290,6 +290,6 @@ bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair
 
   return true;
 }
-#endif
+#endif // wic_owm_find_location
 
 } // namespace
