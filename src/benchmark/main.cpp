@@ -126,9 +126,27 @@ int main(int argc, char** argv)
   }
 
   // Erase all locations that are not retrieved with OpenWeatherMap API.
+  const auto erasableIterator =
   std::remove_if(weatherLocations.begin(), weatherLocations.end(),
-              [](const std::pair<wic::Location, wic::ApiType>& elem) { return elem.second != wic::ApiType::OpenWeatherMap; }
+              [&](const std::pair<wic::Location, wic::ApiType>& elem) { return elem.second != wic::ApiType::OpenWeatherMap; }
               );
+  if (erasableIterator != weatherLocations.end())
+  {
+    weatherLocations.erase(erasableIterator, weatherLocations.end());
+  }
+
+  std::cout << "Locations that are parsed:\n";
+  for (const auto& p : weatherLocations)
+  {
+    std::cout << p.first.toString() << ", " << wic::toString(p.second) << "\n";
+  }
+  if (weatherLocations.size() == 0)
+  {
+    std::cout << "none" << std::endl << std::endl << "Exiting benchmark." << std::endl;
+    return 0;
+  }
+
+  std::cout << std::endl;
 
   for(const auto& elem : weatherLocations)
   {
@@ -176,10 +194,16 @@ int main(int argc, char** argv)
 
     std::cout << "Parsing " << data.size() << " elements for "
               << elem.first.toString() << " took:" << std::endl;
-    const auto jsonCppTime = std::chrono::duration_cast<std::chrono::milliseconds>(jsonCppEnd - jsonCppStart);
-    const auto nlohmannJsonTime = std::chrono::duration_cast<std::chrono::milliseconds>(nlohmannJsonEnd - nlohmannJsonStart);
-    std::cout << "JsonCpp:       " << jsonCppTime.count() << " ms\n"
-              << "nlohmann/json: " << nlohmannJsonTime.count() << " ms\n" << std::endl;
+    const auto jsonCppTime = std::chrono::duration_cast<std::chrono::microseconds>(jsonCppEnd - jsonCppStart);
+    const auto jsonCppPerElement = static_cast<double>(jsonCppTime.count()) / data.size();
+    const auto nlohmannJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(nlohmannJsonEnd - nlohmannJsonStart);
+    const auto nlohmannJsonPerElement = static_cast<double>(nlohmannJsonTime.count()) / data.size();
+    const double percentage = static_cast<double>(nlohmannJsonTime.count()) / jsonCppTime.count() * 100.0;
+    std::cout << "JsonCpp:       " << jsonCppTime.count() << " microseconds (100 %)\n"
+              << "               (ca. " << jsonCppPerElement << " microseconds per element)\n"
+              << "nlohmann/json: " << nlohmannJsonTime.count() << " microseconds (" << percentage << " %)\n"
+              << "               (ca. " << nlohmannJsonPerElement << " microseconds per element)\n"
+              << std::endl;
   } // for
 
 
