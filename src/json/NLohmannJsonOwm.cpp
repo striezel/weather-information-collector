@@ -29,14 +29,16 @@ bool NLohmannJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& w
 {
   if (value.empty())
     return false;
-  value_type val = value["main"];
+  auto find = value.find("main");
   bool foundValidParts = false;
-  if (!val.empty() && val.is_object())
+  if (find != value.end() && find->is_object())
   {
-    value_type v2 = val["temp"];
-    if (!v2.empty() && v2.is_number())
+    const value_type main = value["main"];
+    find = main.find("temp");
+    if (find != main.end() && find->is_number())
     {
-      weather.setTemperatureKelvin(v2.get<float>());
+      const value_type temp = main["temp"];
+      weather.setTemperatureKelvin(temp.get<float>());
       weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
       // Avoid values like 6.9999... ° C by rounding, if appropriate.
       const float celsiusRounded = std::round(weather.temperatureCelsius());
@@ -52,39 +54,42 @@ bool NLohmannJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& w
         weather.setTemperatureFahrenheit(fahrenheitRounded);
       }
     }
-    v2 = val["pressure"];
-    if (!v2.empty() && v2.is_number())
-      weather.setPressure(static_cast<int16_t>(v2.get<float>()));
-    v2 = val["humidity"];
-    if (!v2.empty() && v2.is_number_unsigned())
-      weather.setHumidity(v2.get<int>());
+    find = main.find("pressure");
+    if (find != main.end() && find->is_number())
+      weather.setPressure(static_cast<int16_t>(find->get<float>()));
+    find = main.find("humidity");
+    if (find != main.end() && find->is_number_unsigned())
+      weather.setHumidity(find->get<int>());
     foundValidParts = true;;
   } // if main object
-  val = value["wind"];
-  if (!val.empty() && val.is_object())
+  find = value.find("wind");
+  if (find != value.end() && find->is_object())
   {
-    value_type v2 = val["speed"];
-    if (!v2.empty() && v2.is_number())
-      weather.setWindSpeed(v2.get<float>());
-    v2 = val["deg"];
-    if (!v2.empty() && v2.is_number())
-      weather.setWindDegrees(static_cast<int16_t>(v2.get<float>()));
+    const value_type wind = *find;
+    find = wind.find("speed");
+    if (find != wind.end() && find->is_number())
+      weather.setWindSpeed(find->get<float>());
+    find = wind.find("deg");
+    if (find != wind.end() && find->is_number())
+      weather.setWindDegrees(static_cast<int16_t>(find->get<float>()));
   } // if wind object
-  val = value["clouds"];
-  if (!val.empty() && val.is_object())
+  find = value.find("clouds");
+  if (find != value.end() && find->is_object())
   {
-    const value_type v2 = val["all"];
-    if (!v2.empty() && v2.is_number_integer())
-      weather.setCloudiness(v2.get<int>());
+    const value_type clouds = *find;
+    find = clouds.find("all");
+    if (find != clouds.end() && find->is_number_integer())
+      weather.setCloudiness(find->get<int>());
   } // if clouds object
-  val = value["rain"];
-  if (!val.is_null() && val.is_object())
+  find = value.find("rain");
+  if (find != value.end() && find->is_object())
   {
-    const value_type v2 = val["3h"];
-    if (!v2.is_null())
+    const value_type rain = *find;
+    find = rain.find("3h");
+    if (find != rain.end())
     {
-      if (v2.is_number())
-        weather.setRain(v2.get<float>());
+      if (find->is_number())
+        weather.setRain(find->get<float>());
     }
     else
     {
@@ -92,14 +97,15 @@ bool NLohmannJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& w
       weather.setRain(0.0f);
     }
   } // if rain object
-  const value_type& snow = value["snow"];
-  if (!snow.is_null() && snow.is_object())
+  find = value.find("snow");
+  if (find != value.end() && find->is_object())
   {
-    const value_type& v2 = snow["3h"];
-    if (!v2.is_null())
+    const value_type snow = *find;
+    const auto find3h = snow.find("3h");
+    if (find3h != snow.end())
     {
-      if (v2.is_number())
-        weather.setSnow(v2.get<float>());
+      if (find3h->is_number())
+        weather.setSnow(find3h->get<float>());
     }
     else
     {
@@ -107,10 +113,10 @@ bool NLohmannJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& w
       weather.setSnow(0.0f);
     }
   } // if rain object
-  val = value["dt"];
-  if (!val.empty() && val.is_number_integer())
+  find = value.find("dt");
+  if (find != value.end() && find->is_number_integer())
   {
-    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.get<int64_t>()));
+    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(find->get<int64_t>()));
     weather.setDataTime(dt);
   } // if dt
   return foundValidParts;
