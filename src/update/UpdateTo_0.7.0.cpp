@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #include "UpdateTo_0.7.0.hpp"
 #include <mysql++/mysql++.h>
+#include "../api/OpenWeatherMap.hpp"
+#include "../db/API.hpp"
 #include "../db/Structure.hpp"
 
 namespace wic
@@ -27,7 +29,9 @@ namespace wic
 
 bool UpdateTo070::perform(const ConnectionInformation& ci)
 {
-  return updateStructure(ci);
+  if (!updateStructure(ci))
+    return false;
+  return updateData(ci);
 }
 
 bool UpdateTo070::updateStructure(const ConnectionInformation& ci)
@@ -111,6 +115,89 @@ bool UpdateTo070::updateStructure(const ConnectionInformation& ci)
   } // else (i.e. table must be created)
 
   // All queries were successful. (Or there was nothing to do.)
+  return true;
+}
+
+bool UpdateTo070::updateData(const ConnectionInformation& ci)
+{
+  mysqlpp::Connection conn(false);
+  if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
+                    ci.password().c_str(), ci.port()))
+  {
+    // Should not happen, because previous connection attempts were successful,
+    // but better be safe than sorry.
+    std::cerr << "Error: Could not connect to database!" << std::endl;
+    return false;
+  }
+  // Get API id of OpenWeatherMap, since only OpenWeatherMap entries are of
+  // relevance to the issue.
+  const int owmApiId = db::API::getId(conn, ApiType::OpenWeatherMap);
+  if (owmApiId <= 0)
+  {
+    std::cerr << "Error: Could not find API entry for OpenWeatherMap in database!"
+              << std::endl;
+    return false;
+  }
+  // Get all possible entries of OpenWeatherMap without wind direction but with
+  // JSON data that contains '"deg":', i.e. values for wind direction.
+  mysqlpp::Query query(&conn);
+  query << "SELECT dataID, json FROM `weatherdata` "
+        << "  WHERE `apiID`=" << mysqlpp::quote << owmApiId
+        << "  AND ISNULL(wind_degrees) AND NOT ISNULL(json) AND json LIKE '%\"deg\":%';";
+  mysqlpp::StoreQueryResult result = query.store();
+  if (!result)
+  {
+    std::cerr << "Failed to get query result: " << query.error() << "\n";
+    return false;
+  }
+  const auto rows = result.num_rows();
+  if (rows == 0)
+  {
+    // Nothing to do here.
+    std::cout << "Info: No wind direction data update is needed." << std::endl;
+    return true;
+  }
+  // Update fields.
+  uint_least32_t updated = 0;
+  const OpenWeatherMap owm;
+  for (std::size_t i = 0; i < rows; ++i)
+  {
+    const uint_least32_t dataId = result[i]["dataID"];
+    const std::string json = result[i]["json"].c_str();
+    Weather w;
+    if (!owm.parseCurrentWeather(json, w))
+    {
+      std::cerr << "Error: Could not parse JSON data of dataID " << dataId
+                << " to get weather information!" << std::endl;
+      return false;
+    }
+    if (!w.hasWindDegrees())
+      continue;
+    mysqlpp::Query updateQuery(&conn);
+    updateQuery << "UPDATE weatherdata "
+                << "  SET wind_degrees=" << mysqlpp::quote << w.windDegrees()
+                << "  WHERE dataID=" << mysqlpp::quote << dataId << " LIMIT 1;";
+    if (!updateQuery.exec())
+    {
+      std::cerr << "Error: Could not set wind direction for dataID " << dataId
+                << " to " << w.windDegrees() << "°!" << std::endl
+                << "Internal error: " << updateQuery.error() << std::endl;
+      return false;
+    }
+    ++updated;
+  } // for
+
+  if (updated == 1)
+  {
+    std::cout << "Info: One data set has been updated with new wind direction."
+              << std::endl;
+  }
+  else
+  {
+    std::cout << "Info: " << updated << " data sets have been updated with new wind direction."
+              << std::endl;
+  }
+  // All is done here.
   return true;
 }
 

@@ -1,5 +1,13 @@
 # Version history of weather-information-collector
 
+## Version 0.8.4 (2019-02-19)
+
+The updater's update mechanism to version 0.7.0 will now also adjust the wind
+direction for current weather entries of OpenWeatherMap that have a non-integer
+value as wind direction. (This change should have been part of version 0.7.0,
+but it was overlooked, because the change that allowed to parse not only integer
+values but also float values as wind direction was introduced in version 0.7.0.)
+
 ## Version 0.8.3 (2018-12-25)
 
 Information about precipitation is now split into rain and snow amount.

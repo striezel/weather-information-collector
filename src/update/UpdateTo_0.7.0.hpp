@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,8 +29,10 @@ namespace wic
 /** Manages update of databases before version 0.7.0 of
     weather-information-collector to version 0.7.0.
 
-    This class basically does one thing to the database:
+    This class basically does two things to the database:
     * It adds the tables `forecast` and `forecastdata` to the database.
+    * It sets wind direction values for OpenWeatherMap entries where the value
+      is a floating point value and not an integer.
 */
 class UpdateTo070
 {
@@ -51,6 +53,15 @@ class UpdateTo070
      *         Returns false otherwise.
      */
     static bool updateStructure(const ConnectionInformation& ci);
+
+
+    /** \brief Performs the data changes of the update.
+     *
+     * \param ci   database connection information
+     * \return Returns true, if the update was successful.
+     *         Returns false otherwise.
+     */
+    static bool updateData(const ConnectionInformation& ci);
 }; // class
 
 } // namespace
