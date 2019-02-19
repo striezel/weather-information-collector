@@ -19,6 +19,7 @@
 */
 
 #include "Weather.hpp"
+#include <cmath>
 #include <limits>
 
 namespace wic
@@ -269,7 +270,7 @@ void Weather::setJson(const std::string& newJson)
 constexpr bool same(const float a, const float b)
 {
   // Compare for equality using relatively-sized epsilon environment.
-  return std::abs(a - b) < 0.0001 * std::abs(a)
+  return std::fabs(a - b) < 0.0001 * std::abs(a)
   // Special case for positive vs. negative zero.
       || (a == b);
 }
