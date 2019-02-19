@@ -33,6 +33,7 @@
 			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
 			<Add option="-Dwic_no_tasks_in_config" />
+			<Add option="-Dwic_weather_comparison" />
 			<Add directory="/usr/include/mysql/" />
 			<Add directory="/usr/include/mysql++" />
 		</Compiler>

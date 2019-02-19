@@ -31,6 +31,24 @@
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
 
+void printWeather(const wic::Weather& w)
+{
+  std::cout << "Temperature: " << w.temperatureCelsius() << " °C (" << w.hasTemperatureCelsius() << ")\n"
+            << "Temperature: " << w.temperatureFahrenheit() << " °F (" << w.hasTemperatureFahrenheit() << ")\n"
+            << "Temperature: " << w.temperatureKelvin() << " K (" << w.hasTemperatureKelvin() << ")\n"
+            << "Humidity: " << static_cast<int>(w.humidity()) << " % (" << w.hasHumidity() << ")\n"
+            << "Rain: " << w.rain() << " mm (" << w.hasRain() << ")\n"
+            << "Snow: " << w.snow() << " mm (" << w.hasSnow() << ")\n"
+            << "Pressure: " << w.pressure() << " hPa (" << w.hasPressure() << ")\n"
+            << "Wind speed: " << w.windSpeed() << " m/s (" << w.hasWindSpeed() << ")\n"
+            << "Wind direction: " << w.windDegrees() << " ° (" << w.hasWindDegrees() << ")\n"
+            << "Cloudiness: " << static_cast<int>(w.cloudiness()) << " % (" << w.hasCloudiness() << ")\n";
+  const std::time_t dt_c = std::chrono::system_clock::to_time_t(w.dataTime());
+  std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
+  const std::time_t rt_c = std::chrono::system_clock::to_time_t(w.requestTime());
+  std::cout << "Request time: " << std::ctime(&rt_c) << "\n";
+}
+
 void showVersion()
 {
   wic::GitInfos info;
@@ -158,8 +176,6 @@ int main(int argc, char** argv)
       return wic::rcDatabaseError;
     }
 
-    wic::Weather dummy;
-
     // Parse with JsonCpp.
     const auto jsonCppStart = std::chrono::high_resolution_clock::now();
     for (const wic::Weather& elem: data)
@@ -167,11 +183,27 @@ int main(int argc, char** argv)
       if (!elem.hasJson())
         continue;
 
+      wic::Weather dummy;
       if (!wic::JsonCppOwm::parseCurrentWeather(elem.json(), dummy))
       {
         std::cerr << "Error: Could not parse JSON with JsonCpp!" << std::endl
                   << "JSON is: '" << elem.json() << "'." << std::endl;
         return 1;
+      }
+
+      // compare with value from database
+      // -- First set request time, because that one cannot be determined from
+      //    the raw JSON alone.
+      dummy.setRequestTime(elem.requestTime());
+      if (dummy != elem)
+      {
+        std::cerr << "Error: JsonCpp-parsed element does not match the element from the database!" << std::endl;
+        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+        std::cerr << "Element from database:\n";
+        printWeather(elem);
+        std::cerr << "Element from parser:\n";
+        printWeather(dummy);
+        return 42;
       }
     } // for
     const auto jsonCppEnd = std::chrono::high_resolution_clock::now();
@@ -183,11 +215,27 @@ int main(int argc, char** argv)
       if (!elem.hasJson())
         continue;
 
+      wic::Weather dummy;
       if (!wic::NLohmannJsonOwm::parseCurrentWeather(elem.json(), dummy))
       {
         std::cerr << "Error: Could not parse JSON with nlohmann/json!" << std::endl
                   << "JSON is: '" << elem.json() << "'." << std::endl;
         return 1;
+      }
+
+      // compare with value from database
+      // -- First set request time, because that one cannot be determined from
+      //    the raw JSON alone.
+      dummy.setRequestTime(elem.requestTime());
+      if (dummy != elem)
+      {
+        std::cerr << "Error: nlohmann/json-parsed element does not match the element from the database!" << std::endl;
+        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+        std::cerr << "Element from database:\n";
+        printWeather(elem);
+        std::cerr << "Element from parser:\n";
+        printWeather(dummy);
+        return 42;
       }
     } // for
     const auto nlohmannJsonEnd = std::chrono::high_resolution_clock::now();
@@ -205,7 +253,6 @@ int main(int argc, char** argv)
               << "               (ca. " << nlohmannJsonPerElement << " microseconds per element)\n"
               << std::endl;
   } // for
-
 
   std::cout << "Done." << std::endl;
   return 0;

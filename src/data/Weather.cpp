@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -258,4 +258,40 @@ void Weather::setJson(const std::string& newJson)
   m_json = newJson;
 }
 
-} //namespace
+#ifdef wic_weather_comparison
+/** \brief Utility function to compare floating point values for equality.
+ *
+ * \param a first operand of comparison
+ * \param b second operand of comparison
+ * \return Returns true, if both values are the same, i.e. a is within a small
+ *         epsilon environment of b. Epsilon is 0.01 % of a.
+ */
+constexpr bool same(const float a, const float b)
+{
+  return std::abs(a - b) < 0.0001 * std::abs(a);
+}
+
+bool Weather::operator==(const Weather& other) const
+{
+  return (hasDataTime() == other.hasDataTime()) && (!hasDataTime() || dataTime() == other.dataTime())
+      && (hasRequestTime() == other.hasRequestTime()) && (!hasRequestTime() || requestTime() == other.requestTime())
+      && (hasTemperatureKelvin() == other.hasTemperatureKelvin()) && (!hasTemperatureKelvin() || same(temperatureKelvin(), other.temperatureKelvin())) // float
+      && (hasTemperatureCelsius() == other.hasTemperatureCelsius()) && (!hasTemperatureCelsius() || same(temperatureCelsius(), other.temperatureCelsius())) // float
+      && (hasTemperatureFahrenheit() == other.hasTemperatureFahrenheit()) && (!hasTemperatureFahrenheit() || same(temperatureFahrenheit(), other.temperatureFahrenheit())) // float
+      && (hasHumidity() == other.hasHumidity()) && (!hasHumidity() || humidity() == other.humidity())
+      && (hasRain() == other.hasRain()) && (!hasRain() || same(rain(), other.rain())) // float
+      && (hasSnow() == other.hasSnow()) && (!hasSnow() || same(snow(), other.snow())) // float
+      && (hasPressure() == other.hasPressure()) && (!hasPressure() || pressure() == other.pressure())
+      && (hasWindSpeed() == other.hasWindSpeed()) && (!hasWindSpeed() || same(windSpeed(), other.windSpeed())) // float
+      && (hasWindDegrees() == other.hasWindDegrees()) && (!hasWindDegrees() || windDegrees() == other.windDegrees())
+      && (hasCloudiness() == other.hasCloudiness()) && (!hasCloudiness() || cloudiness() == other.cloudiness())
+      && (hasJson() == other.hasJson()) && (!hasJson() || json() == other.json());
+}
+
+bool Weather::operator!=(const Weather& other) const
+{
+  return !(*this == other);
+}
+#endif // wic_weather_comparison
+
+} // namespace
