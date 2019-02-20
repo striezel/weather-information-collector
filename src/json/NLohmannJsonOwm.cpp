@@ -157,12 +157,13 @@ bool NLohmannJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
   if (root.empty())
     return false;
 
-  const value_type list = root["list"];
-  if (list.empty() || !list.is_array())
+  const auto findList = root.find("list");
+  if ((findList == root.end()) || findList->empty() || !findList->is_array())
   {
     std::cerr << "Error in NLohmannJsonOwm::parseForecast(): list is either empty or not an array!" << std::endl;
     return false;
   }
+  const value_type list = *findList;
   forecast.setData({ });
   auto data = forecast.data();
   for (const value_type val : list)
@@ -178,18 +179,18 @@ bool NLohmannJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
       return false;
     }
   } // for (range-based)
-  const auto val = root["cnt"];
-  if (val.empty() || !val.is_number_unsigned())
+  const auto findCnt = root.find("cnt");
+  if ((findCnt == root.end()) || findCnt->empty() || !findCnt->is_number_unsigned())
   {
     std::cerr << "Error in NLohmannJsonOwm::parseForecast(): cnt is empty or not an integer!" << std::endl;
     return false;
   }
-  const decltype(data.size()) cnt = val.get<unsigned int>();
+  const decltype(data.size()) cnt = findCnt->get<unsigned int>();
   // Number of data items should be the number given in "cnt".
   if (data.size() != cnt)
   {
     std::cerr << "Error in NLohmannJsonOwm::parseForecast(): Expected " << cnt
-              << " items, but only " << data.size() << " items were found!" << std::endl;
+              << " items, but " << data.size() << " items were found!" << std::endl;
     return false;
   }
   forecast.setData(data);
