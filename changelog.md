@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.8.5 (2019-02-20)
+
+A new version of the updater fixes some incorrect rain information for forcast
+data of OpenWeatherMap where rain was mistakenly set to NULL in the database.
+The value is now set to the correct value (zero) instead.
+
 ## Version 0.8.4 (2019-02-19)
 
 The updater's update mechanism to version 0.7.0 will now also adjust the wind
