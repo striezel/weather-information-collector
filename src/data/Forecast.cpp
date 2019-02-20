@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -69,5 +69,22 @@ void Forecast::setData(const std::vector<Weather>& newData)
 {
   m_forecast = newData;
 }
+
+#ifdef wic_weather_comparison
+bool Forecast::operator==(const Forecast& other) const
+{
+  return (hasRequestTime() == other.hasRequestTime()) && (!hasRequestTime() || requestTime() == other.requestTime())
+      // Original line for JSON comparison would be:
+      // && (hasJson() == other.hasJson()) && (!hasJson() || json() == other.json())
+      // ... but since hasJson() does only check for empty strings, we can compare directly.
+      && json() == other.json()
+      && data() == other.data();
+}
+
+bool Forecast::operator!=(const Forecast& other) const
+{
+  return !(*this == other);
+}
+#endif // wic_weather_comparison
 
 } // namespace
