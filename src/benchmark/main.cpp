@@ -49,6 +49,18 @@ void printWeather(const wic::Weather& w)
   std::cout << "Request time: " << std::ctime(&rt_c) << "\n";
 }
 
+void printForecast(const wic::Forecast& f)
+{
+  const std::time_t rt_c = std::chrono::system_clock::to_time_t(f.requestTime());
+  std::cout << "Request time: " << std::ctime(&rt_c) << "\n"
+            << "Number of data points: " << f.data().size() << "\n";
+  for (decltype(f.data().size()) i = 0; i < f.data().size(); ++i)
+  {
+    std::cout << "Data point #" << i << "\n";
+    printWeather(f.data().at(i));
+  } // for
+}
+
 void showVersion()
 {
   wic::GitInfos info;
@@ -135,124 +147,251 @@ int main(int argc, char** argv)
   }
 
   wic::SourceMySQL source(config.connectionInfo());
-  // Find all locations with weather data.
-  std::vector<std::pair<wic::Location, wic::ApiType>> weatherLocations;
-  if (!source.listWeatherLocationsWithApi(weatherLocations))
-  {
-    std::cerr << "Error: Could not retrieve locations with weather data!" << std::endl;
-    return wic::rcDatabaseError;
-  }
 
-  // Erase all locations that are not retrieved with OpenWeatherMap API.
-  const auto erasableIterator =
-  std::remove_if(weatherLocations.begin(), weatherLocations.end(),
-              [&](const std::pair<wic::Location, wic::ApiType>& elem) { return elem.second != wic::ApiType::OpenWeatherMap; }
-              );
-  if (erasableIterator != weatherLocations.end())
+  /* ********* Weather data ********* */
   {
-    weatherLocations.erase(erasableIterator, weatherLocations.end());
-  }
-
-  std::cout << "Locations that are parsed:\n";
-  for (const auto& p : weatherLocations)
-  {
-    std::cout << p.first.toString() << ", " << wic::toString(p.second) << "\n";
-  }
-  if (weatherLocations.size() == 0)
-  {
-    std::cout << "none" << std::endl << std::endl << "Exiting benchmark." << std::endl;
-    return 0;
-  }
-
-  std::cout << std::endl;
-
-  for(const auto& elem : weatherLocations)
-  {
-    std::vector<wic::Weather> data;
-    if (!source.getCurrentWeather(elem.second, elem.first, data))
+    // Find all locations with weather data.
+    std::vector<std::pair<wic::Location, wic::ApiType>> weatherLocations;
+    if (!source.listWeatherLocationsWithApi(weatherLocations))
     {
-      std::cerr << "Error: Could not get weather data for "
-                << elem.first.toString() << std::endl;
+      std::cerr << "Error: Could not retrieve locations with weather data!" << std::endl;
       return wic::rcDatabaseError;
     }
 
-    // Parse with JsonCpp.
-    const auto jsonCppStart = std::chrono::high_resolution_clock::now();
-    for (const wic::Weather& elem: data)
+    // Erase all locations that are not retrieved with OpenWeatherMap API.
+    const auto erasableIterator =
+    std::remove_if(weatherLocations.begin(), weatherLocations.end(),
+                [&](const std::pair<wic::Location, wic::ApiType>& elem) { return elem.second != wic::ApiType::OpenWeatherMap; }
+                );
+    if (erasableIterator != weatherLocations.end())
     {
-      if (!elem.hasJson())
-        continue;
+      weatherLocations.erase(erasableIterator, weatherLocations.end());
+    }
 
-      wic::Weather dummy;
-      if (!wic::JsonCppOwm::parseCurrentWeather(elem.json(), dummy))
-      {
-        std::cerr << "Error: Could not parse JSON with JsonCpp!" << std::endl
-                  << "JSON is: '" << elem.json() << "'." << std::endl;
-        return 1;
-      }
-
-      // compare with value from database
-      // -- First set request time, because that one cannot be determined from
-      //    the raw JSON alone.
-      dummy.setRequestTime(elem.requestTime());
-      if (dummy != elem)
-      {
-        std::cerr << "Error: JsonCpp-parsed element does not match the element from the database!" << std::endl;
-        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
-        std::cerr << "Element from database:\n";
-        printWeather(elem);
-        std::cerr << "Element from parser:\n";
-        printWeather(dummy);
-        return 42;
-      }
-    } // for
-    const auto jsonCppEnd = std::chrono::high_resolution_clock::now();
-
-    // Parse with nlohmann/json.
-    const auto nlohmannJsonStart = std::chrono::high_resolution_clock::now();
-    for (const wic::Weather& elem: data)
+    std::cout << "Locations that are parsed:\n";
+    for (const auto& p : weatherLocations)
     {
-      if (!elem.hasJson())
-        continue;
+      std::cout << p.first.toString() << ", " << wic::toString(p.second) << "\n";
+    }
+    if (weatherLocations.size() == 0)
+    {
+      std::cout << "none" << std::endl << std::endl << "Exiting benchmark." << std::endl;
+      return 0;
+    }
 
-      wic::Weather dummy;
-      if (!wic::NLohmannJsonOwm::parseCurrentWeather(elem.json(), dummy))
+    std::cout << std::endl;
+
+    for(const auto& elem : weatherLocations)
+    {
+      std::vector<wic::Weather> data;
+      if (!source.getCurrentWeather(elem.second, elem.first, data))
       {
-        std::cerr << "Error: Could not parse JSON with nlohmann/json!" << std::endl
-                  << "JSON is: '" << elem.json() << "'." << std::endl;
-        return 1;
+        std::cerr << "Error: Could not get weather data for "
+                  << elem.first.toString() << std::endl;
+        return wic::rcDatabaseError;
       }
 
-      // compare with value from database
-      // -- First set request time, because that one cannot be determined from
-      //    the raw JSON alone.
-      dummy.setRequestTime(elem.requestTime());
-      if (dummy != elem)
+      // Parse with JsonCpp.
+      const auto jsonCppStart = std::chrono::high_resolution_clock::now();
+      for (const wic::Weather& elem: data)
       {
-        std::cerr << "Error: nlohmann/json-parsed element does not match the element from the database!" << std::endl;
-        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
-        std::cerr << "Element from database:\n";
-        printWeather(elem);
-        std::cerr << "Element from parser:\n";
-        printWeather(dummy);
-        return 42;
-      }
+        if (!elem.hasJson())
+          continue;
+
+        wic::Weather dummy;
+        if (!wic::JsonCppOwm::parseCurrentWeather(elem.json(), dummy))
+        {
+          std::cerr << "Error: Could not parse JSON with JsonCpp!" << std::endl
+                    << "JSON is: '" << elem.json() << "'." << std::endl;
+          return 1;
+        }
+
+        // compare with value from database
+        // -- First set request time, because that one cannot be determined from
+        //    the raw JSON alone.
+        dummy.setRequestTime(elem.requestTime());
+        if (dummy != elem)
+        {
+          std::cerr << "Error: JsonCpp-parsed element does not match the element from the database!" << std::endl;
+          std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+          std::cerr << "Element from database:\n";
+          printWeather(elem);
+          std::cerr << "Element from parser:\n";
+          printWeather(dummy);
+          return 42;
+        }
+      } // for
+      const auto jsonCppEnd = std::chrono::high_resolution_clock::now();
+
+      // Parse with nlohmann/json.
+      const auto nlohmannJsonStart = std::chrono::high_resolution_clock::now();
+      for (const wic::Weather& elem: data)
+      {
+        if (!elem.hasJson())
+          continue;
+
+        wic::Weather dummy;
+        if (!wic::NLohmannJsonOwm::parseCurrentWeather(elem.json(), dummy))
+        {
+          std::cerr << "Error: Could not parse JSON with nlohmann/json!" << std::endl
+                    << "JSON is: '" << elem.json() << "'." << std::endl;
+          return 1;
+        }
+
+        // compare with value from database
+        // -- First set request time, because that one cannot be determined from
+        //    the raw JSON alone.
+        dummy.setRequestTime(elem.requestTime());
+        if (dummy != elem)
+        {
+          std::cerr << "Error: nlohmann/json-parsed element does not match the element from the database!" << std::endl;
+          std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+          std::cerr << "Element from database:\n";
+          printWeather(elem);
+          std::cerr << "Element from parser:\n";
+          printWeather(dummy);
+          return 42;
+        }
+      } // for
+      const auto nlohmannJsonEnd = std::chrono::high_resolution_clock::now();
+
+      std::cout << "Parsing " << data.size() << " elements for "
+                << elem.first.toString() << " took:" << std::endl;
+      const auto jsonCppTime = std::chrono::duration_cast<std::chrono::microseconds>(jsonCppEnd - jsonCppStart);
+      const auto jsonCppPerElement = static_cast<double>(jsonCppTime.count()) / data.size();
+      const auto nlohmannJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(nlohmannJsonEnd - nlohmannJsonStart);
+      const auto nlohmannJsonPerElement = static_cast<double>(nlohmannJsonTime.count()) / data.size();
+      const double percentage = static_cast<double>(nlohmannJsonTime.count()) / jsonCppTime.count() * 100.0;
+      std::cout << "JsonCpp:       " << jsonCppTime.count() << " microseconds (100 %)\n"
+                << "               (ca. " << jsonCppPerElement << " microseconds per element)\n"
+                << "nlohmann/json: " << nlohmannJsonTime.count() << " microseconds (" << percentage << " %)\n"
+                << "               (ca. " << nlohmannJsonPerElement << " microseconds per element)\n"
+                << std::endl;
     } // for
-    const auto nlohmannJsonEnd = std::chrono::high_resolution_clock::now();
+  } // end of scope for weather data stuff
 
-    std::cout << "Parsing " << data.size() << " elements for "
-              << elem.first.toString() << " took:" << std::endl;
-    const auto jsonCppTime = std::chrono::duration_cast<std::chrono::microseconds>(jsonCppEnd - jsonCppStart);
-    const auto jsonCppPerElement = static_cast<double>(jsonCppTime.count()) / data.size();
-    const auto nlohmannJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(nlohmannJsonEnd - nlohmannJsonStart);
-    const auto nlohmannJsonPerElement = static_cast<double>(nlohmannJsonTime.count()) / data.size();
-    const double percentage = static_cast<double>(nlohmannJsonTime.count()) / jsonCppTime.count() * 100.0;
-    std::cout << "JsonCpp:       " << jsonCppTime.count() << " microseconds (100 %)\n"
-              << "               (ca. " << jsonCppPerElement << " microseconds per element)\n"
-              << "nlohmann/json: " << nlohmannJsonTime.count() << " microseconds (" << percentage << " %)\n"
-              << "               (ca. " << nlohmannJsonPerElement << " microseconds per element)\n"
-              << std::endl;
-  } // for
+  /* ********* Forecast data ********* */
+  {
+    // Find all locations with forecast data.
+    std::vector<std::pair<wic::Location, wic::ApiType>> forecastLocations;
+    if (!source.listForecastLocationsWithApi(forecastLocations))
+    {
+      std::cerr << "Error: Could not retrieve locations with forecast data!" << std::endl;
+      return wic::rcDatabaseError;
+    }
+
+    // Erase all locations that are not retrieved with OpenWeatherMap API.
+    const auto erasableIterator =
+    std::remove_if(forecastLocations.begin(), forecastLocations.end(),
+                [&](const std::pair<wic::Location, wic::ApiType>& elem) { return elem.second != wic::ApiType::OpenWeatherMap; }
+                );
+    if (erasableIterator != forecastLocations.end())
+    {
+      forecastLocations.erase(erasableIterator, forecastLocations.end());
+    }
+
+    std::cout << "Locations that are parsed:\n";
+    for (const auto& p : forecastLocations)
+    {
+      std::cout << p.first.toString() << ", " << wic::toString(p.second) << "\n";
+    }
+    if (forecastLocations.size() == 0)
+    {
+      std::cout << "none" << std::endl << std::endl << "Exiting benchmark." << std::endl;
+      return 0;
+    }
+
+    std::cout << std::endl;
+
+    for(const auto& elem : forecastLocations)
+    {
+      std::vector<wic::Forecast> data;
+      if (!source.getForecasts(elem.second, elem.first, data))
+      {
+        std::cerr << "Error: Could not get weather forecast data for "
+                  << elem.first.toString() << std::endl;
+        return wic::rcDatabaseError;
+      }
+
+      // Parse with JsonCpp.
+      const auto jsonCppStart = std::chrono::high_resolution_clock::now();
+      for (const wic::Forecast& elem: data)
+      {
+        if (!elem.hasJson())
+          continue;
+
+        wic::Forecast dummy;
+        if (!wic::JsonCppOwm::parseForecast(elem.json(), dummy))
+        {
+          std::cerr << "Error: Could not parse JSON with JsonCpp!" << std::endl
+                    << "JSON is: '" << elem.json() << "'." << std::endl;
+          return 1;
+        }
+
+        // compare with value from database
+        // -- First set request time, because that one cannot be determined from
+        //    the raw JSON alone.
+        dummy.setRequestTime(elem.requestTime());
+        if (dummy != elem)
+        {
+          std::cerr << "Error: JsonCpp-parsed element does not match the element from the database!" << std::endl;
+          std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+          std::cerr << "JSON is '" << elem.json() << "'." << std::endl;
+          std::cerr << "Element from database:\n";
+          printForecast(elem);
+          std::cerr << "Element from parser:\n";
+          printForecast(dummy);
+          return 42;
+        }
+      } // for
+      const auto jsonCppEnd = std::chrono::high_resolution_clock::now();
+
+      // Parse with nlohmann/json.
+      const auto nlohmannJsonStart = std::chrono::high_resolution_clock::now();
+      for (const wic::Forecast& elem: data)
+      {
+        if (!elem.hasJson())
+          continue;
+
+        wic::Forecast dummy;
+        if (!wic::NLohmannJsonOwm::parseForecast(elem.json(), dummy))
+        {
+          std::cerr << "Error: Could not parse JSON with nlohmann/json!" << std::endl
+                    << "JSON is: '" << elem.json() << "'." << std::endl;
+          return 1;
+        }
+
+        // compare with value from database
+        // -- First set request time, because that one cannot be determined from
+        //    the raw JSON alone.
+        dummy.setRequestTime(elem.requestTime());
+        if (dummy != elem)
+        {
+          std::cerr << "Error: nlohmann/json-parsed element does not match the element from the database!" << std::endl;
+          std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+          std::cerr << "Element from database:\n";
+          printForecast(elem);
+          std::cerr << "Element from parser:\n";
+          printForecast(dummy);
+          return 42;
+        }
+      } // for
+      const auto nlohmannJsonEnd = std::chrono::high_resolution_clock::now();
+
+      std::cout << "Parsing " << data.size() << " elements for "
+                << elem.first.toString() << " took:" << std::endl;
+      const auto jsonCppTime = std::chrono::duration_cast<std::chrono::microseconds>(jsonCppEnd - jsonCppStart);
+      const auto jsonCppPerElement = static_cast<double>(jsonCppTime.count()) / data.size();
+      const auto nlohmannJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(nlohmannJsonEnd - nlohmannJsonStart);
+      const auto nlohmannJsonPerElement = static_cast<double>(nlohmannJsonTime.count()) / data.size();
+      const double percentage = static_cast<double>(nlohmannJsonTime.count()) / jsonCppTime.count() * 100.0;
+      std::cout << "JsonCpp:       " << jsonCppTime.count() << " microseconds (100 %)\n"
+                << "               (ca. " << jsonCppPerElement << " microseconds per element)\n"
+                << "nlohmann/json: " << nlohmannJsonTime.count() << " microseconds (" << percentage << " %)\n"
+                << "               (ca. " << nlohmannJsonPerElement << " microseconds per element)\n"
+                << std::endl;
+    } // for
+  } // end of scope for forecast data
 
   std::cout << "Done." << std::endl;
   return 0;
