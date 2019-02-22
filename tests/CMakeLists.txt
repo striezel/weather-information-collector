@@ -85,6 +85,9 @@ add_subdirectory (api/darksky)
 # Recurse into subdirectory for OpenWeatherMap tests.
 add_subdirectory (api/owm)
 
+# Recurse into subdirectory for benchmark executable tests.
+add_subdirectory (benchmark)
+
 # Recurse into subdirectory for executable tests.
 add_subdirectory (collector)
 
