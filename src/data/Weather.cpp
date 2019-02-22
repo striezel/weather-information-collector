@@ -275,13 +275,29 @@ constexpr bool same(const float a, const float b)
       || (a == b);
 }
 
+/** \brief Utility function to compare floating point values for equality.
+ *
+ * \param a first operand of comparison
+ * \param b second operand of comparison
+ * \param epsilon maximum allowed difference (must not be negative)
+ * \return Returns true, if both values are the same, i.e. a is within the small
+ *         epsilon environment of b.
+ */
+constexpr bool same(const float a, const float b, const float epsilon)
+{
+  // Compare for equality using relatively-sized epsilon environment.
+  return std::fabs(a - b) < epsilon
+  // Special case for positive vs. negative zero.
+      || (a == b);
+}
+
 bool Weather::operator==(const Weather& other) const
 {
   return (hasDataTime() == other.hasDataTime()) && (!hasDataTime() || dataTime() == other.dataTime())
       && (hasRequestTime() == other.hasRequestTime()) && (!hasRequestTime() || requestTime() == other.requestTime())
       && (hasTemperatureKelvin() == other.hasTemperatureKelvin()) && (!hasTemperatureKelvin() || same(temperatureKelvin(), other.temperatureKelvin())) // float
       && (hasTemperatureCelsius() == other.hasTemperatureCelsius()) && (!hasTemperatureCelsius() || same(temperatureCelsius(), other.temperatureCelsius())) // float
-      && (hasTemperatureFahrenheit() == other.hasTemperatureFahrenheit()) && (!hasTemperatureFahrenheit() || same(temperatureFahrenheit(), other.temperatureFahrenheit())) // float
+      && (hasTemperatureFahrenheit() == other.hasTemperatureFahrenheit()) && (!hasTemperatureFahrenheit() || same(temperatureFahrenheit(), other.temperatureFahrenheit(), 0.009)) // float
       && (hasHumidity() == other.hasHumidity()) && (!hasHumidity() || humidity() == other.humidity())
       && (hasRain() == other.hasRain()) && (!hasRain() || same(rain(), other.rain())) // float
       && (hasSnow() == other.hasSnow()) && (!hasSnow() || same(snow(), other.snow())) // float
