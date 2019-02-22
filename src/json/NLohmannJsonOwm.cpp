@@ -38,15 +38,22 @@ bool NLohmannJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& w
     if (find != main.end() && find->is_number())
     {
       const value_type temp = main["temp"];
-      weather.setTemperatureKelvin(temp.get<float>());
-      weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
+      const float kelvinRaw = temp.get<float>();
+      weather.setTemperatureKelvin(kelvinRaw);
+      // Avoid values like 280.9999... K by rounding, if appropriate.
+      const float kelvinRounded = std::round(weather.temperatureKelvin());
+      if (std::fabs(kelvinRounded - weather.temperatureKelvin()) < 0.005)
+      {
+        weather.setTemperatureKelvin(kelvinRounded);
+      }
+      weather.setTemperatureCelsius(kelvinRaw - 273.15);
       // Avoid values like 6.9999... ° C by rounding, if appropriate.
       const float celsiusRounded = std::round(weather.temperatureCelsius());
       if (std::fabs(celsiusRounded - weather.temperatureCelsius()) < 0.005)
       {
         weather.setTemperatureCelsius(celsiusRounded);
       }
-      weather.setTemperatureFahrenheit((weather.temperatureKelvin() - 273.15) * 1.8 + 32.0f);
+      weather.setTemperatureFahrenheit((kelvinRaw - 273.15) * 1.8 + 32.0f);
       // Avoid values like 6.9999... ° F by rounding, if appropriate.
       const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
       if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)

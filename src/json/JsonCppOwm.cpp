@@ -36,15 +36,22 @@ bool JsonCppOwm::parseSingleWeatherItem(const value_type& value, Weather& weathe
     value_type v2 = val["temp"];
     if (!v2.empty() && v2.isDouble())
     {
-      weather.setTemperatureKelvin(v2.asFloat());
-      weather.setTemperatureCelsius(weather.temperatureKelvin() - 273.15);
+      const float kelvinRaw = v2.asFloat();
+      weather.setTemperatureKelvin(kelvinRaw);
+      // Avoid values like 280.9999... K by rounding, if appropriate.
+      const float kelvinRounded = std::round(weather.temperatureKelvin());
+      if (std::fabs(kelvinRounded - weather.temperatureKelvin()) < 0.005)
+      {
+        weather.setTemperatureKelvin(kelvinRounded);
+      }
+      weather.setTemperatureCelsius(kelvinRaw - 273.15);
       // Avoid values like 6.9999... ° C by rounding, if appropriate.
       const float celsiusRounded = std::round(weather.temperatureCelsius());
       if (std::fabs(celsiusRounded - weather.temperatureCelsius()) < 0.005)
       {
         weather.setTemperatureCelsius(celsiusRounded);
       }
-      weather.setTemperatureFahrenheit((weather.temperatureKelvin() - 273.15) * 1.8 + 32.0f);
+      weather.setTemperatureFahrenheit((kelvinRaw - 273.15) * 1.8 + 32.0f);
       // Avoid values like 6.9999... ° F by rounding, if appropriate.
       const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
       if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
