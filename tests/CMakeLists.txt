@@ -91,6 +91,9 @@ add_subdirectory (configtest)
 # Recurse into subdirectory for creator executable tests.
 add_subdirectory (creator)
 
+# Recurse into subdirectory for synchronizer executable tests.
+add_subdirectory (synchronizer)
+
 # Recurse into subdirectory for update executable tests.
 add_subdirectory (update)
 
