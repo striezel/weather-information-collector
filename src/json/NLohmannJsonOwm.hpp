@@ -55,8 +55,9 @@ class NLohmannJsonOwm
      *         Returns false, if an error occurred.
      */
     static bool parseForecast(const std::string& json, Forecast& forecast);
-
-
+  #ifndef wic_owm_find_location
+  private:
+  #endif // wic_owm_find_location
     /** \brief Parses weather data from a single JSON weather item into an
      * instance of Weather class.
      *

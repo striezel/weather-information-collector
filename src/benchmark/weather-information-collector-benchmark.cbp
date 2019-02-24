@@ -79,6 +79,7 @@
 		<Unit filename="../util/GitInfos.hpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
+		<Unit filename="benchmark.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

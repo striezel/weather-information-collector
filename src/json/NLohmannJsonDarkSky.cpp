@@ -85,7 +85,7 @@ bool NLohmannJsonDarkSky::parseForecast(const std::string& json, Forecast& forec
     std::cerr << "Error in NLohmannJsonDarkSky::parseForecast(): The element \"data\" is missing or is not an array!" << std::endl;
     return false;
   }
-  const value_type hourlyData = *find;
+  const value_type hourlyData = *findData;
 
   forecast.setData({ });
   auto data = forecast.data();
