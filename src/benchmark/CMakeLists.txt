@@ -11,7 +11,9 @@ set(weather-information-collector-benchmark_sources
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
     ../db/Utilities.cpp
+    ../json/JsonCppDarkSky.cpp
     ../json/JsonCppOwm.cpp
+    ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
     ../retrieve/SourceMySQL.cpp
     ../util/Directories.cpp
