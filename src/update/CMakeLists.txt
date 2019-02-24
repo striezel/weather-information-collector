@@ -17,6 +17,7 @@ set(weather-information-collector-update_sources
     ../db/API.cpp
     ../db/ConnectionInformation.cpp
     ../db/Structure.cpp
+    ../json/ApixuFunctions.cpp
     ../json/JsonCppApixu.cpp
     ../json/JsonCppDarkSky.cpp
     ../json/JsonCppOwm.cpp

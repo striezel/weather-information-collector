@@ -8,6 +8,7 @@ set(apixu_parsing_tests_sources
     ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
+    ../../../src/json/ApixuFunctions.cpp
     ../../../src/json/JsonCppApixu.cpp
     ../../../src/net/Curly.cpp
     ../../../src/util/Strings.cpp

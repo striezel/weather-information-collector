@@ -13,6 +13,7 @@ set(task_manager_tests_sources
     ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
+    ../../../src/json/ApixuFunctions.cpp
     ../../../src/json/JsonCppApixu.cpp
     ../../../src/json/JsonCppDarkSky.cpp
     ../../../src/json/JsonCppOwm.cpp

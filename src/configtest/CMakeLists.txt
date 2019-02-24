@@ -15,6 +15,7 @@ set(weather-information-collector-configtest_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
+    ../json/ApixuFunctions.cpp
     ../json/JsonCppApixu.cpp
     ../json/JsonCppDarkSky.cpp
     ../json/JsonCppOwm.cpp

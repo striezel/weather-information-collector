@@ -73,6 +73,8 @@
 		<Unit filename="../db/ConnectionInformation.hpp" />
 		<Unit filename="../db/Utilities.cpp" />
 		<Unit filename="../db/Utilities.hpp" />
+		<Unit filename="../json/ApixuFunctions.cpp" />
+		<Unit filename="../json/ApixuFunctions.hpp" />
 		<Unit filename="../json/JsonCppApixu.cpp" />
 		<Unit filename="../json/JsonCppApixu.hpp" />
 		<Unit filename="../json/JsonCppDarkSky.cpp" />

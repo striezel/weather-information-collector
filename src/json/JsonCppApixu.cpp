@@ -20,38 +20,10 @@
 
 #include "JsonCppApixu.hpp"
 #include <iostream>
+#include "ApixuFunctions.hpp"
 
 namespace wic
 {
-
-void precipitationDistinction(const float amount, Weather& weather)
-{
-  // Apixu provides no direct distinction between rain and snow. There are
-  // the condition texts, but checking those is tedious and error prone,
-  // because they may change. Therefore we have to do something else.
-  // Basic idea: If temperature is above zero, it is rain. Below zero it
-  // is snow, because water freezes at zero °C.
-  if (weather.temperatureCelsius() >= 0.0f)
-  {
-    weather.setRain(amount);
-    weather.setSnow(0.0f);
-  }
-  else if (weather.temperatureCelsius() < 0.0f)
-  {
-    weather.setRain(0.0f);
-    weather.setSnow(amount);
-  }
-  else
-  {
-    // Temperature (°C) is NaN, so let's have a guess and go with rain.
-    weather.setRain(amount);
-    if (amount == 0.0f)
-    {
-      weather.setSnow(0.0f);
-    }
-  }
-}
-
 
 bool JsonCppApixu::parseCurrentWeather(const std::string& json, Weather& weather)
 {
@@ -237,7 +209,7 @@ bool JsonCppApixu::parseForecast(const std::string& json, Forecast& forecast)
       // day must be a non-empty object.
       if (day.empty() || !day.isObject())
       {
-        std::cout << "Errorin JsonCppApixu::parseForecast(): JSON element 'day' is empty or not an object!" << std::endl;
+        std::cout << "Error in JsonCppApixu::parseForecast(): JSON element 'day' is empty or not an object!" << std::endl;
         return false;
       }
       value_type val = day["mintemp_c"];

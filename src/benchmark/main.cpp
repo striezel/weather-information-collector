@@ -22,8 +22,10 @@
 #include "benchmark.hpp"
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
+#include "../json/JsonCppApixu.hpp"
 #include "../json/JsonCppDarkSky.hpp"
 #include "../json/JsonCppOwm.hpp"
+#include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
 #include "../json/NLohmannJsonOwm.hpp"
 #include "../retrieve/SourceMySQL.hpp"
@@ -132,6 +134,12 @@ int main(int argc, char** argv)
     if (ret != 0)
       return ret;
   }
+  // Apixu
+  {
+    int ret = wic::weatherDataBench<wic::JsonCppApixu, wic::NLohmannJsonApixu>(wic::ApiType::Apixu, source);
+    if (ret != 0)
+      return ret;
+  }
 
   /* ********* Forecast data ********* */
   // OpenWeatherMap
@@ -143,6 +151,12 @@ int main(int argc, char** argv)
   // DarkSky
   {
     int ret = wic::forecastBench<wic::JsonCppDarkSky, wic::NLohmannJsonDarkSky>(wic::ApiType::DarkSky, source);
+    if (ret != 0)
+      return ret;
+  }
+  // Apixu
+  {
+    int ret = wic::forecastBench<wic::JsonCppApixu, wic::NLohmannJsonApixu>(wic::ApiType::Apixu, source);
     if (ret != 0)
       return ret;
   }
