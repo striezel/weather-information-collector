@@ -22,7 +22,6 @@
 #include <cmath>
 #include <iostream>
 #ifdef wic_owm_find_location
-#include <jsoncpp/json/reader.h>
 #include "../json/JsonCppOwm.hpp"
 #include "../net/Curly.hpp"
 #endif // wic_owm_find_location
@@ -223,78 +222,7 @@ bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair
     return false;
   }
 
-  Json::Value root; // will contain the root value after parsing.
-  Json::Reader jsonReader;
-  const bool success = jsonReader.parse(response, root, false);
-  if (!success)
-  {
-    std::cerr << "Error in OpenWeatherMap::findLocation(): Unable to parse JSON data!" << std::endl;
-    return false;
-  }
-  const Json::Value count = root["count"];
-  if (count.empty() || !count.isIntegral())
-  {
-    std::cerr << "Error in OpenWeatherMap::findLocation(): JSON element for count is missing!" << std::endl;
-    return false;
-  }
-  locations.clear();
-  if (count.asInt() == 0)
-    return true;
-
-  const Json::Value list = root["list"];
-  if (list.empty() || !list.isArray())
-  {
-    std::cerr << "Error in OpenWeatherMap::findLocation(): JSON list element is missing!" << std::endl;
-    return false;
-  }
-
-  for (const Json::Value elem : list)
-  {
-    LocationWithCountry loc;
-    Json::Value val = elem["id"];
-    if (!val.empty() && val.isUInt())
-      loc.setId(val.asUInt());
-    val = elem["name"];
-    if (!val.empty() && val.isString())
-      loc.setName(val.asString());
-    const Json::Value coord = elem["coord"];
-    if (!coord.empty() && coord.isObject())
-    {
-      val = coord["lat"];
-      Json::Value lon = coord["lon"];
-      if (!val.empty() && !lon.empty() && val.isNumeric() && lon.isNumeric())
-      {
-        loc.setCoordinates(val.asFloat(), lon.asFloat());
-      }
-    } // coord
-    if (loc.empty())
-    {
-      std::cerr << "Error in OpenWeatherMap::findLocation(): Location data is empty!" << std::endl;
-      return false;
-    }
-    val = elem["sys"];
-    if (!val.empty() && val.isObject())
-    {
-      val = val["country"];
-      if (!val.empty() && val.isString())
-        loc.setCountry(val.asString());
-    }
-    Weather w;
-    if (!JsonCppOwm::parseSingleWeatherItem(elem, w))
-    {
-      std::cerr << "Error in OpenWeatherMap::findLocation(): Weather data for location is missing!" << std::endl;
-      return false;
-    }
-    if (loc.empty())
-    {
-      std::cerr << "Error in OpenWeatherMap::findLocation(): Location data is empty!" << std::endl;
-      return false;
-    }
-    // add element to result
-    locations.push_back(std::make_pair(loc, w));
-  } // for
-
-  return true;
+  return JsonCppOwm::parseLocations(response, locations);
 }
 #endif // wic_owm_find_location
 

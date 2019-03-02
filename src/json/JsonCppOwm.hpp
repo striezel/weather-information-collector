@@ -24,6 +24,9 @@
 #include <jsoncpp/json/reader.h>
 #include "../data/Forecast.hpp"
 #include "../data/Weather.hpp"
+#ifdef wic_owm_find_location
+#include "../data/LocationWithCountry.hpp"
+#endif // wic_owm_find_location
 
 namespace wic
 {
@@ -55,9 +58,18 @@ class JsonCppOwm
      *         Returns false, if an error occurred.
      */
     static bool parseForecast(const std::string& json, Forecast& forecast);
-  #ifndef wic_owm_find_location
+
+    #ifdef wic_owm_find_location
+    /** \brief Parses found locations.
+     *
+     * \param json     string containing the JSON
+     * \param location  variable where parsed locations will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    static bool parseLocations(const std::string& json, std::vector<std::pair<LocationWithCountry, Weather> >& locations);
+    #endif // wic_owm_find_location
   private:
-  #endif // wic_owm_find_location
     /** \brief Parses weather data from a single JSON weather item into an
      * instance of Weather class.
      *
