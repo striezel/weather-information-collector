@@ -68,7 +68,7 @@ TEST_CASE("ConnectionInformation class for db")
 
     connInfo = ConnectionInformation("db-server", "db_one", "foo", "bar");
     REQUIRE( connInfo.isComplete() );
-    //empty password - still complete
+    // empty password - still complete
     connInfo = ConnectionInformation("db-server", "db_one", "foo", "", 3307);
     REQUIRE( connInfo.isComplete() );
   }
@@ -90,7 +90,7 @@ TEST_CASE("ConnectionInformation class for db")
     REQUIRE_FALSE( connInfo.isComplete() );
 
     connInfo = ConnectionInformation("db-server", "db_one", "foo", "", 3307);
-    //Empty password may be allowed.
+    // Empty password may be allowed.
     REQUIRE( connInfo.isComplete() );
 
     connInfo = ConnectionInformation("db-server", "db_one", "foo", "bar", 0);

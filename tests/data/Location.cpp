@@ -28,7 +28,7 @@ TEST_CASE("LocationClass")
 
   SECTION("empty after construction")
   {
-    //no data should be set
+    // no data should be set
     REQUIRE_FALSE( loc.hasId() );
     REQUIRE_FALSE( loc.hasCoordinates() );
     REQUIRE_FALSE( loc.hasName() );
@@ -68,7 +68,7 @@ TEST_CASE("LocationClass")
       loc.setPostcode("01234");
       REQUIRE_FALSE( loc.empty() );
     }
-  } //emptiness section
+  } // emptiness section
 
 
   SECTION("set, has + get id")
@@ -120,36 +120,36 @@ TEST_CASE("LocationClass")
 
   SECTION("equality for latitude + longitude")
   {
-    //both without lat./lon.: equal
+    // both without lat./lon.: equal
     Location loc1, loc2;
     REQUIRE( loc1.equalCoordinates(loc2) );
 
-    //only one with lat./lon.: not equal
+    // only one with lat./lon.: not equal
     loc1.setCoordinates(9000.1f, 9000.1f);
     loc1.setCoordinates(0.0f, 0.0f);
     REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
 
-    //equal values: equal
+    // equal values: equal
     loc1.setCoordinates(5.0, 12.34);
     loc2.setCoordinates(5.0, 12.34);
     REQUIRE( loc1.equalCoordinates(loc2) );
 
-    //almost equal (below 0.01 °): equal
+    // almost equal (below 0.01 °): equal
     loc1.setCoordinates(5.009, 12.34);
     loc2.setCoordinates(5.0, 12.34);
     REQUIRE( loc1.equalCoordinates(loc2) );
 
-    //almost equal (below 0.01 °): equal
+    // almost equal (below 0.01 °): equal
     loc1.setCoordinates(5.0, 123.409);
     loc2.setCoordinates(5.0, 123.4);
     REQUIRE( loc1.equalCoordinates(loc2) );
 
-    //almost equal (below 0.01 °): equal
+    // almost equal (below 0.01 °): equal
     loc1.setCoordinates(5.009, 123.409);
     loc2.setCoordinates(5.0, 123.4);
     REQUIRE( loc1.equalCoordinates(loc2) );
 
-    //difference above 0.01 °: not equal
+    // difference above 0.01 °: not equal
     loc1.setCoordinates(5.15, 123.4);
     loc2.setCoordinates(5.0, 123.4);
     REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
@@ -159,7 +159,7 @@ TEST_CASE("LocationClass")
     loc2.setCoordinates(5.0, 123.4);
     REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
 
-    //difference above 0.01 °: not equal
+    // difference above 0.01 °: not equal
     loc1.setCoordinates(5.12, 123.51);
     loc2.setCoordinates(5.0, 123.4);
     REQUIRE_FALSE( loc1.equalCoordinates(loc2) );
