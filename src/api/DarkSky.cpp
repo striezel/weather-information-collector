@@ -22,7 +22,7 @@
 #include <cmath>
 #include <iostream>
 #ifndef wic_no_json_parsing
-#include "../json/JsonCppDarkSky.hpp"
+#include "../json/NLohmannJsonDarkSky.hpp"
 #include "../net/Curly.hpp"
 #endif // wic_no_json_parsing
 #include "../util/Strings.hpp"
@@ -73,7 +73,7 @@ std::string DarkSky::toRequestString(const Location& location) const
 #ifndef wic_no_json_parsing
 bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
-  return JsonCppDarkSky::parseCurrentWeather(json, weather);
+  return NLohmannJsonDarkSky::parseCurrentWeather(json, weather);
 }
 
 bool DarkSky::currentWeather(const Location& location, Weather& weather)
@@ -113,7 +113,7 @@ bool DarkSky::currentWeather(const Location& location, Weather& weather)
 
 bool DarkSky::parseForecast(const std::string& json, Forecast& forecast) const
 {
-  return JsonCppDarkSky::parseForecast(json, forecast);
+  return NLohmannJsonDarkSky::parseForecast(json, forecast);
 }
 
 bool DarkSky::forecastWeather(const Location& location, Forecast& forecast)

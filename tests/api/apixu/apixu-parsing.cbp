@@ -25,7 +25,6 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Linker>
-			<Add library="jsoncpp" />
 			<Add library="curl" />
 		</Linker>
 		<Unit filename="../../../src/api/API.hpp" />
@@ -39,8 +38,8 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.cpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.hpp" />
-		<Unit filename="../../../src/json/JsonCppApixu.cpp" />
-		<Unit filename="../../../src/json/JsonCppApixu.hpp" />
+		<Unit filename="../../../src/json/NLohmannJsonApixu.cpp" />
+		<Unit filename="../../../src/json/NLohmannJsonApixu.hpp" />
 		<Unit filename="../../../src/net/Curly.cpp" />
 		<Unit filename="../../../src/net/Curly.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />

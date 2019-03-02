@@ -21,7 +21,7 @@
 #include "Apixu.hpp"
 #include <iostream>
 #ifndef wic_no_json_parsing
-#include "../json/JsonCppApixu.hpp"
+#include "../json/NLohmannJsonApixu.hpp"
 #include "../net/Curly.hpp"
 #endif // wic_no_json_parsing
 #include "../util/Strings.hpp"
@@ -76,7 +76,7 @@ std::string Apixu::toRequestString(const Location& location) const
 #ifndef wic_no_json_parsing
 bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
-  return JsonCppApixu::parseCurrentWeather(json, weather);
+  return NLohmannJsonApixu::parseCurrentWeather(json, weather);
 }
 
 bool Apixu::currentWeather(const Location& location, Weather& weather)
@@ -115,7 +115,7 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
 
 bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
 {
-  return JsonCppApixu::parseForecast(json, forecast);
+  return NLohmannJsonApixu::parseForecast(json, forecast);
 }
 
 bool Apixu::forecastWeather(const Location& location, Forecast& forecast)

@@ -17,9 +17,10 @@ set(weather-information-collector-task-creator_sources
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
     ../json/ApixuFunctions.cpp
-    ../json/JsonCppApixu.cpp
-    ../json/JsonCppDarkSky.cpp
     ../json/JsonCppOwm.cpp
+    ../json/NLohmannJsonApixu.cpp
+    ../json/NLohmannJsonDarkSky.cpp
+    ../json/NLohmannJsonOwm.cpp
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp

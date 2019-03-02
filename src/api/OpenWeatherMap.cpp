@@ -27,7 +27,7 @@
 #include "../net/Curly.hpp"
 #endif // wic_owm_find_location
 #ifndef wic_no_json_parsing
-#include "../json/JsonCppOwm.hpp"
+#include "../json/NLohmannJsonOwm.hpp"
 #include "../net/Curly.hpp"
 #endif // wic_no_json_parsing
 #include "../util/Strings.hpp"
@@ -83,7 +83,7 @@ std::string OpenWeatherMap::toRequestString(const Location& location) const
 #ifndef wic_no_json_parsing
 bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
-  return JsonCppOwm::parseCurrentWeather(json, weather);
+  return NLohmannJsonOwm::parseCurrentWeather(json, weather);
 }
 
 bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
@@ -123,7 +123,7 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
 
 bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) const
 {
-  return JsonCppOwm::parseForecast(json, forecast);
+  return NLohmannJsonOwm::parseForecast(json, forecast);
 }
 
 bool OpenWeatherMap::forecastWeather(const Location& location, Forecast& forecast)

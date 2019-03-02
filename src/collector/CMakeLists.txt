@@ -17,9 +17,9 @@ set(weather-information-collector_sources
     ../db/ConnectionInformation.cpp
     ../db/Utilities.cpp
     ../json/ApixuFunctions.cpp
-    ../json/JsonCppApixu.cpp
-    ../json/JsonCppDarkSky.cpp
-    ../json/JsonCppOwm.cpp
+    ../json/NLohmannJsonApixu.cpp
+    ../json/NLohmannJsonDarkSky.cpp
+    ../json/NLohmannJsonOwm.cpp
     ../net/Curly.cpp
     ../store/StoreMySQL.cpp
     ../tasks/Task.cpp
@@ -47,16 +47,6 @@ if (CURL_FOUND)
 else ()
   message ( FATAL_ERROR "cURL was not found!" )
 endif (CURL_FOUND)
-
-# find jsoncpp library
-set(LibJsonCpp_DIR "../../cmake/" )
-find_package (LibJsonCpp)
-if (LIBJSONCPP_FOUND)
-  include_directories(${LIBJSONCPP_INCLUDE_DIRS})
-  target_link_libraries (weather-information-collector ${LIBJSONCPP_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "libjsoncpp was not found!" )
-endif (LIBJSONCPP_FOUND)
 
 # libmysql++
 set(LibMySQLPP_DIR "../../cmake/" )

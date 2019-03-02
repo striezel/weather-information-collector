@@ -40,7 +40,6 @@
 		</Compiler>
 		<Linker>
 			<Add library="curl" />
-			<Add library="jsoncpp" />
 			<Add library="mysqlpp" />
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
@@ -75,12 +74,12 @@
 		<Unit filename="../db/Utilities.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />
 		<Unit filename="../json/ApixuFunctions.hpp" />
-		<Unit filename="../json/JsonCppApixu.cpp" />
-		<Unit filename="../json/JsonCppApixu.hpp" />
-		<Unit filename="../json/JsonCppDarkSky.cpp" />
-		<Unit filename="../json/JsonCppDarkSky.hpp" />
-		<Unit filename="../json/JsonCppOwm.cpp" />
-		<Unit filename="../json/JsonCppOwm.hpp" />
+		<Unit filename="../json/NLohmannJsonApixu.cpp" />
+		<Unit filename="../json/NLohmannJsonApixu.hpp" />
+		<Unit filename="../json/NLohmannJsonDarkSky.cpp" />
+		<Unit filename="../json/NLohmannJsonDarkSky.hpp" />
+		<Unit filename="../json/NLohmannJsonOwm.cpp" />
+		<Unit filename="../json/NLohmannJsonOwm.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../store/Store.hpp" />
