@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ class Apixu: public API
     virtual bool supportsDataType(const DataType data) const;
 
 
+    #ifndef wic_no_json_parsing
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -111,6 +112,7 @@ class Apixu: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
+    #endif // wic_no_json_parsing
   private:
     std::string m_apiKey; /**< the API key for requests */
 

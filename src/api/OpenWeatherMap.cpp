@@ -23,9 +23,13 @@
 #include <iostream>
 #ifdef wic_owm_find_location
 #include <jsoncpp/json/reader.h>
-#endif // wic_owm_find_location
 #include "../json/JsonCppOwm.hpp"
 #include "../net/Curly.hpp"
+#endif // wic_owm_find_location
+#ifndef wic_no_json_parsing
+#include "../json/JsonCppOwm.hpp"
+#include "../net/Curly.hpp"
+#endif // wic_no_json_parsing
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -76,6 +80,7 @@ std::string OpenWeatherMap::toRequestString(const Location& location) const
   return std::string();
 }
 
+#ifndef wic_no_json_parsing
 bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
   return JsonCppOwm::parseCurrentWeather(json, weather);
@@ -162,6 +167,7 @@ bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather
             << "single request is not supported by OpenWeatherMap!" << std::endl;
   return false;
 }
+#endif // wic_no_json_parsing
 
 #ifdef wic_owm_find_location
 std::string urlEncode(const std::string& str)

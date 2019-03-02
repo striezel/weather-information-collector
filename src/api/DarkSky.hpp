@@ -64,6 +64,7 @@ class DarkSky: public API
     virtual bool supportsDataType(const DataType data) const;
 
 
+    #ifndef wic_no_json_parsing
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -113,6 +114,7 @@ class DarkSky: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
+    #endif // wic_no_json_parsing
   private:
     std::string m_apiKey; /**< the API key for requests */
 

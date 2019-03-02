@@ -69,6 +69,7 @@ class OpenWeatherMap: public API
     virtual bool supportsDataType(const DataType data) const;
 
 
+    #ifndef wic_no_json_parsing
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -118,6 +119,7 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
+    #endif // wic_no_json_parsing
 
     #ifdef wic_owm_find_location
     /** \brief Finds matching locations by name.
