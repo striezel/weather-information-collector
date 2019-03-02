@@ -32,4 +32,4 @@ add_subdirectory (synchronizer)
 add_subdirectory (update)
 
 # Recurse into subdirectory for TaskManager tests.
-add_subdirectory (tasks/manager)
+add_subdirectory (task-manager)

@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include "../../../src/tasks/TaskManager.hpp"
+#include "../../src/tasks/TaskManager.hpp"
 
 int main(int argc, char** argv)
 {
@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  //check data
+  // check data
   if (task.api() != wic::ApiType::OpenWeatherMap)
   {
     std::cerr << "Error: Unexpected API type!\n";
@@ -77,14 +77,14 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  //load second, whitespace version
+  // load second, whitespace version
   wic::Task whiteSpaceTask;
   if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg-whitespace.conf", whiteSpaceTask))
   {
     std::cerr << "Error: Could not load task from file test-example-hammelburg-whitespace.conf!\n";
     return 1;
   }
-  //compare data
+  // compare data
   if (task.api() != whiteSpaceTask.api())
   {
     std::cerr << "Error: API values do not match!\n"
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
               << " to be two, but there were " << tasks.size() << " tasks!\n";
     return 2;
   }
-  //compare data with prev. task
+  // compare data with prev. task
   if (task.api() != tasks[0].api())
   {
     std::cerr << "Error: API values do not match!\n"
