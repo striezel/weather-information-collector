@@ -159,7 +159,7 @@ bool NLohmannJsonApixu::parseForecast(const std::string& json, Forecast& forecas
       {
         Weather w;
         auto found = elem.find("time_epoch");
-        if (found != elem.end() || !found->is_number_integer())
+        if (found == elem.end() || !found->is_number_integer())
         {
           std::cerr << "Error in NLohmannJsonApixu::parseForecast(): Hourly forecast data has no timestamp!" << std::endl;
           return false;
