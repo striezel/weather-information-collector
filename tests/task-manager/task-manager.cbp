@@ -30,8 +30,6 @@
 		<Linker>
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
-			<Add library="curl" />
-			<Add library="jsoncpp" />
 		</Linker>
 		<Unit filename="../../src/api/Apixu.cpp" />
 		<Unit filename="../../src/api/Apixu.hpp" />
