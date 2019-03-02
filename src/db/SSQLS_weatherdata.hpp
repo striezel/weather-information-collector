@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `weatherdata` (
   `pressure` smallint(5) unsigned DEFAULT NULL COMMENT 'air pressure in hPa',
   `wind_speed` float DEFAULT NULL COMMENT 'wind speed in meters per second',
   `wind_degrees` smallint(5) unsigned DEFAULT NULL COMMENT 'wind direction in degrees',
-  `cloudiness` tinyint(3) unsigned NOT NULL COMMENT 'cloudiness in percent',
+  `cloudiness` tinyint(3) unsigned DEFAULT NULL COMMENT 'cloudiness in percent',
   `json` mediumtext COMMENT 'raw JSON data'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

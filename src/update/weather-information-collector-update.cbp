@@ -86,6 +86,8 @@
 		<Unit filename="UpdateTo_0.8.3.hpp" />
 		<Unit filename="UpdateTo_0.8.5.cpp" />
 		<Unit filename="UpdateTo_0.8.5.hpp" />
+		<Unit filename="UpdateTo_0.8.6.cpp" />
+		<Unit filename="UpdateTo_0.8.6.hpp" />
 		<Unit filename="Update_0.5.4_to_0.5.5.cpp" />
 		<Unit filename="Update_0.5.4_to_0.5.5.hpp" />
 		<Unit filename="Update_0.5.7_to_0.6.0.cpp" />

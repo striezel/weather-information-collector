@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.8.6 (2019-03-02)
+
+Database structure has been adjusted so that weather data and forecast data
+where the cloudiness is not known can be stored correctly.
+
 ## Version 0.8.5 (2019-02-20)
 
 A new version of the updater fixes some incorrect rain information for forcast
