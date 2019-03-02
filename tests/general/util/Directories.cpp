@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/util/Directories.hpp"
+#include "../../../src/util/Directories.hpp"
 
 TEST_CASE("directory functions")
 {

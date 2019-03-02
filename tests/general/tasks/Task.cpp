@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/tasks/Task.hpp"
+#include "../../../src/tasks/Task.hpp"
 
 TEST_CASE("Class Task")
 {

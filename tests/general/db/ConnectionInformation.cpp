@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/db/ConnectionInformation.hpp"
+#include "../../../src/db/ConnectionInformation.hpp"
 
 TEST_CASE("ConnectionInformation class for db")
 {

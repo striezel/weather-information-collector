@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/util/Strings.hpp"
+#include "../../../src/util/Strings.hpp"
 
 TEST_CASE("string utilities")
 {

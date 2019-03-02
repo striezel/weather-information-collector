@@ -21,7 +21,7 @@
 #include <cmath>
 #include <catch.hpp>
 
-#include "../../src/data/Weather.hpp"
+#include "../../../src/data/Weather.hpp"
 
 TEST_CASE("WeatherClass")
 {

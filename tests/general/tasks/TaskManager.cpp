@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/tasks/TaskManager.hpp"
+#include "../../../src/tasks/TaskManager.hpp"
 
 TEST_CASE("Class TaskManager")
 {

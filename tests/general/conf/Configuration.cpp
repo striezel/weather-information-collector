@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/conf/Configuration.hpp"
+#include "../../../src/conf/Configuration.hpp"
 
 TEST_CASE("Class Configuration")
 {

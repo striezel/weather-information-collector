@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/api/Types.hpp"
+#include "../../../src/api/Types.hpp"
 
 TEST_CASE("API types")
 {

@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../src/data/Location.hpp"
+#include "../../../src/data/Location.hpp"
 
 TEST_CASE("LocationClass")
 {
