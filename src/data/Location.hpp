@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -143,6 +143,14 @@ class Location
      * \return Returns true, if both locations are equal.
      */
     bool operator==(const Location& other) const;
+
+
+    /** \brief inequality operator for Location
+     *
+     * \param other  the other location to compare to
+     * \return Returns true, if both locations are equal.
+     */
+    bool operator!=(const Location& other) const;
 
 
     /** \brief Checks whether two locations have the same latitude and longitude.
