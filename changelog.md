@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.8.7-pre (2019-03-02)
+## Version 0.8.7 (2019-03-13)
 
 Switch JSON library from JsonCpp to nlohmann/json. Parsing with that library
 only requires ca. 50 % up to 75 % of the time required by JsonCpp.
