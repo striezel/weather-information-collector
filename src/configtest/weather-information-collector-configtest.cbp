@@ -32,15 +32,14 @@
 		<Compiler>
 			<Add option="-Weffc++" />
 			<Add option="-pedantic" />
-			<Add option="-std=c++11" />
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add option="-fexceptions" />
+			<Add option="-Dwic_no_json_parsing" />
 		</Compiler>
 		<Linker>
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
-			<Add library="jsoncpp" />
-			<Add library="curl" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
@@ -67,8 +66,6 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
-		<Unit filename="../net/Curly.cpp" />
-		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />

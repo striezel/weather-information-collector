@@ -31,12 +31,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
-			<Add option="-Dwic_task_creator" />
+			<Add option="-Dwic_owm_find_location" />
 		</Compiler>
 		<Linker>
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
-			<Add library="jsoncpp" />
 			<Add library="curl" />
 		</Linker>
 		<Unit filename="../Version.hpp" />
@@ -65,6 +64,14 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../json/ApixuFunctions.cpp" />
+		<Unit filename="../json/ApixuFunctions.hpp" />
+		<Unit filename="../json/NLohmannJsonApixu.cpp" />
+		<Unit filename="../json/NLohmannJsonApixu.hpp" />
+		<Unit filename="../json/NLohmannJsonDarkSky.cpp" />
+		<Unit filename="../json/NLohmannJsonDarkSky.hpp" />
+		<Unit filename="../json/NLohmannJsonOwm.cpp" />
+		<Unit filename="../json/NLohmannJsonOwm.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../tasks/Task.cpp" />

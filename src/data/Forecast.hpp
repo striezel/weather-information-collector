@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +29,8 @@
 namespace wic
 {
 
+/** \brief Contains weather forecast information.
+ */
 class Forecast
 {
   public:
@@ -95,6 +97,26 @@ class Forecast
      * \param newData  the new weather forecast data to set
      */
     void setData(const std::vector<Weather>& newData);
+
+
+    #ifdef wic_weather_comparison
+    /** \brief Equality operator for Forecast class.
+     *
+     * \param other the other Forecast instance
+     * \return Returns true, if both instances are equal.
+     *         Returns false otherwise.
+     */
+    bool operator==(const Forecast& other) const;
+
+
+    /** \brief Inequality operator for Forecast class.
+     *
+     * \param other the other Forecast instance to compare to
+     * \return Returns true, if both instances are NOT equal.
+     *         Returns false otherwise.
+     */
+    bool operator!=(const Forecast& other) const;
+    #endif // wic_weather_comparison
   private:
     std::chrono::time_point<std::chrono::system_clock> m_requestTime; /**< time when the API request was performed */
     std::string m_json; /**< raw JSON data */

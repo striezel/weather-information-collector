@@ -27,6 +27,8 @@ namespace wic
 
 std::string toLowerString(std::string str)
 {
+  // Assume ASCII or compatible charset, where distance of the codepoint of
+  // the uppercase and lowercase version of a letter is always the same.
   const int diff = 'a'-'A';
   for (unsigned int i = 0; i < str.size(); ++i)
   {
@@ -34,14 +36,14 @@ std::string toLowerString(std::string str)
     {
       str[i] = str[i] + diff;
     }
-  }//for
+  } // for
   return str;
 }
 
 void trimLeft(std::string& str1)
 {
   if (str1.empty()) return;
-  //trim stuff at begin
+  // trim stuff at begin
   const int len = str1.length();
   int pos = 0;
   bool go_on = true;
@@ -57,7 +59,7 @@ void trimLeft(std::string& str1)
     {
       go_on = false;
     }
-  }//while
+  } // while
   if (pos >= len)
   {
     str1.clear();
@@ -73,7 +75,7 @@ void trimLeft(std::string& str1)
 void trimRight(std::string& str1)
 {
   if (str1.empty()) return;
-  //trim stuff at end
+  // trim stuff at end
   const int len = str1.length();
   int pos = len - 1;
   bool go_on = true;
@@ -89,7 +91,7 @@ void trimRight(std::string& str1)
     {
       go_on = false;
     }
-  }//while
+  } // while
   if (pos == -1)
   {
     str1.clear();
@@ -106,7 +108,7 @@ void trim(std::string& str1)
   trimLeft(str1);
   trimRight(str1);
   return;
-} //end of trim
+}
 
 std::string intToString(const int value)
 {
@@ -148,13 +150,13 @@ bool stringToInt(const std::string& str, int& value)
       if (value > cRealLimit - (str[i] - '0'))
         return false;
       value = value + (str[i] - '0');
-    }//if
+    } // if
     else
     {
-      //unknown or invalid character detected
+      // unknown or invalid character detected
       return false;
     }
-  }//for
+  } // for
   if (negative)
     value = -value;
   return true;
@@ -193,20 +195,20 @@ bool stringToFloat(const std::string& str, float& value)
       value = value * 10.0f;
       value = value + (str[i]-'0');
       ++next_look;
-    }//if
+    } // if
     else if (str[i] == '.')
     {
-      //decimal separator found - break out of loop
+      // decimal separator found - break out of loop
       next_look = i + 1;
       break;
     }
     else
     {
-      //unknown or invalid character detected
+      // unknown or invalid character detected
       return false;
     }
-  }//for
-  //now go for the stuff after the separator
+  } // for
+  // now go for the stuff after the separator
   float second = 0.0f;
   for (i = str.length() - 1; i >= next_look; --i)
   {
@@ -214,17 +216,17 @@ bool stringToFloat(const std::string& str, float& value)
     {
       second = second + (str[i]-'0');
       second = second / 10.0f;
-    } //if
+    } // if
     else
     {
-      //unknown or invalid character detected
+      // unknown or invalid character detected
       return false;
     }
-  }//for, second loop
+  } // for, second loop
   value = value + second;
   if (negative)
    value = -value;
   return true;
 }
 
-} //namespace
+} // namespace

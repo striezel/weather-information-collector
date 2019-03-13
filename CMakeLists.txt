@@ -3,6 +3,8 @@ cmake_minimum_required (VERSION 2.8)
 
 enable_testing()
 
+option(JSON_BENCHMARK "Build JSON benchmark program" OFF)
+
 # Recurse into subdirectory for the main executable.
 add_subdirectory (src)
 

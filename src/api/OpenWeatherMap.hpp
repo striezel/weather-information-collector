@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,19 +22,12 @@
 #define WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
 
 #include <string>
-#ifdef wic_task_creator
+#ifdef wic_owm_find_location
 #include <utility>
 #include <vector>
 #include "../data/LocationWithCountry.hpp"
-#endif
+#endif // wic_owm_find_location
 #include "API.hpp"
-
-// forward declaration of Json::Value
-namespace Json
-{
-  class Value;
-}
-
 
 namespace wic
 {
@@ -76,6 +69,7 @@ class OpenWeatherMap: public API
     virtual bool supportsDataType(const DataType data) const;
 
 
+    #ifndef wic_no_json_parsing
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -125,9 +119,10 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
+    #endif // wic_no_json_parsing
 
-    #ifdef wic_task_creator
-    /** \brief Finds matching locations by na,e.
+    #ifdef wic_owm_find_location
+    /** \brief Finds matching locations by name.
      *
      * \param name  the name of the location to find
      * \param location  variable where matching locations will be stored
@@ -135,20 +130,9 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     bool findLocation(const std::string& name, std::vector<std::pair<LocationWithCountry, Weather> >& locations) const;
-    #endif
+    #endif // wic_owm_find_location
   private:
     std::string m_apiKey; /**< the API key for requests */
-
-
-    /** \brief Parses weather data from a single JSON weather item into an
-     * instance of Weather class.
-     *
-     * \param value  the JSON value to parse
-     * \param weather the Weather item where the data shall be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    bool parseSingleWeatherItem(const Json::Value& value, Weather& weather) const;
 
 
     /** \brief Turns info of a location to a request string.

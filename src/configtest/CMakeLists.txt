@@ -15,7 +15,6 @@ set(weather-information-collector-configtest_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
-    ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
     ../util/Directories.cpp
@@ -24,32 +23,13 @@ set(weather-information-collector-configtest_sources
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)
-    add_definitions (-Wall -O3 -fexceptions)
+    add_definitions (-Wall -O3 -Weffc++ -pedantic -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++11)
+add_definitions(-std=c++11 -Dwic_no_json_parsing)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather-information-collector-configtest ${weather-information-collector-configtest_sources})
-
-# find cURL library
-find_package (CURL)
-if (CURL_FOUND)
-  include_directories(${CURL_INCLUDE_DIRS})
-  target_link_libraries (weather-information-collector-configtest ${CURL_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "cURL was not found!" )
-endif (CURL_FOUND)
-
-# find jsoncpp library
-set(LibJsonCpp_DIR "../../cmake/" )
-find_package (LibJsonCpp)
-if (LIBJSONCPP_FOUND)
-  include_directories(${LIBJSONCPP_INCLUDE_DIRS})
-  target_link_libraries (weather-information-collector-configtest ${LIBJSONCPP_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "libjsoncpp was not found!" )
-endif (LIBJSONCPP_FOUND)
 
 # find Boost library: filesystem (+ system as dependency)
 find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)

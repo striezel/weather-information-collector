@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -106,6 +106,11 @@ bool Location::operator==(const Location& other) const
   return (m_id == other.m_id) && (m_name == other.m_name)
       && (m_postcode == other.m_postcode)
       && equalCoordinates(other);
+}
+
+bool Location::operator!=(const Location& other) const
+{
+  return !(*this == other);
 }
 
 bool Location::equalCoordinates(const Location& other) const

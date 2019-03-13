@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include "../../../src/api/Apixu.hpp"
@@ -164,7 +165,7 @@ int main(int argc, char** argv)
       std::cerr << "Wind direction is incorrect.\n";
       return 1;
     }
-    if (w.windSpeed() != (6.8f / 3.6f))
+    if (std::fabs(w.windSpeed() - (6.8f / 3.6f)) > 0.000001f)
     {
       std::cerr << "Wind speed is incorrect.\n";
       return 1;

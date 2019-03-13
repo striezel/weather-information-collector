@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,8 +23,11 @@
 
 #include <map>
 #include <vector>
+#include "../api/Types.hpp"
 #include "../db/ConnectionInformation.hpp"
+#ifndef wic_no_tasks_in_config
 #include "../tasks/Task.hpp"
+#endif // wic_no_tasks_in_config
 
 namespace wic
 {
@@ -32,7 +35,7 @@ namespace wic
 class Configuration
 {
   public:
-    /** \brief constructor
+    /** \brief Constructor.
      */
     Configuration();
 
@@ -63,7 +66,7 @@ class Configuration
     const ConnectionInformation& connectionInfo() const;
 
 
-    #ifndef wic_sync
+    #ifndef wic_no_tasks_in_config
     /** \brief Gets the current directory for tasks.
      *
      * \return Returns the current directory for tasks.
@@ -83,7 +86,7 @@ class Configuration
      * \return Returns a container containing all tasks.
      */
     const std::vector<Task>& tasks() const;
-    #endif // wic_sync
+    #endif // wic_no_tasks_in_config
 
 
     /** \brief Gets the API key for the given API.
@@ -133,9 +136,9 @@ class Configuration
     void findTaskDirectory(std::string& realName);
 
 
-    #ifndef wic_sync
+    #ifndef wic_no_tasks_in_config
     std::vector<Task> tasksContainer; /**< container with all tasks */
-    #endif // wic_sync
+    #endif // wic_no_tasks_in_config
     std::map<ApiType, std::string> apiKeys; /**< API keys */
     ConnectionInformation connInfo; /**< database connection information */
     std::string tasksDirectory; /**< directory for tasks */

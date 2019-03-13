@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 namespace wic
 {
 
+/** \brief Contains weather information for a single data point.
+ */
 class Weather
 {
   public:
@@ -332,6 +334,25 @@ class Weather
      * \param newJson  the new JSON data
      */
     void setJson(const std::string& newJson);
+
+    #ifdef wic_weather_comparison
+    /** \brief Equality operator for Weather class.
+     *
+     * \param other the other Weather instance
+     * \return Returns true, if both instances are equal.
+     *         Returns false otherwise.
+     */
+    bool operator==(const Weather& other) const;
+
+
+    /** \brief Inequality operator for Weather class.
+     *
+     * \param other the other Weather instance to compare to
+     * \return Returns true, if both instances are NOT equal.
+     *         Returns false otherwise.
+     */
+    bool operator!=(const Weather& other) const;
+    #endif // wic_weather_comparison
   private:
     std::chrono::time_point<std::chrono::system_clock> m_dataTime; /**< time when the data was received / measured */
     std::chrono::time_point<std::chrono::system_clock> m_requestTime; /**< time when the API request was performed */
@@ -346,8 +367,8 @@ class Weather
     int16_t m_windDegrees; /**< wind direction in degrees */
     int8_t m_cloudiness; /**< cloudiness in percent */
     std::string m_json; /**< raw JSON data */
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_WEATHER_HPP

@@ -8,6 +8,8 @@ set(apixu_parsing_tests_sources
     ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
+    ../../../src/json/ApixuFunctions.cpp
+    ../../../src/json/NLohmannJsonApixu.cpp
     ../../../src/net/Curly.cpp
     ../../../src/util/Strings.cpp
     main.cpp)
@@ -29,17 +31,6 @@ if (CURL_FOUND)
 else ()
   message ( FATAL_ERROR "cURL was not found!" )
 endif (CURL_FOUND)
-
-
-# find jsoncpp library
-set(LibJsonCpp_DIR "../../../cmake/" )
-find_package (LibJsonCpp)
-if (LIBJSONCPP_FOUND)
-  include_directories(${LIBJSONCPP_INCLUDE_DIRS})
-  target_link_libraries (apixu_parsing_tests ${LIBJSONCPP_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "libjsoncpp was not found!" )
-endif (LIBJSONCPP_FOUND)
 
 
 # test run
