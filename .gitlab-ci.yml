@@ -11,7 +11,7 @@ build_gcc:
     - ./ci/cpplint.sh
     - mkdir ./build
     - cd ./build
-    - cmake ../
+    - cmake ../ -DJSON_BENCHMARK=ON
     - make -j4
     - ctest -V
 
@@ -28,6 +28,6 @@ build_clang:
     - ./ci/cpplint.sh
     - mkdir ./build
     - cd ./build
-    - cmake ../
+    - cmake ../ -DJSON_BENCHMARK=ON
     - make -j4
     - ctest -V

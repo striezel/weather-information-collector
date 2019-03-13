@@ -10,7 +10,7 @@ script:
   - ./ci/cpplint.sh
   - mkdir ./build
   - cd ./build
-  - cmake ../
+  - cmake ../ -DJSON_BENCHMARK=ON
   - make -j4
   - ctest -V
 addons:
