@@ -17,7 +17,6 @@ set(weather-information-collector-task-creator_sources
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
     ../json/ApixuFunctions.cpp
-    ../json/JsonCppOwm.cpp
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
@@ -47,16 +46,6 @@ if (CURL_FOUND)
 else ()
   message ( FATAL_ERROR "cURL was not found!" )
 endif (CURL_FOUND)
-
-# find jsoncpp library
-set(LibJsonCpp_DIR "../../cmake/" )
-find_package (LibJsonCpp)
-if (LIBJSONCPP_FOUND)
-  include_directories(${LIBJSONCPP_INCLUDE_DIRS})
-  target_link_libraries (weather-information-collector-task-creator ${LIBJSONCPP_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "libjsoncpp was not found!" )
-endif (LIBJSONCPP_FOUND)
 
 # find Boost library: filesystem (+ system as dependency)
 find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)

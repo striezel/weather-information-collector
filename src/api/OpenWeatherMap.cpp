@@ -22,7 +22,7 @@
 #include <cmath>
 #include <iostream>
 #ifdef wic_owm_find_location
-#include "../json/JsonCppOwm.hpp"
+#include "../json/NLohmannJsonOwm.hpp"
 #include "../net/Curly.hpp"
 #endif // wic_owm_find_location
 #ifndef wic_no_json_parsing
@@ -222,7 +222,7 @@ bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair
     return false;
   }
 
-  return JsonCppOwm::parseLocations(response, locations);
+  return NLohmannJsonOwm::parseLocations(response, locations);
 }
 #endif // wic_owm_find_location
 
