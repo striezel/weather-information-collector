@@ -234,7 +234,7 @@ bool JsonCppOwm::parseLocations(const std::string& json, std::vector<std::pair<L
     if (!coord.empty() && coord.isObject())
     {
       val = coord["lat"];
-      Json::Value lon = coord["lon"];
+      const Json::Value lon = coord["lon"];
       if (!val.empty() && !lon.empty() && val.isNumeric() && lon.isNumeric())
       {
         loc.setCoordinates(val.asFloat(), lon.asFloat());

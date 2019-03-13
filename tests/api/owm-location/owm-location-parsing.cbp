@@ -48,6 +48,9 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/JsonCppOwm.cpp" />
 		<Unit filename="../../../src/json/JsonCppOwm.hpp" />
+		<Unit filename="../../../src/json/NLohmannJsonOwm.cpp" />
+		<Unit filename="../../../src/json/NLohmannJsonOwm.hpp" />
+		<Unit filename="location.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
