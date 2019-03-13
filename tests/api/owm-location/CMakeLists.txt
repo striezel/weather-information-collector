@@ -12,7 +12,7 @@ set(owm_location_parsing_tests_sources
     ../../../src/json/NLohmannJsonOwm.cpp
     main.cpp)
 
-add_definitions(-std=c++11 -Dwic_no_json_parsing -Dwic_owm_find_location -Dwic_weather_comparison)
+add_definitions(-std=c++14 -Dwic_no_json_parsing -Dwic_owm_find_location -Dwic_weather_comparison)
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)

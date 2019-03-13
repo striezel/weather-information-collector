@@ -43,7 +43,7 @@ set(weather-information-collector-update_sources
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++11 -pthread)
+add_definitions(-std=c++14 -pthread)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s -pthread" )
 

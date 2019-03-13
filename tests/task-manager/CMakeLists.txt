@@ -18,7 +18,7 @@ set(task_manager_tests_sources
     ../../src/util/Strings.cpp
     main.cpp)
 
-add_definitions(-std=c++11 -O3 -Dwic_no_json_parsing)
+add_definitions(-std=c++14 -O3 -Dwic_no_json_parsing)
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-Wall -Weffc++ -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)

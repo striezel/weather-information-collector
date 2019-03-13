@@ -29,7 +29,7 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-std=c++11" />
+			<Add option="-std=c++14" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add option="-Dwic_no_tasks_in_config" />

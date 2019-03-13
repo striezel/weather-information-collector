@@ -30,7 +30,7 @@ set(weather_information_collector_tests_sources
     util/Strings.cpp
     main.cpp)
 
-add_definitions(-std=c++11 -Dwic_no_json_parsing)
+add_definitions(-std=c++14 -Dwic_no_json_parsing)
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
