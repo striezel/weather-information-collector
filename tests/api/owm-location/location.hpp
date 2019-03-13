@@ -163,7 +163,7 @@ int parseLocations(const std::string& json)
     expectedWeather.setHumidity(100);
     expectedWeather.setPressure(1020);
     expectedWeather.setWindSpeed(2.66);
-    expectedWeather.setWindDegrees(321.502);
+    expectedWeather.setWindDegrees(static_cast<int16_t>(321.502));
     //expectedWeather.setRain(NaN);
     expectedWeather.setCloudiness(20);
     expectedWeather.setDataTime(std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(1551612156)));
