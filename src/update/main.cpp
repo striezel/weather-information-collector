@@ -23,6 +23,7 @@
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
+#include "guess.hpp"
 #include "Update_0.5.4_to_0.5.5.hpp"
 #include "Update_0.5.7_to_0.6.0.hpp"
 #include "Update_0.6.5_to_0.6.6.hpp"
@@ -52,12 +53,19 @@ void showHelp()
             << "  -c FILE | --conf FILE  - sets the file name of the configuration file to use\n"
             << "                           during the program run. If this option is omitted,\n"
             << "                           then the program will search for the configuration\n"
-            << "                           in some predefined locations.\n";
+            << "                           in some predefined locations.\n"
+            << "  -f | --full            - perform all update steps, even those for older\n"
+            << "                           versions that may not be required. This option is\n"
+            << "                           off by default, so that only required updates are\n"
+            << "                           performed by the update program. Which updates are\n"
+            << "                           required is determined by looking at the current\n"
+            << "                           database structure.\n"  ;
 }
 
 int main(int argc, char** argv)
 {
   std::string configurationFile; /**< path of configuration file */
+  bool fullUpdate = false;       /**< whether user wants a full update */
 
   if ((argc > 1) && (argv != nullptr))
   {
@@ -101,6 +109,16 @@ int main(int argc, char** argv)
           return wic::rcInvalidParameter;
         }
       } // if configuration file
+      else if ((param == "--full") || (param == "-f") || (param == "--all") || (param == "-a"))
+      {
+        if (fullUpdate)
+        {
+          std::cerr << "Error: Parameter " << param << " must not be specified more than once!"
+                    << std::endl;
+          return wic::rcInvalidParameter;
+        }
+        fullUpdate = true;
+      } // if full update procedure / all updates
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
@@ -118,60 +136,112 @@ int main(int argc, char** argv)
     return wic::rcConfigurationError;
   }
 
+  wic::SemVer currentVersion;
+  if (!fullUpdate)
+  {
+    // Try to detect version from database.
+    currentVersion = guessVersionFromDatabase(config.connectionInfo());
+    if (wic::SemVer() == currentVersion)
+    {
+      // Some database error must have occurred, so quit right here.
+      return wic::rcDatabaseError;
+    }
+
+    if (currentVersion == wic::ancientVersion)
+    {
+      std::cout << "Detected program version is very ancient, so a full update will be performed." << std::endl;
+    }
+    else
+    {
+      std::cout << "Detected program version is " << currentVersion.toString()
+                << " or newer. Updates for older versions will be skipped." << std::endl;
+      std::cout << "If this is wrong and you want to perform all update steps "
+                << "instead, then call this program with the parameter --full."
+                << " Be warned that this may take quite a long time though." << std::endl;
+    }
+  } // if no full update is requested
+
   // Perform the incremental updates, step by step.
-  std::cout << "Update for database of version 0.5.4 (and earlier) to version 0.5.5..." << std::endl;
-  if (!wic::Update054_055::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 5, 5))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.5.4 (and earlier) to version 0.5.5..." << std::endl;
+    if (!wic::Update054_055::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.5.7 (and earlier) to version 0.6.0..." << std::endl;
-  if (!wic::Update057_060::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 6, 0))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.5.7 (and earlier) to version 0.6.0..." << std::endl;
+    if (!wic::Update057_060::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.6.5 (and earlier) to version 0.6.6..." << std::endl;
-  if (!wic::Update065_066::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 6, 6))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.6.5 (and earlier) to version 0.6.6..." << std::endl;
+    if (!wic::Update065_066::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.6.7 (and earlier) to version 0.7.0..." << std::endl;
-  if (!wic::UpdateTo070::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 7, 0))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.6.7 (and earlier) to version 0.7.0..." << std::endl;
+    if (!wic::UpdateTo070::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.7.1 (and earlier) to version 0.8.0..." << std::endl;
-  if (!wic::UpdateTo080::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 8, 0))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.7.1 (and earlier) to version 0.8.0..." << std::endl;
+    if (!wic::UpdateTo080::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.8.0 (and earlier) to version 0.8.1..." << std::endl;
-  if (!wic::UpdateTo081::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 8, 1))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.8.0 (and earlier) to version 0.8.1..." << std::endl;
+    if (!wic::UpdateTo081::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.8.1 (and earlier) to version 0.8.3..." << std::endl;
-  if (!wic::UpdateTo083::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 8, 3))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.8.1 (and earlier) to version 0.8.3..." << std::endl;
+    if (!wic::UpdateTo083::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.8.3 (and earlier) to version 0.8.5..." << std::endl;
-  if (!wic::UpdateTo085::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 8, 5))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.8.3 (and earlier) to version 0.8.5..." << std::endl;
+    if (!wic::UpdateTo085::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
-  std::cout << "Update for database of version 0.8.5 (and earlier) to version 0.8.6..." << std::endl;
-  if (!wic::UpdateTo086::perform(config.connectionInfo()))
+  if (currentVersion < wic::SemVer(0, 8, 6))
   {
-    std::cerr << "Error: Database update failed!" << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.8.5 (and earlier) to version 0.8.6..." << std::endl;
+    if (!wic::UpdateTo086::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
 
   std::cout << "OK. All updates succeeded." << std::endl;

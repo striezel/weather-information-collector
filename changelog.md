@@ -1,5 +1,16 @@
 # Version history of weather-information-collector
 
+## Version 0.8.8 (2019-03-14)
+
+The updater will now only perform the most recent update steps that seem to be
+required to get from the previous to the current version. Which updates are
+required is determined by looking at the current database structure. To avoid
+the version detection mechanism and perform all update steps as in previous
+program version, use the parameter --full.
+
+Furthermore, the C++ standard used during compilation has been raised from
+C++11 to C++14. Most compilers should support that by now.
+
 ## Version 0.8.7 (2019-03-13)
 
 Switch JSON library from JsonCpp to nlohmann/json. Parsing with that library

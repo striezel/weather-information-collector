@@ -57,6 +57,8 @@
 		<Unit filename="../../src/tasks/Task.hpp" />
 		<Unit filename="../../src/tasks/TaskManager.cpp" />
 		<Unit filename="../../src/tasks/TaskManager.hpp" />
+		<Unit filename="../../src/update/SemVer.cpp" />
+		<Unit filename="../../src/update/SemVer.hpp" />
 		<Unit filename="../../src/util/Directories.cpp" />
 		<Unit filename="../../src/util/Directories.hpp" />
 		<Unit filename="../../src/util/Strings.cpp" />
@@ -69,6 +71,7 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="tasks/Task.cpp" />
 		<Unit filename="tasks/TaskManager.cpp" />
+		<Unit filename="update/SemVer.cpp" />
 		<Unit filename="util/Directories.cpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Extensions>

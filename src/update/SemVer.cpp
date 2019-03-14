@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,37 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-
-#include <string>
+#include "SemVer.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.8.8, 2019-03-14";
+SemVer::SemVer()
+: majorVer(0), minorVer(0), patchVer(0)
+{
+}
+
+SemVer::SemVer(const uint16_t major, const uint16_t minor, const uint16_t patch)
+: majorVer(major), minorVer(minor), patchVer(patch)
+{
+}
+
+std::string SemVer::toString() const
+{
+  return std::to_string(majorVer) + "." + std::to_string(minorVer) + "." + std::to_string(patchVer);
+}
+
+bool SemVer::operator==(const SemVer& other) const
+{
+  return majorVer == other.majorVer && minorVer == other.minorVer
+      && patchVer == other.patchVer;
+}
+
+bool SemVer::operator<(const SemVer& other) const
+{
+  return (majorVer < other.majorVer)
+    || ((majorVer == other.majorVer) && (minorVer < other.minorVer))
+    || ((majorVer == other.majorVer) && (minorVer == other.minorVer) && (patchVer < other.patchVer));
+}
 
 } // namespace
-
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP

@@ -83,6 +83,8 @@
 		<Unit filename="../util/Strings.hpp" />
 		<Unit filename="ForecastDataUpdate_0.8.3.cpp" />
 		<Unit filename="ForecastDataUpdate_0.8.3.hpp" />
+		<Unit filename="SemVer.cpp" />
+		<Unit filename="SemVer.hpp" />
 		<Unit filename="UpdateTo_0.7.0.cpp" />
 		<Unit filename="UpdateTo_0.7.0.hpp" />
 		<Unit filename="UpdateTo_0.8.0.cpp" />
@@ -103,6 +105,8 @@
 		<Unit filename="Update_0.6.5_to_0.6.6.hpp" />
 		<Unit filename="WeatherDataUpdate_0.8.3.cpp" />
 		<Unit filename="WeatherDataUpdate_0.8.3.hpp" />
+		<Unit filename="guess.cpp" />
+		<Unit filename="guess.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

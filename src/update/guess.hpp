@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,25 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP
+#define WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP
 
-#include <string>
+#include "../db/ConnectionInformation.hpp"
+#include "SemVer.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.8.8, 2019-03-14";
+const SemVer ancientVersion(0, 0, 1); /**< dummy version for very old versions */
+
+/** \brief Tries to guess the current program version from the database structure.
+ *
+ * Note that the actual version may be newer.
+ * \param ci  database connection information
+ * \return Returns the detected version.
+ */
+SemVer guessVersionFromDatabase(const ConnectionInformation& ci);
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP

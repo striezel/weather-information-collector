@@ -17,6 +17,7 @@ set(weather_information_collector_tests_sources
     ../../src/db/ConnectionInformation.cpp
     ../../src/tasks/Task.cpp
     ../../src/tasks/TaskManager.cpp
+    ../../src/update/SemVer.cpp
     ../../src/util/Directories.cpp
     ../../src/util/Strings.cpp
     api/Types.cpp
@@ -26,6 +27,7 @@ set(weather_information_collector_tests_sources
     db/ConnectionInformation.cpp
     tasks/Task.cpp
     tasks/TaskManager.cpp
+    update/SemVer.cpp
     util/Directories.cpp
     util/Strings.cpp
     main.cpp)
