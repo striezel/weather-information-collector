@@ -99,7 +99,7 @@ bool UpdateTo085::updateData(const ConnectionInformation& ci)
 
     mysqlpp::Query update(&conn);
     update << "UPDATE forecastdata SET rain=" << mysqlpp::quote << it->rain()
-           << " WHERE dataID=" << mysqlpp::quote << dataId << " LIMIT 1;";
+           << " WHERE dataID='" << dataId << "' LIMIT 1;";
     if (!update.exec())
     {
       std::cerr << "Error: Could not update rain amount for data ID "

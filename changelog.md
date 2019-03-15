@@ -1,5 +1,9 @@
 # Version history of weather-information-collector
 
+## Version 0.8.9 (2019-03-15)
+
+Fix problem with MySQL++ parameter handling on Raspberry Pi.
+
 ## Version 0.8.8 (2019-03-14)
 
 The updater will now only perform the most recent update steps that seem to be
