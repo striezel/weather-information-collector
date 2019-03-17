@@ -241,7 +241,7 @@ bool NLohmannJsonOwm::parseLocations(const std::string& json, std::vector<std::p
     LocationWithCountry loc;
     auto val = elem.find("id");
     if (val != elem.end() && val->is_number_unsigned())
-      loc.setId(val->get<unsigned int>());
+      loc.setOwmId(val->get<unsigned int>());
     val = elem.find("name");
     if (val != elem.end() && val->is_string())
       loc.setName(val->get<std::string>());

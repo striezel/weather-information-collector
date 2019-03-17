@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ TEST_CASE("LocationClass")
   SECTION("empty after construction")
   {
     // no data should be set
-    REQUIRE_FALSE( loc.hasId() );
+    REQUIRE_FALSE( loc.hasOwmId() );
     REQUIRE_FALSE( loc.hasCoordinates() );
     REQUIRE_FALSE( loc.hasName() );
     REQUIRE_FALSE( loc.hasPostcode() );
@@ -41,10 +41,10 @@ TEST_CASE("LocationClass")
   {
     REQUIRE( loc.empty() );
 
-    SECTION("empty: id")
+    SECTION("empty: OpenWeatherMap id")
     {
       REQUIRE( loc.empty() );
-      loc.setId(5);
+      loc.setOwmId(5);
       REQUIRE_FALSE( loc.empty() );
     }
 
@@ -71,11 +71,11 @@ TEST_CASE("LocationClass")
   } // emptiness section
 
 
-  SECTION("set, has + get id")
+  SECTION("set, has + get OpenWeatherMap id")
   {
-    loc.setId(12345);
-    REQUIRE( loc.hasId() );
-    REQUIRE( loc.id() == 12345 );
+    loc.setOwmId(12345);
+    REQUIRE( loc.hasOwmId() );
+    REQUIRE( loc.owmId() == 12345 );
   }
 
   SECTION("set, has + get latitude and longitude")
@@ -185,11 +185,11 @@ TEST_CASE("LocationClass")
     loc2.setName("Town");
     REQUIRE( loc1 == loc2 );
 
-    loc1.setId(5);
+    loc1.setOwmId(5);
     REQUIRE_FALSE( loc1 == loc2 );
-    loc2.setId(4);
+    loc2.setOwmId(4);
     REQUIRE_FALSE( loc1 == loc2 );
-    loc2.setId(5);
+    loc2.setOwmId(5);
     REQUIRE( loc1 == loc2 );
   }
 }

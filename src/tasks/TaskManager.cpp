@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -147,27 +147,27 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
     } // if interval
     else if ((name == "location.id") || (name == "location_id"))
     {
-      if (task.location().hasId())
+      if (task.location().hasOwmId())
       {
-        std::cerr << "Error: Location ID is specified more than once in file "
+        std::cerr << "Error: Location's OpenWeatherMap ID is specified more than once in file "
                   << fileName << "!" << std::endl;
         return false;
       }
       int id = -1;
       if (!stringToInt(value, id))
       {
-        std::cerr << "Error: Location ID in file " << fileName
+        std::cerr << "Error: Location's OpenWeatherMap ID in file " << fileName
                   << " must be a positive integer value!" << std::endl;
         return false;
       }
       if (id < 1)
       {
-        std::cerr << "Error: Location ID in file " << fileName
+        std::cerr << "Error: Location's OpenWeatherMap ID in file " << fileName
                   << " must be a positive integer value!" << std::endl;
         return false;
       }
       Location loc(task.location());
-      loc.setId(id);
+      loc.setOwmId(id);
       task.setLocation(loc);
     } // if location.id
     else if ((name == "location.name") || (name == "location_name") || (name == "city"))
@@ -378,8 +378,8 @@ bool TaskManager::hasDuplicates(const std::vector<Task>& tasks, const bool silen
         if (!silent)
         {
           std::cerr << "Error: There are duplicate / overlapping tasks for the location";
-          if (tasks[i].location().hasId())
-            std::cerr << " with the id " << tasks[i].location().id();
+          if (tasks[i].location().hasOwmId())
+            std::cerr << " with the OpenWeatherMap id " << tasks[i].location().owmId();
           if (tasks[i].location().hasName())
             std::cerr << " with the name " << tasks[i].location().name();
           if (tasks[i].location().hasPostcode())

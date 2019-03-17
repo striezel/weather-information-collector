@@ -40,14 +40,14 @@ TEST_CASE("Class Task")
   {
     Location loc;
     loc.setName("City");
-    loc.setId(123456);
+    loc.setOwmId(123456);
 
     Task t(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(3600));
 
     REQUIRE( t.api() == ApiType::OpenWeatherMap );
     REQUIRE( t.data() == DataType::Current );
     REQUIRE( t.location().name() == "City" );
-    REQUIRE( t.location().id() == 123456 );
+    REQUIRE( t.location().owmId() == 123456 );
     REQUIRE( t.interval().count() == 3600 );
   }
 
@@ -55,7 +55,7 @@ TEST_CASE("Class Task")
   {
     Location loc;
     loc.setName("City");
-    loc.setId(123456);
+    loc.setOwmId(123456);
 
     // empty / default-constructed task is not complete
     Task t;

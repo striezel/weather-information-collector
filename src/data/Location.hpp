@@ -36,27 +36,27 @@ class Location
     Location();
 
 
-    /** \brief Gets the API id of the location (if any).
+    /** \brief Gets the OpenWeatherMap API id of the location (if any).
      *
-     * \return Returns the API id of the location.
+     * \return Returns the OpenWeatherMap API id of the location.
      *         Returns zero, if no id is set.
      */
-    uint32_t id() const;
+    uint32_t owmId() const;
 
 
-    /** \brief Sets the API id of the location.
+    /** \brief Sets the OpenWeatherMap API id of the location.
      *
-     * \param newId  the new API id of the location
+     * \param newId  the new OpenWeatherMap API id of the location
      */
-    void setId(const uint32_t newId);
+    void setOwmId(const uint32_t newId);
 
 
-    /** \brief Checks whether the location has an API id.
+    /** \brief Checks whether the location has an OpenWeatherMap API id.
      *
-     * \return Returns true, if the location has an API id.
+     * \return Returns true, if the location has an OpenWeatherMap API id.
      *         Returns false otherwise.
      */
-    bool hasId() const;
+    bool hasOwmId() const;
 
 
     /** \brief Gets the latitude of the location.
@@ -184,7 +184,7 @@ class Location
      */
     std::string coordinatesToString() const;
   private:
-    uint32_t m_id; /**< id of the location */
+    uint32_t m_owmId; /**< OpenWeatherMap API id of the location */
     float m_latitude; /**< latitude of the location */
     float m_longitude; /**< longitude of the location */
     std::string m_name; /**< name of the location */

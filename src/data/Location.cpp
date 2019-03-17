@@ -26,7 +26,7 @@ namespace wic
 {
 
 Location::Location()
-: m_id(0),
+: m_owmId(0),
   m_latitude(std::numeric_limits<float>::quiet_NaN()),
   m_longitude(std::numeric_limits<float>::quiet_NaN()),
   m_name(""),
@@ -34,19 +34,19 @@ Location::Location()
 {
 }
 
-uint32_t Location::id() const
+uint32_t Location::owmId() const
 {
-  return m_id;
+  return m_owmId;
 }
 
-void Location::setId(const uint32_t newId)
+void Location::setOwmId(const uint32_t newId)
 {
-  m_id = newId;
+  m_owmId = newId;
 }
 
-bool Location::hasId() const
+bool Location::hasOwmId() const
 {
-  return (m_id != 0);
+  return (m_owmId != 0);
 }
 
 float Location::latitude() const
@@ -103,7 +103,7 @@ bool Location::hasPostcode() const
 
 bool Location::operator==(const Location& other) const
 {
-  return (m_id == other.m_id) && (m_name == other.m_name)
+  return (m_owmId == other.m_owmId) && (m_name == other.m_name)
       && (m_postcode == other.m_postcode)
       && equalCoordinates(other);
 }
@@ -136,7 +136,7 @@ bool Location::equalCoordinates(const Location& other) const
 
 bool Location::empty() const
 {
-  return (!hasId() && !hasName()
+  return (!hasOwmId() && !hasName()
        && !hasCoordinates() && !hasPostcode());
 }
 
@@ -158,9 +158,9 @@ std::string Location::toString() const
   {
     return coordinatesToString();
   }
-  if (hasId())
+  if (hasOwmId())
   {
-    return "ID " + std::to_string(id());
+    return "OWM ID " + std::to_string(owmId());
   }
   // Postcode?
   if (hasPostcode())

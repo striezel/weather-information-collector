@@ -339,9 +339,9 @@ bool writeTaskFile(const std::string& fileName, const Task& t)
   // data type
       + std::string("data=") + toString(t.data()) + "\n";
   // location
-  if (t.location().hasId())
+  if (t.location().hasOwmId())
   {
-    fileContent += "location.id=" + std::to_string(t.location().id()) + "\n";
+    fileContent += "location.id=" + std::to_string(t.location().owmId()) + "\n";
   }
   if (t.location().hasName())
   {

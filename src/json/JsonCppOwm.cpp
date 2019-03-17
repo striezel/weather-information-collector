@@ -226,7 +226,7 @@ bool JsonCppOwm::parseLocations(const std::string& json, std::vector<std::pair<L
     LocationWithCountry loc;
     Json::Value val = elem["id"];
     if (!val.empty() && val.isUInt())
-      loc.setId(val.asUInt());
+      loc.setOwmId(val.asUInt());
     val = elem["name"];
     if (!val.empty() && val.isString())
       loc.setName(val.asString());

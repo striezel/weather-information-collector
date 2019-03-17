@@ -33,7 +33,7 @@ TEST_CASE("Class TaskManager")
 
   Location loc;
   loc.setName("London");
-  loc.setId(123456789);
+  loc.setOwmId(123456789);
 
   SECTION("hasDuplicates")
   {
@@ -41,7 +41,7 @@ TEST_CASE("Class TaskManager")
 
     Location loc2;
     loc.setName("Paris");
-    loc.setId(987654321);
+    loc.setOwmId(987654321);
 
     SECTION("empty task list")
     {

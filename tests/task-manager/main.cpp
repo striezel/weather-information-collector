@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,9 +54,9 @@ int main(int argc, char** argv)
     std::cerr << "Error: Wrong interval!\n";
     return 1;
   }
-  if (task.location().id() != 123)
+  if (task.location().owmId() != 123)
   {
-    std::cerr << "Error: Wrong location ID!\n";
+    std::cerr << "Error: Wrong OpenWeatherMap location ID!\n";
     return 1;
   }
   if (task.location().name() != "Hammelburg")

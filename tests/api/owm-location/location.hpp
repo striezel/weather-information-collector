@@ -80,10 +80,10 @@ int parseLocations(const std::string& json)
                 << location.country() << " instead!" << std::endl;
       return 1;
     }
-    if (location.id() != 2950159)
+    if (location.owmId() != 2950159)
     {
       std::cerr << "Error: Expected id 2950159, but it is "
-                << location.id() << " instead!" << std::endl;
+                << location.owmId() << " instead!" << std::endl;
       return 1;
     }
     if (location.name() != "Berlin")
@@ -145,7 +145,7 @@ int parseLocations(const std::string& json)
     }
 
     Location expectedLocation;
-    expectedLocation.setId(4831725);
+    expectedLocation.setOwmId(4831725);
     expectedLocation.setCoordinates(41.6215, -72.7457);
     expectedLocation.setName("Berlin");
     expectedLocation.setPostcode("");
@@ -191,7 +191,7 @@ int parseLocations(const std::string& json)
     }
 
     Location expectedLocation;
-    expectedLocation.setId(5163076);
+    expectedLocation.setOwmId(5163076);
     expectedLocation.setCoordinates(40.5612, -81.7944);
     expectedLocation.setName("Berlin");
     expectedLocation.setPostcode("");
@@ -237,7 +237,7 @@ int parseLocations(const std::string& json)
     }
 
     Location expectedLocation;
-    expectedLocation.setId(1019330);
+    expectedLocation.setOwmId(1019330);
     expectedLocation.setCoordinates(-32.8834, 27.5794);
     expectedLocation.setName("Berlin");
     expectedLocation.setPostcode("");
@@ -283,7 +283,7 @@ int parseLocations(const std::string& json)
     }
 
     Location expectedLocation;
-    expectedLocation.setId(2950158);
+    expectedLocation.setOwmId(2950158);
     expectedLocation.setCoordinates(54.0364, 10.4461);
     expectedLocation.setName("Berlin");
     expectedLocation.setPostcode("");

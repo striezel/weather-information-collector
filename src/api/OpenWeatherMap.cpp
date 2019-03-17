@@ -46,7 +46,7 @@ void OpenWeatherMap::setApiKey(const std::string& key)
 
 bool OpenWeatherMap::validLocation(const Location& location) const
 {
-  return (location.hasId() || location.hasCoordinates()
+  return (location.hasOwmId() || location.hasCoordinates()
       || location.hasName() || location.hasPostcode());
 }
 
@@ -66,8 +66,8 @@ bool OpenWeatherMap::supportsDataType(const DataType data) const
 
 std::string OpenWeatherMap::toRequestString(const Location& location) const
 {
-  if (location.hasId())
-    return std::string("id=") + intToString(location.id());
+  if (location.hasOwmId())
+    return std::string("id=") + intToString(location.owmId());
   if (location.hasCoordinates())
     return std::string("lat=") + floatToString(location.latitude())
          + std::string("&lon=") + floatToString(location.longitude());

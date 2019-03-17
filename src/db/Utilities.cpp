@@ -28,9 +28,9 @@ int getLocationId(mysqlpp::Connection& conn, const Location& location)
 {
   mysqlpp::Query query(&conn);
   query << "SELECT * FROM location WHERE ";
-  if (location.hasId())
+  if (location.hasOwmId())
   {
-    query << "id=" << mysqlpp::quote << location.id();
+    query << "id=" << mysqlpp::quote << location.owmId();
   }
   else if (location.hasName())
   {
@@ -61,9 +61,9 @@ int getLocationId(mysqlpp::Connection& conn, const Location& location)
   mysqlpp::Query insertQuery(&conn);
   insertQuery << "INSERT INTO location SET ";
   bool previousData = false;
-  if (location.hasId())
+  if (location.hasOwmId())
   {
-    insertQuery << "id=" << mysqlpp::quote << location.id();
+    insertQuery << "id=" << mysqlpp::quote << location.owmId();
     previousData = true;
   }
   if (location.hasName())
@@ -106,7 +106,7 @@ Location getLocation(mysqlpp::Connection& conn, const int locationId)
 
   Location loc;
   if (!queryData[0].id.is_null)
-    loc.setId(queryData[0].id.data);
+    loc.setOwmId(queryData[0].id.data);
   if (!queryData[0].latitude.is_null && !queryData[0].longitude.is_null)
     loc.setCoordinates(queryData[0].latitude.data, queryData[0].longitude.data);
   if (!queryData[0].name.is_null)
