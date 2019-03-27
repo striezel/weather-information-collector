@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,11 +48,12 @@ TEST_CASE("Class TaskManager")
       REQUIRE_FALSE( TaskManager::hasDuplicates(tasks, false) );
     }
 
-    SECTION("three tasks with same location and data type but different API")
+    SECTION("four tasks with same location and data type but different API")
     {
       tasks.push_back(Task(loc, ApiType::Apixu, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(900)));
       REQUIRE_FALSE( TaskManager::hasDuplicates(tasks, false) );
     }
 
@@ -255,11 +256,54 @@ TEST_CASE("Class TaskManager")
     }
 
 
-    SECTION("Apixu + OpenWeatherMap + DarkSky: three tasks within limits")
+    SECTION("Weatherbit only: two tasks within limits")
+    {
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(1800)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(1800)));
+
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Weatherbit only: two tasks with too much requests")
+    {
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(120)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(120)));
+
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Weatherbit only: multitude of tasks within limits")
+    {
+      for (int i = 1; i <= 6; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
+      }
+      REQUIRE( TaskManager::withinLimits(tasks) );
+
+      tasks.clear();
+      for (int i = 1; i <= 2; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(180)));
+      }
+      REQUIRE( TaskManager::withinLimits(tasks) );
+    }
+
+    SECTION("Weatherbit only: multitude of tasks with too much requests")
+    {
+      for (int i = 1; i <= 60; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(60)));
+      }
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+    }
+
+
+    SECTION("Apixu + OpenWeatherMap + DarkSky + Weatherbit: four tasks within limits")
     {
       tasks.push_back(Task(loc, ApiType::Apixu, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(900)));
 
       REQUIRE( TaskManager::withinLimits(tasks) );
     }
@@ -286,18 +330,19 @@ TEST_CASE("Class TaskManager")
       REQUIRE( TaskManager::withinLimits(tasks) );
     }
 
-    SECTION("Apixu + OpenWeatherMap + DarkSky: out of limit, even if only one API has too much requests")
+    SECTION("Apixu + OpenWeatherMap + DarkSky + Weatherbit: out of limit, even if only one API has too much requests")
     {
-      // too much OWM requests, but Apixu + DarkSky requests within limit
+      // too much OWM requests, but Apixu + DarkSky + Weatherbit requests within limit
       for (int i = 1; i <= 61; ++i)
       {
         tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(1)));
       }
       tasks.push_back(Task(loc, ApiType::Apixu, DataType::Current, std::chrono::seconds(3600)));
       tasks.push_back(Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(3600)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
       REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
 
-      // too much Apixu requests, but OWM + DarkSky requests within limit
+      // too much Apixu requests, but OWM + DarkSky + Weatherbit requests within limit
       tasks.clear();
       for (int i = 1; i <= 14; ++i)
       {
@@ -305,9 +350,10 @@ TEST_CASE("Class TaskManager")
       }
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(3600)));
       tasks.push_back(Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(3600)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
       REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
 
-      // too much DarkSky requests, but OWM + Apixu requests within limit
+      // too much DarkSky requests, but OWM + Apixu + Weatherbit requests within limit
       tasks.clear();
       for (int i = 1; i <= 50; ++i)
       {
@@ -315,6 +361,18 @@ TEST_CASE("Class TaskManager")
       }
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(3600)));
       tasks.push_back(Task(loc, ApiType::Apixu, DataType::Current, std::chrono::seconds(3600)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
+
+      // too much Weatherbit requests, but OWM + Apixu + DarkSky requests within limit
+      tasks.clear();
+      for (int i = 1; i <= 50; ++i)
+      {
+        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
+      }
+      tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(3600)));
+      tasks.push_back(Task(loc, ApiType::Apixu, DataType::Current, std::chrono::seconds(3600)));
+      tasks.push_back(Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(3600)));
       REQUIRE_FALSE( TaskManager::withinLimits(tasks) );
     }
   } //withinLimits

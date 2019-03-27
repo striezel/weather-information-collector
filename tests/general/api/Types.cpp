@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,6 +47,14 @@ TEST_CASE("API types")
     REQUIRE( wic::toApiType("\t  DaRkSkY  ") == wic::ApiType::DarkSky );
   }
 
+  SECTION("to API type: Weatherbit")
+  {
+    REQUIRE( wic::toApiType("weatherbit") == wic::ApiType::Weatherbit );
+    REQUIRE( wic::toApiType("Weatherbit") == wic::ApiType::Weatherbit );
+    REQUIRE( wic::toApiType("WEATHERBIT") == wic::ApiType::Weatherbit );
+    REQUIRE( wic::toApiType("\t  WeAtHeRbIt  ") == wic::ApiType::Weatherbit );
+  }
+
   SECTION("to API type: none")
   {
     REQUIRE( wic::toApiType("none") == wic::ApiType::none );
@@ -68,6 +76,7 @@ TEST_CASE("API types")
     REQUIRE( wic::toString(wic::ApiType::Apixu) == "Apixu" );
     REQUIRE( wic::toString(wic::ApiType::OpenWeatherMap) == "OpenWeatherMap" );
     REQUIRE( wic::toString(wic::ApiType::DarkSky) == "DarkSky" );
+    REQUIRE( wic::toString(wic::ApiType::Weatherbit) == "Weatherbit" );
     REQUIRE( wic::toString(wic::ApiType::none) == "none" );
   }
 
@@ -76,6 +85,7 @@ TEST_CASE("API types")
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::Apixu)) == wic::ApiType::Apixu );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::OpenWeatherMap)) == wic::ApiType::OpenWeatherMap );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::DarkSky)) == wic::ApiType::DarkSky );
+    REQUIRE( wic::toApiType(wic::toString(wic::ApiType::Weatherbit)) == wic::ApiType::Weatherbit );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::none)) == wic::ApiType::none );
   }
 }
