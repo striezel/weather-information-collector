@@ -1,0 +1,47 @@
+{
+    "data":[
+        {
+            "rh":42,
+            "pod":"d",
+            "lon":13.73832,
+            "pres":1005.65,
+            "timezone":"Europe\/Berlin",
+            "ob_time":"2019-03-30 12:37",
+            "country_code":"DE",
+            "clouds":72,
+            "ts":1553949441.8558,
+            "solar_rad":459.262,
+            "state_code":"13",
+            "lat":51.05089,
+            "wind_spd":2.00069,
+            "wind_cdir_full":"west",
+            "wind_cdir":"W",
+            "slp":1022.28,
+            "vis":24.1,
+            "h_angle":12.9,
+            "sunset":"17:32",
+            "dni":840.12,
+            "dewpt":3.8,
+            "snow":0,
+            "uv":2.26583,
+            "precip":0,
+            "wind_dir":264,
+            "sunrise":"04:43",
+            "ghi":608.67,
+            "dhi":103.26,
+            "aqi":33,
+            "city_name":"Dresden",
+            "weather":{
+                "icon":"c04d",
+                "code":804,
+                "description":"Overcast clouds"
+            },
+            "datetime":"2019-03-30:12",
+            "temp":16.4,
+            "station":"E7277",
+            "elev_angle":41.72,
+            "app_temp":16.4
+        }
+    ],
+    "count":1
+}

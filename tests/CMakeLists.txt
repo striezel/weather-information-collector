@@ -13,6 +13,9 @@ add_subdirectory (api/owm)
 # Recurse into subdirectory for OpenWeatherMap location parsing tests.
 add_subdirectory (api/owm-location)
 
+# Recurse into subdirectory for Weatherbit tests.
+add_subdirectory (api/weatherbit)
+
 if (JSON_BENCHMARK)
   # Recurse into subdirectory for benchmark executable tests.
   add_subdirectory (benchmark)
