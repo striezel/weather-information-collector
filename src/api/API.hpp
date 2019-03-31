@@ -60,7 +60,7 @@ class API
     virtual bool supportsDataType(const DataType data) const = 0;
 
 
-    #ifndef wic_no_json_parsing
+    #ifndef wic_no_network_requests
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -69,16 +69,6 @@ class API
      *         Returns false, if an error occurred.
      */
     virtual bool currentWeather(const Location& location, Weather& weather) = 0;
-
-
-    /** \brief Parses the current weather information from JSON into the Weather object.
-     *
-     * \param json     string containing the JSON
-     * \param weather  variable where result of the parsing process will be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const = 0;
 
 
     /** \brief Retrieves the weather forecast for a given location.
@@ -91,16 +81,6 @@ class API
     virtual bool forecastWeather(const Location& location, Forecast& forecast) = 0;
 
 
-    /** \brief Parses the weather forecast information from JSON into Weather objects.
-     *
-     * \param json     string containing the JSON
-     * \param forecast variable where result of the parsing process will be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    virtual bool parseForecast(const std::string& json, Forecast& forecast) const = 0;
-
-
     /** \brief Retrieves the current weather and the forecast for a given location.
      *
      * \param location  the location for which the forecast is requested
@@ -110,6 +90,28 @@ class API
      *         Returns false, if an error occurred.
      */
     virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast) = 0;
+    #endif // wic_no_network_requests
+
+
+    #ifndef wic_no_json_parsing
+    /** \brief Parses the current weather information from JSON into the Weather object.
+     *
+     * \param json     string containing the JSON
+     * \param weather  variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const = 0;
+
+
+    /** \brief Parses the weather forecast information from JSON into Weather objects.
+     *
+     * \param json     string containing the JSON
+     * \param forecast variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseForecast(const std::string& json, Forecast& forecast) const = 0;
     #endif // wic_no_json_parsing
 
 

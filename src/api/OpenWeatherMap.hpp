@@ -69,7 +69,7 @@ class OpenWeatherMap: public API
     virtual bool supportsDataType(const DataType data) const;
 
 
-    #ifndef wic_no_json_parsing
+    #ifndef wic_no_network_requests
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -78,16 +78,6 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentWeather(const Location& location, Weather& weather);
-
-
-    /** \brief Parses the current weather information from JSON into the Weather object.
-     *
-     * \param json     string containing the JSON
-     * \param weather  variable where result of the parsing process will be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const;
 
 
     /** \brief Retrieves the weather forecast for a given location.
@@ -100,16 +90,6 @@ class OpenWeatherMap: public API
     virtual bool forecastWeather(const Location& location, Forecast& forecast);
 
 
-    /** \brief Parses the weather forecast information from JSON into Weather objects.
-     *
-     * \param json     string containing the JSON
-     * \param forecast variable where result of the parsing process will be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
-
-
     /** \brief Retrieves the current weather and the forecast for a given location.
      *
      * \param location  the location for which the forecast is requested
@@ -119,7 +99,30 @@ class OpenWeatherMap: public API
      *         Returns false, if an error occurred.
      */
     virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
+    #endif // wic_no_network_requests
+
+
+    #ifndef wic_no_json_parsing
+    /** \brief Parses the current weather information from JSON into the Weather object.
+     *
+     * \param json     string containing the JSON
+     * \param weather  variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const;
+
+
+    /** \brief Parses the weather forecast information from JSON into Weather objects.
+     *
+     * \param json     string containing the JSON
+     * \param forecast variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
     #endif // wic_no_json_parsing
+
 
     #ifdef wic_owm_find_location
     /** \brief Finds matching locations by name.
@@ -135,6 +138,7 @@ class OpenWeatherMap: public API
     std::string m_apiKey; /**< the API key for requests */
 
 
+    #ifndef wic_no_network_requests
     /** \brief Turns info of a location to a request string.
      *
      * \param location  the location information
@@ -142,6 +146,7 @@ class OpenWeatherMap: public API
      *         Returns empty string, if an error occurred.
      */
     std::string toRequestString(const Location& location) const;
+    #endif // wic_no_network_requests
 }; // class
 
 } // namespace

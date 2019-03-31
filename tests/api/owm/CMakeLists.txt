@@ -9,27 +9,17 @@ set(owm_parsing_tests_sources
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/json/NLohmannJsonOwm.cpp
-    ../../../src/net/Curly.cpp
     ../../../src/util/Strings.cpp
     main.cpp)
 
-add_definitions(-std=c++14)
+add_definitions(-std=c++14 -Dwic_no_network_requests)
 if (CMAKE_COMPILER_IS_GNUCC)
-    add_definitions(-Wall -O3 -fexceptions -std=c++14)
+    add_definitions(-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(owm_parsing_tests ${owm_parsing_tests_sources})
-
-# find cURL library
-find_package (CURL)
-if (CURL_FOUND)
-  include_directories(${CURL_INCLUDE_DIRS})
-  target_link_libraries (owm_parsing_tests ${CURL_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "cURL was not found!" )
-endif (CURL_FOUND)
 
 
 # test run

@@ -27,8 +27,10 @@
 #endif // wic_owm_find_location
 #ifndef wic_no_json_parsing
 #include "../json/NLohmannJsonOwm.hpp"
-#include "../net/Curly.hpp"
 #endif // wic_no_json_parsing
+#ifndef wic_no_network_requests
+#include "../net/Curly.hpp"
+#endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -64,6 +66,19 @@ bool OpenWeatherMap::supportsDataType(const DataType data) const
   }
 }
 
+#ifndef wic_no_json_parsing
+bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weather) const
+{
+  return NLohmannJsonOwm::parseCurrentWeather(json, weather);
+}
+
+bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) const
+{
+  return NLohmannJsonOwm::parseForecast(json, forecast);
+}
+#endif // wic_no_json_parsing
+
+#ifndef wic_no_network_requests
 std::string OpenWeatherMap::toRequestString(const Location& location) const
 {
   if (location.hasOwmId())
@@ -77,12 +92,6 @@ std::string OpenWeatherMap::toRequestString(const Location& location) const
     return std::string("zip=") + location.postcode();
   // no required data set
   return std::string();
-}
-
-#ifndef wic_no_json_parsing
-bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weather) const
-{
-  return NLohmannJsonOwm::parseCurrentWeather(json, weather);
 }
 
 bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
@@ -118,11 +127,6 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
 
   // Parsing is done here.
   return parseCurrentWeather(response, weather);
-}
-
-bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) const
-{
-  return NLohmannJsonOwm::parseForecast(json, forecast);
 }
 
 bool OpenWeatherMap::forecastWeather(const Location& location, Forecast& forecast)
@@ -166,7 +170,7 @@ bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather
             << "single request is not supported by OpenWeatherMap!" << std::endl;
   return false;
 }
-#endif // wic_no_json_parsing
+#endif // wic_no_network_requests
 
 #ifdef wic_owm_find_location
 std::string urlEncode(const std::string& str)

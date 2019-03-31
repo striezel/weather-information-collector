@@ -23,8 +23,10 @@
 #include <iostream>
 #ifndef wic_no_json_parsing
 #include "../json/NLohmannJsonDarkSky.hpp"
-#include "../net/Curly.hpp"
 #endif // wic_no_json_parsing
+#ifndef wic_no_network_requests
+#include "../net/Curly.hpp"
+#endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -61,6 +63,19 @@ bool DarkSky::supportsDataType(const DataType data) const
   } // switch
 }
 
+#ifndef wic_no_json_parsing
+bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) const
+{
+  return NLohmannJsonDarkSky::parseCurrentWeather(json, weather);
+}
+
+bool DarkSky::parseForecast(const std::string& json, Forecast& forecast) const
+{
+  return NLohmannJsonDarkSky::parseForecast(json, forecast);
+}
+#endif // wic_no_json_parsing
+
+#ifndef wic_no_network_requests
 std::string DarkSky::toRequestString(const Location& location) const
 {
   if (location.hasCoordinates())
@@ -68,12 +83,6 @@ std::string DarkSky::toRequestString(const Location& location) const
          + std::to_string(location.longitude());
   // no required data set
   return std::string();
-}
-
-#ifndef wic_no_json_parsing
-bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) const
-{
-  return NLohmannJsonDarkSky::parseCurrentWeather(json, weather);
 }
 
 bool DarkSky::currentWeather(const Location& location, Weather& weather)
@@ -109,11 +118,6 @@ bool DarkSky::currentWeather(const Location& location, Weather& weather)
 
   // Parsing is done here.
   return parseCurrentWeather(response, weather);
-}
-
-bool DarkSky::parseForecast(const std::string& json, Forecast& forecast) const
-{
-  return NLohmannJsonDarkSky::parseForecast(json, forecast);
 }
 
 bool DarkSky::forecastWeather(const Location& location, Forecast& forecast)
@@ -191,6 +195,6 @@ bool DarkSky::currentAndForecastWeather(const Location& location, Weather& weath
     return false;
   return parseForecast(response, forecast);
 }
-#endif // wic_no_json_parsing
+#endif // wic_no_network_requests
 
 } // namespace
