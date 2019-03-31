@@ -23,8 +23,10 @@
 #include <iostream>
 #ifndef wic_no_json_parsing
 #include "../json/NLohmannJsonWeatherbit.hpp"
-#include "../net/Curly.hpp"
 #endif // wic_no_json_parsing
+#ifndef wic_no_network_requests
+#include "../net/Curly.hpp"
+#endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -62,6 +64,19 @@ bool Weatherbit::supportsDataType(const DataType data) const
   } // switch
 }
 
+#ifndef wic_no_json_parsing
+bool Weatherbit::parseCurrentWeather(const std::string& json, Weather& weather) const
+{
+  return NLohmannJsonWeatherbit::parseCurrentWeather(json, weather);
+}
+
+bool Weatherbit::parseForecast(const std::string& json, Forecast& forecast) const
+{
+  return NLohmannJsonWeatherbit::parseForecast(json, forecast);
+}
+#endif // wic_no_json_parsing
+
+#ifndef wic_no_network_requests
 std::string Weatherbit::toRequestString(const Location& location) const
 {
   if (location.hasCoordinates())
@@ -73,12 +88,6 @@ std::string Weatherbit::toRequestString(const Location& location) const
          + std::to_string(location.country()); */
   // no required data set
   return std::string();
-}
-
-#ifndef wic_no_json_parsing
-bool Weatherbit::parseCurrentWeather(const std::string& json, Weather& weather) const
-{
-  return NLohmannJsonWeatherbit::parseCurrentWeather(json, weather);
 }
 
 bool Weatherbit::currentWeather(const Location& location, Weather& weather)
@@ -116,11 +125,6 @@ bool Weatherbit::currentWeather(const Location& location, Weather& weather)
 
   // Parsing is done here.
   return parseCurrentWeather(response, weather);
-}
-
-bool Weatherbit::parseForecast(const std::string& json, Forecast& forecast) const
-{
-  return NLohmannJsonWeatherbit::parseForecast(json, forecast);
 }
 
 bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
@@ -167,6 +171,6 @@ bool Weatherbit::currentAndForecastWeather(const Location& location, Weather& we
             << "single request is not supported by Weatherbit!" << std::endl;
   return false;
 }
-#endif // wic_no_json_parsing
+#endif // wic_no_network_requests
 
 } // namespace

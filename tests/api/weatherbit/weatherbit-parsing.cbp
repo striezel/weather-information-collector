@@ -32,10 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
+			<Add option="-Dwic_no_network_requests" />
 		</Compiler>
-		<Linker>
-			<Add library="curl" />
-		</Linker>
 		<Unit filename="../../../src/api/API.hpp" />
 		<Unit filename="../../../src/api/Weatherbit.cpp" />
 		<Unit filename="../../../src/api/Weatherbit.hpp" />
@@ -47,8 +45,6 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.hpp" />
-		<Unit filename="../../../src/net/Curly.cpp" />
-		<Unit filename="../../../src/net/Curly.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />
 		<Unit filename="../../../src/util/Strings.hpp" />
 		<Unit filename="main.cpp" />
