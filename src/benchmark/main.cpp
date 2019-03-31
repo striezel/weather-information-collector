@@ -58,6 +58,7 @@ void showHelp()
 
 int main(int argc, char** argv)
 {
+  using namespace wic;
   std::string configurationFile; /**< path of configuration file */
 
   if ((argc > 1) && (argv != nullptr))
@@ -67,7 +68,7 @@ int main(int argc, char** argv)
       if (argv[i] == nullptr)
       {
         std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
-        return wic::rcInvalidParameter;
+        return rcInvalidParameter;
       }
       const std::string param(argv[i]);
       if ((param == "-v") || (param == "--version"))
@@ -86,7 +87,7 @@ int main(int argc, char** argv)
         {
           std::cerr << "Error: Configuration was already set to "
                     << configurationFile << "!" << std::endl;
-          return wic::rcInvalidParameter;
+          return rcInvalidParameter;
         }
         // enough parameters?
         if ((i+1 < argc) && (argv[i+1] != nullptr))
@@ -99,44 +100,44 @@ int main(int argc, char** argv)
         {
           std::cerr << "Error: You have to enter a file path after \""
                     << param <<"\"." << std::endl;
-          return wic::rcInvalidParameter;
+          return rcInvalidParameter;
         }
       } // if configuration file
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
                   << "Use --help to show available parameters." << std::endl;
-        return wic::rcInvalidParameter;
+        return rcInvalidParameter;
       }
     } // for i
   } // if arguments are there
 
   // load configuration file + configured tasks
-  wic::Configuration config;
+  Configuration config;
   if (!config.load(configurationFile, true, true))
   {
     std::cerr << "Error: Could not load configuration!" << std::endl;
-    return wic::rcConfigurationError;
+    return rcConfigurationError;
   }
 
-  wic::SourceMySQL source(config.connectionInfo());
+  SourceMySQL source(config.connectionInfo());
 
   /* ********* Weather data ********* */
   // OpenWeatherMap
   {
-    int ret = wic::weatherDataBench<wic::JsonCppOwm, wic::NLohmannJsonOwm>(wic::ApiType::OpenWeatherMap, source);
+    int ret = weatherDataBench<JsonCppOwm, NLohmannJsonOwm>(ApiType::OpenWeatherMap, source);
     if (ret != 0)
       return ret;
   }
   // DarkSky
   {
-    int ret = wic::weatherDataBench<wic::JsonCppDarkSky, wic::NLohmannJsonDarkSky>(wic::ApiType::DarkSky, source);
+    int ret = weatherDataBench<JsonCppDarkSky, NLohmannJsonDarkSky>(ApiType::DarkSky, source);
     if (ret != 0)
       return ret;
   }
   // Apixu
   {
-    int ret = wic::weatherDataBench<wic::JsonCppApixu, wic::NLohmannJsonApixu>(wic::ApiType::Apixu, source);
+    int ret = weatherDataBench<JsonCppApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
     if (ret != 0)
       return ret;
   }
@@ -144,19 +145,19 @@ int main(int argc, char** argv)
   /* ********* Forecast data ********* */
   // OpenWeatherMap
   {
-    int ret = wic::forecastBench<wic::JsonCppOwm, wic::NLohmannJsonOwm>(wic::ApiType::OpenWeatherMap, source);
+    int ret = forecastBench<JsonCppOwm, NLohmannJsonOwm>(ApiType::OpenWeatherMap, source);
     if (ret != 0)
       return ret;
   }
   // DarkSky
   {
-    int ret = wic::forecastBench<wic::JsonCppDarkSky, wic::NLohmannJsonDarkSky>(wic::ApiType::DarkSky, source);
+    int ret = forecastBench<JsonCppDarkSky, NLohmannJsonDarkSky>(ApiType::DarkSky, source);
     if (ret != 0)
       return ret;
   }
   // Apixu
   {
-    int ret = wic::forecastBench<wic::JsonCppApixu, wic::NLohmannJsonApixu>(wic::ApiType::Apixu, source);
+    int ret = forecastBench<JsonCppApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
     if (ret != 0)
       return ret;
   }

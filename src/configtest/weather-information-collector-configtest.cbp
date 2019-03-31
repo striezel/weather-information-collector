@@ -36,6 +36,7 @@
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
 			<Add option="-Dwic_no_json_parsing" />
+			<Add option="-Dwic_no_network_requests" />
 		</Compiler>
 		<Linker>
 			<Add library="boost_filesystem" />

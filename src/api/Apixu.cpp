@@ -22,8 +22,10 @@
 #include <iostream>
 #ifndef wic_no_json_parsing
 #include "../json/NLohmannJsonApixu.hpp"
-#include "../net/Curly.hpp"
 #endif // wic_no_json_parsing
+#ifndef wic_no_network_requests
+#include "../net/Curly.hpp"
+#endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
 namespace wic
@@ -60,6 +62,19 @@ bool Apixu::supportsDataType(const DataType data) const
   }
 }
 
+#ifndef wic_no_json_parsing
+bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
+{
+  return NLohmannJsonApixu::parseCurrentWeather(json, weather);
+}
+
+bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
+{
+  return NLohmannJsonApixu::parseForecast(json, forecast);
+}
+#endif // wic_no_json_parsing
+
+#ifndef wic_no_network_requests
 std::string Apixu::toRequestString(const Location& location) const
 {
   if (location.hasCoordinates())
@@ -71,12 +86,6 @@ std::string Apixu::toRequestString(const Location& location) const
     return std::string("q=") + location.postcode();
   // no required data set
   return std::string();
-}
-
-#ifndef wic_no_json_parsing
-bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
-{
-  return NLohmannJsonApixu::parseCurrentWeather(json, weather);
 }
 
 bool Apixu::currentWeather(const Location& location, Weather& weather)
@@ -111,11 +120,6 @@ bool Apixu::currentWeather(const Location& location, Weather& weather)
   } // scope of curly
 
   return parseCurrentWeather(response, weather);
-}
-
-bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
-{
-  return NLohmannJsonApixu::parseForecast(json, forecast);
 }
 
 bool Apixu::forecastWeather(const Location& location, Forecast& forecast)
@@ -193,6 +197,6 @@ bool Apixu::currentAndForecastWeather(const Location& location, Weather& weather
     return false;
   return parseForecast(response, forecast);
 }
-#endif // wic_no_json_parsing
+#endif // wic_no_network_requests
 
 } // namespace

@@ -21,7 +21,6 @@ set(weather-information-collector-update_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
-    ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
     ../util/Directories.cpp
@@ -45,20 +44,11 @@ set(weather-information-collector-update_sources
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++14 -pthread)
+add_definitions(-std=c++14 -pthread -Dwic_no_network_requests)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s -pthread" )
 
 add_executable(weather-information-collector-update ${weather-information-collector-update_sources})
-
-# find cURL library
-find_package (CURL)
-if (CURL_FOUND)
-  include_directories(${CURL_INCLUDE_DIRS})
-  target_link_libraries (weather-information-collector-update ${CURL_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "cURL was not found!" )
-endif (CURL_FOUND)
 
 # libmysql++
 set(LibMySQLPP_DIR "../../cmake/" )

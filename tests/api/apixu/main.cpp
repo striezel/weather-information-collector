@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     || (argv[3] == nullptr) || (argv[4] == nullptr) || (argv[5] == nullptr))
   {
     std::cerr << "Error: No JSON file names were specified!\n";
-    std::cerr << "Three files are needed:\n"
+    std::cerr << "Five files are needed:\n"
               << " * JSON file for current weather data (apixu.current.json)\n"
               << " * JSON file for forecast weather data (apixu.forecast.json)\n"
               << " * JSON file for hourly forecast weather data (apixu.forecast.hour.json)\n"

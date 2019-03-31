@@ -23,10 +23,8 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
+			<Add option="-Dwic_no_network_requests" />
 		</Compiler>
-		<Linker>
-			<Add library="curl" />
-		</Linker>
 		<Unit filename="../../../src/api/API.hpp" />
 		<Unit filename="../../../src/api/DarkSky.cpp" />
 		<Unit filename="../../../src/api/DarkSky.hpp" />
@@ -38,8 +36,6 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonDarkSky.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonDarkSky.hpp" />
-		<Unit filename="../../../src/net/Curly.cpp" />
-		<Unit filename="../../../src/net/Curly.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />
 		<Unit filename="../../../src/util/Strings.hpp" />
 		<Unit filename="main.cpp" />

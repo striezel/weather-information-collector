@@ -32,7 +32,10 @@ set(weather-information-collector-task-creator_sources
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++14 -Dwic_owm_find_location)
+# We can safely add the -Dwic_no_network_requests to remove unnecessary methods
+# from the API classes, because -Dwic_owm_find_location takes care of all the
+# cURL-related stuff, so we can still do web requests for everything we need.
+add_definitions(-std=c++14 -Dwic_owm_find_location -Dwic_no_network_requests)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
