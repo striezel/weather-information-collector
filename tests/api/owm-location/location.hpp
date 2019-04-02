@@ -148,6 +148,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(4831725);
     expectedLocation.setCoordinates(41.6215, -72.7457);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("US");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)
@@ -194,6 +195,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(5163076);
     expectedLocation.setCoordinates(40.5612, -81.7944);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("US");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)
@@ -240,6 +242,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(1019330);
     expectedLocation.setCoordinates(-32.8834, 27.5794);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("ZA");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)
@@ -286,6 +289,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(2950158);
     expectedLocation.setCoordinates(54.0364, 10.4461);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("DE");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)
