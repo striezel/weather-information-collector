@@ -25,7 +25,7 @@
 #ifdef wic_owm_find_location
 #include <utility>
 #include <vector>
-#include "../data/LocationWithCountry.hpp"
+#include "../data/Location.hpp"
 #endif // wic_owm_find_location
 #include "API.hpp"
 
@@ -132,7 +132,7 @@ class OpenWeatherMap: public API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    bool findLocation(const std::string& name, std::vector<std::pair<LocationWithCountry, Weather> >& locations) const;
+    bool findLocation(const std::string& name, std::vector<std::pair<Location, Weather> >& locations) const;
     #endif // wic_owm_find_location
   private:
     std::string m_apiKey; /**< the API key for requests */

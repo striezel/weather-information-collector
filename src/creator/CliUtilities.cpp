@@ -56,7 +56,7 @@ std::string dataTypeToHumanString(const DataType dt)
   } // switch
 }
 
-void writeLocationList(const std::vector<std::pair<LocationWithCountry, Weather> >& locations)
+void writeLocationList(const std::vector<std::pair<Location, Weather> >& locations)
 {
   int idx = 1;
   for (const auto & elem : locations)
@@ -66,8 +66,8 @@ void writeLocationList(const std::vector<std::pair<LocationWithCountry, Weather>
     // name of the location
               << elem.first.name();
     // country, if any
-    if (elem.first.hasCountry())
-      std::cout << ", " << elem.first.country();
+    if (elem.first.hasCountryCode())
+      std::cout << ", " << elem.first.countryCode();
     // latitude,longitude
     if (elem.first.hasCoordinates())
       std::cout << " @ " << elem.first.coordinatesToString();
@@ -113,10 +113,10 @@ void writeLocationList(const std::vector<std::pair<LocationWithCountry, Weather>
   } // for (locations)
 }
 
-LocationWithCountry selectLocation(const std::vector<std::pair<LocationWithCountry, Weather> >& locations)
+Location selectLocation(const std::vector<std::pair<Location, Weather> >& locations)
 {
   writeLocationList(locations);
-  wic::LocationWithCountry selectedLocation;
+  wic::Location selectedLocation;
   if (locations.size() == 1)
   {
     std::cout << "Selecting " << locations[0].first.toString()
@@ -149,7 +149,7 @@ LocationWithCountry selectLocation(const std::vector<std::pair<LocationWithCount
   }
 
   // no valid selection
-  return LocationWithCountry();
+  return Location();
 }
 
 ApiType selectApi()

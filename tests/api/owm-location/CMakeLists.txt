@@ -6,7 +6,6 @@ project(owm_location_parsing_tests)
 set(owm_location_parsing_tests_sources
     ../../../src/data/Forecast.cpp
     ../../../src/data/Location.cpp
-    ../../../src/data/LocationWithCountry.cpp
     ../../../src/data/Weather.cpp
     ../../../src/json/JsonCppOwm.cpp
     ../../../src/json/NLohmannJsonOwm.cpp

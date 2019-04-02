@@ -22,7 +22,7 @@
 #include "CliUtilities.hpp"
 #include "../api/OpenWeatherMap.hpp"
 #include "../conf/Configuration.hpp"
-#include "../data/LocationWithCountry.hpp"
+#include "../data/Location.hpp"
 #include "../data/Weather.hpp"
 #include "../tasks/TaskManager.hpp"
 #include "../util/GitInfos.hpp"
@@ -131,7 +131,7 @@ if ((argc > 1) && (argv != nullptr))
 
   wic::OpenWeatherMap owm;
   owm.setApiKey(owmKey);
-  std::vector<std::pair<wic::LocationWithCountry, wic::Weather> > locations;
+  std::vector<std::pair<wic::Location, wic::Weather> > locations;
   if (!owm.findLocation(userInput, locations) || locations.empty())
   {
     std::cerr << "Could not find a location with the name \"" << userInput
@@ -149,7 +149,7 @@ if ((argc > 1) && (argv != nullptr))
   }
 
   // Let user select the location.
-  wic::LocationWithCountry selectedLocation;
+  wic::Location selectedLocation;
   do
   {
     selectedLocation = wic::creator::selectLocation(locations);

@@ -60,8 +60,6 @@
 		<Unit filename="../data/Forecast.hpp" />
 		<Unit filename="../data/Location.cpp" />
 		<Unit filename="../data/Location.hpp" />
-		<Unit filename="../data/LocationWithCountry.cpp" />
-		<Unit filename="../data/LocationWithCountry.hpp" />
 		<Unit filename="../data/Weather.cpp" />
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />

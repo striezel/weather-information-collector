@@ -13,7 +13,6 @@ set(weather-information-collector-task-creator_sources
     ../conf/Configuration.cpp
     ../data/Forecast.cpp
     ../data/Location.cpp
-    ../data/LocationWithCountry.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
     ../json/ApixuFunctions.cpp

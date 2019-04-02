@@ -26,7 +26,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "../../../src/data/LocationWithCountry.hpp"
+#include "../../../src/data/Location.hpp"
 #include "../../../src/data/Weather.hpp"
 
 namespace wic
@@ -53,7 +53,7 @@ void printWeather(const Weather& w)
 template<typename jsonT>
 int parseLocations(const std::string& json)
 {
-  std::vector<std::pair<LocationWithCountry, Weather> > locations;
+  std::vector<std::pair<Location, Weather> > locations;
 
   if (!jsonT::parseLocations(json, locations))
   {
@@ -71,13 +71,13 @@ int parseLocations(const std::string& json)
 
   // first entry
   {
-    const LocationWithCountry& location = locations.at(0).first;
+    const Location& location = locations.at(0).first;
     const Weather& weather = locations.at(0).second;
 
-    if (location.country() != "DE")
+    if (location.countryCode() != "DE")
     {
       std::cerr << "Error: Expected country DE, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
     if (location.owmId() != 2950159)
@@ -134,13 +134,13 @@ int parseLocations(const std::string& json)
 
   // second entry
   {
-    const LocationWithCountry& location = locations.at(1).first;
+    const Location& location = locations.at(1).first;
     const Weather& weather = locations.at(1).second;
 
-    if (location.country() != "US")
+    if (location.countryCode() != "US")
     {
       std::cerr << "Error in 2nd entry: Expected country US, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
@@ -180,13 +180,13 @@ int parseLocations(const std::string& json)
 
   // third entry
   {
-    const LocationWithCountry& location = locations.at(2).first;
+    const Location& location = locations.at(2).first;
     const Weather& weather = locations.at(2).second;
 
-    if (location.country() != "US")
+    if (location.countryCode() != "US")
     {
       std::cerr << "Error in 3rd entry: Expected country US, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
@@ -226,13 +226,13 @@ int parseLocations(const std::string& json)
 
   // fourth entry
   {
-    const LocationWithCountry& location = locations.at(3).first;
+    const Location& location = locations.at(3).first;
     const Weather& weather = locations.at(3).second;
 
-    if (location.country() != "ZA")
+    if (location.countryCode() != "ZA")
     {
       std::cerr << "Error in 4th entry: Expected country ZA, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
@@ -272,13 +272,13 @@ int parseLocations(const std::string& json)
 
   // fifth entry
   {
-    const LocationWithCountry& location = locations.at(4).first;
+    const Location& location = locations.at(4).first;
     const Weather& weather = locations.at(4).second;
 
-    if (location.country() != "DE")
+    if (location.countryCode() != "DE")
     {
       std::cerr << "Error in 5th entry: Expected country DE, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
