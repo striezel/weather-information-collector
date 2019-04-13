@@ -45,7 +45,14 @@ void Weatherbit::setApiKey(const std::string& key)
 bool Weatherbit::validLocation(const Location& location) const
 {
   // Only latitude and longitude are required for a request.
-  return location.hasCoordinates();
+  return location.hasCoordinates()
+  // Name and country is another valid option.
+    || (location.hasName() && location.hasCountryCode())
+  // Postal code and country is also possible.
+  // (Although the country is optional when using a postcode in Weatherbit, it
+  //  is better to use the country code, too. Otherwise one may get unexpected
+  //  results.)
+    || (location.hasPostcode() && location.hasCountryCode());
   // TODO: Add checks for other possibilities.
 }
 
@@ -80,12 +87,15 @@ bool Weatherbit::parseForecast(const std::string& json, Forecast& forecast) cons
 std::string Weatherbit::toRequestString(const Location& location) const
 {
   if (location.hasCoordinates())
-    return "lat=" + std::to_string(location.latitude())+ std::string("&lon=")
+    return "lat=" + std::to_string(location.latitude()) + std::string("&lon=")
          + std::to_string(location.longitude());
+  if (location.hasName() && location.hasCountryCode())
+    return std::string("city=") + location.name() + std::string("&country=")
+         + std::to_string(location.country());
+  if (location.hasPostcode() && location.hasCountryCode())
+    return std::string("postal_code=") + std::to_string(location..postcode())
+         + std::string("&country=") + std::to_string(location.country());
   // TODO: Add query string for other possibilities.
-  /*if (location.hasName() && location.hasCountry())
-    return "city=" + std::to_string(location.name())+ std::string("&country=")
-         + std::to_string(location.country()); */
   // no required data set
   return std::string();
 }
