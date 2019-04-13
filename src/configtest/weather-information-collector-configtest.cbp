@@ -57,6 +57,8 @@
 		<Unit filename="../api/OpenWeatherMap.hpp" />
 		<Unit filename="../api/Types.cpp" />
 		<Unit filename="../api/Types.hpp" />
+		<Unit filename="../api/Weatherbit.cpp" />
+		<Unit filename="../api/Weatherbit.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
 		<Unit filename="../data/Forecast.cpp" />

@@ -66,6 +66,8 @@ The following settings are recognized in a task file:
 * **location.id** - _(optional)_ numeric ID of the location for which the
   weather shall be requested (only supported by OpenWeatherMap)
 * **location.name** - name of the location / city, e.g. `London`
+* **location.countrycode** - _(optional, except for some Weatherbit requests)_
+  ISO 3166 ALPHA-2 country code, e.g. `GB`
 * **location.postcode** - _(optional)_ postcode of the location / city; make
   sure that this is a format supported by the corresponding API, or otherwise
   you might get unexpected results / data
@@ -130,6 +132,18 @@ An example for the third API would be:
     location.coordinates=37.8267,-122.4233
     # one request every 20 minutes, e.g. every 1200 seconds
     interval=1200
+
+A possible task file for Weatherbit API could be:
+
+    # use Weatherbit API
+    api=Weatherbit
+    # collect data about current weather
+    data=current
+    # city of London, UK
+    location.name=London
+    location.countrycode=GB
+    # one request every two hours, e.g. every 7200 seconds
+    interval=7200
 
 Remember that you can create multiple task files to define multiple collection
 tasks.

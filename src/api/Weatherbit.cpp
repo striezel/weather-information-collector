@@ -91,10 +91,10 @@ std::string Weatherbit::toRequestString(const Location& location) const
          + std::to_string(location.longitude());
   if (location.hasName() && location.hasCountryCode())
     return std::string("city=") + location.name() + std::string("&country=")
-         + std::to_string(location.country());
+         + location.countryCode();
   if (location.hasPostcode() && location.hasCountryCode())
-    return std::string("postal_code=") + std::to_string(location..postcode())
-         + std::string("&country=") + std::to_string(location.country());
+    return std::string("postal_code=") + location.postcode()
+         + std::string("&country=") + location.countryCode();
   // TODO: Add query string for other possibilities.
   // no required data set
   return std::string();

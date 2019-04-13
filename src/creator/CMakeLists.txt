@@ -10,6 +10,7 @@ set(weather-information-collector-task-creator_sources
     ../api/Limits.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Types.cpp
+    ../api/Weatherbit.cpp
     ../conf/Configuration.cpp
     ../data/Forecast.cpp
     ../data/Location.cpp
@@ -19,6 +20,7 @@ set(weather-information-collector-task-creator_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
+    ../json/NLohmannJsonWeatherbit.cpp
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp

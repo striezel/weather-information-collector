@@ -102,6 +102,47 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  // load third file with country code
+  {
+    wic::Task countryTask;
+    if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg-country.conf", countryTask))
+    {
+      std::cerr << "Error: Could not load task from file test-example-hammelburg-country.conf!\n";
+      return 1;
+    }
+    // compare data
+    if (countryTask.api() != wic::ApiType::Weatherbit)
+    {
+      std::cerr << "Error: API values do not match!\n"
+                << wic::toString(task.api()) << " != Weatherbit\n";
+      return 1;
+    }
+    if (countryTask.location().countryCode() != "DE")
+    {
+      std::cerr << "Error: Country code does not match!\n"
+                << countryTask.location().countryCode() << " != DE\n";
+      return 1;
+    }
+    if (task.interval() != countryTask.interval())
+    {
+      std::cerr << "Error: Request intervals do not match!\n";
+      return 1;
+    }
+    if (task.data() != wic::DataType::Current)
+    {
+      std::cerr << "Error: Requested data type does not match 'current'!\n";
+      return 1;
+    }
+    // check location
+    wic::Location expectedLocation(task.location());
+    expectedLocation.setCountryCode("DE");
+    if (!(expectedLocation == countryTask.location()))
+    {
+      std::cerr << "Error: Location of task with country code does not match the expected value!\n";
+      return 1;
+    }
+  }
+
 
   /* ***************************** *
    * tests for loadFromDirectory() *
@@ -114,10 +155,10 @@ int main(int argc, char** argv)
               << "!\n";
     return 2;
   }
-  if (tasks.size() != 2)
+  if (tasks.size() != 3)
   {
     std::cerr << "Error: Expected number of tasks from directory " << baseDirectory
-              << " to be two, but there were " << tasks.size() << " tasks!\n";
+              << " to be three, but there were " << tasks.size() << " tasks!\n";
     return 2;
   }
   // compare data with prev. task
@@ -169,13 +210,13 @@ int main(int argc, char** argv)
               << "!\n";
     return 4;
   }
-  if (tasks.size() != 2)
+  if (tasks.size() != 3)
   {
     std::cerr << "Error: Expected number of tasks from directory " << baseDirectory
-              << " to be two, but there were " << tasks.size() << " tasks!\n";
+              << " to be three, but there were " << tasks.size() << " tasks!\n";
     return 4;
   }
-  //both tasks are identical, so there should be duplicates
+  // some tasks are identical, so there should be duplicates
   if (!tm.hasDuplicates(tasks, false))
   {
     std::cerr << "Error: Duplicate detection failed!\n";

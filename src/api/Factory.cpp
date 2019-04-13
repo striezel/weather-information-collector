@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "Apixu.hpp"
 #include "DarkSky.hpp"
 #include "OpenWeatherMap.hpp"
+#include "Weatherbit.hpp"
 
 namespace wic
 {
@@ -33,13 +34,16 @@ std::unique_ptr<API> Factory::create(const ApiType api, const std::string& key)
   switch (api)
   {
     case ApiType::OpenWeatherMap:
-         result.reset(new wic::OpenWeatherMap(key));
+         result.reset(new OpenWeatherMap(key));
          break;
     case ApiType::Apixu:
-         result.reset(new wic::Apixu(key));
+         result.reset(new Apixu(key));
          break;
     case ApiType::DarkSky:
-         result.reset(new wic::DarkSky(key));
+         result.reset(new DarkSky(key));
+         break;
+    case ApiType::Weatherbit:
+         result.reset(new Weatherbit(key));
          break;
     case ApiType::none:
     default:

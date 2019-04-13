@@ -10,6 +10,7 @@ set(weather-information-collector-update_sources
     ../api/Limits.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Types.cpp
+    ../api/Weatherbit.cpp
     ../conf/Configuration.cpp
     ../data/Forecast.cpp
     ../data/Location.cpp
@@ -21,6 +22,7 @@ set(weather-information-collector-update_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
+    ../json/NLohmannJsonWeatherbit.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
     ../util/Directories.cpp
@@ -38,6 +40,7 @@ set(weather-information-collector-update_sources
     WeatherDataUpdate_0.8.3.cpp
     UpdateTo_0.8.5.cpp
     UpdateTo_0.8.6.cpp
+    UpdateTo_0.9.0.cpp
     guess.cpp
     main.cpp)
 

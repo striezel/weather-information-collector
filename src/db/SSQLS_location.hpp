@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,11 +36,12 @@ namespace wic
     `latitude` float DEFAULT NULL COMMENT 'latitude of the location',
     `longitude` float DEFAULT NULL COMMENT 'longitude of the location',
     `name` varchar(255) DEFAULT NULL COMMENT 'name of the location / city',
-    `postcode` varchar(25) DEFAULT NULL COMMENT 'postal code of the location'
+    `postcode` varchar(25) DEFAULT NULL COMMENT 'postal code of the location',
+    `country_code` char(2) DEFAULT NULL COMMENT 'ISO 3166 ALPHA-2 two letter country code of the location',
    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
-sql_create_6(location,
+sql_create_7(location,
     1, // "COMPCOUNT"
     0, // "SETCOUNT" - zero means no setters
     mysqlpp::sql_int_unsigned, locationID,
@@ -48,7 +49,8 @@ sql_create_6(location,
     mysqlpp::Null<mysqlpp::sql_float>, latitude,
     mysqlpp::Null<mysqlpp::sql_float>, longitude,
     mysqlpp::Null<mysqlpp::sql_varchar>, name,
-    mysqlpp::Null<mysqlpp::sql_varchar>, postcode)
+    mysqlpp::Null<mysqlpp::sql_varchar>, postcode,
+    mysqlpp::Null<mysqlpp::sql_char>, country_code)
 
 } // namespace
 

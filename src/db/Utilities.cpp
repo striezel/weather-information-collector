@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,6 +31,11 @@ int getLocationId(mysqlpp::Connection& conn, const Location& location)
   if (location.hasOwmId())
   {
     query << "id=" << mysqlpp::quote << location.owmId();
+  }
+  else if (location.hasName() && location.hasCountryCode())
+  {
+    query << "name=" << mysqlpp::quote << location.name()
+          << " AND country_code=" << mysqlpp::quote << location.countryCode();
   }
   else if (location.hasName())
   {
@@ -73,6 +78,13 @@ int getLocationId(mysqlpp::Connection& conn, const Location& location)
     insertQuery << "name=" << mysqlpp::quote << location.name();
     previousData = true;
   }
+  if (location.hasCountryCode())
+  {
+    if (previousData)
+      insertQuery << ", ";
+    insertQuery << "country_code=" << mysqlpp::quote << location.countryCode();
+    previousData = true;
+  }
   if (location.hasCoordinates())
   {
     if (previousData)
@@ -113,6 +125,8 @@ Location getLocation(mysqlpp::Connection& conn, const int locationId)
     loc.setName(queryData[0].name.data);
   if (!queryData[0].postcode.is_null)
     loc.setPostcode(queryData[0].postcode.data);
+  if (!queryData[0].country_code.is_null)
+    loc.setCountryCode(queryData[0].country_code.data);
 
   return loc;
 }

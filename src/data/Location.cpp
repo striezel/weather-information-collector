@@ -94,7 +94,8 @@ const std::string& Location::countryCode() const
 
 void Location::setCountryCode(const std::string& newIso3166Code)
 {
-  m_countryCode = newIso3166Code;
+  // Limit country code to two characters before assignment happens.
+  m_countryCode = newIso3166Code.substr(0, 2);
 }
 
 bool Location::hasCountryCode() const
