@@ -37,7 +37,7 @@ int main(int argc, char** argv)
    * tests for loadFromFile() *
    * ************************ */
 
-  if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg.conf", task))
+  if (!tm.loadFromFile(baseDirectory + "/conf.d/test-example-hammelburg.conf", task))
   {
     std::cerr << "Error: Could not load task from file test-example-hammelburg.conf!\n";
     return 1;
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 
   // load second, whitespace version
   wic::Task whiteSpaceTask;
-  if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg-whitespace.conf", whiteSpaceTask))
+  if (!tm.loadFromFile(baseDirectory + "/conf.d/test-example-hammelburg-whitespace.conf", whiteSpaceTask))
   {
     std::cerr << "Error: Could not load task from file test-example-hammelburg-whitespace.conf!\n";
     return 1;
@@ -149,16 +149,16 @@ int main(int argc, char** argv)
    * ***************************** */
 
   std::vector<wic::Task> tasks;
-  if (!tm.loadFromDirectory(baseDirectory, ".conf", tasks))
+  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks))
   {
     std::cerr << "Error: Could not load tasks from directory " << baseDirectory
               << "!\n";
     return 2;
   }
-  if (tasks.size() != 3)
+  if (tasks.size() != 2)
   {
     std::cerr << "Error: Expected number of tasks from directory " << baseDirectory
-              << " to be three, but there were " << tasks.size() << " tasks!\n";
+              << " to be two, but there were " << tasks.size() << " tasks!\n";
     return 2;
   }
   // compare data with prev. task
@@ -204,16 +204,16 @@ int main(int argc, char** argv)
     std::cerr << "Error: There cannot be any duplicates in an empty vector!\n";
     return 4;
   }
-  if (!tm.loadFromDirectory(baseDirectory, ".conf", tasks))
+  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks))
   {
     std::cerr << "Error: Could not load tasks from directory " << baseDirectory
               << "!\n";
     return 4;
   }
-  if (tasks.size() != 3)
+  if (tasks.size() != 2)
   {
     std::cerr << "Error: Expected number of tasks from directory " << baseDirectory
-              << " to be three, but there were " << tasks.size() << " tasks!\n";
+              << " to be two, but there were " << tasks.size() << " tasks!\n";
     return 4;
   }
   // some tasks are identical, so there should be duplicates
