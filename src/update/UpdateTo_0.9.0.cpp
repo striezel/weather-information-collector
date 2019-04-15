@@ -19,18 +19,107 @@
 */
 
 #include "UpdateTo_0.9.0.hpp"
+#include <iostream>
 #include <mysql++/mysql++.h>
+#include "../../third-party/nlohmann/json.hpp"
 #include "../db/API.hpp"
 #include "../db/Structure.hpp"
 
 namespace wic
 {
 
+bool setCountryCodes(const ConnectionInformation& ci)
+{
+  const int owmApiId = db::API::getId(ci, ApiType::OpenWeatherMap);
+  if (owmApiId <= 0)
+  {
+    // Nothing to do here.
+    std::cerr << "Error: API entry for OpenWeatherMap is missing!" << std::endl;
+    return false;
+  }
+  mysqlpp::Connection conn(false);
+  if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
+                    ci.password().c_str(), ci.port()))
+  {
+    // Should not happen, because previous connection attempts were successful,
+    // but better be safe than sorry.
+    std::cerr << "Error: Could not connect to database!" << std::endl;
+    return false;
+  }
+  mysqlpp::Query query(&conn);
+  query << "SELECT locationID FROM `location` WHERE ISNULL(country_code);";
+  mysqlpp::StoreQueryResult result = query.store();
+  if (!result)
+  {
+    std::cerr << "Error: Could not get locations from table location.\n"
+              << "Internal error: " << query.error() << std::endl;
+    return false;
+  }
+  // SELECT was successful, but do we have some data?
+  if (result.num_rows() == 0)
+  {
+    // Nothing to do here.
+    std::clog << "Info: All locations already have a country code." << std::endl;
+    return true;
+  }
+  std::vector<uint_least32_t> locations;
+  for(uint_least32_t i = 0; i < result.num_rows(); ++i)
+  {
+    mysqlpp::Query subQuery(&conn);
+    subQuery << "SELECT dataID, json FROM weatherdata WHERE apiID = " << owmApiId
+             << " AND locationID = " << result[i]["locationID"]
+             << " AND json LIKE '%\"country\"%' LIMIT 1;";
+    mysqlpp::StoreQueryResult jsonResult = subQuery.store();
+    if (jsonResult.num_rows() == 0)
+    {
+      std::clog << "Info: Found not matching country code for location "
+                << result[i]["locationID"] << ". Therefore it will not be "
+                << "updated. (This is intentional and not an error.)" << std::endl;
+      continue;
+    }
+    const std::string json = jsonResult.at(0)["json"].c_str();
+    // Parse JSON.
+    nlohmann::json jsonRoot;
+    try
+    {
+      jsonRoot = nlohmann::json::parse(json);
+    }
+    catch(...)
+    {
+      std::cerr << "Error: Unable to parse JSON data of dataID " << jsonResult[i]["dataID"] << "!" << std::endl;
+      return false;
+    }
+    auto sys = jsonRoot.find("sys");
+    if (sys == jsonRoot.end() || !sys->is_object())
+    {
+      continue;
+    }
+    auto country = sys->find("country");
+    if (country != sys->end() && country->is_string())
+    {
+      const std::string countryCode = country->get<std::string>();
+      mysqlpp::Query updateQuery(&conn);
+      updateQuery << "UPDATE location SET country_code = " << mysqlpp::quote << countryCode
+                  << " WHERE locationID = " << result[i]["locationID"] << " LIMIT 1;";
+      if (!updateQuery.exec())
+      {
+        std::cerr << "Error: Could not set country code for location " << result[i]["locationID"]
+                  << " to '" << countryCode << "'!" << std::endl;
+        return false;
+      }
+    } // if there is a country code
+  } // for
+
+  return true;
+}
+
 bool UpdateTo090::perform(const ConnectionInformation& ci)
 {
   if (!updateStructure(ci))
     return false;
-  return updateData(ci);
+  if (!updateData(ci))
+    return false;
+  return setCountryCodes(ci);
 }
 
 bool UpdateTo090::updateStructure(const ConnectionInformation& ci)

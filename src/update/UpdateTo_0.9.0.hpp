@@ -29,8 +29,12 @@ namespace wic
 /** Manages update of databases before version 0.9.0 of
     weather-information-collector to version 0.9.0.
 
-    This class basically does two things to the database:
+    This class basically does three things to the database:
     * It adds the column country_code to the table `location` in the database.
+    * It tries to find a matching country code for every entry in the table
+      `location` by looking at existing weather data from OpenWeatherMap
+      (because those contain a country code), and sets the country code, if one
+      was found.
     * It adds a new entry for the Weatherbit API to the table `api`.
 */
 class UpdateTo090
