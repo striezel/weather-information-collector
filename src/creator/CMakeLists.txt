@@ -16,11 +16,7 @@ set(weather-information-collector-task-creator_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
-    ../json/ApixuFunctions.cpp
-    ../json/NLohmannJsonApixu.cpp
-    ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
-    ../json/NLohmannJsonWeatherbit.cpp
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
@@ -36,7 +32,7 @@ endif (CMAKE_COMPILER_IS_GNUCC)
 # We can safely add the -Dwic_no_network_requests to remove unnecessary methods
 # from the API classes, because -Dwic_owm_find_location takes care of all the
 # cURL-related stuff, so we can still do web requests for everything we need.
-add_definitions(-std=c++14 -Dwic_owm_find_location -Dwic_no_network_requests)
+add_definitions(-std=c++14 -Dwic_owm_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
