@@ -98,6 +98,7 @@ bool DarkSky::currentWeather(const Location& location, Weather& weather)
     Curly curly;
     curly.setURL(url);
 
+    weather.setRequestTime(std::chrono::system_clock::now());
     if (!curly.perform(response))
     {
       return false;
