@@ -330,6 +330,16 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
       }
       apiKeys[ApiType::DarkSky] = value;
     } // if key.darksky
+    else if ((name == "key.Weatherbit") || (name == "key.weatherbit"))
+    {
+      if (!key(ApiType::Weatherbit).empty())
+      {
+        std::cerr << "Error: API key for Weatherbit is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      apiKeys[ApiType::Weatherbit] = value;
+    } // if key.weatherbit
     else
     {
       std::cerr << "Error while reading configuration file " << fileName
