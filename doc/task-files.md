@@ -59,8 +59,8 @@ The following settings are recognized in a task file:
   not every API will support every data type. Currently the following values
   are available:
   * **current** - collect data about the current weather (supported by all
-    three APIs)
-  * **forecast** - collect weather forecast data (supported by all three APIs)
+    four APIs)
+  * **forecast** - collect weather forecast data (supported by all four APIs)
   * **current+forecast** - collect data about current weather and forecast data
     (supported by Apixu and DarkSky)
 * **location.id** - _(optional)_ numeric ID of the location for which the
@@ -71,7 +71,7 @@ The following settings are recognized in a task file:
 * **location.postcode** - _(optional)_ postcode of the location / city; make
   sure that this is a format supported by the corresponding API, or otherwise
   you might get unexpected results / data
-* **location.coordinates** - _(optional for Apixu and OpenWeatherMap)_
+* **location.coordinates** - _(optional for all APIs except DarkSky)_
   geographical coordinates (latitude and  longitude) of the location, e.g.
   `51.5,-1.2` - **required for DarkSky tasks**
 * **interval** - the interval in seconds after which the next request for the
