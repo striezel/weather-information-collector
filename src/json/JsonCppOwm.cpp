@@ -194,7 +194,7 @@ bool JsonCppOwm::parseForecast(const std::string& json, Forecast& forecast)
 }
 
 #ifdef wic_owm_find_location
-bool JsonCppOwm::parseLocations(const std::string& json, std::vector<std::pair<LocationWithCountry, Weather> >& locations)
+bool JsonCppOwm::parseLocations(const std::string& json, std::vector<std::pair<Location, Weather> >& locations)
 {
   Json::Value root; // will contain the root value after parsing.
   Json::Reader jsonReader;
@@ -223,7 +223,7 @@ bool JsonCppOwm::parseLocations(const std::string& json, std::vector<std::pair<L
 
   for (const Json::Value elem : list)
   {
-    LocationWithCountry loc;
+    Location loc;
     Json::Value val = elem["id"];
     if (!val.empty() && val.isUInt())
       loc.setOwmId(val.asUInt());
@@ -250,7 +250,7 @@ bool JsonCppOwm::parseLocations(const std::string& json, std::vector<std::pair<L
     {
       val = val["country"];
       if (!val.empty() && val.isString())
-        loc.setCountry(val.asString());
+        loc.setCountryCode(val.asString());
     }
     Weather w;
     if (!JsonCppOwm::parseSingleWeatherItem(elem, w))

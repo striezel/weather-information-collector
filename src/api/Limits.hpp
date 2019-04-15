@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -52,6 +52,11 @@ struct Limit
   /** \brief contains the limit for DarkSky API calls
    */
   static const Limit darksky;
+
+
+  /** \brief contains the limit for Weatherbit API calls
+   */
+  static const Limit weatherbit;
 
 
   /** \brief contains the limit for unknown API - always zero

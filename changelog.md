@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.9.0-pre (2019-04-??)
+
+The program is now able to collect data from the Weatherbit API, too.
+(Implementation for Weatherbit is still incomplete.)
+
 ## Version 0.8.9 (2019-03-15)
 
 Fix problem with MySQL++ parameter handling on Raspberry Pi.

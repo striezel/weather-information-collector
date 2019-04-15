@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include "../api/Apixu.hpp"
 #include "../api/DarkSky.hpp"
 #include "../api/OpenWeatherMap.hpp"
+#include "../api/Weatherbit.hpp"
 #include "../data/Weather.hpp"
 #include "../store/StoreMySQL.hpp"
 
@@ -54,10 +55,12 @@ bool Collector::fromConfiguration(const Configuration& conf)
   apiKeys[ApiType::Apixu] = conf.key(ApiType::Apixu);
   apiKeys[ApiType::OpenWeatherMap] = conf.key(ApiType::OpenWeatherMap);
   apiKeys[ApiType::DarkSky] = conf.key(ApiType::DarkSky);
+  apiKeys[ApiType::Weatherbit] = conf.key(ApiType::Weatherbit);
 
   if (apiKeys[ApiType::Apixu].empty()
       && apiKeys[ApiType::OpenWeatherMap].empty()
-      && apiKeys[ApiType::DarkSky].empty())
+      && apiKeys[ApiType::DarkSky].empty()
+      && apiKeys[ApiType::Weatherbit].empty())
   {
     std::cerr << "Error: No API keys are set!\n";
     return false;
@@ -127,13 +130,16 @@ void Collector::collect()
     switch (tasksContainer[idx].task.api())
     {
       case ApiType::OpenWeatherMap:
-           api.reset(new wic::OpenWeatherMap(key));
+           api.reset(new OpenWeatherMap(key));
            break;
       case ApiType::Apixu:
-           api.reset(new wic::Apixu(key));
+           api.reset(new Apixu(key));
            break;
       case ApiType::DarkSky:
-           api.reset(new wic::DarkSky(key));
+           api.reset(new DarkSky(key));
+           break;
+      case ApiType::Weatherbit:
+           api.reset(new Weatherbit(key));
            break;
       case ApiType::none:
       default:

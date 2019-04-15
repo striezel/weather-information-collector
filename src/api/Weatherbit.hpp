@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,30 +18,25 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
-#define WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_WEATHERBIT_HPP
+#define WEATHER_INFORMATION_COLLECTOR_WEATHERBIT_HPP
 
 #include <string>
-#ifdef wic_owm_find_location
-#include <utility>
-#include <vector>
-#include "../data/Location.hpp"
-#endif // wic_owm_find_location
 #include "API.hpp"
 
 namespace wic
 {
 
-/** \brief Handles API requests for OpenWeatherMap.org.
+/** \brief Handles API requests for Weatherbit.io.
  */
-class OpenWeatherMap: public API
+class Weatherbit: public API
 {
   public:
     /** \brief Constructor.
      *
      * \param key  the API key for requests
      */
-    OpenWeatherMap(const std::string& key = "");
+    Weatherbit(const std::string& key = "");
 
 
     /** \brief Sets the API key for API requests.
@@ -122,18 +117,6 @@ class OpenWeatherMap: public API
      */
     virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
     #endif // wic_no_json_parsing
-
-
-    #ifdef wic_owm_find_location
-    /** \brief Finds matching locations by name.
-     *
-     * \param name  the name of the location to find
-     * \param location  variable where matching locations will be stored
-     * \return Returns true, if the request was successful.
-     *         Returns false, if an error occurred.
-     */
-    bool findLocation(const std::string& name, std::vector<std::pair<Location, Weather> >& locations) const;
-    #endif // wic_owm_find_location
   private:
     std::string m_apiKey; /**< the API key for requests */
 
@@ -151,4 +134,4 @@ class OpenWeatherMap: public API
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_OPENWEATHERMAP_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_WEATHERBIT_HPP

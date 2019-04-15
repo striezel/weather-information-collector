@@ -30,6 +30,7 @@ Location::Location()
   m_latitude(std::numeric_limits<float>::quiet_NaN()),
   m_longitude(std::numeric_limits<float>::quiet_NaN()),
   m_name(""),
+  m_countryCode(""),
   m_postcode("")
 {
 }
@@ -86,6 +87,22 @@ bool Location::hasName() const
   return !m_name.empty();
 }
 
+const std::string& Location::countryCode() const
+{
+  return m_countryCode;
+}
+
+void Location::setCountryCode(const std::string& newIso3166Code)
+{
+  // Limit country code to two characters before assignment happens.
+  m_countryCode = newIso3166Code.substr(0, 2);
+}
+
+bool Location::hasCountryCode() const
+{
+  return !m_countryCode.empty();
+}
+
 const std::string& Location::postcode() const
 {
   return m_postcode;
@@ -104,6 +121,7 @@ bool Location::hasPostcode() const
 bool Location::operator==(const Location& other) const
 {
   return (m_owmId == other.m_owmId) && (m_name == other.m_name)
+      && (m_countryCode == other.m_countryCode)
       && (m_postcode == other.m_postcode)
       && equalCoordinates(other);
 }
@@ -136,6 +154,7 @@ bool Location::equalCoordinates(const Location& other) const
 
 bool Location::empty() const
 {
+  // Country code alone does not make a valid location, so do not check it.
   return (!hasOwmId() && !hasName()
        && !hasCoordinates() && !hasPostcode());
 }
@@ -147,6 +166,15 @@ std::string Location::toString() const
   }
   if (hasName())
   {
+    if (hasCountryCode())
+    {
+      if (hasCoordinates())
+      {
+        return name() + ", " + countryCode() + " (" + coordinatesToString() + ")";
+      }
+      // name + country code only
+      return name() + ", " + countryCode();
+    }
     if (hasCoordinates())
     {
       return name() + " (" + coordinatesToString() + ")";

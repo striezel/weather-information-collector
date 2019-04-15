@@ -36,6 +36,12 @@ SemVer guessVersionFromDatabase(const ConnectionInformation& ci)
     return SemVer();
   }
 
+  // 0.9.0: Column `country_code` was added to location.
+  if (Structure::columnExists(ci, "location", "country_code"))
+  {
+    return SemVer(0, 9, 0);
+  }
+
   // 0.8.6: cloudiness is nullable.
   {
     mysqlpp::Query query(&conn);

@@ -205,7 +205,7 @@ bool NLohmannJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
 }
 
 #ifdef wic_owm_find_location
-bool NLohmannJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<LocationWithCountry, Weather> >& locations)
+bool NLohmannJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<Location, Weather> >& locations)
 {
   value_type root; // will contain the root value after parsing.
   try
@@ -238,7 +238,7 @@ bool NLohmannJsonOwm::parseLocations(const std::string& json, std::vector<std::p
 
   for (const value_type elem : list)
   {
-    LocationWithCountry loc;
+    Location loc;
     auto val = elem.find("id");
     if (val != elem.end() && val->is_number_unsigned())
       loc.setOwmId(val->get<unsigned int>());
@@ -265,7 +265,7 @@ bool NLohmannJsonOwm::parseLocations(const std::string& json, std::vector<std::p
     {
       const auto country = val->find("country");
       if (country != val->end() && country->is_string())
-        loc.setCountry(country->get<std::string>());
+        loc.setCountryCode(country->get<std::string>());
     }
     Weather w;
     if (!NLohmannJsonOwm::parseSingleWeatherItem(elem, w))

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -88,6 +88,8 @@ TEST_CASE("Class Task")
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::none, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::none, std::chrono::seconds::zero());
+    REQUIRE_FALSE( t.complete() );
 
     // task with API type and duration only is not complete (0101 = 5)
     t = Task(Location(), ApiType::Apixu, DataType::none, std::chrono::seconds(36));
@@ -95,6 +97,8 @@ TEST_CASE("Class Task")
     t = Task(Location(), ApiType::OpenWeatherMap, DataType::none, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::none, std::chrono::seconds(36));
+    REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::none, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
 
     // task with API type and data type only is not complete (0110 = 6)
@@ -104,17 +108,23 @@ TEST_CASE("Class Task")
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::Current, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::Current, std::chrono::seconds::zero());
+    REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::Apixu, DataType::Forecast, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::OpenWeatherMap, DataType::Forecast, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::Forecast, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::Forecast, std::chrono::seconds::zero());
+    REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::Apixu, DataType::CurrentAndForecast, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::OpenWeatherMap, DataType::CurrentAndForecast, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::CurrentAndForecast, std::chrono::seconds::zero());
+    REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::CurrentAndForecast, std::chrono::seconds::zero());
     REQUIRE_FALSE( t.complete() );
 
     // task with API type and data type and duration only is not complete (0111 = 7)
@@ -124,17 +134,23 @@ TEST_CASE("Class Task")
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::Current, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::Current, std::chrono::seconds(36));
+    REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::Apixu, DataType::Forecast, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::OpenWeatherMap, DataType::Forecast, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::Forecast, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::Forecast, std::chrono::seconds(36));
+    REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::Apixu, DataType::CurrentAndForecast, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::OpenWeatherMap, DataType::CurrentAndForecast, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
     t = Task(Location(), ApiType::DarkSky, DataType::CurrentAndForecast, std::chrono::seconds(36));
+    REQUIRE_FALSE( t.complete() );
+    t = Task(Location(), ApiType::Weatherbit, DataType::CurrentAndForecast, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
 
     // task with location only is not complete (1000 = 8)
@@ -152,6 +168,8 @@ TEST_CASE("Class Task")
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::DarkSky);
     REQUIRE_FALSE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit);
+    REQUIRE_FALSE( t.complete() );
 
     // task with location and API and duration only is not complete (1101 = 13)
     t = Task(loc, ApiType::Apixu, DataType::none, std::chrono::seconds(36));
@@ -159,6 +177,8 @@ TEST_CASE("Class Task")
     t = Task(loc, ApiType::OpenWeatherMap, DataType::none, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::DarkSky, DataType::none, std::chrono::seconds(36));
+    REQUIRE_FALSE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit, DataType::none, std::chrono::seconds(36));
     REQUIRE_FALSE( t.complete() );
 
     // task with location and API type and data type and duration only is not complete (1110 = 14)
@@ -168,17 +188,23 @@ TEST_CASE("Class Task")
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::DarkSky, DataType::Current);
     REQUIRE_FALSE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit, DataType::Current);
+    REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::Apixu, DataType::Forecast);
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::OpenWeatherMap, DataType::Forecast);
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::DarkSky, DataType::Forecast);
     REQUIRE_FALSE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit, DataType::Forecast);
+    REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::Apixu, DataType::CurrentAndForecast);
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::OpenWeatherMap, DataType::CurrentAndForecast);
     REQUIRE_FALSE( t.complete() );
     t = Task(loc, ApiType::DarkSky, DataType::CurrentAndForecast);
+    REQUIRE_FALSE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit, DataType::CurrentAndForecast);
     REQUIRE_FALSE( t.complete() );
 
     // task with all data is complete (1111 = 15)
@@ -188,17 +214,23 @@ TEST_CASE("Class Task")
     REQUIRE( t.complete() );
     t = Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(36));
     REQUIRE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(36));
+    REQUIRE( t.complete() );
     t = Task(loc, ApiType::Apixu, DataType::Forecast, std::chrono::seconds(36));
     REQUIRE( t.complete() );
     t = Task(loc, ApiType::OpenWeatherMap, DataType::Forecast, std::chrono::seconds(36));
     REQUIRE( t.complete() );
     t = Task(loc, ApiType::DarkSky, DataType::Forecast, std::chrono::seconds(36));
     REQUIRE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit, DataType::Forecast, std::chrono::seconds(36));
+    REQUIRE( t.complete() );
     t = Task(loc, ApiType::Apixu, DataType::CurrentAndForecast, std::chrono::seconds(36));
     REQUIRE( t.complete() );
     t = Task(loc, ApiType::OpenWeatherMap, DataType::CurrentAndForecast, std::chrono::seconds(36));
     REQUIRE( t.complete() );
     t = Task(loc, ApiType::DarkSky, DataType::CurrentAndForecast, std::chrono::seconds(36));
+    REQUIRE( t.complete() );
+    t = Task(loc, ApiType::Weatherbit, DataType::CurrentAndForecast, std::chrono::seconds(36));
     REQUIRE( t.complete() );
 
     // negative duration shall not count

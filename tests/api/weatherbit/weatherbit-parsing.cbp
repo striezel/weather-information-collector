@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="owm-location-parsing" />
+		<Option title="weatherbit-parsing" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/owm-location-parsing" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/weatherbit-parsing" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,7 +16,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/owm-location-parsing" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/weatherbit-parsing" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -32,29 +32,27 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
-			<Add option="-Dwic_no_json_parsing" />
-			<Add option="-Dwic_owm_find_location" />
-			<Add option="-Dwic_weather_comparison" />
+			<Add option="-Dwic_no_network_requests" />
 		</Compiler>
-		<Linker>
-			<Add library="jsoncpp" />
-		</Linker>
+		<Unit filename="../../../src/api/API.hpp" />
+		<Unit filename="../../../src/api/Weatherbit.cpp" />
+		<Unit filename="../../../src/api/Weatherbit.hpp" />
 		<Unit filename="../../../src/data/Forecast.cpp" />
 		<Unit filename="../../../src/data/Forecast.hpp" />
 		<Unit filename="../../../src/data/Location.cpp" />
 		<Unit filename="../../../src/data/Location.hpp" />
 		<Unit filename="../../../src/data/Weather.cpp" />
 		<Unit filename="../../../src/data/Weather.hpp" />
-		<Unit filename="../../../src/json/JsonCppOwm.cpp" />
-		<Unit filename="../../../src/json/JsonCppOwm.hpp" />
-		<Unit filename="../../../src/json/NLohmannJsonOwm.cpp" />
-		<Unit filename="../../../src/json/NLohmannJsonOwm.hpp" />
-		<Unit filename="location.hpp" />
+		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.cpp" />
+		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.hpp" />
+		<Unit filename="../../../src/util/Strings.cpp" />
+		<Unit filename="../../../src/util/Strings.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
-			<code_completion />
 			<envvars />
+			<code_completion />
 			<debugger />
+			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

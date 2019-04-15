@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 #include <vector>
 #include "../api/Types.hpp"
 #include "../conf/Configuration.hpp"
-#include "../data/LocationWithCountry.hpp"
+#include "../data/Location.hpp"
 #include "../data/Weather.hpp"
 #include "../tasks/Task.hpp"
 
@@ -39,7 +39,7 @@ namespace creator
  *
  * \param location  pairs of locations with corresponding weather
  */
-void writeLocationList(const std::vector<std::pair<LocationWithCountry, Weather> >& locations);
+void writeLocationList(const std::vector<std::pair<Location, Weather> >& locations);
 
 
 /** \brief Lets the user select a location from the given list.
@@ -48,7 +48,7 @@ void writeLocationList(const std::vector<std::pair<LocationWithCountry, Weather>
  * \return Returns the selected location, if a valid selection was made.
  *         Returns an empty location, if no selection was made.
  */
-LocationWithCountry selectLocation(const std::vector<std::pair<LocationWithCountry, Weather> >& locations);
+Location selectLocation(const std::vector<std::pair<Location, Weather> >& locations);
 
 
 /** \brief Lets the user select an API from the supported weather data APIs.

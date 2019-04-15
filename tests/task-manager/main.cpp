@@ -37,7 +37,7 @@ int main(int argc, char** argv)
    * tests for loadFromFile() *
    * ************************ */
 
-  if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg.conf", task))
+  if (!tm.loadFromFile(baseDirectory + "/conf.d/test-example-hammelburg.conf", task))
   {
     std::cerr << "Error: Could not load task from file test-example-hammelburg.conf!\n";
     return 1;
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 
   // load second, whitespace version
   wic::Task whiteSpaceTask;
-  if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg-whitespace.conf", whiteSpaceTask))
+  if (!tm.loadFromFile(baseDirectory + "/conf.d/test-example-hammelburg-whitespace.conf", whiteSpaceTask))
   {
     std::cerr << "Error: Could not load task from file test-example-hammelburg-whitespace.conf!\n";
     return 1;
@@ -102,13 +102,54 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  // load third file with country code
+  {
+    wic::Task countryTask;
+    if (!tm.loadFromFile(baseDirectory + "/test-example-hammelburg-country.conf", countryTask))
+    {
+      std::cerr << "Error: Could not load task from file test-example-hammelburg-country.conf!\n";
+      return 1;
+    }
+    // compare data
+    if (countryTask.api() != wic::ApiType::Weatherbit)
+    {
+      std::cerr << "Error: API values do not match!\n"
+                << wic::toString(task.api()) << " != Weatherbit\n";
+      return 1;
+    }
+    if (countryTask.location().countryCode() != "DE")
+    {
+      std::cerr << "Error: Country code does not match!\n"
+                << countryTask.location().countryCode() << " != DE\n";
+      return 1;
+    }
+    if (task.interval() != countryTask.interval())
+    {
+      std::cerr << "Error: Request intervals do not match!\n";
+      return 1;
+    }
+    if (task.data() != wic::DataType::Current)
+    {
+      std::cerr << "Error: Requested data type does not match 'current'!\n";
+      return 1;
+    }
+    // check location
+    wic::Location expectedLocation(task.location());
+    expectedLocation.setCountryCode("DE");
+    if (!(expectedLocation == countryTask.location()))
+    {
+      std::cerr << "Error: Location of task with country code does not match the expected value!\n";
+      return 1;
+    }
+  }
+
 
   /* ***************************** *
    * tests for loadFromDirectory() *
    * ***************************** */
 
   std::vector<wic::Task> tasks;
-  if (!tm.loadFromDirectory(baseDirectory, ".conf", tasks))
+  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks))
   {
     std::cerr << "Error: Could not load tasks from directory " << baseDirectory
               << "!\n";
@@ -163,7 +204,7 @@ int main(int argc, char** argv)
     std::cerr << "Error: There cannot be any duplicates in an empty vector!\n";
     return 4;
   }
-  if (!tm.loadFromDirectory(baseDirectory, ".conf", tasks))
+  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks))
   {
     std::cerr << "Error: Could not load tasks from directory " << baseDirectory
               << "!\n";
@@ -175,7 +216,7 @@ int main(int argc, char** argv)
               << " to be two, but there were " << tasks.size() << " tasks!\n";
     return 4;
   }
-  //both tasks are identical, so there should be duplicates
+  // some tasks are identical, so there should be duplicates
   if (!tm.hasDuplicates(tasks, false))
   {
     std::cerr << "Error: Duplicate detection failed!\n";

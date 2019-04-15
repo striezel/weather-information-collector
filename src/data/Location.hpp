@@ -114,6 +114,31 @@ class Location
     bool hasName() const;
 
 
+    /** \brief Gets the country code of the location (if any).
+     *
+     * \remarks The code is the ISO 3166 ALPHA-2 two letter country code.
+     * \return Returns the country code of the location.
+     *         Returns an empty string, if no country code is set.
+     */
+    const std::string& countryCode() const;
+
+
+    /** \brief Sets the country code of the location.
+     *
+     * \param newIso3166Code  the new ISO 3166 ALPHA-2 country code of the location
+     * \remarks The code has to be the ISO 3166 ALPHA-2 two letter country code.
+     */
+    void setCountryCode(const std::string& newIso3166Code);
+
+
+    /** \brief Checks whether the location has a country code.
+     *
+     * \return Returns true, if the location has a country code.
+     *         Returns false otherwise.
+     */
+    bool hasCountryCode() const;
+
+
     /** \brief Gets the postcode of the location (if any).
      *
      * \return Returns the postcode of the location.
@@ -188,6 +213,7 @@ class Location
     float m_latitude; /**< latitude of the location */
     float m_longitude; /**< longitude of the location */
     std::string m_name; /**< name of the location */
+    std::string m_countryCode; /**< country code */
     std::string m_postcode; /**< postcode of the location */
 }; // class
 

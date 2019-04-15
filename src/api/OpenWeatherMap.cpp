@@ -200,7 +200,7 @@ std::string urlEncode(const std::string& str)
   return encoded;
 }
 
-bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair<LocationWithCountry, Weather> >& locations) const
+bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair<Location, Weather> >& locations) const
 {
   if (m_apiKey.empty() || name.empty())
     return false;

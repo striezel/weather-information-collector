@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS `api` (
 INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
 (1, 'Apixu', 'https://api.apixu.com/v1/'),
 (2, 'OpenWeatherMap', 'https://api.openweathermap.org/data/2.5/'),
-(3, 'DarkSky', 'https://api.darksky.net/');
+(3, 'DarkSky', 'https://api.darksky.net/'),
+(4, 'Weatherbit', 'https://api.weatherbit.io/v2.0/');
 
 --
 -- Table structure for table `forecast`
@@ -89,6 +90,7 @@ CREATE TABLE IF NOT EXISTS `location` (
   `longitude` float DEFAULT NULL COMMENT 'longitude of the location',
   `name` varchar(255) DEFAULT NULL COMMENT 'name of the location / city',
   `postcode` varchar(25) DEFAULT NULL COMMENT 'postal code of the location',
+  `country_code` char(2) DEFAULT NULL COMMENT 'ISO 3166 ALPHA-2 two letter country code of the location',
   PRIMARY KEY (`locationID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

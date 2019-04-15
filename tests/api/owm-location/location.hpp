@@ -26,7 +26,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "../../../src/data/LocationWithCountry.hpp"
+#include "../../../src/data/Location.hpp"
 #include "../../../src/data/Weather.hpp"
 
 namespace wic
@@ -53,7 +53,7 @@ void printWeather(const Weather& w)
 template<typename jsonT>
 int parseLocations(const std::string& json)
 {
-  std::vector<std::pair<LocationWithCountry, Weather> > locations;
+  std::vector<std::pair<Location, Weather> > locations;
 
   if (!jsonT::parseLocations(json, locations))
   {
@@ -71,13 +71,13 @@ int parseLocations(const std::string& json)
 
   // first entry
   {
-    const LocationWithCountry& location = locations.at(0).first;
+    const Location& location = locations.at(0).first;
     const Weather& weather = locations.at(0).second;
 
-    if (location.country() != "DE")
+    if (location.countryCode() != "DE")
     {
       std::cerr << "Error: Expected country DE, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
     if (location.owmId() != 2950159)
@@ -134,13 +134,13 @@ int parseLocations(const std::string& json)
 
   // second entry
   {
-    const LocationWithCountry& location = locations.at(1).first;
+    const Location& location = locations.at(1).first;
     const Weather& weather = locations.at(1).second;
 
-    if (location.country() != "US")
+    if (location.countryCode() != "US")
     {
       std::cerr << "Error in 2nd entry: Expected country US, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
@@ -148,6 +148,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(4831725);
     expectedLocation.setCoordinates(41.6215, -72.7457);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("US");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)
@@ -180,13 +181,13 @@ int parseLocations(const std::string& json)
 
   // third entry
   {
-    const LocationWithCountry& location = locations.at(2).first;
+    const Location& location = locations.at(2).first;
     const Weather& weather = locations.at(2).second;
 
-    if (location.country() != "US")
+    if (location.countryCode() != "US")
     {
       std::cerr << "Error in 3rd entry: Expected country US, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
@@ -194,6 +195,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(5163076);
     expectedLocation.setCoordinates(40.5612, -81.7944);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("US");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)
@@ -226,13 +228,13 @@ int parseLocations(const std::string& json)
 
   // fourth entry
   {
-    const LocationWithCountry& location = locations.at(3).first;
+    const Location& location = locations.at(3).first;
     const Weather& weather = locations.at(3).second;
 
-    if (location.country() != "ZA")
+    if (location.countryCode() != "ZA")
     {
       std::cerr << "Error in 4th entry: Expected country ZA, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
@@ -240,6 +242,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(1019330);
     expectedLocation.setCoordinates(-32.8834, 27.5794);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("ZA");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)
@@ -272,13 +275,13 @@ int parseLocations(const std::string& json)
 
   // fifth entry
   {
-    const LocationWithCountry& location = locations.at(4).first;
+    const Location& location = locations.at(4).first;
     const Weather& weather = locations.at(4).second;
 
-    if (location.country() != "DE")
+    if (location.countryCode() != "DE")
     {
       std::cerr << "Error in 5th entry: Expected country DE, but it is "
-                << location.country() << " instead!" << std::endl;
+                << location.countryCode() << " instead!" << std::endl;
       return 1;
     }
 
@@ -286,6 +289,7 @@ int parseLocations(const std::string& json)
     expectedLocation.setOwmId(2950158);
     expectedLocation.setCoordinates(54.0364, 10.4461);
     expectedLocation.setName("Berlin");
+    expectedLocation.setCountryCode("DE");
     expectedLocation.setPostcode("");
 
     if (expectedLocation != location)

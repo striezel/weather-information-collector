@@ -206,6 +206,26 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       loc.setPostcode(value);
       task.setLocation(loc);
     } // if location.postcode
+    else if ((name == "location.countrycode") || (name == "location_countrycode") || (name == "countrycode")
+      || (name == "location.country_code") || (name == "location_country_code") || (name == "country_code"))
+    {
+      if (task.location().hasCountryCode())
+      {
+        std::cerr << "Error: Location's country code is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      if (value.size() > 2)
+      {
+        std::cerr << "Error: Location's country code in file " << fileName
+                  << " is longer than two characters! Use the two letter"
+                  << " country code from ISO-3166, please." << std::endl;
+        return false;
+      }
+      Location loc(task.location());
+      loc.setCountryCode(value);
+      task.setLocation(loc);
+    } // if location.countrycode
     else if ((name == "location.coordinates") || (name == "location_coordinates") || (name == "coordinates"))
     {
       if (task.location().hasCoordinates())

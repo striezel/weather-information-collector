@@ -39,7 +39,6 @@ bool NLohmannJsonDarkSky::parseCurrentWeather(const std::string& json, Weather& 
   }
 
   weather.setJson(json);
-  weather.setRequestTime(std::chrono::system_clock::now());
 
   if (root.empty())
     return false;

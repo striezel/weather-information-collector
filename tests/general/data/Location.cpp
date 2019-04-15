@@ -32,6 +32,7 @@ TEST_CASE("LocationClass")
     REQUIRE_FALSE( loc.hasOwmId() );
     REQUIRE_FALSE( loc.hasCoordinates() );
     REQUIRE_FALSE( loc.hasName() );
+    REQUIRE_FALSE( loc.hasCountryCode() );
     REQUIRE_FALSE( loc.hasPostcode() );
 
     REQUIRE( loc.empty() );
@@ -59,6 +60,22 @@ TEST_CASE("LocationClass")
     {
       REQUIRE( loc.empty() );
       loc.setName("Townington");
+      REQUIRE_FALSE( loc.empty() );
+    }
+
+    SECTION("empty: country code only")
+    {
+      REQUIRE( loc.empty() );
+      loc.setCountryCode("FR");
+      // Country code alone does not count.
+      REQUIRE( loc.empty() );
+    }
+
+    SECTION("empty: name + country code")
+    {
+      REQUIRE( loc.empty() );
+      loc.setName("Townington");
+      loc.setCountryCode("UK");
       REQUIRE_FALSE( loc.empty() );
     }
 
@@ -109,6 +126,13 @@ TEST_CASE("LocationClass")
     loc.setName("Townsvillage");
     REQUIRE( loc.hasName() );
     REQUIRE( loc.name() == std::string("Townsvillage") );
+  }
+
+  SECTION("set, has + get country code")
+  {
+    loc.setCountryCode("UK");
+    REQUIRE( loc.hasCountryCode() );
+    REQUIRE( loc.countryCode() == std::string("UK") );
   }
 
   SECTION("set, has + get postcode")
@@ -183,6 +207,11 @@ TEST_CASE("LocationClass")
     loc1.setName("Town");
     REQUIRE_FALSE( loc1 == loc2 );
     loc2.setName("Town");
+    REQUIRE( loc1 == loc2 );
+
+    loc1.setCountryCode("TO");
+    REQUIRE_FALSE( loc1 == loc2 );
+    loc2.setCountryCode("TO");
     REQUIRE( loc1 == loc2 );
 
     loc1.setOwmId(5);

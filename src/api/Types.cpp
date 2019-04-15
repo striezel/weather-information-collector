@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,6 +37,9 @@ ApiType toApiType(const std::string& apiName)
   // DarkSky
   if (name == "darksky")
     return ApiType::DarkSky;
+  // Weatherbit
+  if (name == "weatherbit")
+    return ApiType::Weatherbit;
   // unknown / none
   return ApiType::none;
 }
@@ -51,6 +54,8 @@ std::string toString(const ApiType type)
          return "OpenWeatherMap";
     case ApiType::DarkSky:
          return "DarkSky";
+    case ApiType::Weatherbit:
+         return "Weatherbit";
     case ApiType::none:
     default:
          return "none";
