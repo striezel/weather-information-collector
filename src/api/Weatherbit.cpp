@@ -53,7 +53,12 @@ bool Weatherbit::validLocation(const Location& location) const
   //  is better to use the country code, too. Otherwise one may get unexpected
   //  results.)
     || (location.hasPostcode() && location.hasCountryCode());
-  // TODO: Add checks for other possibilities.
+
+  // Note: The other possibilities are not useful here.
+  // (IP address should not be used, because it can change and it might be
+  //  inaccurate. ICAO codes are only available to premium subscriptions.
+  //  City IDs cannot easily be retrieved via the API, but only as JSON file
+  //  download which is ca. 66 MB in size.)
 }
 
 bool Weatherbit::supportsDataType(const DataType data) const
@@ -95,7 +100,13 @@ std::string Weatherbit::toRequestString(const Location& location) const
   if (location.hasPostcode() && location.hasCountryCode())
     return std::string("postal_code=") + location.postcode()
          + std::string("&country=") + location.countryCode();
-  // TODO: Add query string for other possibilities.
+
+  // Note: The other possibilities are not useful here.
+  // (IP address should not be used, because it can change and it might be
+  //  inaccurate. ICAO codes are only available to premium subscriptions.
+  //  City IDs cannot easily be retrieved via the API, but only as JSON file
+  //  download which is ca. 66 MB in size.)
+
   // no required data set
   return std::string();
 }
