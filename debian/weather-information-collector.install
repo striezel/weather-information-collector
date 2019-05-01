@@ -1,0 +1,5 @@
+obj*/src/collector/weather-information-collector usr/bin
+obj*/src/configtest/weather-information-collector-configtest usr/bin
+obj*/src/creator/weather-information-collector-task-creator usr/bin
+obj*/src/synchronizer/weather-information-collector-synchronizer usr/bin
+obj*/src/update/weather-information-collector-update usr/bin
