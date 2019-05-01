@@ -1,0 +1,18 @@
+Source: weather-information-collector
+Section: unknown
+Priority: optional
+Maintainer: Dirk Stolle <striezel-dev@web.de>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.2
+Homepage: https://gitlab.com/striezel/weather-information-collector
+Vcs-Git: https://gitlab.com/striezel/weather-information-collector.git
+
+Package: weather-information-collector
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Collects information from various weather APIs
+ weather-information-collector is a tool that collects weather information from
+ various available ReST API services (currently OpenWeatherMap, Apixu, DarkSky
+ and Weatherbit) and stores the information in a database. Currently only MySQL
+ and compatible DBMS like MariaDB are supported.
+ Data collection tasks can be configured individually.
