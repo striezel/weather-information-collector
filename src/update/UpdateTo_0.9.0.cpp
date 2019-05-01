@@ -72,7 +72,7 @@ bool setCountryCodes(const ConnectionInformation& ci)
     mysqlpp::StoreQueryResult jsonResult = subQuery.store();
     if (jsonResult.num_rows() == 0)
     {
-      std::clog << "Info: Found not matching country code for location "
+      std::clog << "Info: Found no matching country code for location "
                 << result[i]["locationID"] << ". Therefore it will not be "
                 << "updated. (This is intentional and not an error.)" << std::endl;
       continue;
