@@ -72,6 +72,8 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../db/Structure.cpp" />
+		<Unit filename="../db/Structure.hpp" />
 		<Unit filename="../db/Utilities.cpp" />
 		<Unit filename="../db/Utilities.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />
@@ -93,6 +95,10 @@
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />
 		<Unit filename="../tasks/TaskManager.hpp" />
+		<Unit filename="../update/SemVer.cpp" />
+		<Unit filename="../update/SemVer.hpp" />
+		<Unit filename="../update/guess.cpp" />
+		<Unit filename="../update/guess.hpp" />
 		<Unit filename="../util/Directories.cpp" />
 		<Unit filename="../util/Directories.hpp" />
 		<Unit filename="../util/GitInfos.hpp" />

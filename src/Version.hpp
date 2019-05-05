@@ -27,7 +27,7 @@ namespace wic
 {
 
 /** \brief version information */
-const std::string version = "version 0.9.0, 2019-04-15";
+const std::string version = "version 0.9.1, 2019-05-05";
 
 } // namespace
 

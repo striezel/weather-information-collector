@@ -12,10 +12,13 @@ set(weather-information-collector-synchronizer_sources
     ../db/ConnectionInformation.cpp
     ../db/SSQLS_location.hpp
     ../db/SSQLS_weatherdata.hpp
+    ../db/Structure.cpp
     ../db/Utilities.cpp
     ../retrieve/SourceMySQL.cpp
     ../store/StoreMySQL.cpp
     ../store/StoreMySQLBatch.cpp
+    ../update/SemVer.cpp
+    ../update/guess.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp

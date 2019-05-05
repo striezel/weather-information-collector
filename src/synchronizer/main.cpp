@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include "../retrieve/SourceMySQL.hpp"
 #include "../store/StoreMySQL.hpp"
 #include "../store/StoreMySQLBatch.hpp"
+#include "../update/SemVer.hpp"
+#include "../update/guess.hpp"
 #include "../util/GitInfos.hpp"
 #include "../util/Strings.hpp"
 #include "../ReturnCodes.hpp"
@@ -62,7 +64,9 @@ void showHelp()
             << "                           Higher numbers mean increased performance, but it\n"
             << "                           could also result in hitting MySQL's limit for the\n"
             << "                           maximum packet size, called max_allowed_packet.\n"
-            << "                           Defaults to " << defaultBatchSize << ", if no value is given.\n" ;
+            << "                           Defaults to " << defaultBatchSize << ", if no value is given.\n"
+            << "  --skip-update-check    - skips the check to determine whether the databases\n"
+            << "                           are up to date during program startup.\n";
 }
 
 bool isLess(const wic::Weather& lhs, const wic::Weather& rhs)
@@ -78,9 +82,10 @@ bool isLess(const wic::Forecast& lhs, const wic::Forecast& rhs)
 
 int main(int argc, char** argv)
 {
-  std::string srcConfigurationFile;
-  std::string destConfigurationFile;
-  int batchSize = -1;
+  std::string srcConfigurationFile; /**< path of configuration file for source */
+  std::string destConfigurationFile; /**< path of configuration file for destination */
+  int batchSize = -1; /**< number of records per batch insert */
+  bool skipUpdateCheck = false; /**< whether to skip check for up to date DB */
   if ((argc > 1) && (argv != nullptr))
   {
     for (int i = 1; i < argc; ++i)
@@ -180,6 +185,16 @@ int main(int argc, char** argv)
           return wic::rcInvalidParameter;
         }
       } // if batch size
+      else if ((param == "--skip-update-check") || (param == "--no-update-check"))
+      {
+        if (skipUpdateCheck)
+        {
+          std::cerr << "Error: Parameter " << param << " was already specified!"
+                    << std::endl;
+          return wic::rcInvalidParameter;
+        }
+        skipUpdateCheck = true;
+      } // if database update check shall be skipped
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
@@ -199,13 +214,6 @@ int main(int argc, char** argv)
     std::cerr << "Error: No destination configuration file was specified!" << std::endl;
     return wic::rcInvalidParameter;
   }
-  // If there is no batch size, use 25 as default value.
-  if (batchSize < 0)
-  {
-    std::cout << "Info: Using default batch size value of " << defaultBatchSize
-              << "." << std::endl;
-    batchSize = defaultBatchSize;
-  }
 
   // load source configuration file
   wic::Configuration srcConfig;
@@ -222,6 +230,53 @@ int main(int argc, char** argv)
     std::cerr << "Error: Could not load destination configuration!" << std::endl;
     return wic::rcConfigurationError;
   }
+
+  // If there is no batch size, use 125 as default value.
+  if (batchSize < 0)
+  {
+    std::cout << "Info: Using default batch size value of " << defaultBatchSize
+              << "." << std::endl;
+    batchSize = defaultBatchSize;
+  }
+
+  // Check whether databases are up to date.
+  if (!skipUpdateCheck)
+  {
+    for (const wic::Configuration& config : { srcConfig, destConfig })
+    {
+      const wic::SemVer currentVersion = wic::guessVersionFromDatabase(config.connectionInfo());
+      if (wic::SemVer() == currentVersion)
+      {
+        // Some database error must have occurred, so quit right here.
+        std::cerr << "Error: Could not check version of database!" << std::endl;
+        return wic::rcDatabaseError;
+      }
+      if (currentVersion < wic::mostUpToDateVersion)
+      {
+        const auto ci = config.connectionInfo();
+        std::cerr << "Error: The database " << ci.db() << " at " << ci.hostname()
+                  << ":" << ci.port() << " seems to be from an older version of"
+                  << " weather-information-collector. Please run "
+                  << "weather-information-collector-update to update the database."
+                  << std::endl;
+        std::cerr << "If this is wrong and you want to skip that check instead,"
+                  << " then call this program with the parameter --skip-update-check."
+                  << " Be warned that this may result in incomplete data being "
+                  << "written to the destination database though." << std::endl;
+        return wic::rcDatabaseError;
+      }
+    } // for
+  } // if update check shall be performed
+  else
+  {
+    // Give a warning to the user, so nobody can say "But why did nobody tell
+    // me about these possible problems there?"
+    std::cout << "Warning: Check whether the databases are up to date has been"
+              << " skipped, as requested by user. This could possibly result"
+              << " in incomplete data being written to the destination database"
+              << " as well as other database errors. Only use this if you are "
+              << " certain that both databases are up to date." << std::endl;
+  } // else
 
   // Get list of location-API pairs that need to be synchronized.
   wic::SourceMySQL dataSource = wic::SourceMySQL(srcConfig.connectionInfo());

@@ -60,6 +60,8 @@
 		<Unit filename="../db/SSQLS_forecastdata.hpp" />
 		<Unit filename="../db/SSQLS_location.hpp" />
 		<Unit filename="../db/SSQLS_weatherdata.hpp" />
+		<Unit filename="../db/Structure.cpp" />
+		<Unit filename="../db/Structure.hpp" />
 		<Unit filename="../db/Utilities.cpp" />
 		<Unit filename="../db/Utilities.hpp" />
 		<Unit filename="../retrieve/SourceMySQL.cpp" />
@@ -69,6 +71,10 @@
 		<Unit filename="../store/StoreMySQL.hpp" />
 		<Unit filename="../store/StoreMySQLBatch.cpp" />
 		<Unit filename="../store/StoreMySQLBatch.hpp" />
+		<Unit filename="../update/SemVer.cpp" />
+		<Unit filename="../update/SemVer.hpp" />
+		<Unit filename="../update/guess.cpp" />
+		<Unit filename="../update/guess.hpp" />
 		<Unit filename="../util/Directories.cpp" />
 		<Unit filename="../util/Directories.hpp" />
 		<Unit filename="../util/GitInfos.cpp" />

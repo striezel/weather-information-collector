@@ -16,6 +16,7 @@ set(weather-information-collector_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
+    ../db/Structure.cpp
     ../db/Utilities.cpp
     ../json/ApixuFunctions.cpp
     ../json/NLohmannJsonApixu.cpp
@@ -26,6 +27,8 @@ set(weather-information-collector_sources
     ../store/StoreMySQL.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
+    ../update/SemVer.cpp
+    ../update/guess.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp

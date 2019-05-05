@@ -1,5 +1,15 @@
 # Version history of weather-information-collector
 
+## Version 0.9.1 (2019-05-05)
+
+The collector and synchronization programs will now check whether the databases
+are up to date before performing their tasks. That way data corruption can be
+avoided when someone accidentally runs one of these programs with an older
+database.
+
+To disable that check and return to the behaviour as of version 0.9.0 and
+earlier versions, pass the parameter --skip-update-check to the programs.
+
 ## Version 0.9.0 (2019-04-15)
 
 The program is now able to collect data from the Weatherbit API, too.

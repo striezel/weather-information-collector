@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include "../db/ConnectionInformation.hpp"
 #include "../store/StoreMySQL.hpp"
 #include "../tasks/TaskManager.hpp"
+#include "../update/SemVer.hpp"
+#include "../update/guess.hpp"
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
@@ -50,13 +52,16 @@ void showHelp()
             << "                           during the program run. If this option is omitted,\n"
             << "                           then the program will search for the configuration\n"
             << "                           in some predefined locations.\n"
-            << "  -l | --ignore-limits   - ignore check for API limits during startup\n";
+            << "  -l | --ignore-limits   - ignore check for API limits during startup\n"
+            << "  --skip-update-check    - skips the check to determine whether the database\n"
+            << "                           is up to date during program startup.\n";
 }
 
 int main(int argc, char** argv)
 {
   std::string configurationFile; /**< path of configuration file */
   bool checkApiLimits = true; /**< whether to check if tasks exceed API limits */
+  bool skipUpdateCheck = false; /**< whether to skip check for up to date DB */
 
   if ((argc > 1) && (argv != nullptr))
   {
@@ -110,6 +115,16 @@ int main(int argc, char** argv)
         }
         checkApiLimits = false;
       } // if ignore limits
+      else if ((param == "--skip-update-check") || (param == "--no-update-check"))
+      {
+        if (skipUpdateCheck)
+        {
+          std::cerr << "Error: Parameter " << param << " was already specified!"
+                    << std::endl;
+          return wic::rcInvalidParameter;
+        }
+        skipUpdateCheck = true;
+      } // if database update check shall be skipped
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
@@ -149,6 +164,42 @@ int main(int argc, char** argv)
         return wic::rcTasksExceedApiRequestLimit;
       }
     } // if check shall be performed
+
+    // Check whether database is up to date.
+    if (!skipUpdateCheck)
+    {
+      wic::SemVer currentVersion = wic::guessVersionFromDatabase(config.connectionInfo());
+      if (wic::SemVer() == currentVersion)
+      {
+        // Some database error must have occurred, so quit right here.
+        std::cerr << "Error: Could not check version of database!" << std::endl;
+        return wic::rcDatabaseError;
+      }
+      if (currentVersion < wic::mostUpToDateVersion)
+      {
+        const auto ci = config.connectionInfo();
+        std::cerr << "Error: The database " << ci.db() << " at " << ci.hostname()
+                  << ":" << ci.port() << " seems to be from an older version of"
+                  << " weather-information-collector. Please run "
+                  << "weather-information-collector-update to update the database."
+                  << std::endl;
+        std::cerr << "If this is wrong and you want to skip that check instead,"
+                  << " then call this program with the parameter --skip-update-check."
+                  << " Be warned that this may result in incomplete data being "
+                  << "written to the database though." << std::endl;
+        return wic::rcDatabaseError;
+      }
+    } // if update check shall be performed
+    else
+    {
+      // Give a warning to the user, so nobody can say "But why did nobody tell
+      // me about these possible problems there?"
+      std::cout << "Warning: Check whether the database is up to date has been"
+                << " skipped, as requested by user. This could possibly result"
+                << " in incomplete data being written to the database as well "
+                << " as other database errors. Only use this if you are certain"
+                << " that the database is up to date." << std::endl;
+    }
 
     if (!collector.fromConfiguration(config))
     {

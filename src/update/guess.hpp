@@ -29,6 +29,8 @@ namespace wic
 
 const SemVer ancientVersion(0, 0, 1); /**< dummy version for very old versions */
 
+const SemVer mostUpToDateVersion(0, 9, 0); /**< version for newest possible guess */
+
 /** \brief Tries to guess the current program version from the database structure.
  *
  * Note that the actual version may be newer.
