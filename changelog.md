@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.9.2 (2019-05-09)
+
+Switch Weatherbit.io forecast from 3-hourly / 5 day forecast to hourly / 2 day
+forecast, because the first is only available for users on premium plans.
+
 ## Version 0.9.1 (2019-05-05)
 
 The collector and synchronization programs will now check whether the databases

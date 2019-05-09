@@ -154,8 +154,11 @@ bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
   forecast = Forecast();
   if (m_apiKey.empty())
     return false;
+  // 3-hourly forecast for 120 hours / 5 days (only available for users on premium plans of Weatherbit.io)
   // https://api.weatherbit.io/v2.0/forecast/3hourly?key=you-API-key-here&city=city-name-here&country=ISO-3166-two-letter-code-here
-  const std::string url = "https://api.weatherbit.io/v2.0/forecast/3hourly?key=" + m_apiKey
+  // hourly forecast for up to 48 hours (or up to 120 for premium users)
+  // https://api.weatherbit.io/v2.0/forecast/hourly?key=you-API-key-here&city=city-name-here&country=ISO-3166-two-letter-code-here
+  const std::string url = "https://api.weatherbit.io/v2.0/forecast/hourly?key=" + m_apiKey
                         // Use the metric system.
                         + std::string("&units=M")
                         + "&" + toRequestString(location);
