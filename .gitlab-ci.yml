@@ -31,3 +31,55 @@ build_clang:
     - cmake ../ -DJSON_BENCHMARK=ON
     - make -j4
     - ctest -V
+
+package_debian9:
+  image: debian:9
+  stage: build
+  before_script:
+    - ./ci/gitlab-01-install-dependencies.sh
+  script:
+    - ./ci/gitlab-02-create-package.sh
+  only:
+    - tags
+  artifacts:
+    paths:
+      - "weather-information-collector*.deb"
+
+package_debian8:
+  image: debian:8
+  stage: build
+  before_script:
+    - ./ci/gitlab-01-install-dependencies.sh
+  script:
+    - ./ci/gitlab-02-create-package.sh
+  only:
+    - tags
+  artifacts:
+    paths:
+      - "weather-information-collector*.deb"
+
+package_ubuntu1804:
+  image: ubuntu:bionic
+  stage: build
+  before_script:
+    - ./ci/gitlab-01-install-dependencies.sh
+  script:
+    - ./ci/gitlab-02-create-package.sh
+  only:
+    - tags
+  artifacts:
+    paths:
+      - "weather-information-collector*.deb"
+
+package_ubuntu1604:
+  image: ubuntu:xenial
+  stage: build
+  before_script:
+    - ./ci/gitlab-01-install-dependencies.sh
+  script:
+    - ./ci/gitlab-02-create-package.sh
+  only:
+    - tags
+  artifacts:
+    paths:
+      - "weather-information-collector*.deb"
