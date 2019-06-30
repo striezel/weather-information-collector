@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.9.4 (2019-06-30)
+
+The synchronization program will now cause less traffic to the destination
+server which potentially speeds up the synchronization, especially if the
+network connection to the destionation server is slow.
+
 ## Version 0.9.3 (2019-06-30)
 
 Default batch size of the synchronization program is reduced from 125 to 40.

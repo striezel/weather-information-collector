@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -130,6 +130,52 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
   return true;
 }
 
+bool SourceMySQL::getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather)
+{
+  mysqlpp::Connection conn(false);
+  if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
+                    connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()))
+  {
+    std::cerr << "Could not connect to database: " << conn.error() << "\n";
+    return false;
+  }
+  // get API id
+  const std::string apiName = toString(type);
+  mysqlpp::Query query(&conn);
+  query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << apiName << " LIMIT 1";
+  mysqlpp::StoreQueryResult result = query.store();
+  if (!result)
+  {
+    std::cerr << "Failed to get query result: " << query.error() << "\n";
+    return false;
+  }
+  if (result.num_rows() == 0)
+  {
+    return false;
+  }
+  const int apiId = result[0]["apiID"];
+  const int locationId = wic::getLocationId(conn, location);
+  if (locationId <= 0)
+    return false;
+
+  mysqlpp::Query selectQuery(&conn);
+  selectQuery << "SELECT dataTime, requestTime FROM weatherdata WHERE apiID=" << mysqlpp::quote << apiId
+              << " AND locationID=" << mysqlpp::quote << locationId
+              << " ORDER BY dataTime ASC, requestTime ASC;";
+  mysqlpp::StoreQueryResult timeResult = selectQuery.store();
+  weather.clear();
+  weather.reserve(timeResult.num_rows());
+
+  for(const auto elem : timeResult)
+  {
+    WeatherMeta w;
+    w.setDataTime(std::chrono::system_clock::from_time_t(mysqlpp::DateTime(elem["dataTime"])));
+    w.setRequestTime(std::chrono::system_clock::from_time_t(mysqlpp::DateTime(elem["requestTime"])));
+    weather.push_back(w);
+  } // for
+  return true;
+}
+
 bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast)
 {
   mysqlpp::Connection conn(false);
@@ -237,6 +283,52 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
     current.setData(fcData);
     forecast.push_back(current);
   } // for (range-based, dbForecasts)
+
+  return true;
+}
+
+bool SourceMySQL::getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast)
+{
+  mysqlpp::Connection conn(false);
+  if (!conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
+                    connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()))
+  {
+    std::cerr << "Could not connect to database: " << conn.error() << "\n";
+    return false;
+  }
+  // get API id
+  const std::string apiName = toString(type);
+  mysqlpp::Query query(&conn);
+  query << "SELECT * FROM api WHERE name=" << mysqlpp::quote << apiName << " LIMIT 1";
+  mysqlpp::StoreQueryResult result = query.store();
+  if (!result)
+  {
+    std::cerr << "Failed to get query result: " << query.error() << "\n";
+    return false;
+  }
+  if (result.num_rows() == 0)
+  {
+    return false;
+  }
+  const int apiId = result[0]["apiID"];
+  const int locationId = wic::getLocationId(conn, location);
+  if (locationId <= 0)
+    return false;
+
+  mysqlpp::Query selectQueryForecasts(&conn);
+  selectQueryForecasts << "SELECT requestTime FROM forecast WHERE apiID=" << mysqlpp::quote << apiId
+              << " AND locationID=" << mysqlpp::quote << locationId
+              << " ORDER BY requestTime ASC;";
+  mysqlpp::StoreQueryResult timeResult = selectQueryForecasts.store();
+  forecast.clear();
+  forecast.reserve(timeResult.num_rows());
+
+  for (const auto& elem : timeResult)
+  {
+    ForecastMeta current;
+    current.setRequestTime(std::chrono::system_clock::from_time_t(mysqlpp::DateTime(elem["requestTime"])));
+    forecast.push_back(current);
+  } // for (range-based, timeResult)
 
   return true;
 }

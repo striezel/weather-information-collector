@@ -69,13 +69,13 @@ void showHelp()
             << "                           are up to date during program startup.\n";
 }
 
-bool isLess(const wic::Weather& lhs, const wic::Weather& rhs)
+bool isLess(const wic::WeatherMeta& lhs, const wic::Weather& rhs)
 {
   return (lhs.dataTime() < rhs.dataTime())
     || ((lhs.dataTime() == rhs.dataTime()) && (lhs.requestTime() < rhs.requestTime()));
 }
 
-bool isLess(const wic::Forecast& lhs, const wic::Forecast& rhs)
+bool isLess(const wic::ForecastMeta& lhs, const wic::Forecast& rhs)
 {
   return (lhs.requestTime() < rhs.requestTime());
 }
@@ -344,8 +344,8 @@ int main(int argc, char** argv)
         return wic::rcDatabaseError;
       }
       // Get existing entries in destination database.
-      std::vector<wic::Weather> destinationWeather;
-      if (!dataDest.getCurrentWeather(item.second, item.first, destinationWeather))
+      std::vector<wic::WeatherMeta> destinationWeatherMeta;
+      if (!dataDest.getMetaCurrentWeather(item.second, item.first, destinationWeatherMeta))
       {
         std::cerr << "Error: Could not load weather data for " << item.first.toString()
                   << ", " << wic::toString(item.second) << " from destination database!" << std::endl;
@@ -355,8 +355,8 @@ int main(int argc, char** argv)
       // Iterate over data.
       auto sourceIterator = sourceWeather.begin();
       const auto sourceEnd = sourceWeather.end();
-      auto destinationIterator = destinationWeather.begin();
-      auto destinationEnd = destinationWeather.end();
+      auto destinationIterator = destinationWeatherMeta.begin();
+      auto destinationEnd = destinationWeatherMeta.end();
       while (sourceIterator != sourceEnd)
       {
         while (destinationIterator != destinationEnd && isLess(*destinationIterator, *sourceIterator))
@@ -406,8 +406,8 @@ int main(int argc, char** argv)
         return wic::rcDatabaseError;
       }
       // Get existing entries in destination database.
-      std::vector<wic::Forecast> destinationForecast;
-      if (!dataDest.getForecasts(item.second, item.first, destinationForecast))
+      std::vector<wic::ForecastMeta> destinationForecastMeta;
+      if (!dataDest.getMetaForecasts(item.second, item.first, destinationForecastMeta))
       {
         std::cerr << "Error: Could not load forecast data for " << item.first.toString()
                   << ", " << wic::toString(item.second) << " from destination database!" << std::endl;
@@ -419,8 +419,8 @@ int main(int argc, char** argv)
       // Iterate over data.
       auto sourceIterator = sourceForecast.begin();
       const auto sourceEnd = sourceForecast.end();
-      auto destinationIterator = destinationForecast.begin();
-      auto destinationEnd = destinationForecast.end();
+      auto destinationIterator = destinationForecastMeta.begin();
+      auto destinationEnd = destinationForecastMeta.end();
       while (sourceIterator != sourceEnd)
       {
         while (destinationIterator != destinationEnd && isLess(*destinationIterator, *sourceIterator))

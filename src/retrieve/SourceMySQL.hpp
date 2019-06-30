@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,8 +26,10 @@
 #include <vector>
 #include "../api/Types.hpp"
 #include "../data/Forecast.hpp"
+#include "../data/ForecastMeta.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
+#include "../data/WeatherMeta.hpp"
 #include "../db/ConnectionInformation.hpp"
 
 namespace wic
@@ -60,6 +62,17 @@ class SourceMySQL
     virtual bool getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather);
 
 
+    /** \brief Gets the metadata of current weather data for a given location and API.
+     *
+     * \param type      API that was used to gather the information
+     * \param location  location for the weather information
+     * \param weather   container to store the retrieved information
+     * \return Returns true, if the data was retrieved.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather);
+
+
     /** \brief Gets the weather forecast data for a given location and API.
      *
      * \param type      API that was used to gather the information
@@ -69,6 +82,17 @@ class SourceMySQL
      *         Returns false, if an error occurred.
      */
     virtual bool getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast);
+
+
+    /** \brief Gets the metadata of weather forecasts for a given location and API.
+     *
+     * \param type      API that was used to gather the information
+     * \param location  location for the weather information
+     * \param forecast   container to store the retrieved information
+     * \return Returns true, if the data was retrieved.
+     *         Returns false, if an error occurred.
+     */
+    virtual bool getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast);
 
 
     /** \brief Lists all APIs that are present in the database.

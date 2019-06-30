@@ -7,8 +7,10 @@ set(weather-information-collector-synchronizer_sources
     ../api/Types.cpp
     ../conf/Configuration.cpp
     ../data/Forecast.cpp
+    ../data/ForecastMeta.cpp
     ../data/Location.cpp
     ../data/Weather.cpp
+    ../data/WeatherMeta.cpp
     ../db/ConnectionInformation.cpp
     ../db/SSQLS_location.hpp
     ../db/SSQLS_weatherdata.hpp
