@@ -26,10 +26,14 @@
 #include <vector>
 #include "../api/Types.hpp"
 #include "../data/Forecast.hpp"
+#ifndef wic_no_metadata
 #include "../data/ForecastMeta.hpp"
+#endif // wic_no_metadata
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
+#ifndef wic_no_metadata
 #include "../data/WeatherMeta.hpp"
+#endif // wic_no_metadata
 #include "../db/ConnectionInformation.hpp"
 
 namespace wic
@@ -62,6 +66,7 @@ class SourceMySQL
     virtual bool getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather);
 
 
+#ifndef wic_no_metadata
     /** \brief Gets the metadata of current weather data for a given location and API.
      *
      * \param type      API that was used to gather the information
@@ -71,6 +76,7 @@ class SourceMySQL
      *         Returns false, if an error occurred.
      */
     virtual bool getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather);
+#endif // wic_no_metadata
 
 
     /** \brief Gets the weather forecast data for a given location and API.
@@ -84,6 +90,7 @@ class SourceMySQL
     virtual bool getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast);
 
 
+#ifndef wic_no_metadata
     /** \brief Gets the metadata of weather forecasts for a given location and API.
      *
      * \param type      API that was used to gather the information
@@ -93,6 +100,7 @@ class SourceMySQL
      *         Returns false, if an error occurred.
      */
     virtual bool getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast);
+#endif // wic_no_metadata
 
 
     /** \brief Lists all APIs that are present in the database.

@@ -34,6 +34,7 @@
 			<Add option="-fexceptions" />
 			<Add option="-Dwic_no_tasks_in_config" />
 			<Add option="-Dwic_weather_comparison" />
+			<Add option="-Dwic_no_metadata" />
 			<Add directory="/usr/include/mysql/" />
 			<Add directory="/usr/include/mysql++" />
 		</Compiler>

@@ -130,6 +130,7 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
   return true;
 }
 
+#ifndef wic_no_metadata
 bool SourceMySQL::getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather)
 {
   mysqlpp::Connection conn(false);
@@ -175,6 +176,7 @@ bool SourceMySQL::getMetaCurrentWeather(const ApiType type, const Location& loca
   } // for
   return true;
 }
+#endif // wic_no_metadata
 
 bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast)
 {
@@ -287,6 +289,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
   return true;
 }
 
+#ifndef wic_no_metadata
 bool SourceMySQL::getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast)
 {
   mysqlpp::Connection conn(false);
@@ -332,6 +335,7 @@ bool SourceMySQL::getMetaForecasts(const ApiType type, const Location& location,
 
   return true;
 }
+#endif
 
 bool SourceMySQL::listApis(std::map<ApiType, int>& apis)
 {
