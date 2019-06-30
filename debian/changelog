@@ -1,3 +1,9 @@
+weather-information-collector (0.9.3-1) UNRELEASED; urgency=medium
+
+  * update to new release 0.9.3
+
+ -- Dirk Stolle <striezel-dev@web.de>  Sun, 30 Jun 2019 16:27:51 +0200
+
 weather-information-collector (0.9.2-1) UNRELEASED; urgency=medium
 
   * update to new release 0.9.2

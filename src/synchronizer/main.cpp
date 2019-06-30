@@ -32,7 +32,7 @@
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
 
-const int defaultBatchSize = 125;
+const int defaultBatchSize = 40;
 
 void showVersion()
 {
@@ -231,7 +231,7 @@ int main(int argc, char** argv)
     return wic::rcConfigurationError;
   }
 
-  // If there is no batch size, use 125 as default value.
+  // If there is no batch size, use the default value.
   if (batchSize < 0)
   {
     std::cout << "Info: Using default batch size value of " << defaultBatchSize

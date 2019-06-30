@@ -1,5 +1,9 @@
 # Version history of weather-information-collector
 
+## Version 0.9.3 (2019-06-30)
+
+Default batch size of the synchronization program is reduced from 125 to 40.
+
 ## Version 0.9.2 (2019-05-09)
 
 Switch Weatherbit.io forecast from 3-hourly / 5 day forecast to hourly / 2 day
