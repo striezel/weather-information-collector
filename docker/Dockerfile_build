@@ -25,6 +25,13 @@ RUN ./ci/gitlab-01-install-dependencies.sh && \
 # -- remove Git repository
 WORKDIR /opt
 RUN rm -rf /opt/weather-information-collector
+# Set timezone.
+# Adjust the following line, if necessary.
+# ENV TZ Etc/Utc
+ENV TZ Europe/Berlin
+RUN echo "$TZ" > /etc/timezone && \
+    dpkg-reconfigure --frontend non-interactive tzdata && \
+    echo "Current date is $(date)."
 # Create new user that will be used to run the program.
 RUN useradd --create-home wic
 USER wic

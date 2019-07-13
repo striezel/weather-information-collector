@@ -22,6 +22,13 @@ RUN apt-get update && apt-get upgrade -y && \
     dpkg -i weather-information-collector*.deb && \
     rm -f weather-information-collector*.deb && \
     apt-get purge -y wget unzip && apt-get clean
+# Set timezone.
+# Adjust the following line, if necessary.
+# ENV TZ Etc/Utc
+ENV TZ Europe/Berlin
+RUN echo "$TZ" > /etc/timezone && \
+    dpkg-reconfigure --frontend non-interactive tzdata && \
+    echo "Current date is $(date)."
 # Create new user that will be used to run the program.
 RUN useradd --create-home wic
 USER wic
