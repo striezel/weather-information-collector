@@ -28,7 +28,7 @@ USER wic
 WORKDIR /home/wic
 # Copy configuration files.
 RUN mkdir .wic
-COPY configuration .wic
+COPY --chown=wic:wic configuration .wic
 # Show version after build. (May differ from current SCM checkout.)
 RUN weather-information-collector --version
 # Run it!
