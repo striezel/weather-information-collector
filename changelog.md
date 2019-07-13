@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.9.5 (2019-07-13)
+
+Fix build error with benchmark (not build by default, only by CI) and add a
+Dockerfile as alternative to native build.
+
 ## Version 0.9.4 (2019-06-30)
 
 The synchronization program will now cause less traffic to the destination
