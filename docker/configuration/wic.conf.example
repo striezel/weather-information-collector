@@ -1,0 +1,17 @@
+# This line is a comment and will be ignored by the program.
+# Rename this file to wic.conf and adjust the settings to your needs.
+
+# database settings
+db.host=localhost
+db.name=weather_information_collector
+db.user=wic
+db.password=secret
+db.port=3306
+# task directory information
+tasks.directory=/home/wic/.wic/task.d
+tasks.extension=.task
+# API keys
+key.owm=0123456789abcdefdeadbeef1c0ffee1
+key.apixu=abcdef9876543210affe1affe2affe
+key.darksky=f00ba12735743210fedcba9876543210
+key.weatherbit=fedcba98765432100123456789abcdef

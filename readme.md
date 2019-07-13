@@ -40,6 +40,10 @@ or
 
 into a root terminal.
 
+_Note: As of now (2019-07-13) there is no libmysql++ package for Debian 10.0
+(codename "buster"). Therefore it is recommended to either stick with Debian 9
+for the moment, or to use Docker (see `docker/` directory) instead._
+
 ### Getting the source code
 
 Get the source directly from Git by cloning the Git repository and change to
@@ -59,6 +63,11 @@ Starting in the root directory of the source, you can do the following steps:
     cd build
     cmake ../
     make -j4
+
+### Run with Docker
+
+If you prefer Docker over the native approach, take a look into the `docker/`
+directory and refer to the [readme there](./docker/readme.md).
 
 ## Usage
 
