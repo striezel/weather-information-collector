@@ -1,0 +1,12 @@
+# This is an example for a task file.
+# Place your own task files in this directory.
+
+# use OpenWeatherMap API
+api=OpenWeatherMap
+# collect data about current weather
+data=current
+# city of London, UK
+location.name=London
+# one request every hour, e.g. every 3600 seconds
+interval=3600
+

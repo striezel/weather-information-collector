@@ -1,0 +1,5 @@
+# core configuration file
+wic.conf
+
+# contents of task directory
+task.d/*.task

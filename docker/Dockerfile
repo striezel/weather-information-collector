@@ -28,6 +28,10 @@ RUN rm -rf /opt/weather-information-collector
 RUN useradd --create-home wic
 USER wic
 WORKDIR /home/wic
-# For now just show the version of the binary, we have no configuration files
-# to actually use them, yet.
-CMD weather-information-collector --version
+# Copy configuration files.
+RUN mkdir .wic
+COPY configuration .wic
+# Show version after build. (May differ from current SCM checkout.)
+RUN weather-information-collector --version
+# Run it!
+CMD weather-information-collector

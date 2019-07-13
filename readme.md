@@ -60,6 +60,11 @@ Starting in the root directory of the source, you can do the following steps:
     cmake ../
     make -j4
 
+### Run with Docker
+
+If you prefer Docker over the native approach, take a look into the `docker/`
+directory and refer to the [readme there](./docker/readme.md).
+
 ## Usage
 
     weather-information-collector [OPTIONS]
