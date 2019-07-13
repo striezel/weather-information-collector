@@ -40,6 +40,10 @@ or
 
 into a root terminal.
 
+_Note: As of now (2019-07-13) there is no libmysql++ package for Debian 10.0
+(codename "buster"). Therefore it is recommended to either stick with Debian 9
+for the moment, or to use Docker (see `docker/` directory) instead._
+
 ### Getting the source code
 
 Get the source directly from Git by cloning the Git repository and change to
