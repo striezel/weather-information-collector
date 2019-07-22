@@ -14,7 +14,13 @@ Add you configuration files to the `configuration/` directory and type
     docker build -t weather .
     docker run -d weather
 
-into your terminal. That's it. For a more detailed walkthrough see below.
+into your terminal. That's it. If you are on Linux (or a compatible system with
+Bash) you can also use the utility script for building the image and starting a
+container from that image:
+
+    ./start.sh
+
+For a more detailed walkthrough see below.
 
 ## Setting up the Docker container
 

@@ -1,0 +1,4 @@
+# ignore all unwanted files from this directory
+Dockerfile*
+readme.md
+start.sh
