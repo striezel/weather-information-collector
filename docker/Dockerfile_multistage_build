@@ -1,0 +1,57 @@
+# This version of the Dockerfile builds the *.deb package from the latest tagged
+# version in the first stage and then copies the package to the second stage.
+# That approach is slower than Dockerfile_download and takes longer to build,
+# but it should be the most compatible approach for Docker 17.05 and later while
+# still keeping the image size as low as Dockerfile_download.
+#
+# Image is based on Debian 9, because the current version of Debian 10 does not
+# have the libmysql++ package yet.
+FROM debian:9-slim AS build_deb
+MAINTAINER Dirk Stolle <striezel-dev@web.de>
+
+RUN mkdir -p /opt
+WORKDIR /opt
+
+# Update packages, install dependencies + root certificates.
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends catch cmake g++ git \
+    libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev \
+    make pkg-config ca-certificates && \
+    git clone https://gitlab.com/striezel/weather-information-collector.git
+WORKDIR /opt/weather-information-collector
+RUN ./ci/gitlab-01-install-dependencies.sh && \
+    ./ci/gitlab-02-create-package.sh
+
+
+# second image used as runtime environment
+FROM debian:9-slim AS runtime
+MAINTAINER Dirk Stolle <striezel-dev@web.de>
+
+# Update packages, install dependencies + root certificates.
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends ca-certificates tzdata && \
+    apt-get install -y --no-install-recommends libboost-filesystem1.62.0 libboost-system1.62.0 libcurl3-gnutls libmariadbclient18 libmysql++3v5 && \
+    mkdir -p /opt
+WORKDIR /opt
+COPY --from=build_deb /opt/weather-information-collector/weather-information-collector*.deb /opt/
+RUN dpkg -i weather-information-collector*.deb && \
+    apt-get autoremove -y
+
+# Set timezone.
+# Adjust the following line, if necessary.
+# ENV TZ Etc/Utc
+ENV TZ Europe/Berlin
+RUN echo "$TZ" > /etc/timezone && \
+    dpkg-reconfigure --frontend non-interactive tzdata && \
+    echo "Current date is $(date)."
+# Create new user that will be used to run the program.
+RUN useradd --create-home wic
+USER wic
+WORKDIR /home/wic
+# Copy configuration files.
+RUN mkdir .wic
+COPY --chown=wic:wic configuration .wic
+# Show version after build. (May differ from current SCM checkout.)
+RUN weather-information-collector --version
+# Run it!
+CMD weather-information-collector
