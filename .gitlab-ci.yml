@@ -1,12 +1,12 @@
-# Use the official gcc image, based on debian.
-# It can use version tags as well, like gcc:5.2.
-# See https://hub.docker.com/_/gcc/ for more info.
-image: gcc
+# Official gcc image at Docker Hub uses Debian 10 ("buster"), but buster does
+# not contain libmysql++ anymore, so we use Debian 9 ("stretch") instead.
+image: debian:9-slim
 
 build_gcc:
   stage: build
   before_script:
-    - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev
+    - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev pkg-config
+    - export CC=gcc && export CXX=g++
   script:
     - ./ci/cpplint.sh
     - mkdir ./build
@@ -15,14 +15,11 @@ build_gcc:
     - make -j4
     - ctest -V
 
-# There is no official clang image at Docker Hub, so we just install clang into
-# the GCC image. Oh, the irony...
+# There is no official clang image at Docker Hub.
 build_clang:
   stage: build
   before_script:
-    - apt-get update && apt-get -y install catch clang cmake libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev
-    - unlink /usr/bin/c++ && ln -s /usr/bin/clang++ /usr/bin/c++
-    - unlink /usr/bin/cc && ln -s /usr/bin/clang /usr/bin/cc
+    - apt-get update && apt-get -y install catch clang cmake libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev pkg-config
     - export CC=clang && export CXX=clang++
   script:
     - ./ci/cpplint.sh
