@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version NEXT (2019-09-22)
+## Version 0.9.6 (2019-09-22)
 
 Synchronization program will not start the synchronization, if both the source
 and the destination configuration point to the same database.
