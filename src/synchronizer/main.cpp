@@ -231,6 +231,16 @@ int main(int argc, char** argv)
     return wic::rcConfigurationError;
   }
 
+  // Check that synchronization happens between different databases.
+  const auto& srcDb = srcConfig.connectionInfo();
+  const auto& destDb = destConfig.connectionInfo();
+  if (srcDb.port() == destDb.port() && srcDb.db() == destDb.db()
+      && wic::toLowerString(srcDb.hostname()) == wic::toLowerString(destDb.hostname()))
+  {
+    std::cerr << "Error: Source and destination databases are identical!" << std::endl;
+    return wic::rcConfigurationError;
+  }
+
   // If there is no batch size, use the default value.
   if (batchSize < 0)
   {

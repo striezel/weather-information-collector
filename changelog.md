@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version NEXT (2019-09-22)
+
+Synchronization program will not start the synchronization, if both the source
+and the destination configuration point to the same database.
+
 ## Version 0.9.5 (2019-07-13)
 
 Fix build error with benchmark (not build by default, only by CI) and add a
