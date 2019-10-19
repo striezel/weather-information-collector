@@ -2,7 +2,7 @@
 
 ## Synchronization tool (weather-information-collector-synchronizer)
 
-Depending on the selected batch size (default: 125) a few problems could occur.
+Depending on the selected batch size (default: 40) a few problems could occur.
 
 * **Q: Synchronization throws an exception half way through, complaining that
   the "MySQL server is gone". What should I do?**
