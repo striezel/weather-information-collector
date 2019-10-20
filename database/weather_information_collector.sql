@@ -30,7 +30,8 @@ INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
 (1, 'Apixu', 'https://api.apixu.com/v1/'),
 (2, 'OpenWeatherMap', 'https://api.openweathermap.org/data/2.5/'),
 (3, 'DarkSky', 'https://api.darksky.net/'),
-(4, 'Weatherbit', 'https://api.weatherbit.io/v2.0/');
+(4, 'Weatherbit', 'https://api.weatherbit.io/v2.0/'),
+(5, 'Weatherstack', 'http://api.weatherstack.com/');
 
 --
 -- Table structure for table `forecast`

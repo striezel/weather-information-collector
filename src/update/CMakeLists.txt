@@ -43,6 +43,7 @@ set(weather-information-collector-update_sources
     UpdateTo_0.8.5.cpp
     UpdateTo_0.8.6.cpp
     UpdateTo_0.9.0.cpp
+    UpdateTo_0.9.7.cpp
     guess.cpp
     main.cpp)
 
