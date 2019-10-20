@@ -55,16 +55,6 @@ class NLohmannJsonWeatherstack
      *         Returns false, if an error occurred.
      */
     static bool parseForecast(const std::string& json, Forecast& forecast);
-  private:
-    /** \brief Parses weather data from a single JSON weather item into an
-     * instance of Weather class.
-     *
-     * \param value  the JSON value to parse
-     * \param weather the Weather item where the data shall be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    static bool parseSingleWeatherItem(const value_type& value, Weather& weather);
 }; // class
 
 } // namespace

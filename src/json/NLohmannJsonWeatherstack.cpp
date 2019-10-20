@@ -20,10 +20,53 @@
 
 #include "NLohmannJsonWeatherstack.hpp"
 #include <cmath>
+#include <ctime>
+#include <iomanip>
 #include <iostream>
 
 namespace wic
 {
+
+std::chrono::time_point<std::chrono::system_clock> parseDateTime(const nlohmann::json& root)
+{
+  // date of data update
+  const auto location = root.find("location");
+  if (location != root.end() && location->is_object())
+  {
+    const auto v1 = location->find("localtime");
+    if (v1 != location->end() && v1->is_string())
+    {
+      // This string streams and C-style function stuff is a mess.
+      // Should probably switch to Howard Hinnant's date.h or (later) C++20 in
+      // the future.
+      const std::string timeString = v1->get<std::string>();
+      std::istringstream stream(timeString);
+      std::tm t_old = {};
+      stream >> std::get_time(&t_old, "%Y-%m-%d %H:%M");
+      t_old.tm_isdst = -1; // unknown whether we have DST or not
+      const std::time_t tt = std::mktime(&t_old);
+      if (tt == static_cast<std::time_t>(-1))
+        return std::chrono::time_point<std::chrono::system_clock>();
+      return std::chrono::system_clock::from_time_t(tt);
+    }
+    // fall back to localtime_epoch - less precise / may be wrong timezone
+    const auto v2 = location->find("localtime_epoch");
+    if (v2 != location->end() && v2->is_number_integer())
+    {
+      return std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2->get<int64_t>()));
+    }
+    else
+    {
+      std::cerr << "Error in NLohmannJsonWeatherstack::parseCurrentWeather(): location object does not have an integral localtime_epoch entry!" << std::endl;
+      return std::chrono::time_point<std::chrono::system_clock>();
+    }
+  }
+  else
+  {
+    std::cerr << "Error in NLohmannJsonWeatherstack::parseCurrentWeather(): JSON does not have a location object!" << std::endl;
+    return std::chrono::time_point<std::chrono::system_clock>();
+  }
+}
 
 bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather& weather)
 {
@@ -92,25 +135,15 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
     if (v2 != current.end() && v2->is_number_integer())
       weather.setCloudiness(v2->get<int>());
     // date of data update
-    const auto location = root.find("location");
-    if (location != root.end() && location->is_object())
+    const auto dt = parseDateTime(root);
+    if (dt != std::chrono::time_point<std::chrono::system_clock>())
     {
-      v2 = location->find("localtime_epoch");
-      if (v2 != location->end() && v2->is_number_integer())
-      {
-        const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2->get<int64_t>()));
-        weather.setDataTime(dt);
-        return true;
-      }
-      else
-      {
-        std::cerr << "Error in NLohmannJsonWeatherstack::parseCurrentWeather(): location object does not have an integral localtime_epoch entry!" << std::endl;
-        return false;
-      }
+      weather.setDataTime(dt);
+      return true;
     }
     else
     {
-      std::cerr << "Error in NLohmannJsonWeatherstack::parseCurrentWeather(): JSON does not have a location object!" << std::endl;
+      std::cerr << "Error in NLohmannJsonWeatherstack::parseCurrentWeather(): JSON does not have data time!" << std::endl;
       return false;
     }
   } // if current object
