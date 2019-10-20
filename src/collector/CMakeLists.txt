@@ -25,6 +25,7 @@ set(weather-information-collector_sources
     ../json/NLohmannJsonOwm.cpp
     ../json/NLohmannJsonWeatherbit.cpp
     ../json/NLohmannJsonWeatherstack.cpp
+    ../json/WeatherstackFunctions.cpp
     ../net/Curly.cpp
     ../store/StoreMySQL.cpp
     ../tasks/Task.cpp

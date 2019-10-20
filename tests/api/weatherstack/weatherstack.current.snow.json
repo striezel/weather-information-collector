@@ -1,0 +1,37 @@
+{
+  "request": {
+    "type": "City",
+    "query": "Novyy Urengoy, Russia",
+    "language": "en",
+    "unit": "m"
+  },
+  "location": {
+    "name": "Novyy Urengoy",
+    "country": "Russia",
+    "region": "Yamal-Nenets",
+    "lat": "66.083",
+    "lon": "76.633",
+    "timezone_id": "Asia\/Yekaterinburg",
+    "localtime": "2019-10-21 03:12",
+    "localtime_epoch": 1571627520,
+    "utc_offset": "5.0"
+  },
+  "current": {
+    "observation_time": "10:12 PM",
+    "temperature": -4,
+    "weather_code": 230,
+    "weather_icons": ["https:\/\/assets.weatherstack.com\/images\/wsymbols01_png_64\/wsymbol_0036_cloudy_with_heavy_snow_night.png"],
+    "weather_descriptions": ["Blizzard"],
+    "wind_speed": 33,
+    "wind_degree": 236,
+    "wind_dir": "SW",
+    "pressure": 1009,
+    "precip": 0.7,
+    "humidity": 92,
+    "cloudcover": 100,
+    "feelslike": -12,
+    "uv_index": 0,
+    "visibility": 0,
+    "is_day": "no"
+  }
+}

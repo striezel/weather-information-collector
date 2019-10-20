@@ -40,140 +40,283 @@ void printWeather(const wic::Weather& w)
 
 int main(int argc, char** argv)
 {
-  if ((argc < 2) || (argv[1] == nullptr))
+  if ((argc < 3) || (argv[1] == nullptr) || (argv[2] == nullptr))
   {
     std::cerr << "Error: No JSON file name was specified!" << std::endl;
-    std::cerr << "One file is needed:\n"
-              << " * JSON file for current weather data (weatherstack.current.json)\n" << std::endl;
-    return 1;
-  }
-  const std::string jsonFileName = std::string(argv[1]);
-
-  std::ifstream jsonStream;
-  jsonStream.open(jsonFileName, std::ios_base::in | std::ios_base::binary);
-  if (!jsonStream.is_open())
-  {
-    std::cerr << "Error: JSON file " << jsonFileName << " could not be opened!" << std::endl;
+    std::cerr << "Two files are needed:\n"
+              << " * JSON file for current weather data (weatherstack.current.json)" << std::endl
+              << " * JSON file for snowy current weather data (weatherstack.current.snow.json)\n" << std::endl;
     return 1;
   }
 
-  std::string json;
-  std::getline(jsonStream, json, '\0');
-  jsonStream.close();
+  {
+    const std::string jsonFileName = std::string(argv[1]);
+    std::ifstream jsonStream;
+    jsonStream.open(jsonFileName, std::ios_base::in | std::ios_base::binary);
+    if (!jsonStream.is_open())
+    {
+      std::cerr << "Error: JSON file " << jsonFileName << " could not be opened!" << std::endl;
+      return 1;
+    }
 
-  wic::Weatherstack api;
-  wic::Weather w;
-  bool success = api.parseCurrentWeather(json, w);
-  if (!success)
-  {
-    std::cerr << "Error: JSON data (current weather) could not be parsed!" << std::endl;
-    return 1;
-  }
+    std::string json;
+    std::getline(jsonStream, json, '\0');
+    jsonStream.close();
 
-  std::cout << "Current weather data:" << std::endl;
-  printWeather(w);
+    wic::Weatherstack api;
+    wic::Weather w;
+    bool success = api.parseCurrentWeather(json, w);
+    if (!success)
+    {
+      std::cerr << "Error: JSON data (current weather) could not be parsed!" << std::endl;
+      return 1;
+    }
 
-  if (!w.hasHumidity())
-  {
-    std::cerr << "Error: Weather object does not have humidity data!\n";
-    return 1;
-  }
-  if (!w.hasRain())
-  {
-    std::cerr << "Error: Weather object does not have rain amount information!\n";
-    return 1;
-  }
-  if (w.hasSnow())
-  {
-    std::cerr << "Error: Weather object has snow amount information, but it should not!\n";
-    return 1;
-  }
-  if (!w.hasPressure())
-  {
-    std::cerr << "Error: Weather object does not have pressure data!\n";
-    return 1;
-  }
-  if (!w.hasTemperatureCelsius())
-  {
-    std::cerr << "Error: Weather object does not have temperature data in °C!\n";
-    return 1;
-  }
-  if (!w.hasTemperatureFahrenheit())
-  {
-    std::cerr << "Error: Weather object does not have temperature data in °F!\n";
-    return 1;
-  }
-  if (!w.hasTemperatureKelvin())
-  {
-    std::cerr << "Error: Weather object does not have temperature data in Kelvin!\n";
-    return 1;
-  }
-  if (!w.hasWindDegrees())
-  {
-    std::cerr << "Error: Weather object does not have wind direction!\n";
-    return 1;
-  }
-  if (!w.hasWindSpeed())
-  {
-    std::cerr << "Error: Weather object does not have wind speed!\n";
-    return 1;
-  }
-  if (!w.hasDataTime())
-  {
-    std::cerr << "Error: Weather object does not have data time!\n";
-    return 1;
-  }
-  if (!w.hasJson())
-  {
-    std::cerr << "Error: Weather object does not have raw JSON data!\n";
-    return 1;
-  }
+    std::cout << "Current weather data:" << std::endl;
+    printWeather(w);
 
-  if (w.humidity() != 82)
+    if (!w.hasHumidity())
+    {
+      std::cerr << "Error: Weather object does not have humidity data!\n";
+      return 1;
+    }
+    if (!w.hasRain())
+    {
+      std::cerr << "Error: Weather object does not have rain amount information!\n";
+      return 1;
+    }
+    if (!w.hasSnow())
+    {
+      std::cerr << "Error: Weather object does not have snow amount information!\n";
+      return 1;
+    }
+    if (!w.hasPressure())
+    {
+      std::cerr << "Error: Weather object does not have pressure data!\n";
+      return 1;
+    }
+    if (!w.hasTemperatureCelsius())
+    {
+      std::cerr << "Error: Weather object does not have temperature data in °C!\n";
+      return 1;
+    }
+    if (!w.hasTemperatureFahrenheit())
+    {
+      std::cerr << "Error: Weather object does not have temperature data in °F!\n";
+      return 1;
+    }
+    if (!w.hasTemperatureKelvin())
+    {
+      std::cerr << "Error: Weather object does not have temperature data in Kelvin!\n";
+      return 1;
+    }
+    if (!w.hasWindDegrees())
+    {
+      std::cerr << "Error: Weather object does not have wind direction!\n";
+      return 1;
+    }
+    if (!w.hasWindSpeed())
+    {
+      std::cerr << "Error: Weather object does not have wind speed!\n";
+      return 1;
+    }
+    if (!w.hasDataTime())
+    {
+      std::cerr << "Error: Weather object does not have data time!\n";
+      return 1;
+    }
+    if (!w.hasJson())
+    {
+      std::cerr << "Error: Weather object does not have raw JSON data!\n";
+      return 1;
+    }
+
+    if (w.humidity() != 82)
+    {
+      std::cerr << "Humidity value is incorrect.\n";
+      return 1;
+    }
+    if (w.rain() != 0.0f)
+    {
+      std::cerr << "Rain amount is incorrect.\n";
+      return 1;
+    }
+    if (w.snow() != 0.0f)
+    {
+      std::cerr << "Snow amount is incorrect.\n";
+      return 1;
+    }
+    if (w.pressure() != 1009)
+    {
+      std::cerr << "Pressure value is incorrect.\n";
+      return 1;
+    }
+    if (w.temperatureCelsius() != 14.0f)
+    {
+      std::cerr << "Temperature (°C) is incorrect.\n";
+      return 1;
+    }
+    if (w.temperatureFahrenheit() != 57.2f)
+    {
+      std::cerr << "Temperature (°F) is incorrect.\n";
+      return 1;
+    }
+    if (w.temperatureKelvin() != 287.15f)
+    {
+      std::cerr << "Temperature (Kelvin) is incorrect.\n";
+      return 1;
+    }
+    if (w.windDegrees() != 150)
+    {
+      std::cerr << "Wind direction is incorrect.\n";
+      return 1;
+    }
+    if (w.windSpeed() != 17.0f / 3.6f)
+    {
+      std::cerr << "Wind speed is incorrect.\n";
+      return 1;
+    }
+    if (w.cloudiness() != 0)
+    {
+      std::cerr << "Cloudiness is incorrect.\n";
+      return 1;
+    }
+  } // first JSON file
+
+  // second file (snow)
   {
-    std::cerr << "Humidity value is incorrect.\n";
-    return 1;
-  }
-  if (w.rain() != 0.0f)
-  {
-    std::cerr << "Rain amount is incorrect.\n";
-    return 1;
-  }
-  if (w.pressure() != 1009)
-  {
-    std::cerr << "Pressure value is incorrect.\n";
-    return 1;
-  }
-  if (w.temperatureCelsius() != 14.0f)
-  {
-    std::cerr << "Temperature (°C) is incorrect.\n";
-    return 1;
-  }
-  if (w.temperatureFahrenheit() != 57.2f)
-  {
-    std::cerr << "Temperature (°F) is incorrect.\n";
-    return 1;
-  }
-  if (w.temperatureKelvin() != 287.15f)
-  {
-    std::cerr << "Temperature (Kelvin) is incorrect.\n";
-    return 1;
-  }
-  if (w.windDegrees() != 150)
-  {
-    std::cerr << "Wind direction is incorrect.\n";
-    return 1;
-  }
-  if (w.windSpeed() != 17.0f / 3.6f)
-  {
-    std::cerr << "Wind speed is incorrect.\n";
-    return 1;
-  }
-  if (w.cloudiness() != 0)
-  {
-    std::cerr << "Cloudiness is incorrect.\n";
-    return 1;
-  }
+    const std::string jsonSnowFile = std::string(argv[2]);
+    std::ifstream jsonStream;
+    jsonStream.open(jsonSnowFile, std::ios_base::in | std::ios_base::binary);
+    if (!jsonStream.is_open())
+    {
+      std::cerr << "Error: JSON file " << jsonSnowFile << " could not be opened!" << std::endl;
+      return 1;
+    }
+
+    std::string json;
+    std::getline(jsonStream, json, '\0');
+    jsonStream.close();
+
+    wic::Weatherstack api;
+    wic::Weather w;
+    bool success = api.parseCurrentWeather(json, w);
+    if (!success)
+    {
+      std::cerr << "Error: JSON data (current weather) could not be parsed!" << std::endl;
+      return 1;
+    }
+
+    std::cout << "Snow weather data:" << std::endl;
+    printWeather(w);
+
+    if (!w.hasHumidity())
+    {
+      std::cerr << "Error: Weather object does not have humidity data!\n";
+      return 1;
+    }
+    if (!w.hasRain())
+    {
+      std::cerr << "Error: Weather object does not have rain amount information!\n";
+      return 1;
+    }
+    if (!w.hasSnow())
+    {
+      std::cerr << "Error: Weather object does not have snow amount information!\n";
+      return 1;
+    }
+    if (!w.hasPressure())
+    {
+      std::cerr << "Error: Weather object does not have pressure data!\n";
+      return 1;
+    }
+    if (!w.hasTemperatureCelsius())
+    {
+      std::cerr << "Error: Weather object does not have temperature data in °C!\n";
+      return 1;
+    }
+    if (!w.hasTemperatureFahrenheit())
+    {
+      std::cerr << "Error: Weather object does not have temperature data in °F!\n";
+      return 1;
+    }
+    if (!w.hasTemperatureKelvin())
+    {
+      std::cerr << "Error: Weather object does not have temperature data in Kelvin!\n";
+      return 1;
+    }
+    if (!w.hasWindDegrees())
+    {
+      std::cerr << "Error: Weather object does not have wind direction!\n";
+      return 1;
+    }
+    if (!w.hasWindSpeed())
+    {
+      std::cerr << "Error: Weather object does not have wind speed!\n";
+      return 1;
+    }
+    if (!w.hasDataTime())
+    {
+      std::cerr << "Error: Weather object does not have data time!\n";
+      return 1;
+    }
+    if (!w.hasJson())
+    {
+      std::cerr << "Error: Weather object does not have raw JSON data!\n";
+      return 1;
+    }
+
+    if (w.humidity() != 92)
+    {
+      std::cerr << "Humidity value is incorrect.\n";
+      return 1;
+    }
+    if (w.rain() != 0.0f)
+    {
+      std::cerr << "Rain amount is incorrect.\n";
+      return 1;
+    }
+    if (w.snow() != 0.7f)
+    {
+      std::cerr << "Snow amount is incorrect.\n";
+      return 1;
+    }
+    if (w.pressure() != 1009)
+    {
+      std::cerr << "Pressure value is incorrect.\n";
+      return 1;
+    }
+    if (w.temperatureCelsius() != -4.0f)
+    {
+      std::cerr << "Temperature (°C) is incorrect.\n";
+      return 1;
+    }
+    if (w.temperatureFahrenheit() != 24.8f)
+    {
+      std::cerr << "Temperature (°F) is incorrect.\n";
+      return 1;
+    }
+    if (w.temperatureKelvin() != 269.15f)
+    {
+      std::cerr << "Temperature (Kelvin) is incorrect.\n";
+      return 1;
+    }
+    if (w.windDegrees() != 236)
+    {
+      std::cerr << "Wind direction is incorrect.\n";
+      return 1;
+    }
+    if (w.windSpeed() != 33.0f / 3.6f)
+    {
+      std::cerr << "Wind speed is incorrect.\n";
+      return 1;
+    }
+    if (w.cloudiness() != 100)
+    {
+      std::cerr << "Cloudiness is incorrect.\n";
+      return 1;
+    }
+  } // second JSON file (snow)
 
   // All tests passed.
   return 0;

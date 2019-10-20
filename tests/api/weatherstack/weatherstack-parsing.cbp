@@ -45,6 +45,8 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherstack.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../../../src/json/WeatherstackFunctions.cpp" />
+		<Unit filename="../../../src/json/WeatherstackFunctions.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />
 		<Unit filename="../../../src/util/Strings.hpp" />
 		<Unit filename="main.cpp" />

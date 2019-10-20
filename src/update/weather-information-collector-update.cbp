@@ -77,6 +77,8 @@
 		<Unit filename="../json/NLohmannJsonWeatherbit.hpp" />
 		<Unit filename="../json/NLohmannJsonWeatherstack.cpp" />
 		<Unit filename="../json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../json/WeatherstackFunctions.cpp" />
+		<Unit filename="../json/WeatherstackFunctions.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />

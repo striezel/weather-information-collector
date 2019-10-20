@@ -90,6 +90,8 @@
 		<Unit filename="../json/NLohmannJsonWeatherbit.hpp" />
 		<Unit filename="../json/NLohmannJsonWeatherstack.cpp" />
 		<Unit filename="../json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../json/WeatherstackFunctions.cpp" />
+		<Unit filename="../json/WeatherstackFunctions.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../store/Store.hpp" />

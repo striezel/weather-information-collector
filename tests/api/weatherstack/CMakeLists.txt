@@ -9,6 +9,7 @@ set(weatherstack_parsing_tests_sources
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/json/NLohmannJsonWeatherstack.cpp
+    ../../../src/json/WeatherstackFunctions.cpp
     ../../../src/util/Strings.cpp
     main.cpp)
 
@@ -24,4 +25,4 @@ add_executable(weatherstack_parsing_tests ${weatherstack_parsing_tests_sources})
 
 # test run
 add_test(NAME Weatherstack-parsing
-         COMMAND $<TARGET_FILE:weatherstack_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/weatherstack.current.json")
+         COMMAND $<TARGET_FILE:weatherstack_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/weatherstack.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/weatherstack.current.snow.json")

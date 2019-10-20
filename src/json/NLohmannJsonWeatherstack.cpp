@@ -24,6 +24,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include "WeatherstackFunctions.hpp"
 
 namespace wic
 {
@@ -123,13 +124,16 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
     {
       weather.setPressure(v2->get<double>());
     }
-    // rain (or snow?)
+    // rain or snow
     v2 = current.find("precip");
     if (v2 != current.end() && v2->is_number())
     {
-      weather.setRain(v2->get<float>());
+      const auto weather_code = current.find("weather_code");
+      const int code = (weather_code != current.end() && weather_code->is_number_integer())
+                       ? weather_code->get<int>()
+                       : 0;
+      weatherstackPrecipitationDistinction(v2->get<float>(), weather, code);
     }
-    //weather.setSnow(0.0f);
 
     // cloudiness
     v2 = current.find("cloudcover");
