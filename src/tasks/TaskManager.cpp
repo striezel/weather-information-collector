@@ -101,6 +101,13 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
         return false;
       }
       task.setApi(api);
+      // add deprecation notice for Apixu
+      if (api == ApiType::Apixu)
+      {
+        std::clog << "Warning: The task in file " << fileName
+                  << " uses the Apixu API which has been deprecated and shut down!"
+                  << std::endl;
+      }
     } // if api
     else if (name == "data")
     {

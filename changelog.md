@@ -5,6 +5,10 @@
 The program is now able to collect data from the Weatherstack API, too.
 However, only data about the current weather can be collected (yet).
 
+Furthermore, a deprecation notice will be shown whenever a task uses the Apixu
+API to get data. That API has been shut down, so no more data can be retrieved
+from it.
+
 ## Version 0.9.6 (2019-09-22)
 
 Synchronization program will not start the synchronization, if both the source
