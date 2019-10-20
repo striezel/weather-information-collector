@@ -340,6 +340,16 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
       }
       apiKeys[ApiType::Weatherbit] = value;
     } // if key.weatherbit
+    else if ((name == "key.weatherstack") || (name == "key.Weatherstack"))
+    {
+      if (!key(ApiType::Weatherstack).empty())
+      {
+        std::cerr << "Error: API key for Weatherstack is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      apiKeys[ApiType::Weatherstack] = value;
+    } // if key.weatherstack
     else
     {
       std::cerr << "Error while reading configuration file " << fileName

@@ -46,6 +46,8 @@
 		<Unit filename="../../src/api/Types.hpp" />
 		<Unit filename="../../src/api/Weatherbit.cpp" />
 		<Unit filename="../../src/api/Weatherbit.hpp" />
+		<Unit filename="../../src/api/Weatherstack.cpp" />
+		<Unit filename="../../src/api/Weatherstack.hpp" />
 		<Unit filename="../../src/data/Forecast.cpp" />
 		<Unit filename="../../src/data/Forecast.hpp" />
 		<Unit filename="../../src/data/Location.cpp" />

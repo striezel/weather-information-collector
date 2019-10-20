@@ -59,6 +59,8 @@
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../api/Weatherbit.cpp" />
 		<Unit filename="../api/Weatherbit.hpp" />
+		<Unit filename="../api/Weatherstack.cpp" />
+		<Unit filename="../api/Weatherstack.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
 		<Unit filename="../data/Forecast.cpp" />

@@ -54,6 +54,8 @@ The following settings are recognized in a task file:
   * **OpenWeatherMap** - data is fetched from OpenWeatherMap
   * **Apixu** - data is fetched from Apixu
   * **DarkSky** - data is fetched from DarkSky
+  * **Weatherbit** - data is fetched from Weatherbit
+  * **Weatherstack** - data is fetched from Weatherstack
 * **data** - the type of data that will be collected via the API. If this is not
   set, it will default to `current` for backwards compatibility. Furthermore,
   not every API will support every data type. Currently the following values
@@ -97,7 +99,7 @@ not exceed the API limit by accident.
 # Example of a complete task file
 
 The following example is a complete task file for the
-weather-information-collector program (as of version 0.7.0):
+weather-information-collector program (as of version 0.9.0):
 
     # This line is a comment and will be ignored by the program.
     #And so is this line.
@@ -106,8 +108,12 @@ weather-information-collector program (as of version 0.7.0):
     api=OpenWeatherMap
     # collect data about current weather
     data=current
-    # city of London, UK
+    # city of London, United Kingdom
     location.name=London
+    location.countrycode=GB
+    location.coordinates=51.507301,-0.1277
+    # location's ID for OpenWeatherMap
+    location.id=2643743
     # one request every hour, e.g. every 3600 seconds
     interval=3600
 
