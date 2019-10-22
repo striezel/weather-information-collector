@@ -95,10 +95,19 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
         std::cerr << "Hint: Recognized API types are:" << std::endl
                   << "\t" << toString(ApiType::Apixu) << std::endl
                   << "\t" << toString(ApiType::DarkSky) << std::endl
-                  << "\t" << toString(ApiType::OpenWeatherMap) << std::endl;
+                  << "\t" << toString(ApiType::OpenWeatherMap) << std::endl
+                  << "\t" << toString(ApiType::Weatherbit) << std::endl
+                  << "\t" << toString(ApiType::Weatherstack) << std::endl;
         return false;
       }
       task.setApi(api);
+      // add deprecation notice for Apixu
+      if (api == ApiType::Apixu)
+      {
+        std::clog << "Warning: The task in file " << fileName
+                  << " uses the Apixu API which has been deprecated and shut down!"
+                  << std::endl;
+      }
     } // if api
     else if (name == "data")
     {
@@ -215,10 +224,10 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
                   << fileName << "!" << std::endl;
         return false;
       }
-      if (value.size() > 2)
+      if (value.size() != 2)
       {
         std::cerr << "Error: Location's country code in file " << fileName
-                  << " is longer than two characters! Use the two letter"
+                  << " is not two characters long! Use the two letter"
                   << " country code from ISO-3166, please." << std::endl;
         return false;
       }

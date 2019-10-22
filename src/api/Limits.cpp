@@ -38,6 +38,10 @@ const Limit Limit::darksky = Limit(1000, std::chrono::hours(24));
    which is ca. 41.667 requests per hour. */
 const Limit Limit::weatherbit = Limit(1000, std::chrono::hours(24));
 
+/* Limit for Weatherstack is 1000 calls per month on the free plan,
+   which is ca. 1.34 requests per hour. */
+const Limit Limit::weatherstack = Limit(1000, std::chrono::hours(24 * 31));
+
 /* There's no limit here for "none" API, but set it to zero. */
 const Limit Limit::none = Limit(0, std::chrono::hours(1));
 
@@ -59,8 +63,10 @@ const Limit& Limit::forApi(const ApiType api)
          return Limit::darksky;
     case ApiType::Weatherbit:
          return Limit::weatherbit;
+    case ApiType::Weatherstack:
+         return Limit::weatherstack;
     case ApiType::none:
-         //no limit
+         // no limit
          return Limit::none;
   }
   // Fallback, just in case there might be more APIs in the future.

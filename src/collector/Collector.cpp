@@ -23,10 +23,7 @@
 #include <memory>
 #include <thread>
 #include "../api/API.hpp"
-#include "../api/Apixu.hpp"
-#include "../api/DarkSky.hpp"
-#include "../api/OpenWeatherMap.hpp"
-#include "../api/Weatherbit.hpp"
+#include "../api/Factory.hpp"
 #include "../data/Weather.hpp"
 #include "../store/StoreMySQL.hpp"
 
@@ -56,11 +53,13 @@ bool Collector::fromConfiguration(const Configuration& conf)
   apiKeys[ApiType::OpenWeatherMap] = conf.key(ApiType::OpenWeatherMap);
   apiKeys[ApiType::DarkSky] = conf.key(ApiType::DarkSky);
   apiKeys[ApiType::Weatherbit] = conf.key(ApiType::Weatherbit);
+  apiKeys[ApiType::Weatherstack] = conf.key(ApiType::Weatherstack);
 
   if (apiKeys[ApiType::Apixu].empty()
       && apiKeys[ApiType::OpenWeatherMap].empty()
       && apiKeys[ApiType::DarkSky].empty()
-      && apiKeys[ApiType::Weatherbit].empty())
+      && apiKeys[ApiType::Weatherbit].empty()
+      && apiKeys[ApiType::Weatherstack].empty())
   {
     std::cerr << "Error: No API keys are set!\n";
     return false;
@@ -125,28 +124,14 @@ void Collector::collect()
       return;
     }
     const Location& loc = tasksContainer[idx].task.location();
-    std::unique_ptr<API> api = nullptr;
     const std::string key = apiKeys[tasksContainer[idx].task.api()];
-    switch (tasksContainer[idx].task.api())
+    std::unique_ptr<API> api = Factory::create(tasksContainer[idx].task.api(), key);
+    if (api == nullptr)
     {
-      case ApiType::OpenWeatherMap:
-           api.reset(new OpenWeatherMap(key));
-           break;
-      case ApiType::Apixu:
-           api.reset(new Apixu(key));
-           break;
-      case ApiType::DarkSky:
-           api.reset(new DarkSky(key));
-           break;
-      case ApiType::Weatherbit:
-           api.reset(new Weatherbit(key));
-           break;
-      case ApiType::none:
-      default:
-           std::cerr << "Error: Cannot collect data for unsupported API type "
-                     << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
-           return;
-    } // switch
+      std::cerr << "Error: Cannot collect data for unsupported API type "
+                << toString(tasksContainer[idx].task.api()) << "!" << std::endl;
+      return;
+    } // if
 
     // Retrieve data.
     switch (tasksContainer[idx].task.data())

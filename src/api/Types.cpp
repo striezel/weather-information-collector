@@ -40,6 +40,8 @@ ApiType toApiType(const std::string& apiName)
   // Weatherbit
   if (name == "weatherbit")
     return ApiType::Weatherbit;
+  if (name == "weatherstack")
+    return ApiType::Weatherstack;
   // unknown / none
   return ApiType::none;
 }
@@ -56,6 +58,8 @@ std::string toString(const ApiType type)
          return "DarkSky";
     case ApiType::Weatherbit:
          return "Weatherbit";
+    case ApiType::Weatherstack:
+         return "Weatherstack";
     case ApiType::none:
     default:
          return "none";

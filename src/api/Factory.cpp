@@ -24,6 +24,7 @@
 #include "DarkSky.hpp"
 #include "OpenWeatherMap.hpp"
 #include "Weatherbit.hpp"
+#include "Weatherstack.hpp"
 
 namespace wic
 {
@@ -44,6 +45,9 @@ std::unique_ptr<API> Factory::create(const ApiType api, const std::string& key)
          break;
     case ApiType::Weatherbit:
          result.reset(new Weatherbit(key));
+         break;
+    case ApiType::Weatherstack:
+         result.reset(new Weatherstack(key));
          break;
     case ApiType::none:
     default:

@@ -1,5 +1,9 @@
 # apixu.com API
 
+__NOTE:__ The Apixu API has been deprecated and shut down in October 2019.
+This document is only here for historical purposes. __You cannot use Apixu
+anymore to retrieve weather information.__
+
 ## Authentication
 
 Authentication is achieved by passing an API key as request parameter "key",

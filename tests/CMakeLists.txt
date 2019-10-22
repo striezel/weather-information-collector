@@ -16,6 +16,9 @@ add_subdirectory (api/owm-location)
 # Recurse into subdirectory for Weatherbit tests.
 add_subdirectory (api/weatherbit)
 
+# Recurse into subdirectory for Weatherstack tests.
+add_subdirectory (api/weatherstack)
+
 if (JSON_BENCHMARK)
   # Recurse into subdirectory for benchmark executable tests.
   add_subdirectory (benchmark)

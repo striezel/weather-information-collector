@@ -11,6 +11,7 @@ set(task_manager_tests_sources
     ../../src/api/OpenWeatherMap.cpp
     ../../src/api/Types.cpp
     ../../src/api/Weatherbit.cpp
+    ../../src/api/Weatherstack.cpp
     ../../src/data/Forecast.cpp
     ../../src/data/Location.cpp
     ../../src/data/Weather.cpp

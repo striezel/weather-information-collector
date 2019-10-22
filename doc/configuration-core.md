@@ -102,6 +102,7 @@ The following configurations settings for keys are recognized:
 * **key.apixu** - API key for Apixu API calls
 * **key.darksky** - API key for DarkSky API calls
 * **key.weatherbit** - API key for Weatherbit API calls
+* **key.weatherstack** - API key for Weatherstack API calls
 
 Possible values of these settings could be:
 
@@ -109,11 +110,12 @@ Possible values of these settings could be:
     key.apixu=abcdef9876543210affe001f00d123
     key.darksky=f00ba12735743210fedcba9876543210
     key.weatherbit=fedcba98765432100123456789abcdef
+    key.weatherstack=f00ba12abcdef1234567890abcdef123
 
 # Example of a complete configuration file
 
 The following example is a complete core configuration file for the
-weather-information-collector program (as of version 0.9.0):
+weather-information-collector program (as of version 0.9.7):
 
     # This line is a comment and will be ignored by the program.
     #And so is this line.
@@ -132,3 +134,4 @@ weather-information-collector program (as of version 0.9.0):
     key.apixu=abcdef9876543210affe1affe2affe
     key.darksky=f00ba12735743210fedcba9876543210
     key.weatherbit=fedcba98765432100123456789abcdef
+    key.weatherstack=f00ba12abcdef1234567890abcdef123

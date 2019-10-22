@@ -23,6 +23,7 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 #ifndef wic_no_tasks_in_config
+#include <algorithm>
 #include "../tasks/TaskManager.hpp"
 #endif // wic_no_tasks_in_config
 #include "../util/Directories.hpp"
@@ -340,6 +341,16 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
       }
       apiKeys[ApiType::Weatherbit] = value;
     } // if key.weatherbit
+    else if ((name == "key.weatherstack") || (name == "key.Weatherstack"))
+    {
+      if (!key(ApiType::Weatherstack).empty())
+      {
+        std::cerr << "Error: API key for Weatherstack is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      apiKeys[ApiType::Weatherstack] = value;
+    } // if key.weatherstack
     else
     {
       std::cerr << "Error while reading configuration file " << fileName
@@ -454,6 +465,18 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
   if (tasksContainer.empty())
   {
     std::clog << "Warning: Task list is empty!" << std::endl;
+  }
+  // Warn, if there are Apixu tasks, because Apixu API has been deprecated.
+  const auto apixuTaskCount = std::count_if(tasksContainer.begin(), tasksContainer.end(),
+                                  [](const Task& t) { return t.api() == ApiType::Apixu; });
+  if (apixuTaskCount > 0)
+  {
+    if (apixuTaskCount > 1)
+      std::clog << "Warning: There are " << apixuTaskCount << " tasks configured that use Apixu API.";
+    else
+      std::clog << "Warning: There is one task configured that uses Apixu API.";
+    std::clog << std::endl << "However, the Apixu API has been deprecated and shut down." << std::endl
+              << "Consider switching to another API, e.g. DarkSky, OpenWeatherMap, Weatherbit or Weatherstack." << std::endl;
   }
   #endif // wic_no_tasks_in_config
 

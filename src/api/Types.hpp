@@ -28,7 +28,7 @@ namespace wic
 
 /** \brief enumeration type for supported APIs
  */
-enum class ApiType { none, Apixu, OpenWeatherMap, DarkSky, Weatherbit };
+enum class ApiType { none, Apixu, OpenWeatherMap, DarkSky, Weatherbit, Weatherstack };
 
 
 /** \brief Converts a name / string to a supported API type.

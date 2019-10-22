@@ -62,6 +62,8 @@
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../api/Weatherbit.cpp" />
 		<Unit filename="../api/Weatherbit.hpp" />
+		<Unit filename="../api/Weatherstack.cpp" />
+		<Unit filename="../api/Weatherstack.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />
 		<Unit filename="../conf/Configuration.hpp" />
 		<Unit filename="../data/Forecast.cpp" />
@@ -86,6 +88,10 @@
 		<Unit filename="../json/NLohmannJsonOwm.hpp" />
 		<Unit filename="../json/NLohmannJsonWeatherbit.cpp" />
 		<Unit filename="../json/NLohmannJsonWeatherbit.hpp" />
+		<Unit filename="../json/NLohmannJsonWeatherstack.cpp" />
+		<Unit filename="../json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../json/WeatherstackFunctions.cpp" />
+		<Unit filename="../json/WeatherstackFunctions.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../store/Store.hpp" />

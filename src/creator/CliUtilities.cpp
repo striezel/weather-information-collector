@@ -158,7 +158,8 @@ ApiType selectApi()
       ApiType::Apixu,
       ApiType::DarkSky,
       ApiType::OpenWeatherMap,
-      ApiType::Weatherbit
+      ApiType::Weatherbit,
+      ApiType::Weatherstack
   };
   std::cout << "Choose the API that shall be used for data collection:" << std::endl;
   int idx = 1;

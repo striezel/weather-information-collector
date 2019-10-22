@@ -59,12 +59,17 @@ struct Limit
   static const Limit weatherbit;
 
 
+  /** \brief contains the limit for Weatherstack API calls
+   */
+  static const Limit weatherstack;
+
+
   /** \brief contains the limit for unknown API - always zero
    */
   static const Limit none;
 
 
-  /** \brief returns a limit for a particular API
+  /** \brief Returns a limit for a particular API.
    *
    * \param api  the corresponding API
    * \return Returns the request limit for the specified API.
