@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.9.7-pre (2019-10-??)
+## Version 0.9.7 (2019-10-22)
 
 The program is now able to collect data from the Weatherstack API, too.
 However, only data about the current weather can be collected. Forecast is only
