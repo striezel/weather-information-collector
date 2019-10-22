@@ -3,7 +3,9 @@
 ## Version 0.9.7-pre (2019-10-??)
 
 The program is now able to collect data from the Weatherstack API, too.
-However, only data about the current weather can be collected (yet).
+However, only data about the current weather can be collected. Forecast is only
+available on the professional plan or higher plans, and therefore it cannot be
+tested and implemented.
 
 Furthermore, a deprecation notice will be shown whenever a task uses the Apixu
 API to get data. That API has been shut down, so no more data can be retrieved

@@ -157,26 +157,4 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
   return false;
 }
 
-bool NLohmannJsonWeatherstack::parseForecast(const std::string& json, Forecast& forecast)
-{
-  value_type root; // will contain the root value after parsing.
-  try
-  {
-    root = nlohmann::json::parse(json);
-  }
-  catch(...)
-  {
-    std::cerr << "Error in NLohmannJsonWeatherstack::parseForecast(): Unable to parse JSON data!" << std::endl;
-    return false;
-  }
-
-  forecast.setJson(json);
-  if (root.empty())
-    return false;
-
-  // TODO: Implement!
-  std::cerr << "Error in NLohmannJsonWeatherstack::parseForecast(): Not implemented!" << std::endl;
-  return false;
-}
-
 } // namespace

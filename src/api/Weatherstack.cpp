@@ -70,7 +70,8 @@ bool Weatherstack::parseCurrentWeather(const std::string& json, Weather& weather
 
 bool Weatherstack::parseForecast(const std::string& json, Forecast& forecast) const
 {
-  return NLohmannJsonWeatherstack::parseForecast(json, forecast);
+  // Not implemented.
+  return false;
 }
 #endif // wic_no_json_parsing
 
@@ -124,78 +125,16 @@ bool Weatherstack::currentWeather(const Location& location, Weather& weather)
 
 bool Weatherstack::forecastWeather(const Location& location, Forecast& forecast)
 {
+  // Not implemented.
   forecast = Forecast();
-  if (m_apiKey.empty())
-    return false;
-
-  const std::string url = "http://api.weatherstack.com/forecast?access_key="
-                        + m_apiKey + "&hourly=1&forecast_days=7&" + toRequestString(location);
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    forecast.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in Weatherstack::forecastWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
-
-  // Parsing is done in separate method.
-  return parseForecast(response, forecast);
+  return false;
 }
 
 bool Weatherstack::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
 {
   weather = Weather();
   forecast = Forecast();
-  if (m_apiKey.empty())
-    return false;
-
-  const std::string url = "http://api.weatherstack.com/forecast?access_key="
-                        + m_apiKey + "&hourly=1&forecast_days=7&" + toRequestString(location);
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    weather.setRequestTime(std::chrono::system_clock::now());
-    forecast.setRequestTime(weather.requestTime());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in Weatherstack::currentAndForecastWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
-
-  // Parsing is done in separate methods.
-  if (!parseCurrentWeather(response, weather))
-    return false;
-  return parseForecast(response, forecast);
+  return false;
 }
 #endif // wic_no_network_requests
 
