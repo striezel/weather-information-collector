@@ -51,9 +51,9 @@ your choice. Currently, weather-information-collector supports the following
 four providers:
 
 * [OpenWeatherMap](https://openweathermap.org/)
-* [Apixu](https://www.apixu.com/)
 * [DarkSky](https://darksky.net/)
 * [Weatherbit](https://www.weatherbit.io/)
+* [Weatherstack](https://weatherstack.com/)
 
 Choose the one you like best (or maybe even all of them), and make sure you
 have the API key ready. It will be needed for the configuration file of

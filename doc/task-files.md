@@ -52,19 +52,21 @@ The following settings are recognized in a task file:
   values depend on the currently supported APIs. Currently the following values
   are recognized:
   * **OpenWeatherMap** - data is fetched from OpenWeatherMap
-  * **Apixu** - data is fetched from Apixu (deprecated, do not use anymore)
   * **DarkSky** - data is fetched from DarkSky
   * **Weatherbit** - data is fetched from Weatherbit
   * **Weatherstack** - data is fetched from Weatherstack
+  * **Apixu** - data is fetched from Apixu (Supported before v0.9.8; now
+    deprecated, because Apixu shut down. Do not use anymore.)
 * **data** - the type of data that will be collected via the API. If this is not
   set, it will default to `current` for backwards compatibility. Furthermore,
   not every API will support every data type. Currently the following values
   are available:
   * **current** - collect data about the current weather (supported by all
     four APIs)
-  * **forecast** - collect weather forecast data (supported by all four APIs)
+  * **forecast** - collect weather forecast data (supported by all APIs except
+    Weatherstack)
   * **current+forecast** - collect data about current weather and forecast data
-    (supported by Apixu and DarkSky)
+    (supported by DarkSky)
 * **location.id** - _(optional)_ numeric ID of the location for which the
   weather shall be requested (only supported by OpenWeatherMap)
 * **location.name** - name of the location / city, e.g. `London`
