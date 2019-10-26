@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.9.8-pre (2019-10-26)
+
+Tasks using the Apixu API are not allowed anymore and will cause an error when
+trying to run the weather-information-collector. Since Apixu has been shut
+down by its owner, this is just the right course of action.
+
 ## Version 0.9.7 (2019-10-22)
 
 The program is now able to collect data from the Weatherstack API, too.

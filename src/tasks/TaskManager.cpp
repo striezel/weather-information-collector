@@ -93,7 +93,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
         std::cerr << "Error: API type \"" << value << "\" in file " << fileName
                   << " is not a recognized API!" << std::endl;
         std::cerr << "Hint: Recognized API types are:" << std::endl
-                  << "\t" << toString(ApiType::Apixu) << std::endl
+                  << "\t" << toString(ApiType::Apixu) << " (deprecated, do not use anymore)" << std::endl
                   << "\t" << toString(ApiType::DarkSky) << std::endl
                   << "\t" << toString(ApiType::OpenWeatherMap) << std::endl
                   << "\t" << toString(ApiType::Weatherbit) << std::endl
@@ -104,7 +104,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
       // add deprecation notice for Apixu
       if (api == ApiType::Apixu)
       {
-        std::clog << "Warning: The task in file " << fileName
+        std::cerr << "Warning: The task in file " << fileName
                   << " uses the Apixu API which has been deprecated and shut down!"
                   << std::endl;
       }

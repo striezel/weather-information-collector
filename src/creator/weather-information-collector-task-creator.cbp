@@ -41,6 +41,7 @@
 			<Add library="boost_system" />
 			<Add library="curl" />
 		</Linker>
+		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/API.hpp" />
 		<Unit filename="../api/Apixu.cpp" />

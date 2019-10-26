@@ -154,8 +154,7 @@ Location selectLocation(const std::vector<std::pair<Location, Weather> >& locati
 
 ApiType selectApi()
 {
-  const std::vector<ApiType> allApis = {
-      ApiType::Apixu,
+  const std::vector<ApiType> availableApis = {
       ApiType::DarkSky,
       ApiType::OpenWeatherMap,
       ApiType::Weatherbit,
@@ -163,12 +162,12 @@ ApiType selectApi()
   };
   std::cout << "Choose the API that shall be used for data collection:" << std::endl;
   int idx = 1;
-  for (const auto api: allApis)
+  for (const auto api: availableApis)
   {
     std::cout << "[" << idx << "]: " << toString(api) << std::endl;
     ++idx;
   }
-  std::cout << "Enter the number of the API [1-" << allApis.size() << "]: ";
+  std::cout << "Enter the number of the API [1-" << availableApis.size() << "]: ";
   std::string userInput;
   std::getline(std::cin, userInput);
   int apiIndex = -1;
@@ -183,14 +182,14 @@ ApiType selectApi()
   }
   else
   {
-    if ((apiIndex > allApis.size()) || (apiIndex < 1))
+    if ((apiIndex > availableApis.size()) || (apiIndex < 1))
     {
       std::cout << "Error: The number must be in the range between 1 and "
-                << allApis.size() << "." << std::endl;
+                << availableApis.size() << "." << std::endl;
     }
     else
     {
-      return allApis.at(apiIndex - 1);
+      return availableApis.at(apiIndex - 1);
     }
   }
 

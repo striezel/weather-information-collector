@@ -99,15 +99,14 @@ key is an error.
 The following configurations settings for keys are recognized:
 
 * **key.owm** - API key for OpenWeatherMap API calls
-* **key.apixu** - API key for Apixu API calls
 * **key.darksky** - API key for DarkSky API calls
 * **key.weatherbit** - API key for Weatherbit API calls
 * **key.weatherstack** - API key for Weatherstack API calls
+* **key.apixu** - API key for Apixu API calls (deprecated, do not use anymore)
 
 Possible values of these settings could be:
 
     key.owm=0123456789abcdefdeadbeef1c0ffee1
-    key.apixu=abcdef9876543210affe001f00d123
     key.darksky=f00ba12735743210fedcba9876543210
     key.weatherbit=fedcba98765432100123456789abcdef
     key.weatherstack=f00ba12abcdef1234567890abcdef123

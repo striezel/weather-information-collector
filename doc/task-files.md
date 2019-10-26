@@ -52,7 +52,7 @@ The following settings are recognized in a task file:
   values depend on the currently supported APIs. Currently the following values
   are recognized:
   * **OpenWeatherMap** - data is fetched from OpenWeatherMap
-  * **Apixu** - data is fetched from Apixu
+  * **Apixu** - data is fetched from Apixu (deprecated, do not use anymore)
   * **DarkSky** - data is fetched from DarkSky
   * **Weatherbit** - data is fetched from Weatherbit
   * **Weatherstack** - data is fetched from Weatherstack
@@ -119,14 +119,14 @@ weather-information-collector program (as of version 0.9.0):
 
 Another example would be:
 
-    # use Apixu API
-    api=Apixu
+    # use Weatherstack API
+    api=Weatherstack
     # collect data of weather forecast
     data=forecast
     # location somewhere in England, near the town of Newbury
     location.coordinates=51.5,-1.2
-    # one request every 30 minutes, e.g. every 1800 seconds
-    interval=1800
+    # one request two hours minutes, e.g. every 7200 seconds
+    interval=7200
 
 An example for the third API would be:
 
