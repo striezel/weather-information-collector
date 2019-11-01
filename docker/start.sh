@@ -27,7 +27,7 @@ CONTAINER=${2:-weatherbot}
 docker info > /dev/null 2>&1
 if [[ $? -ne 0 ]]
 then
-  echo "Error: It looks like Docker is no installed or you do not have the"
+  echo "Error: It looks like Docker is not installed or you do not have the"
   echo "required permissions to use Docker."
   exit 1
 fi
