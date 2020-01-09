@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector benchmark tool.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <iostream>
 #include <vector>
 #include "../api/Types.hpp"
@@ -51,6 +52,59 @@ void printWeather(const Weather& w)
   std::cout << "Data time: " << std::ctime(&dt_c) << "\n";
   const std::time_t rt_c = std::chrono::system_clock::to_time_t(w.requestTime());
   std::cout << "Request time: " << std::ctime(&rt_c) << "\n";
+}
+
+/** \brief Utility function to compare floating point values for equality.
+ *
+ * \param a first operand of comparison
+ * \param b second operand of comparison
+ * \return Returns true, if both values are the same, i.e. a is within a small
+ *         epsilon environment of b. Epsilon is 0.01 % of a.
+ */
+constexpr bool same(const float a, const float b)
+{
+  // Compare for equality using relatively-sized epsilon environment.
+  return std::fabs(a - b) < 0.0001 * std::abs(a)
+  // Special case for positive vs. negative zero.
+      || (a == b);
+}
+
+/** \brief Utility function to compare floating point values for equality.
+ *
+ * \param a first operand of comparison
+ * \param b second operand of comparison
+ * \param epsilon maximum allowed difference (must not be negative)
+ * \return Returns true, if both values are the same, i.e. a is within the small
+ *         epsilon environment of b.
+ */
+constexpr bool same(const float a, const float b, const float epsilon)
+{
+  // Compare for equality using relatively-sized epsilon environment.
+  return std::fabs(a - b) < epsilon
+  // Special case for positive vs. negative zero.
+      || (a == b);
+}
+
+void printComponentMatchStatus(const Weather& first, const Weather& second)
+{
+  std::cout << "Data time: " << ((first.hasDataTime() == second.hasDataTime()) && (!first.hasDataTime() || first.dataTime() == second.dataTime())) << "\n"
+            << "Request time: " << ((first.hasRequestTime() == second.hasRequestTime()) && (!first.hasRequestTime() || first.requestTime() == second.requestTime())) << "\n"
+            << "Temperature K: " << ((first.hasTemperatureKelvin() == second.hasTemperatureKelvin()) && (!first.hasTemperatureKelvin() || same(first.temperatureKelvin(), second.temperatureKelvin()))) << "\n"
+            << "Temperature C: " << ((first.hasTemperatureCelsius() == second.hasTemperatureCelsius()) && (!first.hasTemperatureCelsius() || same(first.temperatureCelsius(), second.temperatureCelsius()))) << "\n"
+            << "Temperature F: " << ((first.hasTemperatureFahrenheit() == second.hasTemperatureFahrenheit()) && (!first.hasTemperatureFahrenheit() || same(first.temperatureFahrenheit(), second.temperatureFahrenheit(), 0.009))) << "\n"
+            << "Humidity: " << ((first.hasHumidity() == second.hasHumidity()) && (!first.hasHumidity() || first.humidity() == second.humidity())) << "\n"
+            << "Rain: " << ((first.hasRain() == second.hasRain()) && (!first.hasRain() || same(first.rain(), second.rain()))) << "\n"
+            << "Snow: " << ((first.hasSnow() == second.hasSnow()) && (!first.hasSnow() || same(first.snow(), second.snow()))) << "\n"
+            << "Pressure: " << ((first.hasPressure() == second.hasPressure()) && (!first.hasPressure() || first.pressure() == second.pressure())) << "\n"
+            << "Wind speed: " << ((first.hasWindSpeed() == second.hasWindSpeed()) && (!first.hasWindSpeed() || same(first.windSpeed(), second.windSpeed()))) << "\n"
+            << "Wind direction: " << ((first.hasWindDegrees() == second.hasWindDegrees()) && (!first.hasWindDegrees() || first.windDegrees() == second.windDegrees())) << "\n"
+            << "Cloudiness: " << ((first.hasCloudiness() == second.hasCloudiness()) && (!first.hasCloudiness() || first.cloudiness() == second.cloudiness())) << "\n"
+            << "JSON: " << ((first.hasJson() == second.hasJson()) && (!first.hasJson() || first.json() == second.json())) << "\n";
+
+  std::cout << "Data time (1st): " << first.dataTime().time_since_epoch().count() << "\n"
+            << "Data time (2nd): " << second.dataTime().time_since_epoch().count() << "\n"
+            << "Request time (1st): " << first.requestTime().time_since_epoch().count() << "\n"
+            << "Request time (2nd): " << second.requestTime().time_since_epoch().count() << "\n";
 }
 
 void printForecast(const Forecast& f)
@@ -137,6 +191,8 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
         printWeather(elem);
         std::cerr << "Element from parser:\n";
         printWeather(dummy);
+        std::cerr << "Status:\n";
+        printComponentMatchStatus(elem, dummy);
         return 42;
       }
     } // for
@@ -169,6 +225,8 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
         printWeather(elem);
         std::cerr << "Element from parser:\n";
         printWeather(dummy);
+        std::cerr << "Status:\n";
+        printComponentMatchStatus(elem, dummy);
         return 42;
       }
     } // for
