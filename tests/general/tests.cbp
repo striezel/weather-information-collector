@@ -41,6 +41,8 @@
 		<Unit filename="../../src/api/Limits.hpp" />
 		<Unit filename="../../src/api/OpenWeatherMap.cpp" />
 		<Unit filename="../../src/api/OpenWeatherMap.hpp" />
+		<Unit filename="../../src/api/Plans.cpp" />
+		<Unit filename="../../src/api/Plans.hpp" />
 		<Unit filename="../../src/api/Types.cpp" />
 		<Unit filename="../../src/api/Types.hpp" />
 		<Unit filename="../../src/api/Weatherbit.cpp" />
@@ -68,6 +70,7 @@
 		<Unit filename="../../src/util/Directories.hpp" />
 		<Unit filename="../../src/util/Strings.cpp" />
 		<Unit filename="../../src/util/Strings.hpp" />
+		<Unit filename="api/Plans.cpp" />
 		<Unit filename="api/Types.cpp" />
 		<Unit filename="conf/Configuration.cpp" />
 		<Unit filename="data/Location.cpp" />

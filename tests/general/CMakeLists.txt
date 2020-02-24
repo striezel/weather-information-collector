@@ -9,6 +9,7 @@ set(weather_information_collector_tests_sources
     ../../src/api/Factory.cpp
     ../../src/api/Limits.cpp
     ../../src/api/OpenWeatherMap.cpp
+    ../../src/api/Plans.cpp
     ../../src/api/Types.cpp
     ../../src/api/Weatherbit.cpp
     ../../src/api/Weatherstack.cpp
@@ -22,6 +23,7 @@ set(weather_information_collector_tests_sources
     ../../src/update/SemVer.cpp
     ../../src/util/Directories.cpp
     ../../src/util/Strings.cpp
+    api/Plans.cpp
     api/Types.cpp
     conf/Configuration.cpp
     data/Location.cpp
