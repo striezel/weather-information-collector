@@ -1,7 +1,7 @@
 # Possible improvements
 
-The weather-information-collector is currently (2018-08-06) fully functional.
-However, there still is room for improvements here.
+The weather-information-collector is currently (2018-08-06, version 0.6.7)
+fully functional. However, there still is room for improvements here.
 
 Possible future improvements may include:
 
@@ -10,4 +10,3 @@ Possible future improvements may include:
   slow / takes long to respond
 * a possibility to stop the collection (other than killing the collection
   process via kill -9)
-* API limit checks for other plans than the free API plans

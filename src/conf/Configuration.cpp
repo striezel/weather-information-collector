@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +41,9 @@ Configuration::Configuration()
   tasksContainer(std::vector<Task>()),
   #endif // wic_no_tasks_in_config
   apiKeys(std::map<ApiType, std::string>()),
+  planOwm(PlanOwm::none),
+  planWb(PlanWeatherbit::none),
+  planWs(PlanWeatherstack::none),
   connInfo(ConnectionInformation("", "", "", "", 0)),
   tasksDirectory(""),
   tasksExtension("")
@@ -113,6 +116,21 @@ std::string Configuration::key(const ApiType api) const
     return iter->second;
   else
     return std::string();
+}
+
+PlanOwm Configuration::planOpenWeatherMap() const
+{
+  return planOwm;
+}
+
+PlanWeatherbit Configuration::planWeatherbit() const
+{
+  return planWb;
+}
+
+PlanWeatherstack Configuration::planWeatherstack() const
+{
+  return planWs;
 }
 
 void Configuration::findConfigurationFile(std::string& realName)
@@ -351,6 +369,73 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
       }
       apiKeys[ApiType::Apixu] = value;
     } // if key.apixu
+    else if ((name == "plan.OpenWeatherMap") || (name == "plan.owm") || (name == "plan.openweathermap"))
+    {
+      if (planOpenWeatherMap() != PlanOwm::none)
+      {
+        std::cerr << "Error: Plan for OpenWeatherMap is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      const auto plan = toPlanOwm(value);
+      if (plan == PlanOwm::none)
+      {
+        std::cerr << "Error: \"" << value << "\" in file " << fileName
+                  << " is not a recognized plan for OpenWeatherMap!" << std::endl;
+        std::cerr << "Hint: Recognized OpenWeatherMap plans are:" << std::endl
+                  << "\t" << toString(PlanOwm::Free) << std::endl
+                  << "\t" << toString(PlanOwm::Startup) << std::endl
+                  << "\t" << toString(PlanOwm::Developer) << std::endl
+                  << "\t" << toString(PlanOwm::Professional) << std::endl
+                  << "\t" << toString(PlanOwm::Enterprise) << std::endl;
+        return false;
+      }
+      planOwm = plan;
+    } // if plan.owm
+    else if ((name == "plan.weatherbit") || (name == "plan.Weatherbit"))
+    {
+      if (planWeatherbit() != PlanWeatherbit::none)
+      {
+        std::cerr << "Error: Plan for Weatherbit is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      const auto plan = toPlanWeatherbit(value);
+      if (plan == PlanWeatherbit::none)
+      {
+        std::cerr << "Error: \"" << value << "\" in file " << fileName
+                  << " is not a recognized plan for Weatherbit!" << std::endl;
+        std::cerr << "Hint: Recognized Weatherbit plans are:" << std::endl
+                  << "\t" << toString(PlanWeatherbit::Free) << std::endl
+                  << "\t" << toString(PlanWeatherbit::Starter) << std::endl
+                  << "\t" << toString(PlanWeatherbit::Developer) << std::endl
+                  << "\t" << toString(PlanWeatherbit::Advanced) << std::endl;
+        return false;
+      }
+      planWb = plan;
+    } // if plan.weatherbit
+    else if ((name == "plan.weatherstack") || (name == "plan.Weatherstack"))
+    {
+      if (planWeatherstack() != PlanWeatherstack::none)
+      {
+        std::cerr << "Error: Plan for Weatherstack is specified more than once in file "
+                  << fileName << "!" << std::endl;
+        return false;
+      }
+      const auto plan = toPlanWeatherstack(value);
+      if (plan == PlanWeatherstack::none)
+      {
+        std::cerr << "Error: \"" << value << "\" in file " << fileName
+                  << " is not a recognized plan for Weatherstack!" << std::endl;
+        std::cerr << "Hint: Recognized Weatherstack plans are:" << std::endl
+                  << "\t" << toString(PlanWeatherstack::Free) << std::endl
+                  << "\t" << toString(PlanWeatherstack::Standard) << std::endl
+                  << "\t" << toString(PlanWeatherstack::Professional) << std::endl
+                  << "\t" << toString(PlanWeatherstack::Business) << std::endl;
+        return false;
+      }
+      planWs = plan;
+    } // if plan.weatherstack
     else
     {
       std::cerr << "Error while reading configuration file " << fileName
@@ -386,6 +471,15 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
       return false;
     } // if keys are missing
   } // if keys must be present
+
+  // For backwards compatibility with configuration files from version 0.9.8 and
+  // earlier the unset plans are assumed to be free plans.
+  if (planOpenWeatherMap() == PlanOwm::none)
+    planOwm = PlanOwm::Free;
+  if (planWeatherbit() == PlanWeatherbit::none)
+    planWb = PlanWeatherbit::Free;
+  if (planWeatherstack() == PlanWeatherstack::none)
+    planWs = PlanWeatherstack::Free;
 
   // Everything is good, so far.
   return true;

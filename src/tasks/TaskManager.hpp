@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <vector>
 #include "Task.hpp"
+#include "../api/Plans.hpp"
 
 namespace wic
 {
@@ -32,7 +33,7 @@ class TaskManager
   public:
     /** \brief character that indicates comment line in task file
      */
-    static const char commentCharater;
+    static const char commentCharacter;
 
 
     /** \brief The minimum interval for requests. Smaller intervals are rejected.
@@ -76,12 +77,18 @@ class TaskManager
     /** \brief Checks whether the tasks can be executed within API request limits.
      *
      * \param tasks   vector of tasks
+     * \param planOwm the pricing plan for OpenWeatherMap
+     * \param planWb  the pricing plan for Weatherbit
+     * \param planWs  the pricing plan for Weatherstack
      * \param silent  if true, then request statistics will not be shown on
      *                standard output
      * \return Returns true, if the tasks can be executed within the API request limits.
      *         Returns false otherwise.
      */
-    static bool withinLimits(const std::vector<Task>& tasks, const bool silent = false);
+    static bool withinLimits(const std::vector<Task>& tasks,
+                             const PlanOwm planOwm, const PlanWeatherbit planWb,
+                             const PlanWeatherstack planWs,
+                             const bool silent = false);
 }; // class
 
 } // namespace

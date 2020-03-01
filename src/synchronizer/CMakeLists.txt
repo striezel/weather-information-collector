@@ -5,6 +5,7 @@ project(weather-information-collector-synchronizer)
 
 set(weather-information-collector-synchronizer_sources
     ../api/Types.cpp
+    ../api/Plans.cpp
     ../conf/Configuration.cpp
     ../data/Forecast.cpp
     ../data/ForecastMeta.cpp

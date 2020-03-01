@@ -47,6 +47,8 @@
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
+		<Unit filename="../api/Plans.cpp" />
+		<Unit filename="../api/Plans.hpp" />
 		<Unit filename="../api/Types.cpp" />
 		<Unit filename="../api/Types.hpp" />
 		<Unit filename="../conf/Configuration.cpp" />

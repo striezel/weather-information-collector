@@ -5,6 +5,7 @@ project(weather-information-collector-benchmark)
 
 set(weather-information-collector-benchmark_sources
     ../api/Types.cpp
+    ../api/Plans.cpp
     ../conf/Configuration.cpp
     ../data/Forecast.cpp
     ../data/Location.cpp

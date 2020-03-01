@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,30 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_LIMIT_HPP
+#define WEATHER_INFORMATION_COLLECTOR_LIMIT_HPP
 
-#include <string>
+#include <chrono>
+#include <cstdint>
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.9.9-pre, 2020-03-01";
+/** \brief structure for request limits of an API */
+struct Limit
+{
+  /** \brief constructor
+   *
+   * \param _requests  number of allowed requests
+   * \param _timespan  time span for that number of requests
+   */
+  Limit(const uint_least32_t _requests, const std::chrono::seconds& _timespan);
+
+
+  uint_least32_t requests; /**< number of allowed requests */
+  std::chrono::seconds timespan; /**< corresponding time frame */
+}; // struct
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_LIMIT_HPP

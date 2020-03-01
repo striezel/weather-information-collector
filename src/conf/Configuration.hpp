@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <map>
 #include <vector>
+#include "../api/Plans.hpp"
 #include "../api/Types.hpp"
 #include "../db/ConnectionInformation.hpp"
 #ifndef wic_no_tasks_in_config
@@ -98,6 +99,27 @@ class Configuration
     std::string key(const ApiType api) const;
 
 
+    /** \brief Gets the current pricing plan in use for OpenWeatherMap.
+     *
+     * \return Returns the OpenWeatherMap plan.
+     */
+    PlanOwm planOpenWeatherMap() const;
+
+
+    /** \brief Gets the current pricing plan in use for Weatherbit.
+     *
+     * \return Returns the Weatherbit plan.
+     */
+    PlanWeatherbit planWeatherbit() const;
+
+
+    /** \brief Gets the current pricing plan in use for Weatherstack.
+     *
+     * \return Returns the Weatherstack plan.
+     */
+    PlanWeatherstack planWeatherstack() const;
+
+
     /** \brief Loads the configuration from a file.
      *
      * \param  fileName   file name of the configuration file
@@ -140,6 +162,9 @@ class Configuration
     std::vector<Task> tasksContainer; /**< container with all tasks */
     #endif // wic_no_tasks_in_config
     std::map<ApiType, std::string> apiKeys; /**< API keys */
+    PlanOwm planOwm; /**< used pricing plan for OpenWeatherMap */
+    PlanWeatherbit planWb; /**< used pricing plan for Weatherbit */
+    PlanWeatherstack planWs;  /**< used pricing plan for Weatherstack */
     ConnectionInformation connInfo; /**< database connection information */
     std::string tasksDirectory; /**< directory for tasks */
     std::string tasksExtension; /**< file extension (incl. dot) for task files */

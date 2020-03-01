@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 namespace wic
 {
 
-const char TaskManager::commentCharater = '#';
+const char TaskManager::commentCharacter = '#';
 const std::chrono::seconds TaskManager::minimumRequestInterval = std::chrono::seconds(15);
 
 bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
@@ -48,7 +48,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
   {
     trim(line);
     // skip empty lines and comment lines
-    if (line.empty() || line[0] == commentCharater)
+    if (line.empty() || line[0] == commentCharacter)
       continue;
 
     // check for possible carriage return at end (happens on Windows systems)
@@ -425,7 +425,8 @@ bool TaskManager::hasDuplicates(const std::vector<Task>& tasks, const bool silen
   return false;
 }
 
-bool TaskManager::withinLimits(const std::vector<Task>& tasks, const bool silent)
+bool TaskManager::withinLimits(const std::vector<Task>& tasks, const PlanOwm planOwm, const PlanWeatherbit planWb,
+                               const PlanWeatherstack planWs, const bool silent)
 {
   std::map<ApiType, uint_least32_t> requests;
   for (const Task& t : tasks)
@@ -435,7 +436,7 @@ bool TaskManager::withinLimits(const std::vector<Task>& tasks, const bool silent
       return false;
 
     // cast duration to seconds, for better comparability
-    const auto duration_seconds = std::chrono::duration_cast<std::chrono::seconds>(Limit::forApi(t.api()).timespan);
+    const auto duration_seconds = std::chrono::duration_cast<std::chrono::seconds>(Limits::forApi(t.api(), planOwm, planWb, planWs).timespan);
     // Pessimistic number of requests for that task:
     //  n = limit's duration / task's interval, rounded up to the next nearest integer
     const uint_least32_t numberOfRequests = static_cast<uint_least32_t>(std::ceil(duration_seconds.count() / static_cast<double>(t.interval().count())));
@@ -448,7 +449,7 @@ bool TaskManager::withinLimits(const std::vector<Task>& tasks, const bool silent
     std::cout << "Info: Requests consumed via configured tasks for APIs:\n";
     for (const auto& kv : requests)
     {
-      const auto& l = Limit::forApi(kv.first);
+      const auto l = Limits::forApi(kv.first, planOwm, planWb, planWs);
       std::cout << "    " << toString(kv.first) << ": " << kv.second << " of "
                 << l.requests << " possible requests within "
                 << std::chrono::duration_cast<std::chrono::seconds>(l.timespan).count()
@@ -459,7 +460,7 @@ bool TaskManager::withinLimits(const std::vector<Task>& tasks, const bool silent
   // Check whether there are more requests than the limit allows.
   for (const auto& kv : requests)
   {
-    if (kv.second > Limit::forApi(kv.first).requests)
+    if (kv.second > Limits::forApi(kv.first, planOwm, planWb, planWs).requests)
       return false;
   } // for (range-based)
 

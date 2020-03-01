@@ -90,6 +90,35 @@ Possible values for these settings could be:
     task.directory=/home/user/.wic/task.d
     task.extension=.task
 
+## API plans
+
+It is possible to specify the pricing plans in use for some of the weather APIs
+used by weather-information-collector. The plans are used to check whether the
+configuration collection tasks will hit the API's rate limit. Those settings can
+also be omitted, in which case the program assumes the use of the free plan.
+
+The following configuration settings for weather API plans are recognized:
+
+* **plan.owm** - pricing plan for OpenWeatherMap API; currently the following
+  plans are recognized:
+  * **free** - free plan (up to 60 calls per minute)
+  * **startup** - Startup plan (up to 600 calls per minute)
+  * **developer** - Developer plan (up to 3000 calls per minute)
+  * **professional** - Professional plan (up to 30000 calls per minute)
+  * **enterprise** - Enterprise plan (up to 200000 calls per minute)
+* **plan.weatherbit** - pricing plan for Weatherbit API; currently the following
+  plans are recognized:
+  * **free** - free plan (up to 500 calls per day)
+  * **starter** - Starter plan (up to 50000 calls per day)
+  * **developer** - Developer plan (up to 500000 calls per day)
+  * **advanced** - Advanced plan (up to 5000000 calls per day)
+* **plan.weatherstack** - pricing plan for Weatherstack API; currently the
+  following plans are recognized:
+  * **free** - free plan (up to 1000 calls per month)
+  * **standard** - Standard plan (up to 50000 calls per month)
+  * **professional** - Professional plan (up to 300000 calls per month)
+  * **business** - Business plan (up to 1000000 calls per month)
+
 ## API key settings
 
 Finally, one has to specify API key settings. An API key has to be specified for
@@ -114,7 +143,7 @@ Possible values of these settings could be:
 # Example of a complete configuration file
 
 The following example is a complete core configuration file for the
-weather-information-collector program (as of version 0.9.7):
+weather-information-collector program (as of version 0.9.9):
 
     # This line is a comment and will be ignored by the program.
     #And so is this line.
@@ -134,3 +163,7 @@ weather-information-collector program (as of version 0.9.7):
     key.darksky=f00ba12735743210fedcba9876543210
     key.weatherbit=fedcba98765432100123456789abcdef
     key.weatherstack=f00ba12abcdef1234567890abcdef123
+    # API plans
+    plan.owm=developer
+    plan.weatherbit=starter
+    plan.weatherstack=free

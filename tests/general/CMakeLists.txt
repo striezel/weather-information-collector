@@ -29,6 +29,7 @@ set(weather_information_collector_tests_sources
     data/Location.cpp
     data/Weather.cpp
     db/ConnectionInformation.cpp
+    tasks/Plans.cpp
     tasks/Task.cpp
     tasks/TaskManager.cpp
     update/SemVer.cpp

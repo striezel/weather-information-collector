@@ -77,6 +77,7 @@
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="db/ConnectionInformation.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="tasks/Plans.cpp" />
 		<Unit filename="tasks/Task.cpp" />
 		<Unit filename="tasks/TaskManager.cpp" />
 		<Unit filename="update/SemVer.cpp" />
