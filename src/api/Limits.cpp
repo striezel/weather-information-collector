@@ -45,12 +45,6 @@ const Limit Limits::weatherstack = Limit(1000, std::chrono::hours(24 * 31));
 /* There's no limit here for "none" API, but set it to zero. */
 const Limit Limits::none = Limit(0, std::chrono::hours(1));
 
-Limit::Limit(const uint_least32_t _requests, const std::chrono::seconds& _timespan)
-: requests(_requests),
-  timespan(_timespan)
-{
-}
-
 const Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeatherbit planWb, const PlanWeatherstack planWs)
 {
   switch(api)

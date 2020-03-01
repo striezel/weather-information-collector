@@ -7,6 +7,7 @@ set(weather_information_collector_tests_sources
     ../../src/api/Apixu.cpp
     ../../src/api/DarkSky.cpp
     ../../src/api/Factory.cpp
+    ../../src/api/Limit.cpp
     ../../src/api/Limits.cpp
     ../../src/api/OpenWeatherMap.cpp
     ../../src/api/Plans.cpp

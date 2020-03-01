@@ -37,6 +37,8 @@
 		<Unit filename="../../src/api/DarkSky.hpp" />
 		<Unit filename="../../src/api/Factory.cpp" />
 		<Unit filename="../../src/api/Factory.hpp" />
+		<Unit filename="../../src/api/Limit.cpp" />
+		<Unit filename="../../src/api/Limit.hpp" />
 		<Unit filename="../../src/api/Limits.cpp" />
 		<Unit filename="../../src/api/Limits.hpp" />
 		<Unit filename="../../src/api/OpenWeatherMap.cpp" />
