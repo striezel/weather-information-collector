@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.9.9-pre (2020-03-01)
+## Version 0.9.9 (2020-03-01)
 
 It is now possible to specify which plans are used for the APIs of
 OpenWeatherMap, Weatherbit and Weatherstack. Checks for API rate limits will
