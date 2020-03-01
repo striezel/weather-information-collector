@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.9.9-pre (2020-03-01)
+
+It is now possible to specify which plans are used for the APIs of
+OpenWeatherMap, Weatherbit and Weatherstack. Checks for API rate limits will
+respect those plans.
+
 ## Version 0.9.8 (2019-10-26)
 
 Tasks using the Apixu API are not allowed anymore and will cause an error when

@@ -7,8 +7,10 @@ set(weather-information-collector-update_sources
     ../api/Apixu.cpp
     ../api/DarkSky.cpp
     ../api/Factory.cpp
+    ../api/Limit.cpp
     ../api/Limits.cpp
     ../api/OpenWeatherMap.cpp
+    ../api/Plans.cpp
     ../api/Types.cpp
     ../api/Weatherbit.cpp
     ../api/Weatherstack.cpp

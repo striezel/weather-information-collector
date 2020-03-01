@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,15 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-
-#include <string>
+#include "Limit.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.9.9-pre, 2020-03-01";
+Limit::Limit(const uint_least32_t _requests, const std::chrono::seconds& _timespan)
+: requests(_requests),
+  timespan(_timespan)
+{
+}
 
 } // namespace
-
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -181,10 +181,14 @@ if ((argc > 1) && (argv != nullptr))
   const wic::Task newTask = wic::Task(selectedLocation, selectedApi, selectedData, selectedInterval);
   const auto& currentTasks = config.tasks();
   std::cout << "Checking conformity to API request limits ...";
-  const bool currentWithinLimits = wic::TaskManager::withinLimits(currentTasks, true);
+  const bool currentWithinLimits = wic::TaskManager::withinLimits(currentTasks,
+                      config.planOpenWeatherMap(), config.planWeatherbit(),
+                      config.planWeatherstack(), true);
   std::vector<wic::Task> newTasks = currentTasks;
   newTasks.push_back(newTask);
-  const bool newWithinLimits = wic::TaskManager::withinLimits(newTasks, true);
+  const bool newWithinLimits = wic::TaskManager::withinLimits(newTasks,
+                      config.planOpenWeatherMap(), config.planWeatherbit(),
+                      config.planWeatherstack(), true);
   if (newWithinLimits)
   {
     std::cout << " OK." << std::endl;

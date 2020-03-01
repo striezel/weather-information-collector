@@ -132,6 +132,7 @@ bool Weatherstack::forecastWeather(const Location& location, Forecast& forecast)
 
 bool Weatherstack::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
 {
+  // Not implemented.
   weather = Weather();
   forecast = Forecast();
   return false;

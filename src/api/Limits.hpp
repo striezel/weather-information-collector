@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,22 +21,18 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_LIMITS_HPP
 #define WEATHER_INFORMATION_COLLECTOR_LIMITS_HPP
 
-#include <chrono>
-#include <cstdint>
+#include "Limit.hpp"
+#include "Plans.hpp"
 #include "Types.hpp"
 
 namespace wic
 {
 
 /** \brief structure for request limits of an API */
-struct Limit
+struct Limits
 {
-  /** \brief constructor
-   *
-   * \param _requests  number of allowed requests
-   * \param _timespan  time span for that number of requests
-   */
-  Limit(const uint_least32_t _requests, const std::chrono::seconds& _timespan);
+  // delete constructor
+  Limits() = delete;
 
 
   /** \brief contains the limit for Apixu API calls
@@ -72,13 +68,12 @@ struct Limit
   /** \brief Returns a limit for a particular API.
    *
    * \param api  the corresponding API
+   * \param planOwm the pricing plan for OpenWeatherMap
+   * \param planWb the pricing plan for Weatherbit
+   * \param planWs the pricing plan for Weatherstack
    * \return Returns the request limit for the specified API.
    */
-  static const Limit& forApi(const ApiType api);
-
-
-  uint_least32_t requests; /**< number of allowed requests */
-  std::chrono::seconds timespan; /**< corresponding time frame */
+  static const Limit forApi(const ApiType api, const PlanOwm planOwm, const PlanWeatherbit planWb, const PlanWeatherstack planWs);
 }; // struct
 
 } // namespace

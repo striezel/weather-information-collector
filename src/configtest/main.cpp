@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -133,11 +133,14 @@ int main(int argc, char** argv)
 
   if (checkApiLimits)
   {
-    if (!wic::TaskManager::withinLimits(config.tasks()))
+    if (!wic::TaskManager::withinLimits(config.tasks(), config.planOpenWeatherMap(),
+                                        config.planWeatherbit(), config.planWeatherstack()))
     {
       std::cerr << "Error: The configured collection tasks would exceed the "
-                << "request limits imposed by the free API plan! If you are on"
-                << " a different plan and are sure that the configured tasks "
+                << "request limits imposed by the chosen API plans! If you are on"
+                << " a different plan, then please adjust the configuration "
+                << "file and enter your current API plans. If you are on some"
+                << "custom plan and are sure that the configured tasks "
                 << "will not exceed the request limits imposed by the API, "
                 << "then add the parameter --ignore-limits to the call of the "
                 << "application." << std::endl;
