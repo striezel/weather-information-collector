@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,8 +31,9 @@
 namespace wic
 {
 
-Weatherstack::Weatherstack(const std::string& key)
-: m_apiKey(key)
+Weatherstack::Weatherstack(const PlanWeatherstack plan, const std::string& key)
+: m_apiKey(key),
+  m_plan(plan)
 {
 }
 
@@ -94,8 +95,11 @@ bool Weatherstack::currentWeather(const Location& location, Weather& weather)
   weather = Weather();
   if (m_apiKey.empty())
     return false;
-  const std::string url = "http://api.weatherstack.com/current?access_key="
-                        + m_apiKey + "&" + toRequestString(location);
+  // Free plan only supports HTTP, higher plans allow HTTPS.
+  const std::string url = ((m_plan == PlanWeatherstack::Free)
+          ? "http://api.weatherstack.com/current?access_key="
+          : "https://api.weatherstack.com/current?access_key=")
+                  + m_apiKey + "&" + toRequestString(location);
   std::string response;
   {
     Curly curly;

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <memory>
 #include "API.hpp"
+#include "Plans.hpp"
 
 namespace wic
 {
@@ -37,12 +38,13 @@ class Factory
 
     /** \brief Creates an API instance based on the given API type.
      *
-     * \param api  type of the API instance to create
-     * \param key  the API key for that instance (optional)
+     * \param api     type of the API instance to create
+     * \param planWs  current pricing plan for Weatherstack
+     * \param key     the API key for that instance (optional)
      * \return Returns a unique_ptr to the created instance.
      *         Returns nullptr, if api is ApiType::none or not supported.
      */
-    static std::unique_ptr<API> create(const ApiType api, const std::string& key = std::string());
+    static std::unique_ptr<API> create(const ApiType api, const PlanWeatherstack planWs, const std::string& key = std::string());
 }; // class
 
 } // namespace

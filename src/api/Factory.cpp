@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 namespace wic
 {
 
-std::unique_ptr<API> Factory::create(const ApiType api, const std::string& key)
+std::unique_ptr<API> Factory::create(const ApiType api, const PlanWeatherstack planWs, const std::string& key)
 {
   std::unique_ptr<API> result = nullptr;
   switch (api)
@@ -47,7 +47,7 @@ std::unique_ptr<API> Factory::create(const ApiType api, const std::string& key)
          result.reset(new Weatherbit(key));
          break;
     case ApiType::Weatherstack:
-         result.reset(new Weatherstack(key));
+         result.reset(new Weatherstack(planWs, key));
          break;
     case ApiType::none:
     default:

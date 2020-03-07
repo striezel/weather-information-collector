@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -197,14 +197,14 @@ ApiType selectApi()
   return ApiType::none;
 }
 
-DataType selectDataType(const ApiType selectedApi)
+DataType selectDataType(const ApiType selectedApi, const PlanWeatherstack planWs)
 {
   if (selectedApi == ApiType::none)
   {
     std::cout << "Error: An API has to be selected." << std::endl;
     return DataType::none;
   }
-  const auto api = Factory::create(selectedApi, "");
+  const auto api = Factory::create(selectedApi, planWs, "");
 
   const std::vector<DataType> allDataTypes = { DataType::Current, DataType::Forecast, DataType::CurrentAndForecast };
   std::vector<DataType> supportedDataTypes;

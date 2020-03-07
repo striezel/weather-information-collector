@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.9.10-pre (2020-03-07)
+
+Perform Weatherstack requests via HTTPS when the configured plan allows it.
+(Non-free plans allow HTTPS requests, the free plan only supports HTTP.)
+
 ## Version 0.9.9 (2020-03-01)
 
 It is now possible to specify which plans are used for the APIs of

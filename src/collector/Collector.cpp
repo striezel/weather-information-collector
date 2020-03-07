@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ Collector::Collector()
 : tasksContainer(std::vector<TaskData>()),
   apiKeys(std::map<ApiType, std::string>()),
   connInfo(ConnectionInformation("", "", "", "", 0)),
+  planWs(PlanWeatherstack::none),
   stopFlag(false)
 {
 }
@@ -89,6 +90,8 @@ bool Collector::fromConfiguration(const Configuration& conf)
     std::cerr << "Error: Database connection information is incomplete!\n";
     return false;
   }
+  // Get information about pricing plans.
+  planWs = conf.planWeatherstack();
   return true;
 }
 
@@ -125,7 +128,7 @@ void Collector::collect()
     }
     const Location& loc = tasksContainer[idx].task.location();
     const std::string key = apiKeys[tasksContainer[idx].task.api()];
-    std::unique_ptr<API> api = Factory::create(tasksContainer[idx].task.api(), key);
+    std::unique_ptr<API> api = Factory::create(tasksContainer[idx].task.api(), planWs, key);
     if (api == nullptr)
     {
       std::cerr << "Error: Cannot collect data for unsupported API type "

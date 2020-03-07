@@ -63,7 +63,7 @@ int main(int argc, char** argv)
     std::getline(jsonStream, json, '\0');
     jsonStream.close();
 
-    wic::Weatherstack api;
+    wic::Weatherstack api(wic::PlanWeatherstack::Free);
     wic::Weather w;
     bool success = api.parseCurrentWeather(json, w);
     if (!success)
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
     std::getline(jsonStream, json, '\0');
     jsonStream.close();
 
-    wic::Weatherstack api;
+    wic::Weatherstack api(wic::PlanWeatherstack::Free);
     wic::Weather w;
     bool success = api.parseCurrentWeather(json, w);
     if (!success)

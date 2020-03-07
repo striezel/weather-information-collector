@@ -549,7 +549,7 @@ bool Configuration::load(const std::string& fileName, const bool skipTasks, cons
               << taskDirectory() << ": " << ex.what() << std::endl;
   } // try-catch
 
-  if (!TaskManager::loadFromDirectory(taskDirectory(), taskExtension(), tasksContainer))
+  if (!TaskManager::loadFromDirectory(taskDirectory(), taskExtension(), tasksContainer, planWs))
     return false;
   // check for duplicates
   if (TaskManager::hasDuplicates(tasksContainer, false))

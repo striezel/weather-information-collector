@@ -169,7 +169,7 @@ if ((argc > 1) && (argv != nullptr))
   wic::DataType selectedData = wic::DataType::none;
   while (selectedData == wic::DataType::none)
   {
-    selectedData = wic::creator::selectDataType(selectedApi);
+    selectedData = wic::creator::selectDataType(selectedApi, config.planWeatherstack());
   }
   // Select collection interval.
   std::chrono::seconds selectedInterval = std::chrono::seconds::zero();

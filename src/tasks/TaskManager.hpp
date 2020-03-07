@@ -57,10 +57,12 @@ class TaskManager
      * \param extension   extension (including dot) of file names that shall be
      *                    loaded. Empty string means all files.
      * \param storage    vector that will be used to store all loaded tasks, existing elements will be preserved
+     * \param planWs     the pricing plan for Weatherstack
      * \return Returns true, if all tasks from the directory were loaded successfully.
      *         Returns false, if an error occurred.
      */
-    static bool loadFromDirectory(const std::string& directory, const std::string& extension, std::vector<Task>& storage);
+    static bool loadFromDirectory(const std::string& directory, const std::string& extension,
+                                  std::vector<Task>& storage, const PlanWeatherstack planWs);
 
 
     /** \brief Checks whether a list of tasks has duplicate or overlapping tasks.

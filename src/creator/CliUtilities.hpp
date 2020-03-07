@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -62,10 +62,11 @@ ApiType selectApi();
 /** \brief Lets the user select a data type for the selected API.
  *
  * \param selectedApi  type of the selected API from previous step
+ * \param planWs       pricing plan for Weatherstack
  * \return Returns the selected data type, if a valid selection was made.
  *         Returns DataType::none, if the selection was invalid.
  */
-DataType selectDataType(const ApiType selectedApi);
+DataType selectDataType(const ApiType selectedApi, const PlanWeatherstack planWs);
 
 
 /** \brief Lets the user select a collection interval.

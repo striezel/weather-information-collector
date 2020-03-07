@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -91,6 +91,7 @@ class Collector
     std::vector<TaskData> tasksContainer; /**< container with all tasks */
     std::map<ApiType, std::string> apiKeys; /**< API keys */
     ConnectionInformation connInfo; /**< database connection information */
+    PlanWeatherstack planWs; /**< used pricing plan for Weatherstack */
     bool stopFlag; /**< set to true, when application requested to stop collection */
 }; // class
 
