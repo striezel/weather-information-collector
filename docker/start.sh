@@ -2,7 +2,7 @@
 
 #  start.sh - script to ease build Docker image + start of container
 #
-#  Copyright (C) 2019  Dirk Stolle
+#  Copyright (C) 2019, 2020  Dirk Stolle
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -17,10 +17,21 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Gets the latest tag.
+TAG="${CI_COMMIT_TAG:-$(git describe | cut -d '-' -f 1)}"
+if [ -z $TAG ]
+then
+  $TAG=latest
+fi
+
 # Image name is first parameter or defaults to "weather".
-IMAGE=${1:-weather}
+IMAGE=${1:-weather:$TAG}
 # Container name is second parameter or defaults to "weatherbot".
 CONTAINER=${2:-weatherbot}
+if [ "latest" != "$TAG" ]
+then
+  CONTAINER=${2:-weatherbot_$TAG}
+fi
 
 # Check whether Docker exists / daemon is running and user has permission to
 # use it.
