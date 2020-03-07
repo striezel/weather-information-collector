@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.9.10-pre (2020-03-07)
+## Version 0.9.10 (2020-03-07)
 
 - Weatherbit forecast will now use daily forecast for free plan and hourly
   forecast for other plans.
