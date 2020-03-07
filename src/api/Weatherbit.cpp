@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,8 +32,9 @@
 namespace wic
 {
 
-Weatherbit::Weatherbit(const std::string& key)
-: m_apiKey(key)
+Weatherbit::Weatherbit(const PlanWeatherbit plan, const std::string& key)
+: m_apiKey(key),
+  m_plan(plan)
 {
 }
 
@@ -154,14 +155,31 @@ bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
   forecast = Forecast();
   if (m_apiKey.empty())
     return false;
-  // 3-hourly forecast for 120 hours / 5 days (only available for users on premium plans of Weatherbit.io)
+  // Daily forecast for 16 days (available for users on every plan of Weatherbit.io)
+  // https://api.weatherbit.io/v2.0/forecast/daily?key=you-API-key-here&city=city-name-here&country=ISO-3166-two-letter-code-here
+  // 3-hourly forecast for 120 hours / 5 days (only available for users on premium plans of Weatherbit.io, deprecated)
   // https://api.weatherbit.io/v2.0/forecast/3hourly?key=you-API-key-here&city=city-name-here&country=ISO-3166-two-letter-code-here
   // hourly forecast for up to 48 hours (or up to 120 for premium users)
   // https://api.weatherbit.io/v2.0/forecast/hourly?key=you-API-key-here&city=city-name-here&country=ISO-3166-two-letter-code-here
-  const std::string url = "https://api.weatherbit.io/v2.0/forecast/hourly?key=" + m_apiKey
-                        // Use the metric system.
-                        + std::string("&units=M")
-                        + "&" + toRequestString(location);
+  std::string url;
+  switch(m_plan)
+  {
+    case PlanWeatherbit::Free:
+         url = "https://api.weatherbit.io/v2.0/forecast/daily?key=" + m_apiKey
+               // Use the metric system.
+               + std::string("&units=M")
+               + "&" + toRequestString(location);
+         break;
+    case PlanWeatherbit::Starter:
+    case PlanWeatherbit::Developer:
+    case PlanWeatherbit::Advanced:
+    default:
+         url = "https://api.weatherbit.io/v2.0/forecast/hourly?key=" + m_apiKey
+               // Use the metric system.
+               + std::string("&units=M")
+               + "&" + toRequestString(location);
+         break;
+  }
   std::string response;
   {
     Curly curly;

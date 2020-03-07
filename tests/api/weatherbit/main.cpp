@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,13 +40,14 @@ void printWeather(const wic::Weather& w)
 
 int main(int argc, char** argv)
 {
-  if ((argc < 4) || (argv[1] == nullptr) || (argv[2] == nullptr) || (argv[3] == nullptr))
+  if ((argc < 5) || (argv[1] == nullptr) || (argv[2] == nullptr) || (argv[3] == nullptr) || (argv[4] == nullptr))
   {
     std::cerr << "Error: No JSON file name was specified!" << std::endl;
-    std::cerr << "Three files are needed:\n"
+    std::cerr << "Four files are needed:\n"
               << " * JSON file for current weather data (weatherbit.current.json)\n"
               << " * JSON file for hourly weather forecast data (weatherbit.forecast.hourly.json)\n"
-              << " * JSON file for 3-hourly weather forecast data (weatherbit.forecast.3hourly.json)" << std::endl;
+              << " * JSON file for 3-hourly weather forecast data (weatherbit.forecast.3hourly.json)\n"
+              << " * JSON file for daily weather forecast data (weatherbit.forecast.daily.json)" << std::endl;
     return 1;
   }
   const std::string jsonFileName = std::string(argv[1]);
@@ -63,7 +64,7 @@ int main(int argc, char** argv)
   std::getline(jsonStream, json, '\0');
   jsonStream.close();
 
-  wic::Weatherbit api;
+  wic::Weatherbit api(wic::PlanWeatherbit::Free);
   wic::Weather w;
   bool success = api.parseCurrentWeather(json, w);
   if (!success)
@@ -346,6 +347,149 @@ int main(int argc, char** argv)
     {
       std::cerr << "Cloudiness of 3-hourly forecast item is incorrect.\n";
       return 1;
+    }
+  }
+
+  // Test forecast weather data with daily interval.
+  {
+    const std::string jsonDailyFileName = std::string(argv[4]);
+    jsonStream.open(jsonDailyFileName, std::ios_base::in | std::ios_base::binary);
+    if (!jsonStream.is_open())
+    {
+      std::cerr << "Error: JSON file " << jsonDailyFileName << " could not be opened!" << std::endl;
+      return 1;
+    }
+    json.clear();
+    std::getline(jsonStream, json, '\0');
+    jsonStream.close();
+
+    wic::Forecast forecast;
+    success = api.parseForecast(json, forecast);
+    if (!success)
+    {
+      std::cerr << "Error: JSON data (forecast weather, daily intervals) could not be parsed!" << std::endl;
+      return 1;
+    }
+    if (forecast.data().size() != 16) // one entry every day for the next 16 days
+    {
+      std::cerr << "Error: Daily forecast data should contain 16 entries, but there are "
+                << forecast.data().size() << " entries instead!" << std::endl;
+      return 1;
+    }
+
+    // Check forecast weather part.
+    // -- first entry
+    std::cout << "Forecast weather, daily interval, first element:" << std::endl;
+    {
+      const auto &zeroth = forecast.data().at(0);
+      printWeather(zeroth);
+      if (!zeroth.hasDataTime())
+      {
+        std::cerr << "Daily forecast item has no timestamp.\n";
+        return 1;
+      }
+      if (zeroth.rain() != 0.0161133f)
+      {
+        std::cerr << "Rain amount of daily forecast item is incorrect.\n";
+        return 1;
+      }
+      if (zeroth.snow() != 0.0f)
+      {
+        std::cerr << "Snow amount of daily forecast item is not set to zero.\n";
+        return 1;
+      }
+      if (zeroth.temperatureCelsius() != 4.1f)
+      {
+        std::cerr << "Temperature (°C) of daily forecast item is incorrect.\n";
+        return 1;
+      }
+      if (zeroth.temperatureFahrenheit() != 39.38f)
+      {
+        std::cerr << "Temperature (°F) of daily forecast item is incorrect.\n";
+        return 1;
+      }
+      if (zeroth.humidity() != 76)
+      {
+        std::cerr << "Humidity of daily forecast item is incorrect.\n";
+        return 1;
+      }
+      if (zeroth.pressure() != 1002)
+      {
+        std::cerr << "Air pressure of daily forecast item is incorrect.\n";
+        return 1;
+      }
+      if (zeroth.windSpeed() < 2.74763f || zeroth.windSpeed() > 2.74765f)
+      {
+        std::cerr << "Wind speed of daily forecast item is incorrect.\n";
+        return 1;
+      }
+      if (zeroth.windDegrees() != 281)
+      {
+        std::cerr << "Wind direction of daily forecast item is incorrect.\n";
+        return 1;
+      }
+      if (zeroth.cloudiness() != 52)
+      {
+        std::cerr << "Cloudiness of daily forecast item is incorrect.\n";
+        return 1;
+      }
+    }
+
+    // -- 15th entry
+    std::cout << "Forecast weather, daily interval, 16th element:" << std::endl;
+    {
+      const auto &sixteenth = forecast.data().at(15);
+      printWeather(sixteenth);
+      if (!sixteenth.hasDataTime())
+      {
+        std::cerr << "Daily forecast item 16 has no timestamp.\n";
+        return 1;
+      }
+      if (sixteenth.rain() != 0.0f)
+      {
+        std::cerr << "Rain amount of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
+      if (sixteenth.snow() != 0.0f)
+      {
+        std::cerr << "Snow amount of daily forecast item 16 is not set to zero.\n";
+        return 1;
+      }
+      if (sixteenth.temperatureCelsius() != 3.0f)
+      {
+        std::cerr << "Temperature (°C) of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
+      if (sixteenth.temperatureFahrenheit() != 37.4f)
+      {
+        std::cerr << "Temperature (°F) of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
+      if (sixteenth.humidity() != 61)
+      {
+        std::cerr << "Humidity of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
+      if (sixteenth.pressure() != 996)
+      {
+        std::cerr << "Air pressure of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
+      if (sixteenth.windSpeed() < 3.70262f || sixteenth.windSpeed() > 3.70264f)
+      {
+        std::cerr << "Wind speed of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
+      if (sixteenth.windDegrees() != 72)
+      {
+        std::cerr << "Wind direction of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
+      if (sixteenth.cloudiness() != 14)
+      {
+        std::cerr << "Cloudiness of daily forecast item 16 is incorrect.\n";
+        return 1;
+      }
     }
   }
 

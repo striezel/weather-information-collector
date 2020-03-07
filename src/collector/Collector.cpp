@@ -41,6 +41,7 @@ Collector::Collector()
 : tasksContainer(std::vector<TaskData>()),
   apiKeys(std::map<ApiType, std::string>()),
   connInfo(ConnectionInformation("", "", "", "", 0)),
+  planWb(PlanWeatherbit::none),
   planWs(PlanWeatherstack::none),
   stopFlag(false)
 {
@@ -91,6 +92,7 @@ bool Collector::fromConfiguration(const Configuration& conf)
     return false;
   }
   // Get information about pricing plans.
+  planWb = conf.planWeatherbit();
   planWs = conf.planWeatherstack();
   return true;
 }
@@ -128,7 +130,7 @@ void Collector::collect()
     }
     const Location& loc = tasksContainer[idx].task.location();
     const std::string key = apiKeys[tasksContainer[idx].task.api()];
-    std::unique_ptr<API> api = Factory::create(tasksContainer[idx].task.api(), planWs, key);
+    std::unique_ptr<API> api = Factory::create(tasksContainer[idx].task.api(), planWb, planWs, key);
     if (api == nullptr)
     {
       std::cerr << "Error: Cannot collect data for unsupported API type "

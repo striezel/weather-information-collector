@@ -304,7 +304,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
 }
 
 bool TaskManager::loadFromDirectory(const std::string& directory, const std::string& extension,
-                                    std::vector<Task>& storage, const PlanWeatherstack planWs)
+                                    std::vector<Task>& storage, const PlanWeatherbit planWb, const PlanWeatherstack planWs)
 {
   // Let's keep the namespace short and simple.
   namespace fs = boost::filesystem;
@@ -347,7 +347,7 @@ bool TaskManager::loadFromDirectory(const std::string& directory, const std::str
             return false;
           }
           // Check whether the specified API can handle the task.
-          const auto api = Factory::create(t.api(), planWs);
+          const auto api = Factory::create(t.api(), planWb, planWs);
           if (!api)
           {
             std::cerr << "Error: The API " << toString(t.api())

@@ -29,7 +29,7 @@
 namespace wic
 {
 
-std::unique_ptr<API> Factory::create(const ApiType api, const PlanWeatherstack planWs, const std::string& key)
+std::unique_ptr<API> Factory::create(const ApiType api, const PlanWeatherbit planWb, const PlanWeatherstack planWs, const std::string& key)
 {
   std::unique_ptr<API> result = nullptr;
   switch (api)
@@ -44,7 +44,7 @@ std::unique_ptr<API> Factory::create(const ApiType api, const PlanWeatherstack p
          result.reset(new DarkSky(key));
          break;
     case ApiType::Weatherbit:
-         result.reset(new Weatherbit(key));
+         result.reset(new Weatherbit(planWb, key));
          break;
     case ApiType::Weatherstack:
          result.reset(new Weatherstack(planWs, key));

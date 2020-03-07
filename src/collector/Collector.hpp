@@ -91,6 +91,7 @@ class Collector
     std::vector<TaskData> tasksContainer; /**< container with all tasks */
     std::map<ApiType, std::string> apiKeys; /**< API keys */
     ConnectionInformation connInfo; /**< database connection information */
+    PlanWeatherbit planWb; /**< used pricing plan for Weatherbit */
     PlanWeatherstack planWs; /**< used pricing plan for Weatherstack */
     bool stopFlag; /**< set to true, when application requested to stop collection */
 }; // class

@@ -149,7 +149,7 @@ int main(int argc, char** argv)
    * ***************************** */
 
   std::vector<wic::Task> tasks;
-  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks, wic::PlanWeatherstack::Free))
+  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks, wic::PlanWeatherbit::Free, wic::PlanWeatherstack::Free))
   {
     std::cerr << "Error: Could not load tasks from directory " << baseDirectory
               << "!\n";
@@ -185,7 +185,7 @@ int main(int argc, char** argv)
 
   tasks.clear();
   const std::string incompleteDirectory = baseDirectory + "/conf.d-incomplete";
-  if (tm.loadFromDirectory(incompleteDirectory, ".conf", tasks, wic::PlanWeatherstack::Free))
+  if (tm.loadFromDirectory(incompleteDirectory, ".conf", tasks, wic::PlanWeatherbit::Free, wic::PlanWeatherstack::Free))
   {
     std::cerr << "Error: Could load tasks from directory " << incompleteDirectory
               << ", although configuration file there is incomplete!" << std::endl;
@@ -204,7 +204,7 @@ int main(int argc, char** argv)
     std::cerr << "Error: There cannot be any duplicates in an empty vector!\n";
     return 4;
   }
-  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks, wic::PlanWeatherstack::Free))
+  if (!tm.loadFromDirectory(baseDirectory + "/conf.d", ".conf", tasks, wic::PlanWeatherbit::Free, wic::PlanWeatherstack::Free))
   {
     std::cerr << "Error: Could not load tasks from directory " << baseDirectory
               << "!\n";
@@ -230,7 +230,7 @@ int main(int argc, char** argv)
 
   tasks.clear();
   const std::string overlapDirectory = baseDirectory + "/conf.d-overlap";
-  if (!tm.loadFromDirectory(overlapDirectory, ".conf", tasks, wic::PlanWeatherstack::Free))
+  if (!tm.loadFromDirectory(overlapDirectory, ".conf", tasks, wic::PlanWeatherbit::Free, wic::PlanWeatherstack::Free))
   {
     std::cerr << "Error: Could not load tasks from directory " << overlapDirectory
               << "!\n";

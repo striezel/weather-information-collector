@@ -24,4 +24,4 @@ add_executable(weatherbit_parsing_tests ${weatherbit_parsing_tests_sources})
 
 # test run
 add_test(NAME Weatherbit-parsing
-         COMMAND $<TARGET_FILE:weatherbit_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/weatherbit.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/weatherbit.forecast.hourly.json" "${CMAKE_CURRENT_SOURCE_DIR}/weatherbit.forecast.3hourly.json")
+         COMMAND $<TARGET_FILE:weatherbit_parsing_tests> "${CMAKE_CURRENT_SOURCE_DIR}/weatherbit.current.json" "${CMAKE_CURRENT_SOURCE_DIR}/weatherbit.forecast.hourly.json" "${CMAKE_CURRENT_SOURCE_DIR}/weatherbit.forecast.3hourly.json" "${CMAKE_CURRENT_SOURCE_DIR}/weatherbit.forecast.daily.json")

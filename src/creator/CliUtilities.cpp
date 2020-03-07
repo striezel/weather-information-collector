@@ -197,14 +197,14 @@ ApiType selectApi()
   return ApiType::none;
 }
 
-DataType selectDataType(const ApiType selectedApi, const PlanWeatherstack planWs)
+DataType selectDataType(const ApiType selectedApi, const PlanWeatherbit planWb, const PlanWeatherstack planWs)
 {
   if (selectedApi == ApiType::none)
   {
     std::cout << "Error: An API has to be selected." << std::endl;
     return DataType::none;
   }
-  const auto api = Factory::create(selectedApi, planWs, "");
+  const auto api = Factory::create(selectedApi, planWb, planWs, "");
 
   const std::vector<DataType> allDataTypes = { DataType::Current, DataType::Forecast, DataType::CurrentAndForecast };
   std::vector<DataType> supportedDataTypes;

@@ -2,8 +2,10 @@
 
 ## Version 0.9.10-pre (2020-03-07)
 
-Perform Weatherstack requests via HTTPS when the configured plan allows it.
-(Non-free plans allow HTTPS requests, the free plan only supports HTTP.)
+- Weatherbit forecast will now use daily forecast for free plan and hourly
+  forecast for other plans.
+- Perform Weatherstack requests via HTTPS when the configured plan allows it.
+  (Non-free plans allow HTTPS requests, the free plan only supports HTTP.)
 
 ## Version 0.9.9 (2020-03-01)
 

@@ -62,11 +62,12 @@ ApiType selectApi();
 /** \brief Lets the user select a data type for the selected API.
  *
  * \param selectedApi  type of the selected API from previous step
+ * \param planWb       pricing plan for Weatherbit
  * \param planWs       pricing plan for Weatherstack
  * \return Returns the selected data type, if a valid selection was made.
  *         Returns DataType::none, if the selection was invalid.
  */
-DataType selectDataType(const ApiType selectedApi, const PlanWeatherstack planWs);
+DataType selectDataType(const ApiType selectedApi, const PlanWeatherbit planWb, const PlanWeatherstack planWs);
 
 
 /** \brief Lets the user select a collection interval.

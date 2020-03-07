@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <string>
 #include "API.hpp"
+#include "Plans.hpp"
 
 namespace wic
 {
@@ -34,9 +35,10 @@ class Weatherbit: public API
   public:
     /** \brief Constructor.
      *
+     * \param plan the pricing plan for Weatherbit
      * \param key  the API key for requests
      */
-    Weatherbit(const std::string& key = "");
+    Weatherbit(const PlanWeatherbit plan, const std::string& key = "");
 
 
     /** \brief Sets the API key for API requests.
@@ -119,6 +121,7 @@ class Weatherbit: public API
     #endif // wic_no_json_parsing
   private:
     std::string m_apiKey; /**< the API key for requests */
+    PlanWeatherbit m_plan; /**< the Weatherbit plan */
 
 
     #ifndef wic_no_network_requests
