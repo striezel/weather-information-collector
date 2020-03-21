@@ -2,4 +2,4 @@
 wic.conf
 
 # contents of task directory
-task.d/*.task
+task.d/
