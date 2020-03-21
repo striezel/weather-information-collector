@@ -22,8 +22,8 @@
 #define WEATHER_INFORMATION_COLLECTOR_DB_API_HPP
 
 #include <mysql++/mysql++.h>
-#include "../api/Types.hpp"
-#include "ConnectionInformation.hpp"
+#include "../../api/Types.hpp"
+#include "../ConnectionInformation.hpp"
 
 namespace wic
 {

@@ -18,9 +18,10 @@ set(weather-information-collector-update_sources
     ../data/Forecast.cpp
     ../data/Location.cpp
     ../data/Weather.cpp
-    ../db/API.cpp
     ../db/ConnectionInformation.cpp
-    ../db/Structure.cpp
+    ../db/mysqlpp/API.cpp
+    ../db/mysqlpp/Structure.cpp
+    ../db/mysqlpp/guess.cpp
     ../json/ApixuFunctions.cpp
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
@@ -32,9 +33,9 @@ set(weather-information-collector-update_sources
     ../tasks/TaskManager.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
+    ../util/SemVer.cpp
     ../util/Strings.cpp
     ForecastDataUpdate_0.8.3.cpp
-    SemVer.cpp
     Update_0.5.4_to_0.5.5.cpp
     Update_0.5.7_to_0.6.0.cpp
     Update_0.6.5_to_0.6.6.cpp
@@ -47,7 +48,6 @@ set(weather-information-collector-update_sources
     UpdateTo_0.8.6.cpp
     UpdateTo_0.9.0.cpp
     UpdateTo_0.9.7.cpp
-    guess.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)

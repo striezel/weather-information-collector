@@ -21,7 +21,7 @@
 #include "guess.hpp"
 #include <iostream>
 #include <mysql++/mysql++.h>
-#include "../db/Structure.hpp"
+#include "Structure.hpp"
 
 namespace wic
 {

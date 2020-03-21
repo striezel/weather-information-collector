@@ -23,7 +23,7 @@
 #include <mysql++/mysql++.h>
 #include "../api/OpenWeatherMap.hpp"
 #include "../api/Types.hpp"
-#include "../db/API.hpp"
+#include "../db/mysqlpp/API.hpp"
 
 namespace wic
 {

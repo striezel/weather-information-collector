@@ -61,11 +61,13 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
-		<Unit filename="../db/SSQLS_forecast.hpp" />
-		<Unit filename="../db/SSQLS_forecastdata.hpp" />
-		<Unit filename="../db/SSQLS_weatherdata.hpp" />
-		<Unit filename="../db/Utilities.cpp" />
-		<Unit filename="../db/Utilities.hpp" />
+		<Unit filename="../db/mysqlpp/SourceMySQL.cpp" />
+		<Unit filename="../db/mysqlpp/SourceMySQL.hpp" />
+		<Unit filename="../db/mysqlpp/SSQLS_forecast.hpp" />
+		<Unit filename="../db/mysqlpp/SSQLS_forecastdata.hpp" />
+		<Unit filename="../db/mysqlpp/SSQLS_weatherdata.hpp" />
+		<Unit filename="../db/mysqlpp/Utilities.cpp" />
+		<Unit filename="../db/mysqlpp/Utilities.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />
 		<Unit filename="../json/ApixuFunctions.hpp" />
 		<Unit filename="../json/JsonCppApixu.cpp" />
@@ -80,8 +82,6 @@
 		<Unit filename="../json/NLohmannJsonDarkSky.hpp" />
 		<Unit filename="../json/NLohmannJsonOwm.cpp" />
 		<Unit filename="../json/NLohmannJsonOwm.hpp" />
-		<Unit filename="../retrieve/SourceMySQL.cpp" />
-		<Unit filename="../retrieve/SourceMySQL.hpp" />
 		<Unit filename="../util/Directories.cpp" />
 		<Unit filename="../util/Directories.hpp" />
 		<Unit filename="../util/GitInfos.cpp" />

@@ -24,17 +24,17 @@
 #include <chrono>
 #include <map>
 #include <vector>
-#include "../api/Types.hpp"
-#include "../data/Forecast.hpp"
+#include "../../api/Types.hpp"
+#include "../../data/Forecast.hpp"
 #ifndef wic_no_metadata
-#include "../data/ForecastMeta.hpp"
+#include "../../data/ForecastMeta.hpp"
 #endif // wic_no_metadata
-#include "../data/Location.hpp"
-#include "../data/Weather.hpp"
+#include "../../data/Location.hpp"
+#include "../../data/Weather.hpp"
 #ifndef wic_no_metadata
-#include "../data/WeatherMeta.hpp"
+#include "../../data/WeatherMeta.hpp"
 #endif // wic_no_metadata
-#include "../db/ConnectionInformation.hpp"
+#include "../ConnectionInformation.hpp"
 
 namespace wic
 {

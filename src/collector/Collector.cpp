@@ -25,7 +25,7 @@
 #include "../api/API.hpp"
 #include "../api/Factory.hpp"
 #include "../data/Weather.hpp"
-#include "../store/StoreMySQL.hpp"
+#include "../db/mysqlpp/StoreMySQL.hpp"
 
 namespace wic
 {

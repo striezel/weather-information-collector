@@ -20,10 +20,10 @@
 
 #include "SourceMySQL.hpp"
 #include <mysql++/mysql++.h>
-#include "../db/Utilities.hpp"
-#include "../db/SSQLS_weatherdata.hpp"
-#include "../db/SSQLS_forecast.hpp"
-#include "../db/SSQLS_forecastdata.hpp"
+#include "Utilities.hpp"
+#include "SSQLS_weatherdata.hpp"
+#include "SSQLS_forecast.hpp"
+#include "SSQLS_forecastdata.hpp"
 
 namespace wic
 {

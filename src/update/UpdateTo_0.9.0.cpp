@@ -22,8 +22,8 @@
 #include <iostream>
 #include <mysql++/mysql++.h>
 #include "../../third-party/nlohmann/json.hpp"
-#include "../db/API.hpp"
-#include "../db/Structure.hpp"
+#include "../db/mysqlpp/API.hpp"
+#include "../db/mysqlpp/Structure.hpp"
 
 namespace wic
 {

@@ -11,7 +11,8 @@ set(weather-information-collector-benchmark_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
-    ../db/Utilities.cpp
+    ../db/mysqlpp/SourceMySQL.cpp
+    ../db/mysqlpp/Utilities.cpp
     ../json/ApixuFunctions.cpp
     ../json/JsonCppApixu.cpp
     ../json/JsonCppDarkSky.cpp
@@ -19,7 +20,6 @@ set(weather-information-collector-benchmark_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
-    ../retrieve/SourceMySQL.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp

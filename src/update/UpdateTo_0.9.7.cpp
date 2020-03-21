@@ -21,7 +21,7 @@
 #include "UpdateTo_0.9.7.hpp"
 #include <iostream>
 #include <mysql++/mysql++.h>
-#include "../db/API.hpp"
+#include "../db/mysqlpp/API.hpp"
 
 namespace wic
 {

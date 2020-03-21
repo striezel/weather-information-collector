@@ -21,7 +21,7 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_DB_STRUCTURE_HPP
 #define WEATHER_INFORMATION_COLLECTOR_DB_STRUCTURE_HPP
 
-#include "ConnectionInformation.hpp"
+#include "../ConnectionInformation.hpp"
 
 namespace wic
 {

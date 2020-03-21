@@ -29,8 +29,8 @@
 #include "../api/DarkSky.hpp"
 #include "../api/OpenWeatherMap.hpp"
 #include "../api/Types.hpp"
-#include "../db/API.hpp"
-#include "../db/Structure.hpp"
+#include "../db/mysqlpp/API.hpp"
+#include "../db/mysqlpp/Structure.hpp"
 #include "ForecastDataUpdate_0.8.3.hpp"
 #include "WeatherDataUpdate_0.8.3.hpp"
 

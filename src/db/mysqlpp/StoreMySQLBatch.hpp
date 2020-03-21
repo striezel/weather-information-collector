@@ -21,10 +21,10 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_STOREMYSQLBATCH_HPP
 #define WEATHER_INFORMATION_COLLECTOR_STOREMYSQLBATCH_HPP
 
-#include "Store.hpp"
+#include "../Store.hpp"
 #include <fstream>
 #include <mysql++/mysql++.h>
-#include "../db/ConnectionInformation.hpp"
+#include "../ConnectionInformation.hpp"
 
 namespace wic
 {

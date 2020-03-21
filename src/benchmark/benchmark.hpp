@@ -30,7 +30,7 @@
 #include "../data/Forecast.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
-#include "../retrieve/SourceMySQL.hpp"
+#include "../db/mysqlpp/SourceMySQL.hpp"
 #include "../ReturnCodes.hpp"
 
 namespace wic

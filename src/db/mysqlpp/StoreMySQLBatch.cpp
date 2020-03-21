@@ -19,7 +19,7 @@
 */
 
 #include "StoreMySQLBatch.hpp"
-#include "../db/Utilities.hpp"
+#include "Utilities.hpp"
 
 namespace wic
 {

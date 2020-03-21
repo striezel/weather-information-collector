@@ -19,7 +19,7 @@
 */
 
 #include <catch.hpp>
-#include "../../../src/update/SemVer.hpp"
+#include "../../../src/util/SemVer.hpp"
 
 TEST_CASE("SemVer class")
 {

@@ -21,8 +21,8 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP
 #define WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP
 
-#include "../db/ConnectionInformation.hpp"
-#include "SemVer.hpp"
+#include "../ConnectionInformation.hpp"
+#include "../../util/SemVer.hpp"
 
 namespace wic
 {

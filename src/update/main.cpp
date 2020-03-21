@@ -20,10 +20,10 @@
 
 #include <iostream>
 #include "../conf/Configuration.hpp"
+#include "../db/mysqlpp/guess.hpp"
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
-#include "guess.hpp"
 #include "Update_0.5.4_to_0.5.5.hpp"
 #include "Update_0.5.7_to_0.6.0.hpp"
 #include "Update_0.6.5_to_0.6.6.hpp"

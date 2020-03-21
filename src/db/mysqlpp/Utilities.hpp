@@ -22,7 +22,7 @@
 #define WEATHER_INFORMATION_COLLECTOR_DB_UTILITIES_HPP
 
 #include <mysql++/mysql++.h>
-#include "../data/Location.hpp"
+#include "../../data/Location.hpp"
 
 namespace wic
 {

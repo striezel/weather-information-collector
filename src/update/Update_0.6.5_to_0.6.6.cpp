@@ -20,7 +20,7 @@
 
 #include "Update_0.6.5_to_0.6.6.hpp"
 #include <mysql++/mysql++.h>
-#include "../db/Structure.hpp"
+#include "../db/mysqlpp/Structure.hpp"
 
 namespace wic
 {

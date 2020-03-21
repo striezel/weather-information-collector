@@ -19,8 +19,10 @@ set(weather-information-collector_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
-    ../db/Structure.cpp
-    ../db/Utilities.cpp
+    ../db/mysqlpp/StoreMySQL.cpp
+    ../db/mysqlpp/Structure.cpp
+    ../db/mysqlpp/Utilities.cpp
+    ../db/mysqlpp/guess.cpp
     ../json/ApixuFunctions.cpp
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
@@ -29,13 +31,11 @@ set(weather-information-collector_sources
     ../json/NLohmannJsonWeatherstack.cpp
     ../json/WeatherstackFunctions.cpp
     ../net/Curly.cpp
-    ../store/StoreMySQL.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
-    ../update/SemVer.cpp
-    ../update/guess.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
+    ../util/SemVer.cpp
     ../util/Strings.cpp
     Collector.cpp
     main.cpp)

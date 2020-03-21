@@ -20,14 +20,14 @@
 
 #include <iostream>
 #include <string>
-#include "../db/Utilities.hpp"
 #include "../conf/Configuration.hpp"
-#include "../retrieve/SourceMySQL.hpp"
-#include "../store/StoreMySQL.hpp"
-#include "../store/StoreMySQLBatch.hpp"
-#include "../update/SemVer.hpp"
-#include "../update/guess.hpp"
+#include "../db/mysqlpp/SourceMySQL.hpp"
+#include "../db/mysqlpp/StoreMySQL.hpp"
+#include "../db/mysqlpp/StoreMySQLBatch.hpp"
+#include "../db/mysqlpp/Utilities.hpp"
+#include "../db/mysqlpp/guess.hpp"
 #include "../util/GitInfos.hpp"
+#include "../util/SemVer.hpp"
 #include "../util/Strings.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"

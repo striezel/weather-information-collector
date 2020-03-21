@@ -25,8 +25,8 @@
 #include "../api/Apixu.hpp"
 #include "../api/OpenWeatherMap.hpp"
 #include "../api/Types.hpp"
-#include "../db/API.hpp"
-#include "../db/Structure.hpp"
+#include "../db/mysqlpp/API.hpp"
+#include "../db/mysqlpp/Structure.hpp"
 
 namespace wic
 {
