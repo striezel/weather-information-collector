@@ -41,6 +41,8 @@
 			<Add library="mariadb" />
 			<Add library="jsoncpp" />
 		</Linker>
+		<Unit filename="../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../third-party/simdjson/simdjson.h" />
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/Plans.cpp" />
@@ -83,6 +85,8 @@
 		<Unit filename="../json/NLohmannJsonDarkSky.hpp" />
 		<Unit filename="../json/NLohmannJsonOwm.cpp" />
 		<Unit filename="../json/NLohmannJsonOwm.hpp" />
+		<Unit filename="../json/SimdJsonDarkSky.cpp" />
+		<Unit filename="../json/SimdJsonDarkSky.hpp" />
 		<Unit filename="../util/Directories.cpp" />
 		<Unit filename="../util/Directories.hpp" />
 		<Unit filename="../util/GitInfos.cpp" />

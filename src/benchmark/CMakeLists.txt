@@ -4,6 +4,7 @@ cmake_minimum_required (VERSION 2.8)
 project(weather-information-collector-benchmark)
 
 set(weather-information-collector-benchmark_sources
+    ../../third-party/simdjson/simdjson.cpp
     ../api/Types.cpp
     ../api/Plans.cpp
     ../conf/Configuration.cpp
@@ -24,6 +25,7 @@ set(weather-information-collector-benchmark_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
+    ../json/SimdJsonDarkSky.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
