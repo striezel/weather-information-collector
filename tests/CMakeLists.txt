@@ -24,6 +24,9 @@ if (JSON_BENCHMARK)
   add_subdirectory (benchmark)
 endif (JSON_BENCHMARK)
 
+# Recurse into subdirectory for database tests.
+add_subdirectory (db)
+
 # Recurse into subdirectory for executable tests.
 add_subdirectory (collector)
 

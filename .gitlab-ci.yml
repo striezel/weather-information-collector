@@ -4,6 +4,13 @@ image: debian:9-slim
 
 build_gcc:
   stage: build
+  services:
+  - mariadb:10.4
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
     - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev pkg-config
     - export CC=gcc && export CXX=g++
@@ -18,6 +25,13 @@ build_gcc:
 # There is no official clang image at Docker Hub.
 build_clang:
   stage: build
+  services:
+  - mariadb:10.4
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
     - apt-get update && apt-get -y install catch clang cmake libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev libboost-filesystem-dev pkg-config
     - export CC=clang && export CXX=clang++
