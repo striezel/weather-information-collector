@@ -20,8 +20,8 @@
 
 #include <iostream>
 #include <catch.hpp>
-#include "../../../src/db/mysqlpp/SourceMySQL.hpp"
-#include "../../../src/db/mysqlpp/StoreMySQL.hpp"
+#include "../../../src/db/mariadb/SourceMySQL.hpp"
+#include "../../../src/db/mariadb/StoreMySQL.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../CiData.hpp"

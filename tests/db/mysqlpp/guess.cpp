@@ -23,7 +23,7 @@
 #include "../../../src/db/mysqlpp/guess.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
-#include "InitDB.hpp"
+#include "../InitDB.hpp"
 
 TEST_CASE("database version guessing tests")
 {

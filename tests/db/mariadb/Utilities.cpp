@@ -20,14 +20,16 @@
 
 #include <iostream>
 #include <catch.hpp>
-#include "../../../src/db/mysqlpp/API.hpp"
+#include "../../../src/db/mariadb/Utilities.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
+#include "../CiData.hpp"
 #include "../InitDB.hpp"
 
-TEST_CASE("Get API ids")
+TEST_CASE("Utilities tests")
 {
   using namespace wic;
+  using namespace wic::db::mariadb;
   const bool isCI = isGitlabCi() || isTravisCi();
 
   // Only run this test, if we are within the CI environment.
@@ -37,47 +39,36 @@ TEST_CASE("Get API ids")
     REQUIRE( connInfo.isComplete() );
 
     REQUIRE( InitDB::createDb(connInfo) );
-    REQUIRE( InitDB::createTableApi(connInfo) );
-    REQUIRE( InitDB::fillTableApi(connInfo) );
+    REQUIRE( InitDB::createTableLocation(connInfo) );
 
-    SECTION("id of Apixu")
+    const Location Dresden = CiData::getDresden();
+    const Location Tiksi = CiData::getTiksi();
+
+    SECTION("one location")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::Apixu);
+      Connection conn(connInfo);
+      REQUIRE_FALSE( conn.raw() == nullptr );
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 1 );
+      const int idDresden = getLocationId(conn, Dresden);
+      REQUIRE_FALSE( idDresden == -1 );
+      // Getting location again shall return same id.
+      const int idDresdenAgain = getLocationId(conn, Dresden);
+      REQUIRE( idDresden == idDresdenAgain );
     }
 
-    SECTION("id of OpenWeatherMap")
+    SECTION("two locations")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::OpenWeatherMap);
+      Connection conn(connInfo);
+      REQUIRE_FALSE( conn.raw() == nullptr );
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 2 );
-    }
+      const int idDresden = getLocationId(conn, Dresden);
+      REQUIRE_FALSE( idDresden == -1 );
 
-    SECTION("id of DarkSky")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::DarkSky);
+      const int idTiksi = getLocationId(conn, Tiksi);
+      REQUIRE_FALSE( idTiksi == -1 );
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 3 );
-    }
-
-    SECTION("id of Weatherbit")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherbit);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 4 );
-    }
-
-    SECTION("id of Weatherstack")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherstack);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 5 );
+      // New location should have different id.
+      REQUIRE( idDresden != idTiksi );
     }
   }
   else

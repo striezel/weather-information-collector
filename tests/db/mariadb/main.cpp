@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2017  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,32 +18,5 @@
  -------------------------------------------------------------------------------
 */
 
-#include "CiConnection.hpp"
-#include "../../src/util/Environment.hpp"
-
-namespace wic
-{
-
-ConnectionInformation getCiConn()
-{
-  if (isGitlabCi())
-  {
-    // GitLab CI configuration uses mariadb docker container with appropriate
-    // environment variables.
-    const std::string host = getEnvVar("MYSQL_HOST");
-    return ConnectionInformation(
-             host.empty() ? "mariadb" : host,
-             getEnvVar("MYSQL_DATABASE"),
-             getEnvVar("MYSQL_USER"),
-             getEnvVar("MYSQL_PASSWORD"));
-  }
-
-  // Assume Travis CI otherwise.
-  return ConnectionInformation(
-           "127.0.0.1",
-           "weather_information_collector",
-           "travis", // user
-           "" /* Password is blank on Travis CI. */);
-}
-
-} // namespace
+#define CATCH_CONFIG_MAIN
+#include <catch.hpp>

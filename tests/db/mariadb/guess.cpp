@@ -20,12 +20,12 @@
 
 #include <iostream>
 #include <catch.hpp>
-#include "../../../src/db/mysqlpp/API.hpp"
+#include "../../../src/db/mariadb/guess.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../InitDB.hpp"
 
-TEST_CASE("Get API ids")
+TEST_CASE("database version guessing tests")
 {
   using namespace wic;
   const bool isCI = isGitlabCi() || isTravisCi();
@@ -38,46 +38,25 @@ TEST_CASE("Get API ids")
 
     REQUIRE( InitDB::createDb(connInfo) );
     REQUIRE( InitDB::createTableApi(connInfo) );
-    REQUIRE( InitDB::fillTableApi(connInfo) );
+    REQUIRE( InitDB::createTableLocation(connInfo) );
+    REQUIRE( InitDB::createTableWeatherData(connInfo) );
+    REQUIRE( InitDB::createTableForecast(connInfo) );
+    REQUIRE( InitDB::createTableForecastData(connInfo) );
 
-    SECTION("id of Apixu")
+    SECTION("guess current version for up-to-date database")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::Apixu);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 1 );
+      const auto guessedVersion = guessVersionFromDatabase(connInfo);
+      // Database should be the most up to date version.
+      REQUIRE( guessedVersion == mostUpToDateVersion );
     }
 
-    SECTION("id of OpenWeatherMap")
+
+    SECTION("guess version for 0.8.6 database")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::OpenWeatherMap);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 2 );
-    }
-
-    SECTION("id of DarkSky")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::DarkSky);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 3 );
-    }
-
-    SECTION("id of Weatherbit")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherbit);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 4 );
-    }
-
-    SECTION("id of Weatherstack")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherstack);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 5 );
+      REQUIRE( InitDB::downgradeTo_0_8_6(connInfo) );
+      const auto guessedVersion = guessVersionFromDatabase(connInfo);
+      // Database should be the most up to date version.
+      REQUIRE( guessedVersion == SemVer(0, 8, 6) );
     }
   }
   else

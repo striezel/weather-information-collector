@@ -20,7 +20,7 @@
 
 #include <iostream>
 #include <catch.hpp>
-#include "../../../src/db/mysqlpp/API.hpp"
+#include "../../../src/db/mariadb/API.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../InitDB.hpp"

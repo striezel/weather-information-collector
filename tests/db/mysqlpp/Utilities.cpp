@@ -24,7 +24,7 @@
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../CiData.hpp"
-#include "InitDB.hpp"
+#include "../InitDB.hpp"
 
 TEST_CASE("Utilities tests")
 {

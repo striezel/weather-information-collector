@@ -18,14 +18,15 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_DB_MYSQLPP_TESTS_INITDB_HPP
-#define WEATHER_INFORMATION_COLLECTOR_DB_MYSQLPP_TESTS_INITDB_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_DB_TESTS_INITDB_HPP
+#define WEATHER_INFORMATION_COLLECTOR_DB_TESTS_INITDB_HPP
 
-#include "../../../src/db/ConnectionInformation.hpp"
+#include "../../src/db/ConnectionInformation.hpp"
 
 namespace wic
 {
 
+/** \brief Utility class for database initialization steps. */
 class InitDB
 {
   public:
@@ -94,4 +95,4 @@ class InitDB
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_DB_MYSQLPP_TESTS_INITDB_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_DB_TESTS_INITDB_HPP

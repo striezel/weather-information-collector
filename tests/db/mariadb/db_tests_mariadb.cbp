@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="db_tests_mysqlpp" />
+		<Option title="db_tests_mariadb" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Release">
-				<Option output="bin/Release/db_tests_mysqlpp" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/db_tests_mariadb" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -20,38 +20,49 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Weffc++" />
 			<Add option="-Wall" />
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
-			<Add directory="/usr/include/mysql/" />
+			<Add option="-Dwic_weather_comparison" />
 		</Compiler>
 		<Linker>
-			<Add library="mysqlpp" />
-			<Add library="mysqlclient" />
+			<Add library="mariadb" />
 		</Linker>
 		<Unit filename="../../../src/api/Types.cpp" />
 		<Unit filename="../../../src/api/Types.hpp" />
 		<Unit filename="../../../src/data/Forecast.cpp" />
 		<Unit filename="../../../src/data/Forecast.hpp" />
+		<Unit filename="../../../src/data/ForecastMeta.cpp" />
+		<Unit filename="../../../src/data/ForecastMeta.hpp" />
 		<Unit filename="../../../src/data/Location.cpp" />
 		<Unit filename="../../../src/data/Location.hpp" />
 		<Unit filename="../../../src/data/Weather.cpp" />
 		<Unit filename="../../../src/data/Weather.hpp" />
+		<Unit filename="../../../src/data/WeatherMeta.cpp" />
+		<Unit filename="../../../src/data/WeatherMeta.hpp" />
 		<Unit filename="../../../src/db/ConnectionInformation.cpp" />
 		<Unit filename="../../../src/db/ConnectionInformation.hpp" />
-		<Unit filename="../../../src/db/Store.hpp" />
-		<Unit filename="../../../src/db/mysqlpp/API.cpp" />
-		<Unit filename="../../../src/db/mysqlpp/API.hpp" />
-		<Unit filename="../../../src/db/mysqlpp/SSQLS_forecast.hpp" />
-		<Unit filename="../../../src/db/mysqlpp/SSQLS_weatherdata.hpp" />
-		<Unit filename="../../../src/db/mysqlpp/StoreMySQL.cpp" />
-		<Unit filename="../../../src/db/mysqlpp/StoreMySQL.hpp" />
-		<Unit filename="../../../src/db/mysqlpp/Structure.cpp" />
-		<Unit filename="../../../src/db/mysqlpp/Structure.hpp" />
-		<Unit filename="../../../src/db/mysqlpp/Utilities.cpp" />
-		<Unit filename="../../../src/db/mysqlpp/Utilities.hpp" />
-		<Unit filename="../../../src/db/mysqlpp/guess.cpp" />
-		<Unit filename="../../../src/db/mysqlpp/guess.hpp" />
+		<Unit filename="../../../src/db/mariadb/API.cpp" />
+		<Unit filename="../../../src/db/mariadb/API.hpp" />
+		<Unit filename="../../../src/db/mariadb/Connection.cpp" />
+		<Unit filename="../../../src/db/mariadb/Connection.hpp" />
+		<Unit filename="../../../src/db/mariadb/Field.cpp" />
+		<Unit filename="../../../src/db/mariadb/Field.hpp" />
+		<Unit filename="../../../src/db/mariadb/Result.cpp" />
+		<Unit filename="../../../src/db/mariadb/Result.hpp" />
+		<Unit filename="../../../src/db/mariadb/Row.cpp" />
+		<Unit filename="../../../src/db/mariadb/Row.hpp" />
+		<Unit filename="../../../src/db/mariadb/SourceMySQL.cpp" />
+		<Unit filename="../../../src/db/mariadb/SourceMySQL.hpp" />
+		<Unit filename="../../../src/db/mariadb/StoreMySQL.cpp" />
+		<Unit filename="../../../src/db/mariadb/StoreMySQL.hpp" />
+		<Unit filename="../../../src/db/mariadb/Structure.cpp" />
+		<Unit filename="../../../src/db/mariadb/Structure.hpp" />
+		<Unit filename="../../../src/db/mariadb/Utilities.cpp" />
+		<Unit filename="../../../src/db/mariadb/Utilities.hpp" />
+		<Unit filename="../../../src/db/mariadb/guess.cpp" />
+		<Unit filename="../../../src/db/mariadb/guess.hpp" />
 		<Unit filename="../../../src/util/Environment.cpp" />
 		<Unit filename="../../../src/util/Environment.hpp" />
 		<Unit filename="../../../src/util/SemVer.cpp" />
@@ -64,7 +75,12 @@
 		<Unit filename="../CiData.hpp" />
 		<Unit filename="../InitDB.hpp" />
 		<Unit filename="API.cpp" />
+		<Unit filename="Connection.cpp" />
+		<Unit filename="Field.cpp" />
 		<Unit filename="InitDB.cpp" />
+		<Unit filename="Result.cpp" />
+		<Unit filename="Row.cpp" />
+		<Unit filename="SourceMySQL.cpp" />
 		<Unit filename="StoreMySQL.cpp" />
 		<Unit filename="Structure.cpp" />
 		<Unit filename="Utilities.cpp" />

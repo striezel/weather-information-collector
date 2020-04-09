@@ -18,32 +18,22 @@
  -------------------------------------------------------------------------------
 */
 
-#include "CiConnection.hpp"
-#include "../../src/util/Environment.hpp"
+#include <catch.hpp>
+#include "../../../src/db/mariadb/Field.hpp"
 
-namespace wic
+TEST_CASE("FieldType to string")
 {
+  using namespace wic::db::mariadb;
 
-ConnectionInformation getCiConn()
-{
-  if (isGitlabCi())
+  SECTION("toString() for FieldType values")
   {
-    // GitLab CI configuration uses mariadb docker container with appropriate
-    // environment variables.
-    const std::string host = getEnvVar("MYSQL_HOST");
-    return ConnectionInformation(
-             host.empty() ? "mariadb" : host,
-             getEnvVar("MYSQL_DATABASE"),
-             getEnvVar("MYSQL_USER"),
-             getEnvVar("MYSQL_PASSWORD"));
+    REQUIRE( toString(FieldType::Blob) == "blob" );
+    REQUIRE( toString(FieldType::DateTime) == "datetime" );
+    REQUIRE( toString(FieldType::Double) == "double" );
+    REQUIRE( toString(FieldType::Float) == "float" );
+    REQUIRE( toString(FieldType::Integer) == "integer" );
+    REQUIRE( toString(FieldType::String) == "string" );
+
+    REQUIRE( toString(FieldType::unknown) == "unknown" );
   }
-
-  // Assume Travis CI otherwise.
-  return ConnectionInformation(
-           "127.0.0.1",
-           "weather_information_collector",
-           "travis", // user
-           "" /* Password is blank on Travis CI. */);
 }
-
-} // namespace

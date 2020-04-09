@@ -20,12 +20,12 @@
 
 #include <iostream>
 #include <catch.hpp>
-#include "../../../src/db/mysqlpp/API.hpp"
+#include "../../../src/db/mariadb/Structure.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../InitDB.hpp"
 
-TEST_CASE("Get API ids")
+TEST_CASE("Structure tests")
 {
   using namespace wic;
   const bool isCI = isGitlabCi() || isTravisCi();
@@ -38,46 +38,22 @@ TEST_CASE("Get API ids")
 
     REQUIRE( InitDB::createDb(connInfo) );
     REQUIRE( InitDB::createTableApi(connInfo) );
-    REQUIRE( InitDB::fillTableApi(connInfo) );
 
-    SECTION("id of Apixu")
+    SECTION("check for existing tables")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::Apixu);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 1 );
+      REQUIRE( Structure::tableExists(connInfo, "api") );
+      REQUIRE_FALSE( Structure::tableExists(connInfo, "does_not_exist_in_db") );
     }
 
-    SECTION("id of OpenWeatherMap")
+    SECTION("check for existing columns")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::OpenWeatherMap);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 2 );
-    }
-
-    SECTION("id of DarkSky")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::DarkSky);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 3 );
-    }
-
-    SECTION("id of Weatherbit")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherbit);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 4 );
-    }
-
-    SECTION("id of Weatherstack")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherstack);
-
-      REQUIRE( id != -1 );
-      REQUIRE( id == 5 );
+      // existing columns in one existing table
+      REQUIRE( Structure::columnExists(connInfo, "api", "apiID") );
+      REQUIRE( Structure::columnExists(connInfo, "api", "name") );
+      // non-existing column in one existing table
+      REQUIRE_FALSE( Structure::columnExists(connInfo, "api", "foobar") );
+      // non-existing column in non-existing table
+      REQUIRE_FALSE( Structure::columnExists(connInfo, "foo", "bar") );
     }
   }
   else

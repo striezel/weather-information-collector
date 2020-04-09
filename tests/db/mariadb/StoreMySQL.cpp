@@ -20,9 +20,9 @@
 
 #include <iostream>
 #include <catch.hpp>
-#include "../../../src/db/mysqlpp/SSQLS_forecast.hpp"
-#include "../../../src/db/mysqlpp/SSQLS_weatherdata.hpp"
-#include "../../../src/db/mysqlpp/StoreMySQL.hpp"
+#include "../../../src/db/mariadb/API.hpp"
+#include "../../../src/db/mariadb/Result.hpp"
+#include "../../../src/db/mariadb/StoreMySQL.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../CiData.hpp"
@@ -55,31 +55,28 @@ TEST_CASE("StoreMySQL tests")
       REQUIRE( store.saveCurrentWeather(ApiType::OpenWeatherMap, Dresden, weather) );
 
       // Weather data should also exist in DB now. Query some of it.
-      mysqlpp::Connection conn(false);
-      REQUIRE( conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
-                            connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()));
-      mysqlpp::Query query(&conn);
-      query << "SELECT * FROM weatherdata ORDER BY dataID DESC LIMIT 1;";
-      std::vector<weatherdata> queryData;
-      query.storein(queryData);
-      REQUIRE( queryData.size() == 1 );
+      db::mariadb::Connection conn(connInfo);
+      const std::string query = "SELECT * FROM weatherdata ORDER BY dataID DESC LIMIT 1;";
+      const auto result = conn.query(query);
+      REQUIRE( result.good() );
+      REQUIRE( result.rowCount() == 1 );
 
-      const auto elem = queryData.at(0);
-      REQUIRE_FALSE( elem.temperature_C.is_null );
-      REQUIRE( elem.temperature_C.data == weather.temperatureCelsius() );
-      REQUIRE_FALSE( elem.humidity.is_null );
-      const uint8_t humidity = elem.humidity.data;
+      const auto elem = result.row(0);
+      REQUIRE_FALSE( elem.isNull(result.fieldIndex("temperature_C")) );
+      REQUIRE( elem.getFloat(result.fieldIndex("temperature_C")) == weather.temperatureCelsius() );
+      REQUIRE_FALSE( elem.isNull(result.fieldIndex("humidity")) );
+      const uint8_t humidity = elem.getInt(result.fieldIndex("humidity"));
       REQUIRE( humidity == weather.humidity() );
-      REQUIRE_FALSE( elem.pressure.is_null );
-      REQUIRE( elem.pressure.data == weather.pressure() );
-      REQUIRE_FALSE( elem.wind_speed.is_null );
-      REQUIRE( elem.wind_speed.data == weather.windSpeed() );
-      REQUIRE_FALSE( elem.wind_degrees.is_null );
-      REQUIRE( elem.wind_degrees.data == weather.windDegrees() );
-      REQUIRE_FALSE( elem.json.is_null );
-      REQUIRE( elem.json.data == weather.json() );
-      REQUIRE( std::chrono::system_clock::from_time_t(elem.dataTime) == weather.dataTime() );
-      REQUIRE( std::chrono::system_clock::from_time_t(elem.requestTime) == weather.requestTime() );
+      REQUIRE_FALSE( elem.isNull(result.fieldIndex("pressure")) );
+      REQUIRE( elem.getInt(result.fieldIndex("pressure")) == weather.pressure() );
+      REQUIRE_FALSE( elem.isNull(result.fieldIndex("wind_speed")) );
+      REQUIRE( elem.getFloat(result.fieldIndex("wind_speed")) == weather.windSpeed() );
+      REQUIRE_FALSE( elem.isNull(result.fieldIndex("wind_degrees")) );
+      REQUIRE( elem.getFloat(result.fieldIndex("wind_degrees")) == weather.windDegrees() );
+      REQUIRE_FALSE( elem.isNull(result.fieldIndex("json")) );
+      REQUIRE( elem.column(result.fieldIndex("json")) == weather.json() );
+      REQUIRE( elem.getDateTime(result.fieldIndex("dataTime")) == weather.dataTime() );
+      REQUIRE( elem.getDateTime(result.fieldIndex("requestTime")) == weather.requestTime() );
     }
 
 
@@ -92,20 +89,16 @@ TEST_CASE("StoreMySQL tests")
       REQUIRE( store.saveForecast(ApiType::OpenWeatherMap, Dresden, forecast) );
 
       // Forecast data should also exist in DB now. Query some of it.
-      mysqlpp::Connection conn(false);
-      REQUIRE( conn.connect(connInfo.db().c_str(), connInfo.hostname().c_str(),
-                            connInfo.user().c_str(), connInfo.password().c_str(), connInfo.port()));
-      mysqlpp::Query query(&conn);
-      query << "SELECT * FROM forecast ORDER BY forecastID DESC LIMIT 1;";
-      std::vector<forecast_db> queryData;
-      query.storein(queryData);
-      REQUIRE( queryData.size() == 1 );
+      db::mariadb::Connection conn(connInfo);
+      const std::string query = "SELECT * FROM forecast ORDER BY forecastID DESC LIMIT 1;";
+      const auto result = conn.query(query);
+      REQUIRE( result.rowCount() == 1 );
 
-      const auto elem = queryData.at(0);
-      REQUIRE( elem.apiID > 0 );
-      REQUIRE_FALSE( elem.json.is_null );
-      REQUIRE( elem.json.data == forecast.json() );
-      REQUIRE( std::chrono::system_clock::from_time_t(elem.requestTime) == forecast.requestTime() );
+      const auto elem = result.row(0);
+      REQUIRE( elem.getInt(result.fieldIndex("apiID")) > 0 );
+      REQUIRE_FALSE( elem.isNull(result.fieldIndex("json")) );
+      REQUIRE( elem.column(result.fieldIndex("json")) == forecast.json() );
+      REQUIRE( elem.getDateTime(result.fieldIndex("requestTime")) == forecast.requestTime() );
     }
   }
   else

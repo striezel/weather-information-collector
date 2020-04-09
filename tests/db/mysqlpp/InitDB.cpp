@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include "InitDB.hpp"
+#include "../InitDB.hpp"
 #include <iostream>
 #include <mysql++/mysql++.h>
 #include "../../../src/db/mysqlpp/Structure.hpp"

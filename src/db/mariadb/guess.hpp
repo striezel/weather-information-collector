@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
-    This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2020  Dirk Stolle
+    This file is part of the weather information collector.
+    Copyright (C) 2019  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,32 +18,27 @@
  -------------------------------------------------------------------------------
 */
 
-#include "CiConnection.hpp"
-#include "../../src/util/Environment.hpp"
+#ifndef WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP
+#define WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP
+
+#include "../ConnectionInformation.hpp"
+#include "../../util/SemVer.hpp"
 
 namespace wic
 {
 
-ConnectionInformation getCiConn()
-{
-  if (isGitlabCi())
-  {
-    // GitLab CI configuration uses mariadb docker container with appropriate
-    // environment variables.
-    const std::string host = getEnvVar("MYSQL_HOST");
-    return ConnectionInformation(
-             host.empty() ? "mariadb" : host,
-             getEnvVar("MYSQL_DATABASE"),
-             getEnvVar("MYSQL_USER"),
-             getEnvVar("MYSQL_PASSWORD"));
-  }
+const SemVer ancientVersion(0, 0, 1); /**< dummy version for very old versions */
 
-  // Assume Travis CI otherwise.
-  return ConnectionInformation(
-           "127.0.0.1",
-           "weather_information_collector",
-           "travis", // user
-           "" /* Password is blank on Travis CI. */);
-}
+const SemVer mostUpToDateVersion(0, 9, 0); /**< version for newest possible guess */
+
+/** \brief Tries to guess the current program version from the database structure.
+ *
+ * Note that the actual version may be newer.
+ * \param ci  database connection information
+ * \return Returns the detected version.
+ */
+SemVer guessVersionFromDatabase(const ConnectionInformation& ci);
 
 } // namespace
+
+#endif // WEATHER_INFORMATION_COLLECTOR_GUESSVERSION_HPP
