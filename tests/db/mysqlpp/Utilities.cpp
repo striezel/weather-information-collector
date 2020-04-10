@@ -29,7 +29,7 @@
 TEST_CASE("Utilities tests")
 {
   using namespace wic;
-  const bool isCI = isGitlabCi();
+  const bool isCI = isGitlabCi() || isTravisCi();
 
   // Only run this test, if we are within the CI environment.
   if (isCI)

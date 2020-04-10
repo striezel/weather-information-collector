@@ -26,11 +26,23 @@ namespace wic
 
 ConnectionInformation getCiConn()
 {
+  if (isGitlabCi())
+  {
+    // GitLab CI configuration uses mariadb docker container with appropriate
+    // environment variables.
+    return ConnectionInformation(
+             "mariadb",
+             getEnvVar("MYSQL_DATABASE"),
+             getEnvVar("MYSQL_USER"),
+             getEnvVar("MYSQL_PASSWORD"));
+  }
+
+  // Assume Travis CI otherwise.
   return ConnectionInformation(
-           "mariadb",
-           getEnvVar("MYSQL_DATABASE"),
-           getEnvVar("MYSQL_USER"),
-           getEnvVar("MYSQL_PASSWORD"));
+           "127.0.0.1",
+           "weather_information_collector",
+           "travis", // user
+           "" /* Password is blank on Travis CI. */);
 }
 
 } // namespace

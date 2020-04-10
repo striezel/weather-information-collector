@@ -6,6 +6,14 @@ sudo: false
 dist: xenial
 os:
   - linux
+services:
+  - mysql
+before_install:
+  - mysql -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+  - mysql -e "GRANT ALL ON weather_information_collector.* TO 'travis'@'localhost';"
+  - mysql -e "GRANT ALL ON weather_information_collector.* TO 'travis'@'%';"
+  - mysql -e "GRANT ALL ON weather_information_collector.* TO 'travis'@'127.0.0.1';"
+  - mysql -utravis --password="" -e "SHOW DATABASES;"
 script:
   - ./ci/cpplint.sh
   - mkdir ./build

@@ -41,4 +41,10 @@ bool isGitlabCi()
   return hasEnvVar("GITLAB_CI");
 }
 
+bool isTravisCi()
+{
+  // Travis CI defines the environment variable TRAVIS, so check that.
+  return hasEnvVar("TRAVIS");
+}
+
 } // namespace

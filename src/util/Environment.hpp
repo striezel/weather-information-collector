@@ -57,6 +57,13 @@ std::string getEnvVar(const std::string& name);
  */
 bool isGitlabCi();
 
+/** \brief Determines whether the application runs within Travis CI environment.
+ *
+ * \return Returns true, if the program runs in Travis CI.
+ *         Returns false otherwise.
+ */
+bool isTravisCi();
+
 } // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_ENVIRONMENT_HPP
