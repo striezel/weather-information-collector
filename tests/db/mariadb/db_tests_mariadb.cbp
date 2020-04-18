@@ -57,6 +57,8 @@
 		<Unit filename="../../../src/db/mariadb/SourceMySQL.hpp" />
 		<Unit filename="../../../src/db/mariadb/StoreMySQL.cpp" />
 		<Unit filename="../../../src/db/mariadb/StoreMySQL.hpp" />
+		<Unit filename="../../../src/db/mariadb/StoreMySQLBatch.cpp" />
+		<Unit filename="../../../src/db/mariadb/StoreMySQLBatch.hpp" />
 		<Unit filename="../../../src/db/mariadb/Structure.cpp" />
 		<Unit filename="../../../src/db/mariadb/Structure.hpp" />
 		<Unit filename="../../../src/db/mariadb/Utilities.cpp" />
@@ -82,6 +84,7 @@
 		<Unit filename="Row.cpp" />
 		<Unit filename="SourceMySQL.cpp" />
 		<Unit filename="StoreMySQL.cpp" />
+		<Unit filename="StoreMySQLBatch.cpp" />
 		<Unit filename="Structure.cpp" />
 		<Unit filename="Utilities.cpp" />
 		<Unit filename="guess.cpp" />

@@ -18,6 +18,7 @@ set(db_tests_mariadb_sources
     ../../../src/db/mariadb/Row.cpp
     ../../../src/db/mariadb/SourceMySQL.cpp
     ../../../src/db/mariadb/StoreMySQL.cpp
+    ../../../src/db/mariadb/StoreMySQLBatch.cpp
     ../../../src/db/mariadb/Structure.cpp
     ../../../src/db/mariadb/Utilities.cpp
     ../../../src/db/mariadb/guess.cpp
@@ -34,6 +35,7 @@ set(db_tests_mariadb_sources
     Row.cpp
     SourceMySQL.cpp
     StoreMySQL.cpp
+    StoreMySQLBatch.cpp
     Structure.cpp
     Utilities.cpp
     guess.cpp

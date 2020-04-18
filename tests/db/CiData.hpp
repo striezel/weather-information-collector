@@ -32,9 +32,34 @@ namespace wic
 class CiData
 {
   public:
+    /** \brief Get location data for the city of Dresden, Germany.
+     *
+     * \return Returns location data for Dresden.
+     */
     static Location getDresden();
+
+    /** \brief Get location data for the city of Staplehurst, United Kingdom.
+     *
+     * \return Returns location data for Staplehurst.
+     */
+    static Location getStaplehurst();
+
+    /** \brief Get location data for the city of Tiksi, Russia.
+     *
+     * \return Returns location data for Tiksi.
+     */
     static Location getTiksi();
+
+    /** \brief Gets mocked forecast data for Dresden.
+     *
+     * \return Returns generated forecast data.
+     */
     static Forecast sampleForecastDresden();
+
+    /** \brief Gets a weather data sample (hard-coded) for Dresden.
+     *
+     * \return Returns weather data.
+     */
     static Weather sampleWeatherDresden();
 
 

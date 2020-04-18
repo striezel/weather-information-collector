@@ -34,6 +34,16 @@ Location CiData::getDresden()
   return loc;
 }
 
+Location CiData::getStaplehurst()
+{
+  wic::Location loc;
+  loc.setOwmId(2637016);
+  loc.setCoordinates(51.161098, 0.552500);
+  loc.setName("Staplehurst");
+  loc.setCountryCode("GB");
+  return loc;
+}
+
 Location CiData::getTiksi()
 {
   wic::Location loc;
