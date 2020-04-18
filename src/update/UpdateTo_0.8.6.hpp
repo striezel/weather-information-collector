@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ namespace wic
     weather-information-collector to version 0.8.6.
 
     This class basically does one thing to the database:
-    * It sets the column `rain` in the table `forecastdata` to zero, if it is
-      currently NULL, but there is JSON data to indicates that the intended
-      amount of rain was zero. This only applies to OpenWeatherMap data.
+    * It alters the column `cloudiness` in the tables `forecastdata` and
+      `weatherdata` in such a way that NULL is an acceptable value for those
+      columns, too.
 */
 class UpdateTo086
 {

@@ -1,5 +1,15 @@
 # Version history of weather-information-collector
 
+## Version 0.9.11-pre (2020-04-19)
+
+- The library for database requests changes from libmysql++ to libmariadb.
+  libmariadb is available on more of the common Linux distributions than
+  libmysql++, so the weather-information-collector can also be built and run on
+  more distributions.
+- **Backwards-incompatible change:** The update program will no longer support
+  updating from versions older than 0.8.3. If you need this functionality, then
+  use v0.9.10 to perform the updates before moving on to v0.9.11 or newer.
+
 ## Version 0.9.10 (2020-03-07)
 
 - Weatherbit forecast will now use daily forecast for free plan and hourly
