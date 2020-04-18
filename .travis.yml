@@ -3,7 +3,7 @@ compiler:
   - clang
   - gcc
 sudo: false
-dist: xenial
+dist: bionic
 os:
   - linux
 services:
@@ -28,6 +28,7 @@ addons:
     - g++
     - libcurl4-gnutls-dev
     - libjsoncpp-dev
+    - libmariadb-dev
     - libmysql++-dev
     - libboost-filesystem-dev
 notifications:
