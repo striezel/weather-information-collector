@@ -29,7 +29,6 @@ addons:
     - libcurl4-gnutls-dev
     - libjsoncpp-dev
     - libmariadb-dev
-    - libmysql++-dev
     - libboost-filesystem-dev
 notifications:
   email: false

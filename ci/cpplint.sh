@@ -2,7 +2,7 @@
 
 #  cpplint.sh - script to check the syntax of C++ source files
 #
-#  Copyright (C) 2015, 2017, 2019  Dirk Stolle
+#  Copyright (C) 2015, 2017, 2019, 2020  Dirk Stolle
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -34,8 +34,6 @@ else
   echo "Info: Falling back to standard includes for jsoncpp!"
   CFLAGS="-I/usr/include/jsoncpp"
 fi
-# add includes for libmysql++
-CFLAGS="$CFLAGS -I/usr/include/mysql -I/usr/include/mysql++"
 
 # print $CXX version to see which version is used for syntax check
 $CXX --version
