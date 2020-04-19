@@ -2,10 +2,7 @@
 # version and then installs the package. That approach is slower and takes
 # longer to build (and the image size is bigger, too), but it should be the most
 # compatible approach.
-#
-# Image is based on Debian 9, because the current version of Debian 10 does not
-# have the libmysql++ package yet.
-FROM debian:9-slim
+FROM debian:10-slim
 MAINTAINER Dirk Stolle <striezel-dev@web.de>
 
 RUN mkdir -p /opt
@@ -14,7 +11,7 @@ WORKDIR /opt
 # Update packages, install dependencies + root certificates.
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends catch cmake g++ git \
-    libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev \
+    libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev \
     make pkg-config ca-certificates && \
     git clone https://gitlab.com/striezel/weather-information-collector.git
 WORKDIR /opt/weather-information-collector
