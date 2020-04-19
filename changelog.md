@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.9.11-pre (2020-04-19)
+## Version 0.9.11 (2020-04-19)
 
 - The library for database requests changes from libmysql++ to libmariadb.
   libmariadb is available on more of the common Linux distributions than
