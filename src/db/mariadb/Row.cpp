@@ -148,8 +148,12 @@ std::chrono::time_point<std::chrono::system_clock> Row::getDateTime(const std::s
   tm.tm_mon = month - 1;
   tm.tm_year = year - 1900;
   tm.tm_isdst = -1;
-
-  return std::chrono::system_clock::from_time_t(mktime(&tm));
+  const time_t tt = mktime(&tm);
+  if (tt == static_cast<time_t>(-1))
+  {
+    throw std::invalid_argument("mktime() failed when converting " + value + " to time_t.");
+  }
+  return std::chrono::system_clock::from_time_t(tt);
 }
 
 } // namespace
