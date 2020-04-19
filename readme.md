@@ -15,6 +15,9 @@ See the [documentation](doc/readme.md) for more information.
 
 ## Build status
 
+* GitLab CI:
+[![GitLab pipeline status](https://gitlab.com/striezel/weather-information-collector/badges/master/pipeline.svg)](https://gitlab.com/striezel/weather-information-collector/)
+* Travis CI:
 [![Build Status](https://travis-ci.org/striezel/weather-information-collector.svg?branch=master)](https://travis-ci.org/striezel/weather-information-collector)
 
 ## Building from source
