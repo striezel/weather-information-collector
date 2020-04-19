@@ -13,14 +13,16 @@ set(weather-information-collector-synchronizer_sources
     ../data/Weather.cpp
     ../data/WeatherMeta.cpp
     ../db/ConnectionInformation.cpp
-    ../db/mysqlpp/SourceMySQL.cpp
-    ../db/mysqlpp/SSQLS_location.hpp
-    ../db/mysqlpp/SSQLS_weatherdata.hpp
-    ../db/mysqlpp/StoreMySQL.cpp
-    ../db/mysqlpp/StoreMySQLBatch.cpp
-    ../db/mysqlpp/Structure.cpp
-    ../db/mysqlpp/Utilities.cpp
-    ../db/mysqlpp/guess.cpp
+    ../db/mariadb/Connection.cpp
+    ../db/mariadb/Field.cpp
+    ../db/mariadb/Result.cpp
+    ../db/mariadb/Row.cpp
+    ../db/mariadb/SourceMySQL.cpp
+    ../db/mariadb/StoreMySQL.cpp
+    ../db/mariadb/StoreMySQLBatch.cpp
+    ../db/mariadb/Structure.cpp
+    ../db/mariadb/Utilities.cpp
+    ../db/mariadb/guess.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/SemVer.cpp
@@ -36,25 +38,15 @@ set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather-information-collector-synchronizer ${weather-information-collector-synchronizer_sources})
 
-# libmysql++
-set(LibMySQLPP_DIR "../../cmake/" )
-find_package(LibMySQLPP)
-if (MYSQLPP_FOUND)
-  include_directories(${MYSQLPP_INCLUDE_DIR})
-  target_link_libraries (weather-information-collector-synchronizer ${MYSQLPP_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "libmysqlpp was not found!" )
-endif (MYSQLPP_FOUND)
-
-# find libmysqlclient
-set(mysqlclient_DIR "../../cmake/" )
-find_package(mysqlclient REQUIRED)
-if (MYSQLCLIENT_FOUND)
-  include_directories(${MYSQLCLIENT_INCLUDE_DIR})
-  target_link_libraries (weather-information-collector-synchronizer ${MYSQLCLIENT_LIBRARIES})
+# find libmariadb
+set(mariadb_DIR "../../cmake/" )
+find_package(mariadb REQUIRED)
+if (MARIADB_FOUND)
+  include_directories(${MARIADB_INCLUDE_DIR})
+  target_link_libraries (weather-information-collector-synchronizer ${MARIADB_LIBRARIES})
 else()
-  message ( FATAL_ERROR "libmysqlclient was not found!" )
-endif (MYSQLCLIENT_FOUND)
+  message ( FATAL_ERROR "libmariadb was not found!" )
+endif (MARIADB_FOUND)
 
 # find Boost library: filesystem (+ system as dependency)
 find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)

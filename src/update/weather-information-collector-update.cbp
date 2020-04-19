@@ -26,12 +26,11 @@
 			<Add option="-fexceptions" />
 			<Add option="-pthread" />
 			<Add option="-Dwic_no_network_requests" />
-			<Add directory="/usr/include/mysql" />
 		</Compiler>
 		<Linker>
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
-			<Add library="mysqlpp" />
+			<Add library="mariadb" />
 		</Linker>
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/API.hpp" />
@@ -63,14 +62,22 @@
 		<Unit filename="../data/Location.hpp" />
 		<Unit filename="../data/Weather.cpp" />
 		<Unit filename="../data/Weather.hpp" />
-		<Unit filename="../db/mysqlpp/API.cpp" />
-		<Unit filename="../db/mysqlpp/API.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
-		<Unit filename="../db/mysqlpp/Structure.cpp" />
-		<Unit filename="../db/mysqlpp/Structure.hpp" />
-		<Unit filename="../db/mysqlpp/guess.cpp" />
-		<Unit filename="../db/mysqlpp/guess.hpp" />
+		<Unit filename="../db/mariadb/API.cpp" />
+		<Unit filename="../db/mariadb/API.hpp" />
+		<Unit filename="../db/mariadb/Connection.cpp" />
+		<Unit filename="../db/mariadb/Connection.hpp" />
+		<Unit filename="../db/mariadb/Field.cpp" />
+		<Unit filename="../db/mariadb/Field.hpp" />
+		<Unit filename="../db/mariadb/Result.cpp" />
+		<Unit filename="../db/mariadb/Result.hpp" />
+		<Unit filename="../db/mariadb/Row.cpp" />
+		<Unit filename="../db/mariadb/Row.hpp" />
+		<Unit filename="../db/mariadb/Structure.cpp" />
+		<Unit filename="../db/mariadb/Structure.hpp" />
+		<Unit filename="../db/mariadb/guess.cpp" />
+		<Unit filename="../db/mariadb/guess.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />
 		<Unit filename="../json/ApixuFunctions.hpp" />
 		<Unit filename="../json/NLohmannJsonApixu.cpp" />
@@ -97,16 +104,6 @@
 		<Unit filename="../util/SemVer.hpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
-		<Unit filename="ForecastDataUpdate_0.8.3.cpp" />
-		<Unit filename="ForecastDataUpdate_0.8.3.hpp" />
-		<Unit filename="UpdateTo_0.7.0.cpp" />
-		<Unit filename="UpdateTo_0.7.0.hpp" />
-		<Unit filename="UpdateTo_0.8.0.cpp" />
-		<Unit filename="UpdateTo_0.8.0.hpp" />
-		<Unit filename="UpdateTo_0.8.1.cpp" />
-		<Unit filename="UpdateTo_0.8.1.hpp" />
-		<Unit filename="UpdateTo_0.8.3.cpp" />
-		<Unit filename="UpdateTo_0.8.3.hpp" />
 		<Unit filename="UpdateTo_0.8.5.cpp" />
 		<Unit filename="UpdateTo_0.8.5.hpp" />
 		<Unit filename="UpdateTo_0.8.6.cpp" />
@@ -115,14 +112,6 @@
 		<Unit filename="UpdateTo_0.9.0.hpp" />
 		<Unit filename="UpdateTo_0.9.7.cpp" />
 		<Unit filename="UpdateTo_0.9.7.hpp" />
-		<Unit filename="Update_0.5.4_to_0.5.5.cpp" />
-		<Unit filename="Update_0.5.4_to_0.5.5.hpp" />
-		<Unit filename="Update_0.5.7_to_0.6.0.cpp" />
-		<Unit filename="Update_0.5.7_to_0.6.0.hpp" />
-		<Unit filename="Update_0.6.5_to_0.6.6.cpp" />
-		<Unit filename="Update_0.6.5_to_0.6.6.hpp" />
-		<Unit filename="WeatherDataUpdate_0.8.3.cpp" />
-		<Unit filename="WeatherDataUpdate_0.8.3.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

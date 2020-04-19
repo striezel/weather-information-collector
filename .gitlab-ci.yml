@@ -12,7 +12,7 @@ build_gcc:
     MYSQL_PASSWORD: "ci_password"
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
-    - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev libmysql++-dev libboost-filesystem-dev pkg-config
+    - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev libboost-filesystem-dev pkg-config
     - export CC=gcc && export CXX=g++
   script:
     # ./ci/cpplint.sh # segfaults on g++ 6.3.0 in /usr/include/catch.hpp:9473:31
@@ -33,7 +33,7 @@ build_clang:
     MYSQL_PASSWORD: "ci_password"
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
-    - apt-get update && apt-get -y install catch clang cmake libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev libmysql++-dev libboost-filesystem-dev pkg-config
+    - apt-get update && apt-get -y install catch clang cmake libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev libboost-filesystem-dev pkg-config
     - export CC=clang && export CXX=clang++
   script:
     - ./ci/cpplint.sh

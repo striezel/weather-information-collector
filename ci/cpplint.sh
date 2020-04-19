@@ -2,7 +2,7 @@
 
 #  cpplint.sh - script to check the syntax of C++ source files
 #
-#  Copyright (C) 2015, 2017, 2019  Dirk Stolle
+#  Copyright (C) 2015, 2017, 2019, 2020  Dirk Stolle
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -34,15 +34,13 @@ else
   echo "Info: Falling back to standard includes for jsoncpp!"
   CFLAGS="-I/usr/include/jsoncpp"
 fi
-# add includes for libmysql++
-CFLAGS="$CFLAGS -I/usr/include/mysql -I/usr/include/mysql++"
 
 # print $CXX version to see which version is used for syntax check
 $CXX --version
 echo
 
 # find all C++ files and run them through the compilers's syntax check
-find ./ \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' \) -print0 | xargs -0 -i $CXX $CFLAGS -fsyntax-only -Wall -std=c++11 -Dwic_owm_find_location -Dwic_weather_comparison {}
+find ./ \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' \) -print0 | xargs -0 -i $CXX $CFLAGS -fsyntax-only -Wall -std=c++14 -Dwic_owm_find_location -Dwic_weather_comparison {}
 if [[ $? -ne 0 ]]
 then
   echo "Some source code files contain syntax errors!"

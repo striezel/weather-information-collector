@@ -35,14 +35,11 @@
 			<Add option="-Dwic_no_tasks_in_config" />
 			<Add option="-Dwic_weather_comparison" />
 			<Add option="-Dwic_no_metadata" />
-			<Add directory="/usr/include/mysql/" />
-			<Add directory="/usr/include/mysql++" />
 		</Compiler>
 		<Linker>
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
-			<Add library="mysqlclient" />
-			<Add library="mysqlpp" />
+			<Add library="mariadb" />
 			<Add library="jsoncpp" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
@@ -61,13 +58,18 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
-		<Unit filename="../db/mysqlpp/SourceMySQL.cpp" />
-		<Unit filename="../db/mysqlpp/SourceMySQL.hpp" />
-		<Unit filename="../db/mysqlpp/SSQLS_forecast.hpp" />
-		<Unit filename="../db/mysqlpp/SSQLS_forecastdata.hpp" />
-		<Unit filename="../db/mysqlpp/SSQLS_weatherdata.hpp" />
-		<Unit filename="../db/mysqlpp/Utilities.cpp" />
-		<Unit filename="../db/mysqlpp/Utilities.hpp" />
+		<Unit filename="../db/mariadb/Connection.cpp" />
+		<Unit filename="../db/mariadb/Connection.hpp" />
+		<Unit filename="../db/mariadb/Field.cpp" />
+		<Unit filename="../db/mariadb/Field.hpp" />
+		<Unit filename="../db/mariadb/Result.cpp" />
+		<Unit filename="../db/mariadb/Result.hpp" />
+		<Unit filename="../db/mariadb/Row.cpp" />
+		<Unit filename="../db/mariadb/Row.hpp" />
+		<Unit filename="../db/mariadb/SourceMySQL.cpp" />
+		<Unit filename="../db/mariadb/SourceMySQL.hpp" />
+		<Unit filename="../db/mariadb/Utilities.cpp" />
+		<Unit filename="../db/mariadb/Utilities.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />
 		<Unit filename="../json/ApixuFunctions.hpp" />
 		<Unit filename="../json/JsonCppApixu.cpp" />

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector benchmark tool.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "benchmark.hpp"
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
-#include "../db/mysqlpp/SourceMySQL.hpp"
+#include "../db/mariadb/SourceMySQL.hpp"
 #include "../json/JsonCppApixu.hpp"
 #include "../json/JsonCppDarkSky.hpp"
 #include "../json/JsonCppOwm.hpp"

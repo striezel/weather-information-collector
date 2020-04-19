@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@
 #include <iostream>
 #include <string>
 #include "../conf/Configuration.hpp"
-#include "../db/mysqlpp/SourceMySQL.hpp"
-#include "../db/mysqlpp/StoreMySQL.hpp"
-#include "../db/mysqlpp/StoreMySQLBatch.hpp"
-#include "../db/mysqlpp/Utilities.hpp"
-#include "../db/mysqlpp/guess.hpp"
+#include "../db/mariadb/SourceMySQL.hpp"
+#include "../db/mariadb/StoreMySQL.hpp"
+#include "../db/mariadb/StoreMySQLBatch.hpp"
+#include "../db/mariadb/Utilities.hpp"
+#include "../db/mariadb/guess.hpp"
 #include "../util/GitInfos.hpp"
 #include "../util/SemVer.hpp"
 #include "../util/Strings.hpp"
@@ -312,20 +312,21 @@ int main(int argc, char** argv)
   }
 
   // connection to destination database
-  mysqlpp::Connection destinationConn(false);
-  if (!destinationConn.connect(destConfig.connectionInfo().db().c_str(),
-                               destConfig.connectionInfo().hostname().c_str(),
-                               destConfig.connectionInfo().user().c_str(),
-                               destConfig.connectionInfo().password().c_str(),
-                               destConfig.connectionInfo().port()))
+  try
   {
-    std::cerr << "Could not connect to destination database: " << destinationConn.error() << "\n";
+    wic::db::mariadb::Connection conn(destConfig.connectionInfo());
+    std::clog << "Info: Connection attempt to destination database succeeded."
+              << std::endl;
+  }
+  catch (const std::exception& ex)
+  {
+    std::cerr << "Could not connect to destination database: " << ex.what() << "\n";
     return wic::rcDatabaseError;
   }
 
   // scope for synchronization of weather data
   {
-    wic::StoreMySQLBatch destinationStore = wic::StoreMySQLBatch(destConfig.connectionInfo(), batchSize);
+    wic::StoreMySQLBatch destinationStore(destConfig.connectionInfo(), batchSize);
     for(const auto& item : locations)
     {
       std::cout << "Synchronizing weather data for " << item.first.toString()

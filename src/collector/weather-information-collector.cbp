@@ -35,15 +35,12 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++14" />
 			<Add option="-fexceptions" />
-			<Add directory="/usr/include/mysql/" />
-			<Add directory="/usr/include/mysql++" />
 		</Compiler>
 		<Linker>
 			<Add library="curl" />
-			<Add library="mysqlpp" />
+			<Add library="mariadb" />
 			<Add library="boost_filesystem" />
 			<Add library="boost_system" />
-			<Add library="mysqlclient" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
@@ -79,14 +76,22 @@
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
 		<Unit filename="../db/Store.hpp" />
-		<Unit filename="../db/mysqlpp/StoreMySQL.cpp" />
-		<Unit filename="../db/mysqlpp/StoreMySQL.hpp" />
-		<Unit filename="../db/mysqlpp/Structure.cpp" />
-		<Unit filename="../db/mysqlpp/Structure.hpp" />
-		<Unit filename="../db/mysqlpp/Utilities.cpp" />
-		<Unit filename="../db/mysqlpp/Utilities.hpp" />
-		<Unit filename="../db/mysqlpp/guess.cpp" />
-		<Unit filename="../db/mysqlpp/guess.hpp" />
+		<Unit filename="../db/mariadb/Connection.cpp" />
+		<Unit filename="../db/mariadb/Connection.hpp" />
+		<Unit filename="../db/mariadb/Field.cpp" />
+		<Unit filename="../db/mariadb/Field.hpp" />
+		<Unit filename="../db/mariadb/Result.cpp" />
+		<Unit filename="../db/mariadb/Result.hpp" />
+		<Unit filename="../db/mariadb/Row.cpp" />
+		<Unit filename="../db/mariadb/Row.hpp" />
+		<Unit filename="../db/mariadb/StoreMySQL.cpp" />
+		<Unit filename="../db/mariadb/StoreMySQL.hpp" />
+		<Unit filename="../db/mariadb/Structure.cpp" />
+		<Unit filename="../db/mariadb/Structure.hpp" />
+		<Unit filename="../db/mariadb/Utilities.cpp" />
+		<Unit filename="../db/mariadb/Utilities.hpp" />
+		<Unit filename="../db/mariadb/guess.cpp" />
+		<Unit filename="../db/mariadb/guess.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />
 		<Unit filename="../json/ApixuFunctions.hpp" />
 		<Unit filename="../json/NLohmannJsonApixu.cpp" />

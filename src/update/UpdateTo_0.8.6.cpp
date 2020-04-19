@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,11 +19,9 @@
 */
 
 #include "UpdateTo_0.8.6.hpp"
-#include <algorithm>
-#include <mysql++/mysql++.h>
-#include "../api/OpenWeatherMap.hpp"
-#include "../api/Types.hpp"
-#include "../db/mysqlpp/API.hpp"
+#include <iostream>
+#include "../db/mariadb/API.hpp"
+#include "../db/mariadb/Result.hpp"
 
 namespace wic
 {
@@ -35,58 +33,56 @@ bool UpdateTo086::perform(const ConnectionInformation& ci)
 
 bool UpdateTo086::updateStructure(const ConnectionInformation& ci)
 {
-  mysqlpp::Connection conn(false);
-  if (!conn.connect(ci.db().c_str(), ci.hostname().c_str(), ci.user().c_str(),
-                    ci.password().c_str(), ci.port()))
+  try
   {
-    // Should not happen, because previous connection attempts were successful,
-    // but better be safe than sorry.
-    std::cerr << "Error: Could not connect to database!" << std::endl;
-    return false;
-  }
+    db::mariadb::Connection conn(ci);
 
-  for (const std::string& table : { "weatherdata", "forecastdata"})
-  {
-    mysqlpp::Query query(&conn);
-    query << "SELECT IS_NULLABLE FROM information_schema.columns "
-          << "  WHERE TABLE_SCHEMA=" << mysqlpp::quote << ci.db()
-          << "    AND TABLE_NAME='" << table << "' AND COLUMN_NAME='cloudiness';";
-    mysqlpp::StoreQueryResult result = query.store();
-    if (!result)
+    for (const std::string& table : { "weatherdata", "forecastdata"})
     {
-      std::cerr << "Error: Could not get column information of column \"cloudiness\" in table " << table << ".\n"
-                << "Internal error: " << query.error() << std::endl;
-      return false;
-    }
-    // SELECT was successful, but do we have some data?
-    if (result.num_rows() == 0)
-    {
-      std::cerr << "Error: Result of column information query is empty!" << std::endl;
-      return false;
-    }
-    const std::string isNullable = result.at(0)["IS_NULLABLE"].c_str();
-    if (isNullable == "YES")
-    {
-      // Nothing to do here.
-      std::cout << "Info: Table " << table << " already seems to be up to date." << std::endl;
-    }
-    else
-    {
-      query = mysqlpp::Query(&conn);
-      // Alter column cloudiness to accept NULL values, too.
-      query << "ALTER TABLE `" << table << "` CHANGE COLUMN `cloudiness` `cloudiness` tinyint(3) unsigned DEFAULT NULL COMMENT 'cloudiness in percent';";
-      std::clog << "Info: Changing column cloudiness of table " << table
-                << ", this may take a while." << std::endl;
-      if (!query.exec())
+      std::string query = "SELECT IS_NULLABLE FROM information_schema.columns "
+          + std::string("  WHERE TABLE_SCHEMA=") + conn.quote(ci.db())
+          + "    AND TABLE_NAME='" + table + "' AND COLUMN_NAME='cloudiness';";
+      const auto result = conn.query(query);
+      if (!result.good())
       {
-        std::cerr << "Error: Could not update column `cloudiness` of table " << table << "!" << std::endl;
+        std::cerr << "Error: Could not get column information of column \"cloudiness\" in table " << table << ".\n"
+                  << "Internal error: " << conn.errorInfo() << std::endl;
         return false;
       }
-      std::clog << "Info: Column cloudiness of table " << table << " was successfully updated." << std::endl;
-    } // else
-  } // for (range-based)
+      // SELECT was successful, but do we have some data?
+      if (result.rowCount() == 0)
+      {
+        std::cerr << "Error: Result of column information query is empty!" << std::endl;
+        return false;
+      }
+      const std::string isNullable = result.row(0).column(0);
+      if (isNullable == "YES")
+      {
+        // Nothing to do here.
+        std::cout << "Info: Table " << table << " already seems to be up to date." << std::endl;
+      }
+      else
+      {
+        // Alter column cloudiness to accept NULL values, too.
+        query = "ALTER TABLE `" + table + "` CHANGE COLUMN `cloudiness` `cloudiness` tinyint(3) unsigned DEFAULT NULL COMMENT 'cloudiness in percent';";
+        std::clog << "Info: Changing column cloudiness of table " << table
+                  << ", this may take a while." << std::endl;
+        if (conn.exec(query) < 0)
+        {
+          std::cerr << "Error: Could not update column `cloudiness` of table " << table << "!" << std::endl;
+          return false;
+        }
+        std::clog << "Info: Column cloudiness of table " << table << " was successfully updated." << std::endl;
+      } // else
+    } // for (range-based)
 
-  return true;
+    return true;
+  }
+  catch (const std::exception& ex)
+  {
+    std::cerr << "Error: Could not connect to database! " << ex.what() << std::endl;
+    return false;
+  }
 }
 
 } // namespace

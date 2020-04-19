@@ -22,7 +22,7 @@ See the [documentation](doc/readme.md) for more information.
 ### Prerequisites
 
 To build the weather-information-collector from source you need a C++ compiler,
-CMake 2.8 or later, the cURL library (>=7.17), the JsonCpp library, the MySQL++
+CMake 2.8 or later, the cURL library (>=7.17), the JsonCpp library, the MariaDB
 library and Boost's filesystem library. pkg-config is required to make it easier
 to find compiler options for the installed libraries. Additionally, the program
 uses Catch (C++ Automated Test Cases in Headers) to perform some tests.
@@ -32,17 +32,16 @@ system to get the latest source code directly from the Git repository.
 
 All of that can usually be installed be typing
 
-    apt-get install catch cmake g++ git libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmysql++-dev pkg-config
+    apt-get install catch cmake g++ git libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev pkg-config
 
 or
 
-    yum install catch cmake gcc-c++ git boost-filesystem boost-devel libcurl-devel jsoncpp-devel mysql++-devel pkgconfig
+    yum install catch cmake gcc-c++ git boost-filesystem boost-devel libcurl-devel jsoncpp-devel mariadb-devel pkgconfig
 
 into a root terminal.
 
-_Note: As of now (2019-07-13) there is no libmysql++ package for Debian 10.0
-(codename "buster"). Therefore it is recommended to either stick with Debian 9
-for the moment, or to use Docker (see `docker/` directory) instead._
+_Note: If you do not want to perform a build on bare metal, then try to use
+Docker (see `docker/` directory) instead._
 
 ### Getting the source code
 
@@ -84,7 +83,7 @@ directory and refer to the [readme there](./docker/readme.md).
 
 ## Copyright and Licensing
 
-Copyright 2017, 2018, 2019  Dirk Stolle
+Copyright 2017, 2018, 2019, 2020  Dirk Stolle
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

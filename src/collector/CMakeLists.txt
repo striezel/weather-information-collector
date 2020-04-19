@@ -19,10 +19,14 @@ set(weather-information-collector_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
-    ../db/mysqlpp/StoreMySQL.cpp
-    ../db/mysqlpp/Structure.cpp
-    ../db/mysqlpp/Utilities.cpp
-    ../db/mysqlpp/guess.cpp
+    ../db/mariadb/Connection.cpp
+    ../db/mariadb/Field.cpp
+    ../db/mariadb/Result.cpp
+    ../db/mariadb/Row.cpp
+    ../db/mariadb/StoreMySQL.cpp
+    ../db/mariadb/Structure.cpp
+    ../db/mariadb/Utilities.cpp
+    ../db/mariadb/guess.cpp
     ../json/ApixuFunctions.cpp
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
@@ -58,25 +62,15 @@ else ()
   message ( FATAL_ERROR "cURL was not found!" )
 endif (CURL_FOUND)
 
-# libmysql++
-set(LibMySQLPP_DIR "../../cmake/" )
-find_package(LibMySQLPP)
-if (MYSQLPP_FOUND)
-  include_directories(${MYSQLPP_INCLUDE_DIR})
-  target_link_libraries (weather-information-collector ${MYSQLPP_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "libmysqlpp was not found!" )
-endif (MYSQLPP_FOUND)
-
-# find libmysqlclient
-set(mysqlclient_DIR "../../cmake/" )
-find_package(mysqlclient REQUIRED)
-if (MYSQLCLIENT_FOUND)
-  include_directories(${MYSQLCLIENT_INCLUDE_DIR})
-  target_link_libraries (weather-information-collector ${MYSQLCLIENT_LIBRARIES})
+# find libmariadb
+set(mariadb_DIR "../../cmake/" )
+find_package(mariadb REQUIRED)
+if (MARIADB_FOUND)
+  include_directories(${MARIADB_INCLUDE_DIR})
+  target_link_libraries (weather-information-collector ${MARIADB_LIBRARIES})
 else()
-  message ( FATAL_ERROR "libmysqlclient was not found!" )
-endif (MYSQLCLIENT_FOUND)
+  message ( FATAL_ERROR "libmariadb was not found!" )
+endif (MARIADB_FOUND)
 
 # find Boost library: filesystem (+ system as dependency)
 find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)

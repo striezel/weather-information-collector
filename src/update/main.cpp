@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,17 +20,10 @@
 
 #include <iostream>
 #include "../conf/Configuration.hpp"
-#include "../db/mysqlpp/guess.hpp"
+#include "../db/mariadb/guess.hpp"
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
-#include "Update_0.5.4_to_0.5.5.hpp"
-#include "Update_0.5.7_to_0.6.0.hpp"
-#include "Update_0.6.5_to_0.6.6.hpp"
-#include "UpdateTo_0.7.0.hpp"
-#include "UpdateTo_0.8.0.hpp"
-#include "UpdateTo_0.8.1.hpp"
-#include "UpdateTo_0.8.3.hpp"
 #include "UpdateTo_0.8.5.hpp"
 #include "UpdateTo_0.8.6.hpp"
 #include "UpdateTo_0.9.0.hpp"
@@ -157,79 +150,26 @@ int main(int argc, char** argv)
     {
       std::cout << "Detected program version is " << currentVersion.toString()
                 << " or newer. Updates for older versions will be skipped." << std::endl;
-      std::cout << "If this is wrong and you want to perform all update steps "
-                << "instead, then call this program with the parameter --full."
-                << " Be warned that this may take quite a long time though." << std::endl;
     }
   } // if no full update is requested
 
   // Perform the incremental updates, step by step.
-  if (currentVersion < wic::SemVer(0, 5, 5))
-  {
-    std::cout << "Update for database of version 0.5.4 (and earlier) to version 0.5.5..." << std::endl;
-    if (!wic::Update054_055::perform(config.connectionInfo()))
-    {
-      std::cerr << "Error: Database update failed!" << std::endl;
-      return wic::rcUpdateFailure;
-    }
-  }
-  if (currentVersion < wic::SemVer(0, 6, 0))
-  {
-    std::cout << "Update for database of version 0.5.7 (and earlier) to version 0.6.0..." << std::endl;
-    if (!wic::Update057_060::perform(config.connectionInfo()))
-    {
-      std::cerr << "Error: Database update failed!" << std::endl;
-      return wic::rcUpdateFailure;
-    }
-  }
-  if (currentVersion < wic::SemVer(0, 6, 6))
-  {
-    std::cout << "Update for database of version 0.6.5 (and earlier) to version 0.6.6..." << std::endl;
-    if (!wic::Update065_066::perform(config.connectionInfo()))
-    {
-      std::cerr << "Error: Database update failed!" << std::endl;
-      return wic::rcUpdateFailure;
-    }
-  }
-  if (currentVersion < wic::SemVer(0, 7, 0))
-  {
-    std::cout << "Update for database of version 0.6.7 (and earlier) to version 0.7.0..." << std::endl;
-    if (!wic::UpdateTo070::perform(config.connectionInfo()))
-    {
-      std::cerr << "Error: Database update failed!" << std::endl;
-      return wic::rcUpdateFailure;
-    }
-  }
-  if (currentVersion < wic::SemVer(0, 8, 0))
-  {
-    std::cout << "Update for database of version 0.7.1 (and earlier) to version 0.8.0..." << std::endl;
-    if (!wic::UpdateTo080::perform(config.connectionInfo()))
-    {
-      std::cerr << "Error: Database update failed!" << std::endl;
-      return wic::rcUpdateFailure;
-    }
-  }
-  if (currentVersion < wic::SemVer(0, 8, 1))
-  {
-    std::cout << "Update for database of version 0.8.0 (and earlier) to version 0.8.1..." << std::endl;
-    if (!wic::UpdateTo081::perform(config.connectionInfo()))
-    {
-      std::cerr << "Error: Database update failed!" << std::endl;
-      return wic::rcUpdateFailure;
-    }
-  }
   if (currentVersion < wic::SemVer(0, 8, 3))
   {
-    std::cout << "Update for database of version 0.8.1 (and earlier) to version 0.8.3..." << std::endl;
-    if (!wic::UpdateTo083::perform(config.connectionInfo()))
-    {
-      std::cerr << "Error: Database update failed!" << std::endl;
-      return wic::rcUpdateFailure;
-    }
+    std::cerr << "Update for databases earlier than version 0.8.3 is no longer"
+              << " supported. If you need to update from an older version, then"
+              << " download version 0.9.10 of weather-information-collector and"
+              << " its update tool from "
+              << "<https://gitlab.com/striezel/weather-information-collector/-/tree/v0.9.10>"
+              << " and use that to perform the update to a more recent version."
+              << " The v0.9.10 updater still supports updating from ancient "
+              << "versions. The current updater of v0.9.11 and onwards only "
+              << "supports updates of version no older than 0.8.3." << std::endl;
+    return wic::rcUpdateFailure;
   }
   if (currentVersion < wic::SemVer(0, 8, 5))
   {
-    std::cout << "Update for database of version 0.8.3 (and earlier) to version 0.8.5..." << std::endl;
+    std::cout << "Update for database of version 0.8.3 to version 0.8.5..." << std::endl;
     if (!wic::UpdateTo085::perform(config.connectionInfo()))
     {
       std::cerr << "Error: Database update failed!" << std::endl;
