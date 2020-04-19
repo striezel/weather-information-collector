@@ -1,6 +1,4 @@
-# Official gcc image at Docker Hub uses Debian 10 ("buster"), but buster does
-# not contain libmysql++ anymore, so we use Debian 9 ("stretch") instead.
-image: debian:9-slim
+image: debian:10-slim
 
 build_gcc:
   stage: build
@@ -15,7 +13,7 @@ build_gcc:
     - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev libboost-filesystem-dev pkg-config
     - export CC=gcc && export CXX=g++
   script:
-    # ./ci/cpplint.sh # segfaults on g++ 6.3.0 in /usr/include/catch.hpp:9473:31
+    - ./ci/cpplint.sh
     - mkdir ./build
     - cd ./build
     - cmake ../ -DJSON_BENCHMARK=ON
@@ -43,8 +41,8 @@ build_clang:
     - make -j4
     - ctest -V
 
-package_debian9:
-  image: debian:9
+package_debian10:
+  image: debian:10
   stage: build
   before_script:
     - ./ci/gitlab-01-install-dependencies.sh
