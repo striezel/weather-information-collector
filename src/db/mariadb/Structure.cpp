@@ -39,7 +39,7 @@ bool Structure::tableExists(const ConnectionInformation& ci, const std::string& 
     if (!result.good() || !result.hasRows())
       return false;
 
-    const int num = result.rows().at(0).getInt(0);
+    const int_fast32_t num = result.rows().at(0).getInt32(0);
     return (num > 0);
   }
   catch (const std::exception& ex)
@@ -62,7 +62,7 @@ bool Structure::columnExists(const ConnectionInformation& ci, const std::string&
     if (!result.good() || !result.hasRows())
       return false;
 
-    const int num = result.rows().at(0).getInt(0);
+    const int_fast32_t num = result.rows().at(0).getInt32(0);
     return (num > 0);
   }
   catch (const std::exception& ex)

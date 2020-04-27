@@ -55,8 +55,8 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
       return false;
     }
 
-    const int apiId = result.row(0).getInt(0);
-    const int locationId = wic::getLocationId(conn, location);
+    const int32_t apiId = result.row(0).getInt32(0);
+    const int32_t locationId = wic::getLocationId(conn, location);
     if (locationId <= 0)
       return false;
 
@@ -105,7 +105,7 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
       }
       if (!elem.isNull(idxHumidity))
       {
-        const uint8_t hum = elem.getInt(idxHumidity);
+        const uint8_t hum = elem.getInt32(idxHumidity);
         w.setHumidity(static_cast<int8_t>(hum));
       }
       if (!elem.isNull(idxRain))
@@ -118,7 +118,7 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
       }
       if (!elem.isNull(idxPressure))
       {
-        w.setPressure(elem.getInt(idxPressure));
+        w.setPressure(elem.getInt32(idxPressure));
       }
       if (!elem.isNull(idxWindSpeed))
       {
@@ -126,11 +126,11 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
       }
       if (!elem.isNull(idxWindDegrees))
       {
-        w.setWindDegrees(elem.getInt(idxWindDegrees));
+        w.setWindDegrees(elem.getInt32(idxWindDegrees));
       }
       if (!elem.isNull(idxCloudiness))
       {
-        const uint8_t cloudy = elem.getInt(idxCloudiness);
+        const uint8_t cloudy = elem.getInt32(idxCloudiness);
         w.setCloudiness(static_cast<int8_t>(cloudy));
       }
       if (!elem.isNull(idxJson))
@@ -171,8 +171,8 @@ bool SourceMySQL::getMetaCurrentWeather(const ApiType type, const Location& loca
       return false;
     }
 
-    const int apiId = result.row(0).getInt(0);
-    const int locationId = wic::getLocationId(conn, location);
+    const int_fast32_t apiId = result.row(0).getInt32(0);
+    const int_fast32_t locationId = wic::getLocationId(conn, location);
     if (locationId <= 0)
       return false;
 
@@ -229,7 +229,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
       return false;
     }
 
-    const int apiId = result.row(0).getInt(0);
+    const int32_t apiId = result.row(0).getInt32(0);
     const int locationId = wic::getLocationId(conn, location);
     if (locationId <= 0)
       return false;
@@ -258,7 +258,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
       {
         current.setJson(elem.column(idxJson));
       }
-      const uint_least32_t forecastId = elem.getInt(idxForecastId);
+      const uint_least32_t forecastId = elem.getUInt32(idxForecastId);
 
       // Get weather elements in forecast data.
       const std::string selectForecastData = "SELECT DISTINCT * FROM forecastdata WHERE forecastID="
@@ -304,7 +304,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
         }
         if (!dp.isNull(idxHumidity))
         {
-          const uint8_t hum = dp.getInt(idxHumidity);
+          const uint8_t hum = dp.getInt32(idxHumidity);
           w.setHumidity(static_cast<int8_t>(hum));
         }
         if (!dp.isNull(idxRain))
@@ -317,7 +317,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
         }
         if (!dp.isNull(idxPressure))
         {
-          w.setPressure(dp.getInt(idxPressure));
+          w.setPressure(dp.getInt32(idxPressure));
         }
         if (!dp.isNull(idxWindSpeed))
         {
@@ -325,11 +325,11 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
         }
         if (!dp.isNull(idxWindDegrees))
         {
-          w.setWindDegrees(dp.getInt(idxWindDegrees));
+          w.setWindDegrees(dp.getInt32(idxWindDegrees));
         }
         if (!dp.isNull(idxCloudiness))
         {
-          const uint8_t cloudy = dp.getInt(idxCloudiness);
+          const uint8_t cloudy = dp.getInt32(idxCloudiness);
           w.setCloudiness(static_cast<int8_t>(cloudy));
         }
         fcData.push_back(w);
@@ -369,8 +369,8 @@ bool SourceMySQL::getMetaForecasts(const ApiType type, const Location& location,
       return false;
     }
 
-    const int apiId = result.row(0).getInt(0);
-    const int locationId = wic::getLocationId(conn, location);
+    const uint32_t apiId = result.row(0).getUInt32(0);
+    const int_least32_t locationId = wic::getLocationId(conn, location);
     if (locationId <= 0)
       return false;
 
@@ -420,7 +420,7 @@ bool SourceMySQL::listApis(std::map<ApiType, int>& apis)
     apis.clear();
     for (const auto& row : result.rows())
     {
-      const int id = row.getInt(0); // index zero is apiID
+      const int_least32_t id = row.getInt32(0); // index zero is apiID
       const std::string name = row.column(1); // index one is name
       const ApiType api = toApiType(name);
       if (api == ApiType::none)
@@ -462,7 +462,7 @@ bool SourceMySQL::listWeatherLocationsWithApi(std::vector<std::pair<Location, Ap
     for (const auto& row: result.rows())
     {
       const ApiType api = toApiType(row.column(idxApiName));
-      const int locId = row.getInt(idxLocationId);
+      const int_least32_t locId = row.getInt32(idxLocationId);
       const Location loc = getLocation(conn, locId);
       if (api == ApiType::none || loc.empty())
         return false;
@@ -499,7 +499,7 @@ bool SourceMySQL::listForecastLocationsWithApi(std::vector<std::pair<Location, A
     for (const auto& row : result.rows())
     {
       const ApiType api = toApiType(row.column(idxApiName));
-      const int locId = row.getInt(idxLocationId);
+      const int_least32_t locId = row.getInt32(idxLocationId);
       const Location loc = getLocation(conn, locId);
       if (api == ApiType::none || loc.empty())
         return false;

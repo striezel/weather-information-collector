@@ -25,7 +25,7 @@
 namespace wic
 {
 
-int getLocationId(db::mariadb::Connection& conn, const Location& location)
+int_least32_t getLocationId(db::mariadb::Connection& conn, const Location& location)
 {
   std::string sql = "SELECT locationID FROM location WHERE ";
   if (location.hasOwmId())
@@ -60,7 +60,7 @@ int getLocationId(db::mariadb::Connection& conn, const Location& location)
   }
   if (result.hasRows())
   {
-    return result.row(0).getInt(0);
+    return result.row(0).getInt32(0);
   }
 
   // insert location, because it does not exist yet
@@ -111,7 +111,7 @@ int getLocationId(db::mariadb::Connection& conn, const Location& location)
     return -1;
 }
 
-Location getLocation(db::mariadb::Connection& conn, const int locationId)
+Location getLocation(db::mariadb::Connection& conn, const int_least32_t locationId)
 {
   const std::string sql = "SELECT * FROM location WHERE locationID = " + conn.quote(std::to_string(locationId)) + " LIMIT 1;";
   const auto result = conn.query(sql);
@@ -122,7 +122,7 @@ Location getLocation(db::mariadb::Connection& conn, const int locationId)
   const auto& row = result.row(0);
   const auto idxId = result.fieldIndex("id");
   if (!row.isNull(idxId))
-    loc.setOwmId(row.getInt(idxId));
+    loc.setOwmId(row.getUInt32(idxId));
   const auto idxLat = result.fieldIndex("latitude");
   const auto idxLon = result.fieldIndex("longitude");
   if (!row.isNull(idxLat) && !row.isNull(idxLon))

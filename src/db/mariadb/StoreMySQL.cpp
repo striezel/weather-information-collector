@@ -56,8 +56,8 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
       return false;
     }
 
-    const int apiId = result.row(0).getInt(0);
-    const int locationId = getLocationId(conn, location);
+    const int_least32_t apiId = result.row(0).getInt32(0);
+    const int_least32_t locationId = getLocationId(conn, location);
     if (locationId <= 0)
       return false;
 
@@ -153,8 +153,8 @@ bool StoreMySQL::saveForecast(const ApiType type, const Location& location, cons
       return false;
     }
 
-    const int apiId = result.row(0).getInt(0);
-    const int locationId = getLocationId(conn, location);
+    const int_least32_t apiId = result.row(0).getInt32(0);
+    const int_least32_t locationId = getLocationId(conn, location);
     if (locationId <= 0)
       return false;
 

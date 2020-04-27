@@ -23,6 +23,7 @@
 #define WEATHER_INFORMATION_COLLECTOR_DB_MARIADB_ROW_HPP
 
 #include <chrono>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -88,15 +89,45 @@ class Row
      */
     const std::string& operator[](const std::size_t index) const;
 
-    /** \brief Returns the value of the index-th column as integer.
+    /** \brief Returns the value of the index-th column as 32-bit integer.
      *
      * \param index   zero-based index of the column
      * \return Returns value of the given column in the row.
      * \throw  std::out_of_range    the index is out of range
-     * \throw  std::out_of_range    value does not fit into range of int
-     * \throw  std::invalid_argument value cannot be converted to int
+     * \throw  std::out_of_range    value does not fit into range of int32_t
+     * \throw  std::invalid_argument value cannot be converted to int32_t
      */
-    int getInt(const std::size_t index) const;
+    int32_t getInt32(const std::size_t index) const;
+
+    /** \brief Returns the value of the index-th column as 32-bit unsigned integer.
+     *
+     * \param index   zero-based index of the column
+     * \return Returns value of the given column in the row.
+     * \throw  std::out_of_range    the index is out of range
+     * \throw  std::out_of_range    value does not fit into range of uint32_t
+     * \throw  std::invalid_argument value cannot be converted to uint32_t
+     */
+    uint32_t getUInt32(const std::size_t index) const;
+
+    /** \brief Returns the value of the index-th column as 64-bit integer.
+     *
+     * \param index   zero-based index of the column
+     * \return Returns value of the given column in the row.
+     * \throw  std::out_of_range    the index is out of range
+     * \throw  std::out_of_range    value does not fit into range of int64_t
+     * \throw  std::invalid_argument value cannot be converted to int64_t
+     */
+    int64_t getInt64(const std::size_t index) const;
+
+    /** \brief Returns the value of the index-th column as 64-bit unsigned integer.
+     *
+     * \param index   zero-based index of the column
+     * \return Returns value of the given column in the row.
+     * \throw  std::out_of_range    the index is out of range
+     * \throw  std::out_of_range    value does not fit into range of uint64_t
+     * \throw  std::invalid_argument value cannot be converted to uint64_t
+     */
+    uint64_t getUInt64(const std::size_t index) const;
 
     /** \brief Returns the value of the index-th column as float.
      *

@@ -72,7 +72,7 @@ bool UpdateTo085::updateData(const ConnectionInformation& ci)
         std::cerr << "Error: Could not parse JSON data for dataID " << result.row(i).column(0) << "!" << std::endl;
         return false;
       }
-      const unsigned long int dataId = result.row(i).getInt(0);
+      const unsigned long int dataId = result.row(i).getUInt32(0);
       const auto dataTime = result.row(i).getDateTime(1);
       const auto it = std::find_if(f.data().cbegin(), f.data().cend(),
                                  [&] (const Weather& w) { return w.dataTime() == dataTime; });

@@ -19,6 +19,7 @@
 */
 
 #include "Row.hpp"
+#include <climits>
 #include <stdexcept>
 
 namespace wic
@@ -61,14 +62,86 @@ const std::string& Row::operator[](const std::size_t index) const
   return data[index].data;
 }
 
-int Row::getInt(const std::size_t index) const
+int32_t Row::getInt32(const std::size_t index) const
 {
   const auto& value = data.at(index).data;
   std::size_t pos;
-  const int i = std::stoi(value, &pos);
+  #if INT_MAX == 2147483647LL
+  // int is 32 bit.
+  const int32_t i = std::stoi(value, &pos);
+  #elif LONG_MAX == 2147483647LL
+  // long int is 32 bit.
+  const int32_t i = std::stol(value, &pos);
+  #else
+    #error Could not find suitable 32-bit integer type!
+  #endif // INT_MAX
   if (pos != value.size())
   {
-    throw std::invalid_argument(value + " is not a valid integer!");
+    throw std::invalid_argument(value + " is not a valid signed 32-bit integer!");
+  }
+  return i;
+}
+
+uint32_t Row::getUInt32(const std::size_t index) const
+{
+  const auto& value = data.at(index).data;
+  std::size_t pos;
+  const uint32_t i = std::stoul(value, &pos);
+  #if UINT_MAX == 4294967295LL
+  // unsigned int is 32 bit.
+  // unsigned long may be larger (e. g. 64 bit), so we have to check here.
+  if (i > 4294967295)
+  {
+    throw std::out_of_range(value + " is not a valid unsigned 32-bit integer, it's too large!");
+  }
+  #elif ULONG_MAX == 4294967295LL
+  // unsigned long int is 32 bit. No check for limit required.
+  #else
+    #error Could not find suitable 32-bit unsigned integer type!
+  #endif // UINT_MAX
+  if (pos != value.size())
+  {
+    throw std::invalid_argument(value + " is not a valid unsigned 32-bit integer!");
+  }
+  return i;
+}
+
+int64_t Row::getInt64(const std::size_t index) const
+{
+  const auto& value = data.at(index).data;
+  std::size_t pos;
+  #if LONG_MAX == 9223372036854775807LL
+  // long int is 64 bit.
+  const int64_t i = std::stol(value, &pos);
+  #elif LLONG_MAX == 9223372036854775807LL
+  // long long int is 64 bit.
+  const int64_t i = std::stoll(value, &pos);
+  #else
+    #error Could not find suitable 64-bit integer type!
+  #endif // LONG_MAX
+  if (pos != value.size())
+  {
+    throw std::invalid_argument(value + " is not a valid signed 64-bit integer!");
+  }
+  return i;
+}
+
+uint64_t Row::getUInt64(const std::size_t index) const
+{
+  const auto& value = data.at(index).data;
+  std::size_t pos;
+  #if ULONG_MAX == 18446744073709551615ULL
+  // unsigned long int is 64 bit.
+  const uint64_t i = std::stoul(value, &pos);
+  #elif ULLONG_MAX == 18446744073709551615ULL
+  // unsigned long long int is 64 bit.
+  const uint64_t i = std::stoull(value, &pos);
+  #else
+    #error Could not find suitable 64-bit integer type!
+  #endif // LONG_MAX
+  if (pos != value.size())
+  {
+    throw std::invalid_argument(value + " is not a valid signed 64-bit integer!");
   }
   return i;
 }

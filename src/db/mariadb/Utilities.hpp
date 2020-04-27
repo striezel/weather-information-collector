@@ -21,6 +21,7 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_DB_UTILITIES_HPP
 #define WEATHER_INFORMATION_COLLECTOR_DB_UTILITIES_HPP
 
+#include <cstdint>
 #include "../../data/Location.hpp"
 #include "Connection.hpp"
 
@@ -35,7 +36,7 @@ namespace wic
  * \return Returns the ID of the location in case of success.
  * Returns -1, if an error occurred.
  */
-int getLocationId(db::mariadb::Connection& conn, const Location& location);
+int_least32_t getLocationId(db::mariadb::Connection& conn, const Location& location);
 
 
 /** \brief Gets a location by ID from the database.
@@ -45,7 +46,7 @@ int getLocationId(db::mariadb::Connection& conn, const Location& location);
  * \return Returns the location with the given ID, if it was found.
  *         Returns an empty location otherwise.
  */
-Location getLocation(db::mariadb::Connection& conn, const int locationId);
+Location getLocation(db::mariadb::Connection& conn, const int_least32_t locationId);
 
 } // namespace
 

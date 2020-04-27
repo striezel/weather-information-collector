@@ -62,21 +62,78 @@ TEST_CASE("Row class tests")
       REQUIRE_FALSE( result.rows().at(0).isNull(5) );
     }
 
-    SECTION("getInt checks")
+    SECTION("getInt32 checks")
     {
       db::mariadb::Connection conn(connInfo);
-      const auto result = conn.query("SELECT -42, 32001, 123.45, 'foo', '2020-04-20 12:34:56';");
+      const auto result = conn.query("SELECT -42, 32001, 2147483647 AS highest, 123.45, 'foo', '2020-04-20 12:34:56';");
 
       REQUIRE( result.good() );
 
       const auto& row = result.rows().at(0);
-      // First and second column should convert to integer.
-      REQUIRE( row.getInt(0) == -42 );
-      REQUIRE( row.getInt(1) == 32001 );
-      // Third column to last column should not convert.
-      REQUIRE_THROWS_AS( row.getInt(2), std::invalid_argument);
-      REQUIRE_THROWS_AS( row.getInt(3), std::invalid_argument);
-      REQUIRE_THROWS_AS( row.getInt(4), std::invalid_argument);
+      // First three columns should convert to integer.
+      REQUIRE( row.getInt32(0) == -42 );
+      REQUIRE( row.getInt32(1) == 32001 );
+      REQUIRE( row.getInt32(2) == 2147483647L );
+      // Other column should not convert to int32_t.
+      REQUIRE_THROWS_AS( row.getInt32(3), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getInt32(4), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getInt32(5), std::invalid_argument);
+    }
+
+    SECTION("getUInt32 checks")
+    {
+      db::mariadb::Connection conn(connInfo);
+      const auto result = conn.query("SELECT -42, 4294967295 AS highest, 4294967296 AS TooMuch, 123.45, 'foo', '2020-04-20 12:34:56';");
+
+      REQUIRE( result.good() );
+
+      const auto& row = result.rows().at(0);
+      // Negative value should throw.
+      REQUIRE_THROWS_AS( row.getUInt32(0), std::invalid_argument);
+      // Maximum value should convert.
+      REQUIRE( row.getUInt32(1) == 4294967295L );
+      // Other columns should not convert.
+      REQUIRE_THROWS_AS( row.getUInt32(2), std::out_of_range);
+      REQUIRE_THROWS_AS( row.getUInt32(3), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getUInt32(4), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getUInt32(5), std::invalid_argument);
+    }
+
+    SECTION("getInt64 checks")
+    {
+      db::mariadb::Connection conn(connInfo);
+      const auto result = conn.query("SELECT -42, 9223372036854775807 AS highest, 9223372036854775808 AS TooMuchIntWillThrow, 123.45, 'foo', '2020-04-20 12:34:56';");
+
+      REQUIRE( result.good() );
+
+      const auto& row = result.rows().at(0);
+      // Negative value should convert to integer.
+      REQUIRE( row.getInt64(0) == -42 );
+      // Maximum value should convert.
+      REQUIRE( row.getInt64(1) == 9223372036854775807LL );
+      // Other columns should not convert.
+      REQUIRE_THROWS_AS( row.getInt64(2), std::out_of_range);
+      REQUIRE_THROWS_AS( row.getInt64(3), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getInt64(4), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getInt64(5), std::invalid_argument);
+    }
+
+    SECTION("getUInt64 checks")
+    {
+      db::mariadb::Connection conn(connInfo);
+      const auto result = conn.query("SELECT -42, 18446744073709551615 AS highest, 18446744073709551616 AS TooMuchIntWillThrow, 123.45, 'foo', '2020-04-20 12:34:56';");
+
+      REQUIRE( result.good() );
+
+      const auto& row = result.rows().at(0);
+      // Negative value should not convert to unsigned integer.
+      REQUIRE_THROWS_AS( row.getUInt64(0), std::invalid_argument);
+      REQUIRE( row.getUInt64(1) == 18446744073709551615ULL );
+      // Other columns should not convert.
+      REQUIRE_THROWS_AS( row.getUInt64(2), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getUInt64(3), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getUInt64(4), std::invalid_argument);
+      REQUIRE_THROWS_AS( row.getUInt64(5), std::invalid_argument);
     }
 
     SECTION("getFloat checks")

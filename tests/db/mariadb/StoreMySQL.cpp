@@ -65,10 +65,10 @@ TEST_CASE("StoreMySQL tests")
       REQUIRE_FALSE( elem.isNull(result.fieldIndex("temperature_C")) );
       REQUIRE( elem.getFloat(result.fieldIndex("temperature_C")) == weather.temperatureCelsius() );
       REQUIRE_FALSE( elem.isNull(result.fieldIndex("humidity")) );
-      const uint8_t humidity = elem.getInt(result.fieldIndex("humidity"));
+      const uint8_t humidity = elem.getInt32(result.fieldIndex("humidity"));
       REQUIRE( humidity == weather.humidity() );
       REQUIRE_FALSE( elem.isNull(result.fieldIndex("pressure")) );
-      REQUIRE( elem.getInt(result.fieldIndex("pressure")) == weather.pressure() );
+      REQUIRE( elem.getInt32(result.fieldIndex("pressure")) == weather.pressure() );
       REQUIRE_FALSE( elem.isNull(result.fieldIndex("wind_speed")) );
       REQUIRE( elem.getFloat(result.fieldIndex("wind_speed")) == weather.windSpeed() );
       REQUIRE_FALSE( elem.isNull(result.fieldIndex("wind_degrees")) );
@@ -95,7 +95,7 @@ TEST_CASE("StoreMySQL tests")
       REQUIRE( result.rowCount() == 1 );
 
       const auto elem = result.row(0);
-      REQUIRE( elem.getInt(result.fieldIndex("apiID")) > 0 );
+      REQUIRE( elem.getInt32(result.fieldIndex("apiID")) > 0 );
       REQUIRE_FALSE( elem.isNull(result.fieldIndex("json")) );
       REQUIRE( elem.column(result.fieldIndex("json")) == forecast.json() );
       REQUIRE( elem.getDateTime(result.fieldIndex("requestTime")) == forecast.requestTime() );
