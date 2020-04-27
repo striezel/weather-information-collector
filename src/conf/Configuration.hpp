@@ -43,7 +43,7 @@ class Configuration
 
     /** \brief character that indicates comment line in configuration file
      */
-    static const char commentCharater;
+    static const char commentCharacter;
 
 
     /** \brief Gets a list of potential configuration file names.

@@ -33,7 +33,7 @@ namespace wic
 {
 
 // use same comment character as in task files: '#'
-const char Configuration::commentCharater = '#';
+const char Configuration::commentCharacter = '#';
 
 Configuration::Configuration()
 :
@@ -203,7 +203,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
   {
     trim(line);
     // skip empty lines and comment lines
-    if (line.empty() || line[0] == commentCharater)
+    if (line.empty() || line[0] == commentCharacter)
       continue;
 
     // check for possible carriage return at end (happens on Windows systems)
