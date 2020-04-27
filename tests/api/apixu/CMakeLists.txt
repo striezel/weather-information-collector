@@ -13,7 +13,7 @@ set(apixu_parsing_tests_sources
     ../../../src/util/Strings.cpp
     main.cpp)
 
-add_definitions(-std=c++14 -Dwic_no_network_requests)
+add_definitions(-std=c++17 -Dwic_no_network_requests)
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)

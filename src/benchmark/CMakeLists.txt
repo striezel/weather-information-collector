@@ -33,7 +33,7 @@ set(weather-information-collector-benchmark_sources
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++14 -Dwic_no_tasks_in_config -Dwic_weather_comparison -Dwic_no_metadata)
+add_definitions(-std=c++17 -Dwic_no_tasks_in_config -Dwic_weather_comparison -Dwic_no_metadata)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
@@ -59,14 +59,8 @@ else()
   message ( FATAL_ERROR "libmariadb was not found!" )
 endif (MARIADB_FOUND)
 
-# find Boost library: filesystem (+ system as dependency)
-find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
-if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-  target_link_libraries(weather-information-collector-benchmark ${Boost_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "Boost library was not found!" )
-endif (Boost_FOUND)
+# link static library for std::filesystem
+target_link_libraries(weather-information-collector-benchmark stdc++fs)
 
 # create git-related constants
 # -- get the current commit hash

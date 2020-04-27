@@ -20,10 +20,10 @@
 
 #include "TaskManager.hpp"
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <boost/filesystem.hpp>
 #include "../api/Factory.hpp"
 #include "../api/Limits.hpp"
 #include "../util/Strings.hpp"
@@ -307,7 +307,7 @@ bool TaskManager::loadFromDirectory(const std::string& directory, const std::str
                                     std::vector<Task>& storage, const PlanWeatherbit planWb, const PlanWeatherstack planWs)
 {
   // Let's keep the namespace short and simple.
-  namespace fs = boost::filesystem;
+  namespace fs = std::filesystem;
 
   fs::path dir(directory);
   try

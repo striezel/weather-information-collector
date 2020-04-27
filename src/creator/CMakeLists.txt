@@ -35,7 +35,7 @@ endif (CMAKE_COMPILER_IS_GNUCC)
 # We can safely add the -Dwic_no_network_requests to remove unnecessary methods
 # from the API classes, because -Dwic_owm_find_location takes care of all the
 # cURL-related stuff, so we can still do web requests for everything we need.
-add_definitions(-std=c++14 -Dwic_owm_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
+add_definitions(-std=c++17 -Dwic_owm_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
@@ -50,14 +50,8 @@ else ()
   message ( FATAL_ERROR "cURL was not found!" )
 endif (CURL_FOUND)
 
-# find Boost library: filesystem (+ system as dependency)
-find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
-if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-  target_link_libraries(weather-information-collector-task-creator ${Boost_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "Boost library was not found!" )
-endif (Boost_FOUND)
+# link static library for std::filesystem
+target_link_libraries(weather-information-collector-task-creator stdc++fs)
 
 # create git-related constants
 # -- get the current commit hash

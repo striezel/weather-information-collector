@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.9.12-pre (2020-04-??)
+
+The C++ standard used during compilation has been raised from C++14 to C++17.
+Recent compilers should support that by now.
+
 ## Version 0.9.11 (2020-04-19)
 
 - The library for database requests changes from libmysql++ to libmariadb.

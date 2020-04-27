@@ -14,6 +14,7 @@ before_install:
   - mysql -e "GRANT ALL ON weather_information_collector.* TO 'travis'@'%';"
   - mysql -e "GRANT ALL ON weather_information_collector.* TO 'travis'@'127.0.0.1';"
   - mysql -utravis --password="" -e "SHOW DATABASES;"
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-8" CC="gcc-8"; fi
 script:
   - ./ci/cpplint.sh
   - mkdir ./build
@@ -25,10 +26,9 @@ addons:
   apt:
     packages:
     - catch
-    - g++
+    - g++-8
     - libcurl4-gnutls-dev
     - libjsoncpp-dev
     - libmariadb-dev
-    - libboost-filesystem-dev
 notifications:
   email: false

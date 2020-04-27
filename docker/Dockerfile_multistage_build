@@ -13,7 +13,7 @@ WORKDIR /opt
 # Update packages, install dependencies + root certificates.
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends catch cmake g++ git \
-    libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev \
+    libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev \
     make pkg-config ca-certificates && \
     git clone https://gitlab.com/striezel/weather-information-collector.git
 WORKDIR /opt/weather-information-collector
@@ -28,7 +28,7 @@ MAINTAINER Dirk Stolle <striezel-dev@web.de>
 # Update packages, install dependencies + root certificates.
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends ca-certificates tzdata && \
-    apt-get install -y --no-install-recommends libboost-filesystem1.67.0 libboost-system1.67.0 libcurl3-gnutls libmariadb3 && \
+    apt-get install -y --no-install-recommends libcurl3-gnutls libmariadb3 && \
     mkdir -p /opt
 WORKDIR /opt
 COPY --from=build_deb /opt/weather-information-collector/weather-information-collector*.deb /opt/

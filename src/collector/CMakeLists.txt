@@ -47,7 +47,7 @@ set(weather-information-collector_sources
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++14)
+add_definitions(-std=c++17)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
@@ -72,14 +72,8 @@ else()
   message ( FATAL_ERROR "libmariadb was not found!" )
 endif (MARIADB_FOUND)
 
-# find Boost library: filesystem (+ system as dependency)
-find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
-if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-  target_link_libraries(weather-information-collector ${Boost_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "Boost library was not found!" )
-endif (Boost_FOUND)
+# link static library for std::filesystem
+target_link_libraries(weather-information-collector stdc++fs)
 
 # create git-related constants
 # -- get the current commit hash

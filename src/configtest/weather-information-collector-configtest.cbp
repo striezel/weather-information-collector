@@ -33,14 +33,13 @@
 			<Add option="-Weffc++" />
 			<Add option="-pedantic" />
 			<Add option="-Wall" />
-			<Add option="-std=c++14" />
+			<Add option="-std=c++17" />
 			<Add option="-fexceptions" />
 			<Add option="-Dwic_no_json_parsing" />
 			<Add option="-Dwic_no_network_requests" />
 		</Compiler>
 		<Linker>
-			<Add library="boost_filesystem" />
-			<Add library="boost_system" />
+			<Add library="stdc++fs" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />

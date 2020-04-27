@@ -30,15 +30,14 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add option="-std=c++14" />
+			<Add option="-std=c++17" />
 			<Add option="-fexceptions" />
 			<Add option="-Dwic_no_tasks_in_config" />
 			<Add option="-Dwic_weather_comparison" />
 			<Add option="-Dwic_no_metadata" />
 		</Compiler>
 		<Linker>
-			<Add library="boost_filesystem" />
-			<Add library="boost_system" />
+			<Add library="stdc++fs" />
 			<Add library="mariadb" />
 			<Add library="jsoncpp" />
 		</Linker>

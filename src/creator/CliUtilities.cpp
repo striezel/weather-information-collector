@@ -20,11 +20,11 @@
 
 #include "CliUtilities.hpp"
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <stdexcept>
-#include <boost/filesystem.hpp>
 #include "../api/Factory.hpp"
 #include "../tasks/TaskManager.hpp"
 #include "../util/Strings.hpp"
@@ -292,7 +292,7 @@ std::chrono::seconds selectInterval()
 
 std::string createFileName(const Task& t, const Configuration& conf)
 {
-  namespace fs = boost::filesystem;
+  namespace fs = std::filesystem;
 
   if (!t.complete() || conf.taskDirectory().empty())
     return std::string();
@@ -330,7 +330,7 @@ std::string createFileName(const Task& t, const Configuration& conf)
 
 bool writeTaskFile(const std::string& fileName, const Task& t)
 {
-  namespace fs = boost::filesystem;
+  namespace fs = std::filesystem;
 
   if (!t.complete() || fileName.empty())
     return false;
