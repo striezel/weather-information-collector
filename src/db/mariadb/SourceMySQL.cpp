@@ -258,7 +258,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
       {
         current.setJson(elem.column(idxJson));
       }
-      const uint_least32_t forecastId = elem.getUInt32(idxForecastId);
+      const uint_least32_t forecastId = elem.getInt32(idxForecastId);
 
       // Get weather elements in forecast data.
       const std::string selectForecastData = "SELECT DISTINCT * FROM forecastdata WHERE forecastID="
@@ -369,7 +369,7 @@ bool SourceMySQL::getMetaForecasts(const ApiType type, const Location& location,
       return false;
     }
 
-    const uint32_t apiId = result.row(0).getUInt32(0);
+    const uint32_t apiId = result.row(0).getInt32(0);
     const int_least32_t locationId = wic::getLocationId(conn, location);
     if (locationId <= 0)
       return false;

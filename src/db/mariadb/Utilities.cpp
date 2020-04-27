@@ -122,7 +122,7 @@ Location getLocation(db::mariadb::Connection& conn, const int_least32_t location
   const auto& row = result.row(0);
   const auto idxId = result.fieldIndex("id");
   if (!row.isNull(idxId))
-    loc.setOwmId(row.getUInt32(idxId));
+    loc.setOwmId(row.getInt32(idxId));
   const auto idxLat = result.fieldIndex("latitude");
   const auto idxLon = result.fieldIndex("longitude");
   if (!row.isNull(idxLat) && !row.isNull(idxLon))

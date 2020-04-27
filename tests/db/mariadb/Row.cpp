@@ -80,25 +80,6 @@ TEST_CASE("Row class tests")
       REQUIRE_THROWS_AS( row.getInt32(5), std::invalid_argument);
     }
 
-    SECTION("getUInt32 checks")
-    {
-      db::mariadb::Connection conn(connInfo);
-      const auto result = conn.query("SELECT -42, 4294967295 AS highest, 4294967296 AS TooMuch, 123.45, 'foo', '2020-04-20 12:34:56';");
-
-      REQUIRE( result.good() );
-
-      const auto& row = result.rows().at(0);
-      // Negative value should throw.
-      REQUIRE_THROWS_AS( row.getUInt32(0), std::invalid_argument);
-      // Maximum value should convert.
-      REQUIRE( row.getUInt32(1) == 4294967295L );
-      // Other columns should not convert.
-      REQUIRE_THROWS_AS( row.getUInt32(2), std::out_of_range);
-      REQUIRE_THROWS_AS( row.getUInt32(3), std::invalid_argument);
-      REQUIRE_THROWS_AS( row.getUInt32(4), std::invalid_argument);
-      REQUIRE_THROWS_AS( row.getUInt32(5), std::invalid_argument);
-    }
-
     SECTION("getInt64 checks")
     {
       db::mariadb::Connection conn(connInfo);
@@ -116,24 +97,6 @@ TEST_CASE("Row class tests")
       REQUIRE_THROWS_AS( row.getInt64(3), std::invalid_argument);
       REQUIRE_THROWS_AS( row.getInt64(4), std::invalid_argument);
       REQUIRE_THROWS_AS( row.getInt64(5), std::invalid_argument);
-    }
-
-    SECTION("getUInt64 checks")
-    {
-      db::mariadb::Connection conn(connInfo);
-      const auto result = conn.query("SELECT -42, 18446744073709551615 AS highest, 18446744073709551616 AS TooMuchIntWillThrow, 123.45, 'foo', '2020-04-20 12:34:56';");
-
-      REQUIRE( result.good() );
-
-      const auto& row = result.rows().at(0);
-      // Negative value should not convert to unsigned integer.
-      REQUIRE_THROWS_AS( row.getUInt64(0), std::invalid_argument);
-      REQUIRE( row.getUInt64(1) == 18446744073709551615ULL );
-      // Other columns should not convert.
-      REQUIRE_THROWS_AS( row.getUInt64(2), std::invalid_argument);
-      REQUIRE_THROWS_AS( row.getUInt64(3), std::invalid_argument);
-      REQUIRE_THROWS_AS( row.getUInt64(4), std::invalid_argument);
-      REQUIRE_THROWS_AS( row.getUInt64(5), std::invalid_argument);
     }
 
     SECTION("getFloat checks")
