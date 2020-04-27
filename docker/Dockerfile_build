@@ -11,7 +11,7 @@ WORKDIR /opt
 # Update packages, install dependencies + root certificates.
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends catch cmake g++ git \
-    libboost-filesystem-dev libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev \
+    libcurl4-gnutls-dev libjsoncpp-dev libmariadb-dev \
     make pkg-config ca-certificates && \
     git clone https://gitlab.com/striezel/weather-information-collector.git
 WORKDIR /opt/weather-information-collector

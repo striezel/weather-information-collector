@@ -29,8 +29,7 @@
 			<Add option="-Dwic_no_network_requests" />
 		</Compiler>
 		<Linker>
-			<Add library="boost_filesystem" />
-			<Add library="boost_system" />
+			<Add library="stdc++fs" />
 		</Linker>
 		<Unit filename="../../src/api/Apixu.cpp" />
 		<Unit filename="../../src/api/Apixu.hpp" />

@@ -13,7 +13,7 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y ca-certificates wget unzip && \
     wget -O download.zip "$DEB_DOWNLOAD_URL" && \
     unzip download.zip && rm -f download.zip && \
-    apt-get install -y libboost-filesystem1.67.0 libboost-system1.67.0 libc6 && \
+    apt-get install -y libc6 && \
     apt-get install -y libcurl3-gnutls libgcc1 libmariadb3 libstdc++6 && \
     dpkg -i weather-information-collector*.deb && \
     rm -f weather-information-collector*.deb && \

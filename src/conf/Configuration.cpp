@@ -19,9 +19,9 @@
 */
 
 #include "Configuration.hpp"
+#include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <boost/filesystem.hpp>
 #ifndef wic_no_tasks_in_config
 #include <algorithm>
 #include "../tasks/TaskManager.hpp"
@@ -135,7 +135,7 @@ PlanWeatherstack Configuration::planWeatherstack() const
 
 void Configuration::findConfigurationFile(std::string& realName)
 {
-  namespace fs = boost::filesystem;
+  namespace fs = std::filesystem;
 
   if (realName.empty())
   {
@@ -163,7 +163,7 @@ void Configuration::findConfigurationFile(std::string& realName)
 
 void Configuration::findTaskDirectory(std::string& realName)
 {
-  namespace fs = boost::filesystem;
+  namespace fs = std::filesystem;
 
   if (realName.empty())
   {
@@ -487,7 +487,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
 
 bool Configuration::load(const std::string& fileName, const bool skipTasks, const bool missingKeysAllowed)
 {
-  namespace fs = boost::filesystem;
+  namespace fs = std::filesystem;
 
   std::string realName(fileName);
   findConfigurationFile(realName);

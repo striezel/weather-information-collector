@@ -64,14 +64,8 @@ else()
   message ( FATAL_ERROR "libmariadb was not found!" )
 endif (MARIADB_FOUND)
 
-# find Boost library: filesystem (+ system as dependency)
-find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
-if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-  target_link_libraries(weather-information-collector-update ${Boost_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "Boost library was not found!" )
-endif (Boost_FOUND)
+# link static library for std::filesystem
+target_link_libraries(weather-information-collector-update stdc++fs)
 
 # create git-related constants
 # -- get the current commit hash

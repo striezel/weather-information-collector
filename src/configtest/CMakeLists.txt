@@ -35,14 +35,8 @@ set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather-information-collector-configtest ${weather-information-collector-configtest_sources})
 
-# find Boost library: filesystem (+ system as dependency)
-find_package(Boost 1.46.0 REQUIRED COMPONENTS filesystem system)
-if (Boost_FOUND)
-  include_directories(${Boost_INCLUDE_DIRS})
-  target_link_libraries(weather-information-collector-configtest ${Boost_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "Boost library was not found!" )
-endif (Boost_FOUND)
+# link static library for std::filesystem
+target_link_libraries(weather-information-collector-configtest stdc++fs)
 
 # create git-related constants
 # -- get the current commit hash

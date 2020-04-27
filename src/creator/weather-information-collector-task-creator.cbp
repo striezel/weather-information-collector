@@ -37,8 +37,7 @@
 			<Add option="-Dwic_no_json_parsing" />
 		</Compiler>
 		<Linker>
-			<Add library="boost_filesystem" />
-			<Add library="boost_system" />
+			<Add library="stdc++fs" />
 			<Add library="curl" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
