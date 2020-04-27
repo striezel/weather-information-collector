@@ -40,7 +40,7 @@ $CXX --version
 echo
 
 # find all C++ files and run them through the compilers's syntax check
-find ./ \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' \) -print0 | xargs -0 -i $CXX $CFLAGS -fsyntax-only -Wall -std=c++14 -Dwic_owm_find_location -Dwic_weather_comparison {}
+find ./ \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' \) -print0 | xargs -0 -i $CXX $CFLAGS -fsyntax-only -Wall -std=c++17 -Dwic_owm_find_location -Dwic_weather_comparison {}
 if [[ $? -ne 0 ]]
 then
   echo "Some source code files contain syntax errors!"
