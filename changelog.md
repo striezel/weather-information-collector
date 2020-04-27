@@ -1,8 +1,10 @@
 # Version history of weather-information-collector
 
-## Version 0.9.12-pre (2020-04-??)
+## Version 0.9.12 (2020-04-28)
 
 The C++ standard used during compilation has been raised from C++14 to C++17.
+Furthermore, the Boost filesystem library has been replaced by std::filesystem
+which is part of the standard library of C++17.
 Recent compilers should support that by now.
 
 ## Version 0.9.11 (2020-04-19)
