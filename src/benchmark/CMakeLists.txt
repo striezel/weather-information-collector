@@ -19,13 +19,12 @@ set(weather-information-collector-benchmark_sources
     ../db/mariadb/SourceMySQL.cpp
     ../db/mariadb/Utilities.cpp
     ../json/ApixuFunctions.cpp
-    ../json/JsonCppApixu.cpp
-    ../json/JsonCppDarkSky.cpp
-    ../json/JsonCppOwm.cpp
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
+    ../json/SimdJsonApixu.cpp
     ../json/SimdJsonDarkSky.cpp
+    ../json/SimdJsonOwm.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
@@ -40,16 +39,6 @@ add_definitions(-std=c++17 -Dwic_no_tasks_in_config -Dwic_weather_comparison -Dw
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather-information-collector-benchmark ${weather-information-collector-benchmark_sources})
-
-# find jsoncpp library
-set(LibJsonCpp_DIR "../../cmake/" )
-find_package (LibJsonCpp)
-if (LIBJSONCPP_FOUND)
-  include_directories(${LIBJSONCPP_INCLUDE_DIRS})
-  target_link_libraries (weather-information-collector-benchmark ${LIBJSONCPP_LIBRARIES})
-else ()
-  message ( FATAL_ERROR "libjsoncpp was not found!" )
-endif (LIBJSONCPP_FOUND)
 
 # find libmariadb
 set(mariadb_DIR "../../cmake/" )

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector test suite.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@
 #include <fstream>
 #include <iostream>
 #include "location.hpp"
-#include "../../../src/json/JsonCppOwm.hpp"
 #include "../../../src/json/NLohmannJsonOwm.hpp"
+#include "../../../src/json/SimdJsonOwm.hpp"
 
 int main(int argc, char** argv)
 {
@@ -53,8 +53,8 @@ int main(int argc, char** argv)
     jsonStream.close();
   }
 
-  std::cout << "Parsing with JsonCpp ..." << std::endl;
-  int ret = parseLocations<JsonCppOwm>(json);
+  std::cout << "Parsing with simdjson ..." << std::endl;
+  int ret = parseLocations<SimdJsonOwm>(json);
   if (ret != 0)
     return ret;
 
