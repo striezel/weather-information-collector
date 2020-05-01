@@ -1,5 +1,9 @@
 # Version history of weather-information-collector
 
+## Version 0.9.13-pre (2020-05-??)
+
+All remaining uses of the JsonCpp library have been removed.
+
 ## Version 0.9.12 (2020-04-28)
 
 The C++ standard used during compilation has been raised from C++14 to C++17.

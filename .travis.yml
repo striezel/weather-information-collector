@@ -28,7 +28,6 @@ addons:
     - catch
     - g++-8
     - libcurl4-gnutls-dev
-    - libjsoncpp-dev
     - libmariadb-dev
 notifications:
   email: false
