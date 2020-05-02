@@ -4,7 +4,6 @@ cmake_minimum_required (VERSION 2.8)
 project(weather-information-collector-benchmark)
 
 set(weather-information-collector-benchmark_sources
-    ../../third-party/simdjson/simdjson.cpp
     ../api/Types.cpp
     ../api/Plans.cpp
     ../conf/Configuration.cpp
@@ -22,14 +21,28 @@ set(weather-information-collector-benchmark_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
-    ../json/SimdJsonApixu.cpp
-    ../json/SimdJsonDarkSky.cpp
-    ../json/SimdJsonOwm.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
     benchmark.hpp
     main.cpp)
+
+try_compile(CAN_HAVE_SIMDJSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/simd-test
+            ${CMAKE_CURRENT_SOURCE_DIR}/../simdjson-compile-test
+            benchmark-simd-test
+)
+
+if (CAN_HAVE_SIMDJSON)
+  list(APPEND weather-information-collector-benchmark_sources
+    ../../third-party/simdjson/simdjson.cpp
+    ../json/SimdJsonApixu.cpp
+    ../json/SimdJsonDarkSky.cpp
+    ../json/SimdJsonOwm.cpp)
+  message(STATUS "benchmark can use simdjson.")
+else()
+  message(STATUS "Compiler is not fit for simdjson, won't use in benchmark.")
+endif(CAN_HAVE_SIMDJSON)
 
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
