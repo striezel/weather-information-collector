@@ -26,9 +26,11 @@
 #include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
 #include "../json/NLohmannJsonOwm.hpp"
+#ifdef __SIZEOF_INT128__
 #include "../json/SimdJsonApixu.hpp"
 #include "../json/SimdJsonDarkSky.hpp"
 #include "../json/SimdJsonOwm.hpp"
+#endif
 #include "../tasks/TaskManager.hpp"
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
@@ -120,6 +122,7 @@ int main(int argc, char** argv)
     return rcConfigurationError;
   }
 
+#ifdef __SIZEOF_INT128__
   SourceMySQL source(config.connectionInfo());
 
   /* ********* Weather data ********* */
@@ -164,4 +167,10 @@ int main(int argc, char** argv)
 
   std::cout << "Done." << std::endl;
   return 0;
+#else
+  std::cout << "Warning: Your processor architecture or compiler does not seem "
+            << "to provide a 128 bit integer type. Therefore, benchmarks with "
+            << "simdjson are not possible." << std::endl;
+  return 0;
+#endif
 }

@@ -22,7 +22,9 @@
 #include <iostream>
 #include "location.hpp"
 #include "../../../src/json/NLohmannJsonOwm.hpp"
+#ifdef __SIZEOF_INT128__
 #include "../../../src/json/SimdJsonOwm.hpp"
+#endif
 
 int main(int argc, char** argv)
 {
@@ -53,10 +55,16 @@ int main(int argc, char** argv)
     jsonStream.close();
   }
 
+  #ifdef __SIZEOF_INT128__
   std::cout << "Parsing with simdjson ..." << std::endl;
   int ret = parseLocations<SimdJsonOwm>(json);
   if (ret != 0)
     return ret;
+  #else
+  std::cout << "Info: Your processor architecture or compiler may not support "
+            << "simdjson. Therefore the parsing test with simdjson is skipped."
+            << std::endl << std::endl;
+  #endif
 
   std::cout << "Parsing with nlohmann/json ..." << std::endl;
   return  parseLocations<NLohmannJsonOwm>(json);
