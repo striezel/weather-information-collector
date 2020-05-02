@@ -26,11 +26,13 @@
 #include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
 #include "../json/NLohmannJsonOwm.hpp"
+#include "../json/NLohmannJsonWeatherbit.hpp"
 #include "../json/NLohmannJsonWeatherstack.hpp"
 #ifdef __SIZEOF_INT128__
 #include "../json/SimdJsonApixu.hpp"
 #include "../json/SimdJsonDarkSky.hpp"
 #include "../json/SimdJsonOwm.hpp"
+#include "../json/SimdJsonWeatherbit.hpp"
 #include "../json/SimdJsonWeatherstack.hpp"
 #endif
 #include "../tasks/TaskManager.hpp"
@@ -146,6 +148,12 @@ int main(int argc, char** argv)
     if (ret != 0)
       return ret;
   }
+  // Weatherbit
+  {
+    int ret = weatherDataBench<SimdJsonWeatherbit, NLohmannJsonWeatherbit>(ApiType::Weatherbit, source);
+    if (ret != 0)
+      return ret;
+  }
   // Weatherstack
   {
     int ret = weatherDataBench<SimdJsonWeatherstack, NLohmannJsonWeatherstack>(ApiType::Weatherstack, source);
@@ -169,6 +177,12 @@ int main(int argc, char** argv)
   // Apixu
   {
     int ret = forecastBench<SimdJsonApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
+    if (ret != 0)
+      return ret;
+  }
+  // Weatherbit
+  {
+    int ret = forecastBench<SimdJsonWeatherbit, NLohmannJsonWeatherbit>(ApiType::Weatherbit, source);
     if (ret != 0)
       return ret;
   }
