@@ -26,10 +26,12 @@
 #include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
 #include "../json/NLohmannJsonOwm.hpp"
+#include "../json/NLohmannJsonWeatherstack.hpp"
 #ifdef __SIZEOF_INT128__
 #include "../json/SimdJsonApixu.hpp"
 #include "../json/SimdJsonDarkSky.hpp"
 #include "../json/SimdJsonOwm.hpp"
+#include "../json/SimdJsonWeatherstack.hpp"
 #endif
 #include "../tasks/TaskManager.hpp"
 #include "../util/GitInfos.hpp"
@@ -141,6 +143,12 @@ int main(int argc, char** argv)
   // Apixu
   {
     int ret = weatherDataBench<SimdJsonApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
+    if (ret != 0)
+      return ret;
+  }
+  // Weatherstack
+  {
+    int ret = weatherDataBench<SimdJsonWeatherstack, NLohmannJsonWeatherstack>(ApiType::Weatherstack, source);
     if (ret != 0)
       return ret;
   }

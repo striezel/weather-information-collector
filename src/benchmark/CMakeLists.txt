@@ -21,6 +21,8 @@ set(weather-information-collector-benchmark_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
     ../json/NLohmannJsonOwm.cpp
+    ../json/NLohmannJsonWeatherstack.cpp
+    ../json/WeatherstackFunctions.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
@@ -38,7 +40,8 @@ if (CAN_HAVE_SIMDJSON)
     ../../third-party/simdjson/simdjson.cpp
     ../json/SimdJsonApixu.cpp
     ../json/SimdJsonDarkSky.cpp
-    ../json/SimdJsonOwm.cpp)
+    ../json/SimdJsonOwm.cpp
+    ../json/SimdJsonWeatherstack.cpp)
   message(STATUS "benchmark can use simdjson.")
 else()
   message(STATUS "Compiler is not fit for simdjson, won't use in benchmark.")
