@@ -10,3 +10,6 @@ obj/
 
 # cppcheck results
 CppCheckResults.xml
+
+# test builds for simdjson compatibility
+simd-test/

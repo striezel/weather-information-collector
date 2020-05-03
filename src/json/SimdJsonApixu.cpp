@@ -169,8 +169,8 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
           w.setWindDegrees(v2.get<int64_t>());
         // air pressure: pressure_mb
         elem["pressure_mb"].tie(v2, error);
-        if (!error && v2.is<int64_t>())
-          w.setPressure(v2.get<int64_t>().value());
+        if (!error && v2.is<double>())
+          w.setPressure(v2.get<double>().value());
         // rain or snow: precip_mm
         elem["precip_mm"].tie(v2, error);
         if (!error && v2.is<double>())

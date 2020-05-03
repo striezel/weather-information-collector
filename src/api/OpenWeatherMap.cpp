@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,11 +22,19 @@
 #include <cmath>
 #include <iostream>
 #ifdef wic_owm_find_location
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonOwm.hpp"
+#else
 #include "../json/NLohmannJsonOwm.hpp"
+#endif // __SIZEOF_INT128__
 #include "../net/Curly.hpp"
 #endif // wic_owm_find_location
 #ifndef wic_no_json_parsing
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonOwm.hpp"
+#else
 #include "../json/NLohmannJsonOwm.hpp"
+#endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
 #include "../net/Curly.hpp"
@@ -69,12 +77,20 @@ bool OpenWeatherMap::supportsDataType(const DataType data) const
 #ifndef wic_no_json_parsing
 bool OpenWeatherMap::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonOwm::parseCurrentWeather(json, weather);
+#else
   return NLohmannJsonOwm::parseCurrentWeather(json, weather);
+#endif
 }
 
 bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonOwm::parseForecast(json, forecast);
+#else
   return NLohmannJsonOwm::parseForecast(json, forecast);
+#endif
 }
 #endif // wic_no_json_parsing
 
@@ -226,7 +242,11 @@ bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair
     return false;
   }
 
+#ifdef __SIZEOF_INT128__
+  return SimdJsonOwm::parseLocations(response, locations);
+#else
   return NLohmannJsonOwm::parseLocations(response, locations);
+#endif
 }
 #endif // wic_owm_find_location
 

@@ -45,8 +45,12 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.hpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherbit.cpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherbit.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />
 		<Unit filename="../../../src/util/Strings.hpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

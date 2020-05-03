@@ -2,7 +2,11 @@
 
 ## Version 0.9.13-pre (2020-05-??)
 
-All remaining uses of the JsonCpp library have been removed.
+weather-information-collector will now use simdjson for JSON parsing, if the
+compiler supports that. Otherwise it will fall back to nlohmann/json for the
+parsing of JSON content.
+
+Furthermore, all remaining uses of the JsonCpp library have been removed.
 
 ## Version 0.9.12 (2020-04-28)
 

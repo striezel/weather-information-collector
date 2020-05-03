@@ -22,7 +22,11 @@
 #include <cmath>
 #include <iostream>
 #ifndef wic_no_json_parsing
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonWeatherbit.hpp"
+#else
 #include "../json/NLohmannJsonWeatherbit.hpp"
+#endif
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
 #include "../net/Curly.hpp"
@@ -80,12 +84,20 @@ bool Weatherbit::supportsDataType(const DataType data) const
 #ifndef wic_no_json_parsing
 bool Weatherbit::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonWeatherbit::parseCurrentWeather(json, weather);
+#else
   return NLohmannJsonWeatherbit::parseCurrentWeather(json, weather);
+#endif // __SIZEOF_INT128__
 }
 
 bool Weatherbit::parseForecast(const std::string& json, Forecast& forecast) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonWeatherbit::parseForecast(json, forecast);
+#else
   return NLohmannJsonWeatherbit::parseForecast(json, forecast);
+#endif
 }
 #endif // wic_no_json_parsing
 

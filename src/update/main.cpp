@@ -35,7 +35,12 @@ void showVersion()
   std::cout << "weather-information-collector-update, " << wic::version << "\n"
             << "\n"
             << "Version control commit: " << info.commit() << "\n"
-            << "Version control date:   " << info.date() << std::endl;
+            << "Version control date:   " << info.date() << std::endl
+#ifdef __SIZEOF_INT128__
+            << "JSON library:           simdjson" << std::endl;
+#else
+            << "JSON library:           nlohmann/json" << std::endl;
+#endif // __SIZEOF_INT128__
 }
 
 void showHelp()
