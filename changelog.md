@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.9.13-pre (2020-05-??)
+## Version 0.9.13 (2020-05-03)
 
 weather-information-collector will now use simdjson for JSON parsing, if the
 compiler supports that. Otherwise it will fall back to nlohmann/json for the
