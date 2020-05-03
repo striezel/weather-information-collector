@@ -9,9 +9,25 @@ set(apixu_parsing_tests_sources
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/json/ApixuFunctions.cpp
-    ../../../src/json/NLohmannJsonApixu.cpp
     ../../../src/util/Strings.cpp
     main.cpp)
+
+try_compile(CAN_HAVE_SIMDJSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/simd-test
+            ${CMAKE_CURRENT_SOURCE_DIR}/../../../src/simdjson-compile-test
+            apixu-parse-simd-test
+)
+
+if (CAN_HAVE_SIMDJSON)
+  list(APPEND apixu_parsing_tests_sources
+    ../../../third-party/simdjson/simdjson.cpp
+    ../../../src/json/SimdJsonApixu.cpp)
+  message(STATUS "apixu-parsing-tests can use simdjson.")
+else()
+  list(APPEND apixu_parsing_tests_sources
+    ../../../src/json/NLohmannJsonApixu.cpp)
+  message(STATUS "Compiler is not fit for simdjson, won't use it in apixu-parsing-tests.")
+endif(CAN_HAVE_SIMDJSON)
 
 add_definitions(-std=c++17 -Dwic_no_network_requests)
 if (CMAKE_COMPILER_IS_GNUCC)

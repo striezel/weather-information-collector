@@ -38,8 +38,12 @@
 		<Unit filename="../../../src/json/ApixuFunctions.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonApixu.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonApixu.hpp" />
+		<Unit filename="../../../src/json/SimdJsonApixu.cpp" />
+		<Unit filename="../../../src/json/SimdJsonApixu.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />
 		<Unit filename="../../../src/util/Strings.hpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

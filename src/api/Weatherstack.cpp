@@ -21,7 +21,11 @@
 #include "Weatherstack.hpp"
 #include <iostream>
 #ifndef wic_no_json_parsing
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonWeatherstack.hpp"
+#else
 #include "../json/NLohmannJsonWeatherstack.hpp"
+#endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
 #include "../net/Curly.hpp"
@@ -66,7 +70,11 @@ bool Weatherstack::supportsDataType(const DataType data) const
 #ifndef wic_no_json_parsing
 bool Weatherstack::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonWeatherstack::parseCurrentWeather(json, weather);
+#else
   return NLohmannJsonWeatherstack::parseCurrentWeather(json, weather);
+#endif // __SIZEOF_INT128__
 }
 
 bool Weatherstack::parseForecast(const std::string& json, Forecast& forecast) const

@@ -39,8 +39,9 @@
 		<Linker>
 			<Add library="stdc++fs" />
 			<Add library="mariadb" />
-			<Add library="jsoncpp" />
 		</Linker>
+		<Unit filename="../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../third-party/simdjson/simdjson.h" />
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/Plans.cpp" />
@@ -71,18 +72,28 @@
 		<Unit filename="../db/mariadb/Utilities.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />
 		<Unit filename="../json/ApixuFunctions.hpp" />
-		<Unit filename="../json/JsonCppApixu.cpp" />
-		<Unit filename="../json/JsonCppApixu.hpp" />
-		<Unit filename="../json/JsonCppDarkSky.cpp" />
-		<Unit filename="../json/JsonCppDarkSky.hpp" />
-		<Unit filename="../json/JsonCppOwm.cpp" />
-		<Unit filename="../json/JsonCppOwm.hpp" />
 		<Unit filename="../json/NLohmannJsonApixu.cpp" />
 		<Unit filename="../json/NLohmannJsonApixu.hpp" />
 		<Unit filename="../json/NLohmannJsonDarkSky.cpp" />
 		<Unit filename="../json/NLohmannJsonDarkSky.hpp" />
 		<Unit filename="../json/NLohmannJsonOwm.cpp" />
 		<Unit filename="../json/NLohmannJsonOwm.hpp" />
+		<Unit filename="../json/NLohmannJsonWeatherbit.cpp" />
+		<Unit filename="../json/NLohmannJsonWeatherbit.hpp" />
+		<Unit filename="../json/NLohmannJsonWeatherstack.cpp" />
+		<Unit filename="../json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../json/SimdJsonApixu.cpp" />
+		<Unit filename="../json/SimdJsonApixu.hpp" />
+		<Unit filename="../json/SimdJsonDarkSky.cpp" />
+		<Unit filename="../json/SimdJsonDarkSky.hpp" />
+		<Unit filename="../json/SimdJsonOwm.cpp" />
+		<Unit filename="../json/SimdJsonOwm.hpp" />
+		<Unit filename="../json/SimdJsonWeatherbit.cpp" />
+		<Unit filename="../json/SimdJsonWeatherbit.hpp" />
+		<Unit filename="../json/SimdJsonWeatherstack.cpp" />
+		<Unit filename="../json/SimdJsonWeatherstack.hpp" />
+		<Unit filename="../json/WeatherstackFunctions.cpp" />
+		<Unit filename="../json/WeatherstackFunctions.hpp" />
 		<Unit filename="../util/Directories.cpp" />
 		<Unit filename="../util/Directories.hpp" />
 		<Unit filename="../util/GitInfos.cpp" />

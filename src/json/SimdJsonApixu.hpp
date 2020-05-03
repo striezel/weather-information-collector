@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,23 +18,23 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_JSONCPPDARKSKY_HPP
-#define WEATHER_INFORMATION_COLLECTOR_JSONCPPDARKSKY_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_SIMDJSONAPIXU_HPP
+#define WEATHER_INFORMATION_COLLECTOR_SIMDJSONAPIXU_HPP
 
-#include <jsoncpp/json/reader.h>
+#include "../../third-party/simdjson/simdjson.h"
 #include "../data/Forecast.hpp"
 #include "../data/Weather.hpp"
 
 namespace wic
 {
 
-/** \brief Handles JSON input from the DarkSky API with the JsonCpp library.
+/** \brief Handles JSON input from the Apixu API with the simdjson library.
  */
-class JsonCppDarkSky
+class SimdJsonApixu
 {
   public:
     // alias for type that keeps JSON values / objects / arrays, etc.
-    typedef Json::Value value_type;
+    typedef simdjson::dom::element value_type;
 
 
     /** \brief Parses the current weather information from JSON into the Weather object.
@@ -69,4 +69,4 @@ class JsonCppDarkSky
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_JSONCPPDARKSKY_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_SIMDJSONAPIXU_HPP

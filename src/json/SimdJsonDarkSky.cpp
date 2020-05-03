@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,71 +18,71 @@
  -------------------------------------------------------------------------------
 */
 
-#include "JsonCppDarkSky.hpp"
+#include "SimdJsonDarkSky.hpp"
 #include <cmath>
 #include <iostream>
 
 namespace wic
 {
 
-bool JsonCppDarkSky::parseCurrentWeather(const std::string& json, Weather& weather)
+bool SimdJsonDarkSky::parseCurrentWeather(const std::string& json, Weather& weather)
 {
-  value_type root; // will contain the root value after parsing.
-  Json::Reader jsonReader;
-  const bool success = jsonReader.parse(json, root, false);
-  if (!success)
+  simdjson::dom::parser parser;
+  const auto [doc, error] = parser.parse(json);
+  if (error)
   {
-    std::cerr << "Error in JsonCppDarkSky::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonDarkSky::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
     return false;
   }
 
   weather.setJson(json);
-  weather.setRequestTime(std::chrono::system_clock::now());
-
-  if (root.empty())
-    return false;
 
   // Current weather data is located in the currently object below the root.
-  const value_type& currently = root["currently"];
+  simdjson::dom::element currently;
+  simdjson::error_code e;
+  doc["currently"].tie(currently, e);
+  if (e)
+  {
+    std::cerr << "Error in SimdJsonDarkSky::parseCurrentWeather(): No JSON element \"currently\" found!" << std::endl;
+    return false;
+  }
   return parseSingleWeatherItem(currently, weather);
 }
 
-bool JsonCppDarkSky::parseForecast(const std::string& json, Forecast& forecast)
+bool SimdJsonDarkSky::parseForecast(const std::string& json, Forecast& forecast)
 {
-  value_type root; // will contain the root value after parsing.
-  Json::Reader jsonReader;
-  const bool success = jsonReader.parse(json, root, false);
-  if (!success)
+  simdjson::dom::parser parser;
+  const auto [doc, error] = parser.parse(json);
+  if (error)
   {
-    std::cerr << "Error in JsonCppDarkSky::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonDarkSky::parseForecast(): Unable to parse JSON data!" << std::endl;
     return false;
   }
 
   forecast.setJson(json);
-  if (root.empty())
-    return false;
 
-  const value_type hourly = root["hourly"];
-  if (hourly.empty() || !hourly.isObject())
+  const auto [hourly, e] = doc["hourly"];
+  if (e || hourly.type() != simdjson::dom::element_type::OBJECT)
   {
-    std::cerr << "Error in JsonCppDarkSky::parseForecast(): The element \"hourly\" is missing or is not an object!" << std::endl;
+    std::cerr << "Error in SimdJsonDarkSky::parseForecast(): The element \"hourly\" is missing or is not an object!" << std::endl;
     return false;
   }
-  const value_type hourlyData = hourly["data"];
-  if (hourlyData.empty() || !hourlyData.isArray())
+
+  const auto [hourlyData, e2] = hourly["data"];
+  if (e2 || hourlyData.type() != simdjson::dom::element_type::ARRAY)
   {
-    std::cerr << "Error in JsonCppDarkSky::parseForecast(): The element \"data\" is missing or is not an array!" << std::endl;
+    std::cerr << "Error in SimdJsonDarkSky::parseForecast(): The element \"data\" is missing or is not an array!" << std::endl;
     return false;
   }
 
   forecast.setData({ });
   auto data = forecast.data();
-  for (const Json::Value& val : hourlyData)
+  for (const value_type& val : hourlyData)
   {
     Weather w;
     if (!parseSingleWeatherItem(val, w))
     {
-      std::cerr << "Error in JsonCppDarkSky::parseForecast(): Parsing of element in data array failed!" << std::endl;
+      std::cerr << "Error in SimdJsonDarkSky::parseForecast(): Parsing of element in data array failed!" << std::endl;
       return false;
     }
     data.push_back(w);
@@ -93,22 +93,22 @@ bool JsonCppDarkSky::parseForecast(const std::string& json, Forecast& forecast)
   return true;
 }
 
-bool JsonCppDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weather& weather)
+bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weather& weather)
 {
-  if (dataPoint.empty() || !dataPoint.isObject())
+  if (dataPoint.type() != simdjson::dom::element_type::OBJECT)
     return false;
 
-  value_type val = dataPoint["time"];
-  if (!val.empty() && val.isIntegral())
+  auto [elem, error] = dataPoint["time"];
+  if (!error && elem.is<int64_t>())
   {
-    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(val.asInt()));
+    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(elem.get<int64_t>().value()));
     weather.setDataTime(dt);
   }
   // temperature (in °C)
-  val = dataPoint["temperature"];
-  if (!val.empty() && (val.isDouble() || val.isIntegral()))
+  dataPoint["temperature"].tie(elem, error);
+  if (!error && elem.is<double>())
   {
-    weather.setTemperatureCelsius(val.asDouble());
+    weather.setTemperatureCelsius(elem.get<double>().value());
     // Since there are no other values (Fahrenheit or Kelvin), we can just
     // calculate them on the fly.
     weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32);
@@ -121,21 +121,21 @@ bool JsonCppDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weather
     weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15);
   }
   // relative humidity, [0;1]
-  val = dataPoint["humidity"];
-  if (!val.empty() && (val.isDouble() || val.isIntegral()))
+  dataPoint["humidity"].tie(elem, error);
+  if (!error && elem.is<double>())
   {
-    const long int humidity = std::lround(val.asDouble() * 100);
+    const long int humidity = std::lround(elem.get<double>().value() * 100);
     weather.setHumidity(humidity);
   }
   // rain or snow (mm/m² in an hour)
-  val = dataPoint["precipIntensity"];
-  if (!val.empty() && (val.isDouble() || val.isIntegral()))
+  dataPoint["precipIntensity"].tie(elem, error);
+  if (!error && elem.is<double>())
   {
-    const double amount = val.asDouble();
-    const value_type& type = dataPoint["precipType"];
-    if (!type.empty() && type.isString())
+    const double amount = elem.get<double>().value();
+    const auto [findType, typeError] = dataPoint["precipType"];
+    if (!typeError && findType.is<std::string_view>())
     {
-      const auto typeStr = type.asString();
+      const std::string_view typeStr = findType.get<std::string_view>().value();
       if (typeStr == "rain")
       {
         weather.setRain(amount);
@@ -154,7 +154,7 @@ bool JsonCppDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weather
       }
       else
       {
-        std::cerr << "Error in JsonCppDarkSky::parseCurrentWeather(): Unknown precipType "
+        std::cerr << "Error in SimdJsonDarkSky::parseCurrentWeather(): Unknown precipType "
                   << typeStr << "!" << std::endl;
         return false;
       }
@@ -167,36 +167,36 @@ bool JsonCppDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weather
     }
     else
     {
-      std::cerr << "Error in JsonCppDarkSky::parseCurrentWeather(): Missing precipType!"
+      std::cerr << "Error in SimdJsonDarkSky::parseCurrentWeather(): Missing precipType!"
                 << std::endl;
       return false;
     }
   } // if precipIntensity
   // pressure [hPa]
-  val = dataPoint["pressure"];
-  if (!val.empty() && (val.isDouble() || val.isIntegral()))
+  dataPoint["pressure"].tie(elem, error);
+  if (!error && elem.is<double>())
   {
-    const int16_t press = std::lround(val.asDouble());
+    const int16_t press = std::lround(elem.get<double>().value());
     weather.setPressure(press);
   }
   // wind speed [m/s]
-  val = dataPoint["windSpeed"];
-  if (!val.empty() && (val.isDouble() || val.isIntegral()))
+  dataPoint["windSpeed"].tie(elem, error);
+  if (!error && elem.is<double>())
   {
-    weather.setWindSpeed(val.asDouble());
+    weather.setWindSpeed(elem.get<double>().value());
   }
   // wind windBearing [°], with 0=N,90=E,180=S,270=W
-  val = dataPoint["windBearing"];
-  if (!val.empty() && (val.isDouble() || val.isIntegral()))
+  dataPoint["windBearing"].tie(elem, error);
+  if (!error && elem.is<double>())
   {
-    const int16_t degrees = std::lround(val.asDouble());
+    const int16_t degrees = std::lround(elem.get<double>().value());
     weather.setWindDegrees(degrees);
   }
   // cloud cover, [0;1]
-  val = dataPoint["cloudCover"];
-  if (!val.empty() && (val.isDouble() || val.isIntegral()))
+  dataPoint["cloudCover"].tie(elem, error);
+  if (!error && elem.is<double>())
   {
-    long int cloudCover = std::min(101l, std::lround(val.asDouble() * 100));
+    long int cloudCover = std::min(101l, std::lround(elem.get<double>().value() * 100));
     cloudCover = std::max(-1l, cloudCover);
     weather.setCloudiness(cloudCover);
   }

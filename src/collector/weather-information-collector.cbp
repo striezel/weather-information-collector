@@ -41,6 +41,8 @@
 			<Add library="mariadb" />
 			<Add library="stdc++fs" />
 		</Linker>
+		<Unit filename="../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../third-party/simdjson/simdjson.h" />
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/API.hpp" />
@@ -103,6 +105,16 @@
 		<Unit filename="../json/NLohmannJsonWeatherbit.hpp" />
 		<Unit filename="../json/NLohmannJsonWeatherstack.cpp" />
 		<Unit filename="../json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../json/SimdJsonApixu.cpp" />
+		<Unit filename="../json/SimdJsonApixu.hpp" />
+		<Unit filename="../json/SimdJsonDarkSky.cpp" />
+		<Unit filename="../json/SimdJsonDarkSky.hpp" />
+		<Unit filename="../json/SimdJsonOwm.cpp" />
+		<Unit filename="../json/SimdJsonOwm.hpp" />
+		<Unit filename="../json/SimdJsonWeatherbit.cpp" />
+		<Unit filename="../json/SimdJsonWeatherbit.hpp" />
+		<Unit filename="../json/SimdJsonWeatherstack.cpp" />
+		<Unit filename="../json/SimdJsonWeatherstack.hpp" />
 		<Unit filename="../json/WeatherstackFunctions.cpp" />
 		<Unit filename="../json/WeatherstackFunctions.hpp" />
 		<Unit filename="../net/Curly.cpp" />

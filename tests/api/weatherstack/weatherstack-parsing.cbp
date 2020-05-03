@@ -45,10 +45,14 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherstack.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherstack.cpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherstack.hpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.cpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />
 		<Unit filename="../../../src/util/Strings.hpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<envvars />

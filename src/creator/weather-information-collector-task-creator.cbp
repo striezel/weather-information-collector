@@ -40,6 +40,8 @@
 			<Add library="stdc++fs" />
 			<Add library="curl" />
 		</Linker>
+		<Unit filename="../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../third-party/simdjson/simdjson.h" />
 		<Unit filename="../ReturnCodes.hpp" />
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/API.hpp" />
@@ -75,6 +77,8 @@
 		<Unit filename="../db/ConnectionInformation.hpp" />
 		<Unit filename="../json/NLohmannJsonOwm.cpp" />
 		<Unit filename="../json/NLohmannJsonOwm.hpp" />
+		<Unit filename="../json/SimdJsonOwm.cpp" />
+		<Unit filename="../json/SimdJsonOwm.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../tasks/Task.cpp" />

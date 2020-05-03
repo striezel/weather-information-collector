@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
-    This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    This file is part of the weather information collector simdjson build test.
+    Copyright (C) 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,24 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#include <iostream>
+#ifdef __SIZEOF_INT128__
+#include "../../third-party/simdjson/simdjson.h"
+#endif
 
-#include <string>
-
-namespace wic
+int main(int argc, char** argv)
 {
-
-/** \brief version information */
-const std::string version = "version 0.9.13-pre, 2020-05-03";
-
-} // namespace
-
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+  simdjson::dom::parser parser;
+  simdjson::dom::element elem;
+  simdjson::error_code error;
+  parser.load("does-not-exist.json").tie(elem, error);
+  if (error)
+  {
+    std::cout << "Error parsing JSON file, but that was expected." << std::endl;
+  }
+  else
+  {
+    std::cout << "Parsing of JSON succeeded." << std::endl;
+  }
+  return 0;
+}

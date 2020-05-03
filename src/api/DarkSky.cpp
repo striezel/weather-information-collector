@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,7 +22,11 @@
 #include <cmath>
 #include <iostream>
 #ifndef wic_no_json_parsing
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonDarkSky.hpp"
+#else
 #include "../json/NLohmannJsonDarkSky.hpp"
+#endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
 #include "../net/Curly.hpp"
@@ -66,12 +70,20 @@ bool DarkSky::supportsDataType(const DataType data) const
 #ifndef wic_no_json_parsing
 bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonDarkSky::parseCurrentWeather(json, weather);
+#else
   return NLohmannJsonDarkSky::parseCurrentWeather(json, weather);
+#endif // __SIZEOF_INT128__
 }
 
 bool DarkSky::parseForecast(const std::string& json, Forecast& forecast) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonDarkSky::parseForecast(json, forecast);
+#else
   return NLohmannJsonDarkSky::parseForecast(json, forecast);
+#endif // __SIZEOF_INT128__
 }
 #endif // wic_no_json_parsing
 

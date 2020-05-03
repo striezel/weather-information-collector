@@ -27,11 +27,6 @@ set(weather-information-collector-update_sources
     ../db/mariadb/Structure.cpp
     ../db/mariadb/guess.cpp
     ../json/ApixuFunctions.cpp
-    ../json/NLohmannJsonApixu.cpp
-    ../json/NLohmannJsonDarkSky.cpp
-    ../json/NLohmannJsonOwm.cpp
-    ../json/NLohmannJsonWeatherbit.cpp
-    ../json/NLohmannJsonWeatherstack.cpp
     ../json/WeatherstackFunctions.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
@@ -44,6 +39,31 @@ set(weather-information-collector-update_sources
     UpdateTo_0.9.0.cpp
     UpdateTo_0.9.7.cpp
     main.cpp)
+
+try_compile(CAN_HAVE_SIMDJSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/simd-test
+            ${CMAKE_CURRENT_SOURCE_DIR}/../simdjson-compile-test
+            update-simd-test
+)
+
+if (CAN_HAVE_SIMDJSON)
+  list(APPEND weather-information-collector-update_sources
+    ../../third-party/simdjson/simdjson.cpp
+    ../json/SimdJsonApixu.cpp
+    ../json/SimdJsonDarkSky.cpp
+    ../json/SimdJsonOwm.cpp
+    ../json/SimdJsonWeatherbit.cpp
+    ../json/SimdJsonWeatherstack.cpp)
+  message(STATUS "updater can use simdjson.")
+else()
+  list(APPEND weather-information-collector-update_sources
+    ../json/NLohmannJsonApixu.cpp
+    ../json/NLohmannJsonDarkSky.cpp
+    ../json/NLohmannJsonOwm.cpp
+    ../json/NLohmannJsonWeatherbit.cpp
+    ../json/NLohmannJsonWeatherstack.cpp)
+  message(STATUS "Compiler is not fit for simdjson, won't use it in updater.")
+endif(CAN_HAVE_SIMDJSON)
 
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)

@@ -28,11 +28,6 @@ set(weather-information-collector_sources
     ../db/mariadb/Utilities.cpp
     ../db/mariadb/guess.cpp
     ../json/ApixuFunctions.cpp
-    ../json/NLohmannJsonApixu.cpp
-    ../json/NLohmannJsonDarkSky.cpp
-    ../json/NLohmannJsonOwm.cpp
-    ../json/NLohmannJsonWeatherbit.cpp
-    ../json/NLohmannJsonWeatherstack.cpp
     ../json/WeatherstackFunctions.cpp
     ../net/Curly.cpp
     ../tasks/Task.cpp
@@ -43,6 +38,31 @@ set(weather-information-collector_sources
     ../util/Strings.cpp
     Collector.cpp
     main.cpp)
+
+try_compile(CAN_HAVE_SIMDJSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/simd-test
+            ${CMAKE_CURRENT_SOURCE_DIR}/../simdjson-compile-test
+            collector-simd-test
+)
+
+if (CAN_HAVE_SIMDJSON)
+  list(APPEND weather-information-collector_sources
+    ../../third-party/simdjson/simdjson.cpp
+    ../json/SimdJsonApixu.cpp
+    ../json/SimdJsonDarkSky.cpp
+    ../json/SimdJsonOwm.cpp
+    ../json/SimdJsonWeatherbit.cpp
+    ../json/SimdJsonWeatherstack.cpp)
+  message(STATUS "collector can use simdjson.")
+else()
+  list(APPEND weather-information-collector_sources
+    ../json/NLohmannJsonApixu.cpp
+    ../json/NLohmannJsonDarkSky.cpp
+    ../json/NLohmannJsonOwm.cpp
+    ../json/NLohmannJsonWeatherbit.cpp
+    ../json/NLohmannJsonWeatherstack.cpp)
+  message(STATUS "Compiler is not fit for simdjson, won't use it in collector.")
+endif(CAN_HAVE_SIMDJSON)
 
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)

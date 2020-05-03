@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,30 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_SIMDJSONWEATHERSTACK_HPP
+#define WEATHER_INFORMATION_COLLECTOR_SIMDJSONWEATHERSTACK_HPP
 
-#include <string>
+#include "../data/Forecast.hpp"
+#include "../data/Weather.hpp"
 
 namespace wic
 {
 
-/** \brief version information */
-const std::string version = "version 0.9.13-pre, 2020-05-03";
+/** \brief Handles JSON input from the Weatherstack API with the simdjson library.
+ */
+class SimdJsonWeatherstack
+{
+  public:
+    /** \brief Parses the current weather information from JSON into the Weather object.
+     *
+     * \param json     string containing the JSON
+     * \param weather  variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    static bool parseCurrentWeather(const std::string& json, Weather& weather);
+}; // class
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_SIMDJSONWEATHERSTACK_HPP

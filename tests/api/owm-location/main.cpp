@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector test suite.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,10 @@
 #include <fstream>
 #include <iostream>
 #include "location.hpp"
-#include "../../../src/json/JsonCppOwm.hpp"
 #include "../../../src/json/NLohmannJsonOwm.hpp"
+#ifdef __SIZEOF_INT128__
+#include "../../../src/json/SimdJsonOwm.hpp"
+#endif
 
 int main(int argc, char** argv)
 {
@@ -53,10 +55,16 @@ int main(int argc, char** argv)
     jsonStream.close();
   }
 
-  std::cout << "Parsing with JsonCpp ..." << std::endl;
-  int ret = parseLocations<JsonCppOwm>(json);
+  #ifdef __SIZEOF_INT128__
+  std::cout << "Parsing with simdjson ..." << std::endl;
+  int ret = parseLocations<SimdJsonOwm>(json);
   if (ret != 0)
     return ret;
+  #else
+  std::cout << "Info: Your processor architecture or compiler may not support "
+            << "simdjson. Therefore the parsing test with simdjson is skipped."
+            << std::endl << std::endl;
+  #endif
 
   std::cout << "Parsing with nlohmann/json ..." << std::endl;
   return  parseLocations<NLohmannJsonOwm>(json);

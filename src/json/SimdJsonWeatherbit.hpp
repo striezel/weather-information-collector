@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,26 +18,23 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_JSONCPPOWM_HPP
-#define WEATHER_INFORMATION_COLLECTOR_JSONCPPOWM_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_SIMDJSONWEATHERBIT_HPP
+#define WEATHER_INFORMATION_COLLECTOR_SIMDJSONWEATHERBIT_HPP
 
-#include <jsoncpp/json/reader.h>
+#include "../../third-party/simdjson/simdjson.h"
 #include "../data/Forecast.hpp"
 #include "../data/Weather.hpp"
-#ifdef wic_owm_find_location
-#include "../data/Location.hpp"
-#endif // wic_owm_find_location
 
 namespace wic
 {
 
-/** \brief Handles JSON input from the OpenWeatherMap API with the JsonCpp library.
+/** \brief Handles JSON input from the Weatherbit API with the simdjson library.
  */
-class JsonCppOwm
+class SimdJsonWeatherbit
 {
   public:
     // alias for type that keeps JSON values / objects / arrays, etc.
-    typedef Json::Value value_type;
+    typedef simdjson::dom::element value_type;
 
 
     /** \brief Parses the current weather information from JSON into the Weather object.
@@ -58,17 +55,6 @@ class JsonCppOwm
      *         Returns false, if an error occurred.
      */
     static bool parseForecast(const std::string& json, Forecast& forecast);
-
-    #ifdef wic_owm_find_location
-    /** \brief Parses found locations.
-     *
-     * \param json     string containing the JSON
-     * \param location  variable where parsed locations will be stored
-     * \return Returns true, if the parsing was successful.
-     *         Returns false, if an error occurred.
-     */
-    static bool parseLocations(const std::string& json, std::vector<std::pair<Location, Weather> >& locations);
-    #endif // wic_owm_find_location
   private:
     /** \brief Parses weather data from a single JSON weather item into an
      * instance of Weather class.
@@ -83,4 +69,4 @@ class JsonCppOwm
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_JSONCPPOWM_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_SIMDJSONWEATHERBIT_HPP

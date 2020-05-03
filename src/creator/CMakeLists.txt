@@ -19,7 +19,6 @@ set(weather-information-collector-task-creator_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
-    ../json/NLohmannJsonOwm.cpp
     ../net/Curly.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
@@ -28,6 +27,23 @@ set(weather-information-collector-task-creator_sources
     ../util/Strings.cpp
     CliUtilities.cpp
     main.cpp)
+
+try_compile(CAN_HAVE_SIMDJSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/simd-test
+            ${CMAKE_CURRENT_SOURCE_DIR}/../simdjson-compile-test
+            creator-simd-test
+)
+
+if (CAN_HAVE_SIMDJSON)
+  list(APPEND weather-information-collector-task-creator_sources
+    ../../third-party/simdjson/simdjson.cpp
+    ../json/SimdJsonOwm.cpp)
+  message(STATUS "creator can use simdjson.")
+else()
+  list(APPEND weather-information-collector-task-creator_sources
+    ../json/NLohmannJsonOwm.cpp)
+  message(STATUS "Compiler is not fit for simdjson, won't use it in creator.")
+endif(CAN_HAVE_SIMDJSON)
 
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)

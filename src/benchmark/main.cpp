@@ -23,12 +23,18 @@
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
 #include "../db/mariadb/SourceMySQL.hpp"
-#include "../json/JsonCppApixu.hpp"
-#include "../json/JsonCppDarkSky.hpp"
-#include "../json/JsonCppOwm.hpp"
 #include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
 #include "../json/NLohmannJsonOwm.hpp"
+#include "../json/NLohmannJsonWeatherbit.hpp"
+#include "../json/NLohmannJsonWeatherstack.hpp"
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonApixu.hpp"
+#include "../json/SimdJsonDarkSky.hpp"
+#include "../json/SimdJsonOwm.hpp"
+#include "../json/SimdJsonWeatherbit.hpp"
+#include "../json/SimdJsonWeatherstack.hpp"
+#endif
 #include "../tasks/TaskManager.hpp"
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
@@ -120,24 +126,37 @@ int main(int argc, char** argv)
     return rcConfigurationError;
   }
 
+#ifdef __SIZEOF_INT128__
   SourceMySQL source(config.connectionInfo());
 
   /* ********* Weather data ********* */
   // OpenWeatherMap
   {
-    int ret = weatherDataBench<JsonCppOwm, NLohmannJsonOwm>(ApiType::OpenWeatherMap, source);
+    int ret = weatherDataBench<SimdJsonOwm, NLohmannJsonOwm>(ApiType::OpenWeatherMap, source);
     if (ret != 0)
       return ret;
   }
   // DarkSky
   {
-    int ret = weatherDataBench<JsonCppDarkSky, NLohmannJsonDarkSky>(ApiType::DarkSky, source);
+    int ret = weatherDataBench<SimdJsonDarkSky, NLohmannJsonDarkSky>(ApiType::DarkSky, source);
     if (ret != 0)
       return ret;
   }
   // Apixu
   {
-    int ret = weatherDataBench<JsonCppApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
+    int ret = weatherDataBench<SimdJsonApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
+    if (ret != 0)
+      return ret;
+  }
+  // Weatherbit
+  {
+    int ret = weatherDataBench<SimdJsonWeatherbit, NLohmannJsonWeatherbit>(ApiType::Weatherbit, source);
+    if (ret != 0)
+      return ret;
+  }
+  // Weatherstack
+  {
+    int ret = weatherDataBench<SimdJsonWeatherstack, NLohmannJsonWeatherstack>(ApiType::Weatherstack, source);
     if (ret != 0)
       return ret;
   }
@@ -145,23 +164,35 @@ int main(int argc, char** argv)
   /* ********* Forecast data ********* */
   // OpenWeatherMap
   {
-    int ret = forecastBench<JsonCppOwm, NLohmannJsonOwm>(ApiType::OpenWeatherMap, source);
+    int ret = forecastBench<SimdJsonOwm, NLohmannJsonOwm>(ApiType::OpenWeatherMap, source);
     if (ret != 0)
       return ret;
   }
   // DarkSky
   {
-    int ret = forecastBench<JsonCppDarkSky, NLohmannJsonDarkSky>(ApiType::DarkSky, source);
+    int ret = forecastBench<SimdJsonDarkSky, NLohmannJsonDarkSky>(ApiType::DarkSky, source);
     if (ret != 0)
       return ret;
   }
   // Apixu
   {
-    int ret = forecastBench<JsonCppApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
+    int ret = forecastBench<SimdJsonApixu, NLohmannJsonApixu>(ApiType::Apixu, source);
+    if (ret != 0)
+      return ret;
+  }
+  // Weatherbit
+  {
+    int ret = forecastBench<SimdJsonWeatherbit, NLohmannJsonWeatherbit>(ApiType::Weatherbit, source);
     if (ret != 0)
       return ret;
   }
 
   std::cout << "Done." << std::endl;
   return 0;
+#else
+  std::cout << "Warning: Your processor architecture or compiler does not seem "
+            << "to provide a 128 bit integer type. Therefore, benchmarks with "
+            << "simdjson are not possible." << std::endl;
+  return 0;
+#endif
 }

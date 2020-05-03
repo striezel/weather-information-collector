@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +21,11 @@
 #include "Apixu.hpp"
 #include <iostream>
 #ifndef wic_no_json_parsing
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonApixu.hpp"
+#else
 #include "../json/NLohmannJsonApixu.hpp"
+#endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
 #include "../net/Curly.hpp"
@@ -65,12 +69,20 @@ bool Apixu::supportsDataType(const DataType data) const
 #ifndef wic_no_json_parsing
 bool Apixu::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonApixu::parseCurrentWeather(json, weather);
+#else
   return NLohmannJsonApixu::parseCurrentWeather(json, weather);
+#endif // __SIZEOF_INT128__
 }
 
 bool Apixu::parseForecast(const std::string& json, Forecast& forecast) const
 {
+#ifdef __SIZEOF_INT128__
+  return SimdJsonApixu::parseForecast(json, forecast);
+#else
   return NLohmannJsonApixu::parseForecast(json, forecast);
+#endif // __SIZEOF_INT128__
 }
 #endif // wic_no_json_parsing
 

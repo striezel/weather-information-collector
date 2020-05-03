@@ -120,7 +120,7 @@ void printForecast(const Forecast& f)
 }
 
 /* ********* Weather data ********* */
-template<typename jsonCppT, typename nlohmannJsonT>
+template<typename simdJsonT, typename nlohmannJsonT>
 int weatherDataBench(const ApiType api, SourceMySQL& source)
 {
   // Find all locations with weather data.
@@ -164,17 +164,17 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
       return rcDatabaseError;
     }
 
-    // Parse with JsonCpp.
-    const auto jsonCppStart = std::chrono::high_resolution_clock::now();
+    // Parse with simdjson.
+    const auto simdJsonStart = std::chrono::high_resolution_clock::now();
     for (const Weather& elem: data)
     {
       if (!elem.hasJson())
         continue;
 
       Weather dummy;
-      if (!jsonCppT::parseCurrentWeather(elem.json(), dummy))
+      if (!simdJsonT::parseCurrentWeather(elem.json(), dummy))
       {
-        std::cerr << "Error: Could not parse JSON with JsonCpp!" << std::endl
+        std::cerr << "Error: Could not parse JSON with simdjson!" << std::endl
                   << "JSON is: '" << elem.json() << "'." << std::endl;
         return 1;
       }
@@ -185,7 +185,7 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
       dummy.setRequestTime(elem.requestTime());
       if (dummy != elem)
       {
-        std::cerr << "Error: JsonCpp-parsed element does not match the element from the database!" << std::endl;
+        std::cerr << "Error: simdjson-parsed element does not match the element from the database!" << std::endl;
         std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
         std::cerr << "Element from database:\n";
         printWeather(elem);
@@ -196,7 +196,7 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
         return 42;
       }
     } // for
-    const auto jsonCppEnd = std::chrono::high_resolution_clock::now();
+    const auto simdJsonEnd = std::chrono::high_resolution_clock::now();
 
     // Parse with nlohmann/json.
     const auto nlohmannJsonStart = std::chrono::high_resolution_clock::now();
@@ -234,13 +234,13 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
 
     std::cout << "Parsing " << data.size() << " elements for "
               << elem.first.toString() << " took:" << std::endl;
-    const auto jsonCppTime = std::chrono::duration_cast<std::chrono::microseconds>(jsonCppEnd - jsonCppStart);
-    const auto jsonCppPerElement = static_cast<double>(jsonCppTime.count()) / data.size();
+    const auto simdJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(simdJsonEnd - simdJsonStart);
+    const auto simdJsonPerElement = static_cast<double>(simdJsonTime.count()) / data.size();
     const auto nlohmannJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(nlohmannJsonEnd - nlohmannJsonStart);
     const auto nlohmannJsonPerElement = static_cast<double>(nlohmannJsonTime.count()) / data.size();
-    const double percentage = static_cast<double>(nlohmannJsonTime.count()) / jsonCppTime.count() * 100.0;
-    std::cout << "JsonCpp:       " << jsonCppTime.count() << " microseconds (100 %)\n"
-              << "               (ca. " << jsonCppPerElement << " microseconds per element)\n"
+    const double percentage = static_cast<double>(nlohmannJsonTime.count()) / simdJsonTime.count() * 100.0;
+    std::cout << "simdjson:      " << simdJsonTime.count() << " microseconds (100 %)\n"
+              << "               (ca. " << simdJsonPerElement << " microseconds per element)\n"
               << "nlohmann/json: " << nlohmannJsonTime.count() << " microseconds (" << percentage << " %)\n"
               << "               (ca. " << nlohmannJsonPerElement << " microseconds per element)\n"
               << std::endl;
@@ -251,7 +251,7 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
 } // end of scope for weather data benchmark
 
 /* ********* Forecast data ********* */
-template<typename jsonCppT, typename nlohmannJsonT>
+template<typename simdJsonT, typename nlohmannJsonT>
 int forecastBench(const ApiType api, SourceMySQL& source)
 {
   // Find all locations with forecast data.
@@ -295,17 +295,17 @@ int forecastBench(const ApiType api, SourceMySQL& source)
       return rcDatabaseError;
     }
 
-    // Parse with JsonCpp.
-    const auto jsonCppStart = std::chrono::high_resolution_clock::now();
+    // Parse with simdjson.
+    const auto simdJsonStart = std::chrono::high_resolution_clock::now();
     for (const Forecast& elem: data)
     {
       if (!elem.hasJson())
         continue;
 
       Forecast dummy;
-      if (!jsonCppT::parseForecast(elem.json(), dummy))
+      if (!simdJsonT::parseForecast(elem.json(), dummy))
       {
-        std::cerr << "Error: Could not parse JSON with JsonCpp!" << std::endl
+        std::cerr << "Error: Could not parse JSON with simdjson!" << std::endl
                   << "JSON is: '" << elem.json() << "'." << std::endl;
         return 1;
       }
@@ -316,7 +316,7 @@ int forecastBench(const ApiType api, SourceMySQL& source)
       dummy.setRequestTime(elem.requestTime());
       if (dummy != elem)
       {
-        std::cerr << "Error: JsonCpp-parsed element does not match the element from the database!" << std::endl;
+        std::cerr << "Error: simdjson-parsed element does not match the element from the database!" << std::endl;
         std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
         std::cerr << "JSON is '" << elem.json() << "'." << std::endl;
         std::cerr << "Element from database:\n";
@@ -326,7 +326,7 @@ int forecastBench(const ApiType api, SourceMySQL& source)
         return 42;
       }
     } // for
-    const auto jsonCppEnd = std::chrono::high_resolution_clock::now();
+    const auto simdJsonEnd = std::chrono::high_resolution_clock::now();
 
     // Parse with nlohmann/json.
     const auto nlohmannJsonStart = std::chrono::high_resolution_clock::now();
@@ -362,13 +362,13 @@ int forecastBench(const ApiType api, SourceMySQL& source)
 
     std::cout << "Parsing " << data.size() << " elements for "
               << elem.first.toString() << " took:" << std::endl;
-    const auto jsonCppTime = std::chrono::duration_cast<std::chrono::microseconds>(jsonCppEnd - jsonCppStart);
-    const auto jsonCppPerElement = static_cast<double>(jsonCppTime.count()) / data.size();
+    const auto simdJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(simdJsonEnd - simdJsonStart);
+    const auto simdJsonPerElement = static_cast<double>(simdJsonTime.count()) / data.size();
     const auto nlohmannJsonTime = std::chrono::duration_cast<std::chrono::microseconds>(nlohmannJsonEnd - nlohmannJsonStart);
     const auto nlohmannJsonPerElement = static_cast<double>(nlohmannJsonTime.count()) / data.size();
-    const double percentage = static_cast<double>(nlohmannJsonTime.count()) / jsonCppTime.count() * 100.0;
-    std::cout << "JsonCpp:       " << jsonCppTime.count() << " microseconds (100 %)\n"
-              << "               (ca. " << jsonCppPerElement << " microseconds per element)\n"
+    const double percentage = static_cast<double>(nlohmannJsonTime.count()) / simdJsonTime.count() * 100.0;
+    std::cout << "simdjson:      " << simdJsonTime.count() << " microseconds (100 %)\n"
+              << "               (ca. " << simdJsonPerElement << " microseconds per element)\n"
               << "nlohmann/json: " << nlohmannJsonTime.count() << " microseconds (" << percentage << " %)\n"
               << "               (ca. " << nlohmannJsonPerElement << " microseconds per element)\n"
               << std::endl;
