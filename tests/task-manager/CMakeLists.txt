@@ -30,8 +30,10 @@ set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(task_manager_tests ${task_manager_tests_sources})
 
-# link static library for std::filesystem
-target_link_libraries(task_manager_tests stdc++fs)
+if (NOT MSVC)
+  # link static library for std::filesystem on GNU C++ compiler
+  target_link_libraries(task_manager_tests stdc++fs)
+endif (NOT MSVC)
 
 # test run
 add_test(NAME TaskManager_tests

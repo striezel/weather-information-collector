@@ -66,8 +66,10 @@ else ()
   message ( FATAL_ERROR "cURL was not found!" )
 endif (CURL_FOUND)
 
-# link static library for std::filesystem
-target_link_libraries(weather-information-collector-task-creator stdc++fs)
+if (NOT MSVC)
+  # link static library for std::filesystem on GNU C++ compiler
+  target_link_libraries(weather-information-collector-task-creator stdc++fs)
+endif (NOT MSVC)
 
 # create git-related constants
 # -- get the current commit hash

@@ -47,8 +47,10 @@ set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather_information_collector_tests ${weather_information_collector_tests_sources})
 
-# link static library for std::filesystem
-target_link_libraries(weather_information_collector_tests stdc++fs)
+if (NOT MSVC)
+  # link static library for std::filesystem on GNU C++ compiler
+  target_link_libraries(weather_information_collector_tests stdc++fs)
+endif (NOT MSVC)
 
 # test run
 add_test(NAME test-suite

@@ -92,8 +92,10 @@ else()
   message ( FATAL_ERROR "libmariadb was not found!" )
 endif (MARIADB_FOUND)
 
-# link static library for std::filesystem
-target_link_libraries(weather-information-collector stdc++fs)
+if (NOT MSVC)
+  # link static library for std::filesystem on GNU C++ compiler
+  target_link_libraries(weather-information-collector stdc++fs)
+endif ()
 
 # create git-related constants
 # -- get the current commit hash
