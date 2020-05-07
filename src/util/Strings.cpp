@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2020  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ std::string toLowerString(std::string str)
   const int diff = 'a'-'A';
   for (unsigned int i = 0; i < str.size(); ++i)
   {
-    if (str[i] >= 'A' and str[i] <= 'Z')
+    if ((str[i] >= 'A') && (str[i] <= 'Z'))
     {
       str[i] = str[i] + diff;
     }
@@ -50,7 +50,7 @@ void trimLeft(std::string& str1)
   while (go_on)
   {
     const char ch = str1.at(pos);
-    if ((ch == ' ') or (ch == '\t'))
+    if ((ch == ' ') || (ch == '\t'))
     {
       ++pos;
       go_on = (pos<len);
@@ -82,7 +82,7 @@ void trimRight(std::string& str1)
   while (go_on)
   {
     const char ch = str1.at(pos);
-    if ((ch == ' ') or (ch == '\t'))
+    if ((ch == ' ') || (ch == '\t'))
     {
       --pos;
       go_on = (pos >= 0);
@@ -138,7 +138,7 @@ bool stringToInt(const std::string& str, int& value)
   }
   for ( ; i < str.size(); ++i)
   {
-    if ((str[i] >= '0') and (str[i] <= '9'))
+    if ((str[i] >= '0') && (str[i] <= '9'))
     {
       /* If the result of the multiplication in the next line would go out of
          the type range, then the result is not useful anyway, so quit here. */
@@ -190,7 +190,7 @@ bool stringToFloat(const std::string& str, float& value)
   }
   for ( ; i < str.length(); ++i)
   {
-    if ((str[i] >= '0') and (str[i] <= '9'))
+    if ((str[i] >= '0') && (str[i] <= '9'))
     {
       value = value * 10.0f;
       value = value + (str[i]-'0');
@@ -212,7 +212,7 @@ bool stringToFloat(const std::string& str, float& value)
   float second = 0.0f;
   for (i = str.length() - 1; i >= next_look; --i)
   {
-    if ((str[i] >= '0') and (str[i] <= '9'))
+    if ((str[i] >= '0') && (str[i] <= '9'))
     {
       second = second + (str[i]-'0');
       second = second / 10.0f;
