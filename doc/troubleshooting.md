@@ -28,6 +28,6 @@ Depending on the selected batch size (default: 40) a few problems could occur.
     `max_allowed_packet`. More information about it is available at
     <https://mariadb.com/kb/en/library/server-system-variables/#max_allowed_packet>.
 
-## Collector, configuration test and updater
+## Collector, configuration test, task creator and updater
 
 There are no known problems with these programs.
