@@ -69,7 +69,7 @@ Dockerfile as alternative to native build.
 
 The synchronization program will now cause less traffic to the destination
 server which potentially speeds up the synchronization, especially if the
-network connection to the destionation server is slow.
+network connection to the destination server is slow.
 
 ## Version 0.9.3 (2019-06-30)
 
