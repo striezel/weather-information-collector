@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.9.14 (2020-09-??)
+## Version 0.9.14 (2020-09-20)
 
 Restore capabilities of the update program to update from some very old
 versions. In particular, updates from version older than 0.8.3 are now possible
