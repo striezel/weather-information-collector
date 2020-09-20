@@ -115,6 +115,8 @@
 		<Unit filename="../util/SemVer.hpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
+		<Unit filename="ForecastDataUpdate_0.8.3.cpp" />
+		<Unit filename="ForecastDataUpdate_0.8.3.hpp" />
 		<Unit filename="UpdateTo_0.5.5.cpp" />
 		<Unit filename="UpdateTo_0.5.5.hpp" />
 		<Unit filename="UpdateTo_0.6.0.cpp" />
@@ -127,6 +129,8 @@
 		<Unit filename="UpdateTo_0.8.0.hpp" />
 		<Unit filename="UpdateTo_0.8.1.cpp" />
 		<Unit filename="UpdateTo_0.8.1.hpp" />
+		<Unit filename="UpdateTo_0.8.3.cpp" />
+		<Unit filename="UpdateTo_0.8.3.hpp" />
 		<Unit filename="UpdateTo_0.8.5.cpp" />
 		<Unit filename="UpdateTo_0.8.5.hpp" />
 		<Unit filename="UpdateTo_0.8.6.cpp" />
@@ -135,6 +139,8 @@
 		<Unit filename="UpdateTo_0.9.0.hpp" />
 		<Unit filename="UpdateTo_0.9.7.cpp" />
 		<Unit filename="UpdateTo_0.9.7.hpp" />
+		<Unit filename="WeatherDataUpdate_0.8.3.cpp" />
+		<Unit filename="WeatherDataUpdate_0.8.3.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

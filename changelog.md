@@ -2,8 +2,9 @@
 
 ## Version 0.9.14 (2020-09-??)
 
-Partially restore capabilities of the update program to update from older
-versions. In particular, updates up to version 0.6.6 are now possible again.
+Restore capabilities of the update program to update from some very old
+versions. In particular, updates from version older than 0.8.3 are now possible
+again.
 
 ## Version 0.9.13 (2020-05-03)
 
@@ -29,6 +30,9 @@ Recent compilers should support that by now.
 - **Backwards-incompatible change:** The update program will no longer support
   updating from versions older than 0.8.3. If you need this functionality, then
   use v0.9.10 to perform the updates before moving on to v0.9.11 or newer.
+
+  **Note: This backwards-incompatibility was fixed later in version 0.9.14,
+  i.e. the update program is again fully functional in version 0.9.14.**
 
 ## Version 0.9.10 (2020-03-07)
 

@@ -30,6 +30,7 @@
 #include "UpdateTo_0.7.0.hpp"
 #include "UpdateTo_0.8.0.hpp"
 #include "UpdateTo_0.8.1.hpp"
+#include "UpdateTo_0.8.3.hpp"
 #include "UpdateTo_0.8.5.hpp"
 #include "UpdateTo_0.8.6.hpp"
 #include "UpdateTo_0.9.0.hpp"
@@ -221,16 +222,12 @@ int main(int argc, char** argv)
   }
   if (currentVersion < wic::SemVer(0, 8, 3))
   {
-    std::cerr << "Update for databases earlier than version 0.8.3 is no longer"
-              << " supported. If you need to update from an older version, then"
-              << " download version 0.9.10 of weather-information-collector and"
-              << " its update tool from "
-              << "<https://gitlab.com/striezel/weather-information-collector/-/tree/v0.9.10>"
-              << " and use that to perform the update to a more recent version."
-              << " The v0.9.10 updater still supports updating from ancient "
-              << "versions. The current updater of v0.9.11 and onwards only "
-              << "supports updates of version no older than 0.8.3." << std::endl;
-    return wic::rcUpdateFailure;
+    std::cout << "Update for database of version 0.8.1 (and earlier) to version 0.8.3..." << std::endl;
+    if (!wic::UpdateTo083::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
   }
   if (currentVersion < wic::SemVer(0, 8, 5))
   {
