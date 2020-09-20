@@ -24,6 +24,9 @@
 #include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
+#include "UpdateTo_0.5.5.hpp"
+#include "UpdateTo_0.6.0.hpp"
+#include "UpdateTo_0.6.6.hpp"
 #include "UpdateTo_0.8.5.hpp"
 #include "UpdateTo_0.8.6.hpp"
 #include "UpdateTo_0.9.0.hpp"
@@ -159,6 +162,33 @@ int main(int argc, char** argv)
   } // if no full update is requested
 
   // Perform the incremental updates, step by step.
+  if (currentVersion < wic::SemVer(0, 5, 5))
+  {
+    std::cout << "Update for database of version 0.5.4 (and earlier) to version 0.5.5..." << std::endl;
+    if (!wic::UpdateTo055::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
+  }
+  if (currentVersion < wic::SemVer(0, 6, 0))
+  {
+    std::cout << "Update for database of version 0.5.7 (and earlier) to version 0.6.0..." << std::endl;
+    if (!wic::UpdateTo060::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
+  }
+  if (currentVersion < wic::SemVer(0, 6, 6))
+  {
+    std::cout << "Update for database of version 0.6.5 (and earlier) to version 0.6.6..." << std::endl;
+    if (!wic::UpdateTo066::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
+  }
   if (currentVersion < wic::SemVer(0, 8, 3))
   {
     std::cerr << "Update for databases earlier than version 0.8.3 is no longer"

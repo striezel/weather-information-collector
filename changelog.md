@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.9.14 (2020-09-??)
+
+Partially restore capabilities of the update program to update from older
+versions. In particular, updates up to version 0.6.6 are now possible again.
+
 ## Version 0.9.13 (2020-05-03)
 
 weather-information-collector will now use simdjson for JSON parsing, if the

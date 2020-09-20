@@ -115,6 +115,10 @@
 		<Unit filename="../util/SemVer.hpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
+		<Unit filename="UpdateTo_0.5.5.cpp" />
+		<Unit filename="UpdateTo_0.5.5.hpp" />
+		<Unit filename="UpdateTo_0.6.0.cpp" />
+		<Unit filename="UpdateTo_0.6.0.hpp" />
 		<Unit filename="UpdateTo_0.8.5.cpp" />
 		<Unit filename="UpdateTo_0.8.5.hpp" />
 		<Unit filename="UpdateTo_0.8.6.cpp" />
@@ -125,9 +129,6 @@
 		<Unit filename="UpdateTo_0.9.7.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
