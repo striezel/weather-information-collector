@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -448,10 +448,10 @@ bool TaskManager::withinLimits(const std::vector<Task>& tasks, const PlanOwm pla
   if (!requests.empty() && !silent)
   {
     std::cout << "Info: Requests consumed via configured tasks for APIs:\n";
-    for (const auto& kv : requests)
+    for (const auto& [api, count] : requests)
     {
-      const auto l = Limits::forApi(kv.first, planOwm, planWb, planWs);
-      std::cout << "    " << toString(kv.first) << ": " << kv.second << " of "
+      const auto l = Limits::forApi(api, planOwm, planWb, planWs);
+      std::cout << "    " << toString(api) << ": " << count << " of "
                 << l.requests << " possible requests within "
                 << std::chrono::duration_cast<std::chrono::seconds>(l.timespan).count()
                 << " seconds\n";
@@ -459,9 +459,9 @@ bool TaskManager::withinLimits(const std::vector<Task>& tasks, const PlanOwm pla
   } // if requests are not empty
 
   // Check whether there are more requests than the limit allows.
-  for (const auto& kv : requests)
+  for (const auto& [api, hits] : requests)
   {
-    if (kv.second > Limits::forApi(kv.first, planOwm, planWb, planWs).requests)
+    if (hits > Limits::forApi(api, planOwm, planWb, planWs).requests)
       return false;
   } // for (range-based)
 

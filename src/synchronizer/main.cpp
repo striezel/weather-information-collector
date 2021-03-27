@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -297,9 +297,9 @@ int main(int argc, char** argv)
     return wic::rcDatabaseError;
   }
   std::cout << "Found " << locations.size() << " locations with weather data in the database." << std::endl;
-  for(const auto& item : locations)
+  for(const auto& [location, api] : locations)
   {
-    std::cout << "\t" << item.first.toString() << ", " << wic::toString(item.second) << std::endl;
+    std::cout << "\t" << location.toString() << ", " << wic::toString(api) << std::endl;
   } // for
 
   // Get available APIs in destination database.
@@ -327,39 +327,39 @@ int main(int argc, char** argv)
   // scope for synchronization of weather data
   {
     wic::StoreMySQLBatch destinationStore(destConfig.connectionInfo(), batchSize);
-    for(const auto& item : locations)
+    for(const auto& [location, api] : locations)
     {
-      std::cout << "Synchronizing weather data for " << item.first.toString()
-                << ", " << wic::toString(item.second) << "..." << std::endl;
-      if (apis.find(item.second) == apis.end())
+      std::cout << "Synchronizing weather data for " << location.toString()
+                << ", " << wic::toString(api) << "..." << std::endl;
+      if (apis.find(api) == apis.end())
       {
         std::cerr << "Error: Destination database has no API entry for "
-                  << wic::toString(item.second) << "!" << std::endl;
+                  << wic::toString(api) << "!" << std::endl;
         return wic::rcDatabaseError;
       }
-      const int apiId = apis[item.second];
+      const int apiId = apis[api];
       std::vector<wic::Weather> sourceWeather;
-      if (!dataSource.getCurrentWeather(item.second, item.first, sourceWeather))
+      if (!dataSource.getCurrentWeather(api, location, sourceWeather))
       {
-        std::cerr << "Error: Could not load weather data for " << item.first.toString()
-                  << ", " << wic::toString(item.second) << " from source database!" << std::endl;
+        std::cerr << "Error: Could not load weather data for " << location.toString()
+                  << ", " << wic::toString(api) << " from source database!" << std::endl;
         return wic::rcDatabaseError;
       }
       // Get corresponding location ID in destination database.
       // If it does not exist, it will be created.
-      const int locationId = dataDest.getLocationId(item.first);
+      const int locationId = dataDest.getLocationId(location);
       if (locationId <= 0)
       {
-        std::cerr << "Error: Could find or create location " << item.first.toString()
-                  << ", " << wic::toString(item.second) << " in destination database!" << std::endl;
+        std::cerr << "Error: Could find or create location " << location.toString()
+                  << ", " << wic::toString(api) << " in destination database!" << std::endl;
         return wic::rcDatabaseError;
       }
       // Get existing entries in destination database.
       std::vector<wic::WeatherMeta> destinationWeatherMeta;
-      if (!dataDest.getMetaCurrentWeather(item.second, item.first, destinationWeatherMeta))
+      if (!dataDest.getMetaCurrentWeather(api, location, destinationWeatherMeta))
       {
-        std::cerr << "Error: Could not load weather data for " << item.first.toString()
-                  << ", " << wic::toString(item.second) << " from destination database!" << std::endl;
+        std::cerr << "Error: Could not load weather data for " << location.toString()
+                  << ", " << wic::toString(api) << " from destination database!" << std::endl;
         return wic::rcDatabaseError;
       }
 
@@ -400,28 +400,28 @@ int main(int argc, char** argv)
       return wic::rcDatabaseError;
     }
     std::cout << "Found " << locations.size() << " locations with forecast data in the database." << std::endl;
-    for(const auto& item : locations)
+    for(const auto& [location, api] : locations)
     {
-      std::cout << "\t" << item.first.toString() << ", " << wic::toString(item.second) << std::endl;
+      std::cout << "\t" << location.toString() << ", " << wic::toString(api) << std::endl;
     } // for
 
-    for(const auto& item : locations)
+    for(const auto& [location, api] : locations)
     {
-      std::cout << "Synchronizing forecast data for " << item.first.toString()
-                << ", " << wic::toString(item.second) << "..." << std::endl;
+      std::cout << "Synchronizing forecast data for " << location.toString()
+                << ", " << wic::toString(api) << "..." << std::endl;
       std::vector<wic::Forecast> sourceForecast;
-      if (!dataSource.getForecasts(item.second, item.first, sourceForecast))
+      if (!dataSource.getForecasts(api, location, sourceForecast))
       {
-        std::cerr << "Error: Could not load forecast data for " << item.first.toString()
-                  << ", " << wic::toString(item.second) << " from source database!" << std::endl;
+        std::cerr << "Error: Could not load forecast data for " << location.toString()
+                  << ", " << wic::toString(api) << " from source database!" << std::endl;
         return wic::rcDatabaseError;
       }
       // Get existing entries in destination database.
       std::vector<wic::ForecastMeta> destinationForecastMeta;
-      if (!dataDest.getMetaForecasts(item.second, item.first, destinationForecastMeta))
+      if (!dataDest.getMetaForecasts(api, location, destinationForecastMeta))
       {
-        std::cerr << "Error: Could not load forecast data for " << item.first.toString()
-                  << ", " << wic::toString(item.second) << " from destination database!" << std::endl;
+        std::cerr << "Error: Could not load forecast data for " << location.toString()
+                  << ", " << wic::toString(api) << " from destination database!" << std::endl;
         return wic::rcDatabaseError;
       }
 
@@ -444,7 +444,7 @@ int main(int argc, char** argv)
             || (destinationIterator->requestTime() != sourceIterator->requestTime()))
         {
           // Insert data set.
-          if (!destinationStore.saveForecast(item.second, item.first, *sourceIterator))
+          if (!destinationStore.saveForecast(api, location, *sourceIterator))
           {
             std::cerr << "Error: Could insert forecast data into destination database!" << std::endl;
             return wic::rcDatabaseError;

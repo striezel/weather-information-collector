@@ -56,54 +56,54 @@ std::string dataTypeToHumanString(const DataType dt)
 void writeLocationList(const std::vector<std::pair<Location, Weather> >& locations)
 {
   int idx = 1;
-  for (const auto & elem : locations)
+  for (const auto& [location, weather] : locations)
   {
     // index for later use
     std::cout << "[" << idx << "]: "
     // name of the location
-              << elem.first.name();
+              << location.name();
     // country, if any
-    if (elem.first.hasCountryCode())
-      std::cout << ", " << elem.first.countryCode();
+    if (location.hasCountryCode())
+      std::cout << ", " << location.countryCode();
     // latitude,longitude
-    if (elem.first.hasCoordinates())
-      std::cout << " @ " << elem.first.coordinatesToString();
+    if (location.hasCoordinates())
+      std::cout << " @ " << location.coordinatesToString();
     std::cout << std::endl;
     // weather
     std::cout << "     Weather: ";
     // -- temperature
     bool hasTempOutput = false;
-    if (elem.second.hasTemperatureCelsius())
+    if (weather.hasTemperatureCelsius())
     {
-      std::cout << niceFloat(elem.second.temperatureCelsius()) << " °C";
+      std::cout << niceFloat(weather.temperatureCelsius()) << " °C";
       hasTempOutput = true;
     }
-    if (elem.second.hasTemperatureFahrenheit())
+    if (weather.hasTemperatureFahrenheit())
     {
       if (hasTempOutput)
         std::cout << " / ";
-      std::cout << niceFloat(elem.second.temperatureFahrenheit()) << " °F";
+      std::cout << niceFloat(weather.temperatureFahrenheit()) << " °F";
       hasTempOutput = true;
     }
-    if (elem.second.hasTemperatureKelvin())
+    if (weather.hasTemperatureKelvin())
     {
       if (hasTempOutput)
         std::cout << " / ";
-      std::cout << niceFloat(elem.second.temperatureKelvin()) << " K";
+      std::cout << niceFloat(weather.temperatureKelvin()) << " K";
     }
     // -- wind speed
-    if (elem.second.hasWindSpeed())
+    if (weather.hasWindSpeed())
     {
       if (hasTempOutput)
         std::cout << ", ";
-      std::cout << "wind " << niceFloat(elem.second.windSpeed()) << " m/s";
+      std::cout << "wind " << niceFloat(weather.windSpeed()) << " m/s";
       hasTempOutput = true;
     }
-    if (elem.second.hasPressure())
+    if (weather.hasPressure())
     {
       if (hasTempOutput)
         std::cout << ", ";
-      std::cout << elem.second.pressure() << " hPa";
+      std::cout << weather.pressure() << " hPa";
     }
     std::cout << std::endl;
     ++idx;
