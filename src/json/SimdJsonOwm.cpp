@@ -263,7 +263,7 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
       return false;
     }
     // add element to result
-    locations.push_back(std::make_pair(loc, w));
+    locations.emplace_back(loc, w);
   } // for
 
   return true;

@@ -71,7 +71,7 @@ bool Collector::fromConfiguration(const Configuration& conf)
   tasksContainer.clear();
   for (const auto& t : conf.tasks())
   {
-    tasksContainer.push_back(TaskData(t, now));
+    tasksContainer.emplace_back(t, now);
     if (apiKeys[t.api()].empty())
     {
       std::cerr << "Error: API key for " << toString(t.api()) << " is not set, "

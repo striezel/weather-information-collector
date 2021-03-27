@@ -82,7 +82,7 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
     const auto idxWindDegrees = result.fieldIndex("wind_degrees");
     const auto idxCloudiness = result.fieldIndex("cloudiness");
     const auto idxJson = result.fieldIndex("json");
-    for(const auto elem : result.rows())
+    for(const auto& elem : result.rows())
     {
       Weather w;
       w.setDataTime(elem.getDateTime(idxDataTime));
@@ -187,7 +187,7 @@ bool SourceMySQL::getMetaCurrentWeather(const ApiType type, const Location& loca
     weather.clear();
     weather.reserve(result.rowCount());
 
-    for(const auto elem : result.rows())
+    for(const auto& elem : result.rows())
     {
       WeatherMeta w;
       w.setDataTime(elem.getDateTime(0)); // index zero is dataTime
