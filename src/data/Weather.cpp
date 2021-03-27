@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ const std::chrono::time_point<std::chrono::system_clock>& Weather::requestTime()
 
 bool Weather::hasTemperatureKelvin() const
 {
-  return (m_tempK == m_tempK);
+  return !std::isnan(m_tempK);
 }
 
 float Weather::temperatureKelvin() const
@@ -90,7 +90,7 @@ void Weather::setTemperatureKelvin(const float newTempK)
 
 bool Weather::hasTemperatureCelsius() const
 {
-  return (m_tempC == m_tempC);
+  return !std::isnan(m_tempC);
 }
 
 float Weather::temperatureCelsius() const
@@ -105,7 +105,7 @@ void Weather::setTemperatureCelsius(const float newTempC)
 
 bool Weather::hasTemperatureFahrenheit() const
 {
-  return (m_tempF == m_tempF);
+  return !std::isnan(m_tempF);
 }
 
 float Weather::temperatureFahrenheit() const
@@ -138,7 +138,7 @@ void Weather::setHumidity(const int8_t newHumidity)
 
 bool Weather::hasRain() const
 {
-  return (m_rain == m_rain);
+  return !std::isnan(m_rain);
 }
 
 float Weather::rain() const
@@ -156,7 +156,7 @@ void Weather::setRain(const float newRainMm)
 
 bool Weather::hasSnow() const
 {
-  return (m_snow == m_snow);
+  return !std::isnan(m_snow);
 }
 
 float Weather::snow() const
@@ -192,7 +192,7 @@ void Weather::setPressure(const int16_t newPressure_hPa)
 
 bool Weather::hasWindSpeed() const
 {
-  return (m_windSpeed == m_windSpeed);
+  return !std::isnan(m_windSpeed);
 }
 
 float Weather::windSpeed() const
