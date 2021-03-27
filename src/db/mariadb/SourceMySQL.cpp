@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -466,7 +466,7 @@ bool SourceMySQL::listWeatherLocationsWithApi(std::vector<std::pair<Location, Ap
       const Location loc = getLocation(conn, locId);
       if (api == ApiType::none || loc.empty())
         return false;
-      locations.push_back(std::pair<Location, ApiType>(loc, api));
+      locations.emplace_back(loc, api);
     } // for
     return true;
   }
@@ -503,7 +503,7 @@ bool SourceMySQL::listForecastLocationsWithApi(std::vector<std::pair<Location, A
       const Location loc = getLocation(conn, locId);
       if (api == ApiType::none || loc.empty())
         return false;
-      locations.push_back(std::pair<Location, ApiType>(loc, api));
+      locations.emplace_back(loc, api);
     } // for
     return true;
   }

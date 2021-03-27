@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -158,7 +158,7 @@ bool UpdateTo083::updateWeatherData(const ConnectionInformation& ci)
     std::vector<WeatherDataUpdate_083> updates;
     for (unsigned int i = 0; i < threadsOfExecution; ++i)
     {
-      updates.push_back(WeatherDataUpdate_083(ci));
+      updates.emplace_back(ci);
     }
 
     std::vector<unsigned int> startIndices;
@@ -249,7 +249,7 @@ bool UpdateTo083::updateForecastData(const ConnectionInformation& ci)
     std::vector<ForecastDataUpdate_083> updates;
     for (unsigned int i = 0; i < threadsOfExecution; ++i)
     {
-      updates.push_back(ForecastDataUpdate_083(ci));
+      updates.emplace_back(ci);
     }
 
     std::vector<unsigned int> startIndices;

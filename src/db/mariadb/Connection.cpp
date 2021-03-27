@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -170,7 +170,7 @@ Result Connection::query(const std::string& sql)
     MYSQL_FIELD* fields = mysql_fetch_fields(result);
     for (unsigned int i = 0; i < fieldCount; ++i)
     {
-      res.fieldData.push_back(Field(typeFromDbEnum(fields[i].type), std::string(fields[i].name, fields[i].name_length)));
+      res.fieldData.emplace_back(typeFromDbEnum(fields[i].type), std::string(fields[i].name, fields[i].name_length));
     }
   }
 
@@ -190,7 +190,7 @@ Result Connection::query(const std::string& sql)
     currentRow.reserve(fieldCount);
     for (unsigned int i = 0; i < fieldCount; ++i)
     {
-      currentRow.push_back(Row::Value(rowData[i] == nullptr, std::string(rowData[i], lengths[i])));
+      currentRow.emplace_back(rowData[i] == nullptr, std::string(rowData[i], lengths[i]));
     }
     res.data.push_back(std::move(currentRow));
   }

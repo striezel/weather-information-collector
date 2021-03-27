@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -110,7 +110,7 @@ void writeLocationList(const std::vector<std::pair<Location, Weather> >& locatio
     }
     std::cout << std::endl;
     ++idx;
-  } // for (locations)
+  } // range-based for over locations
 }
 
 Location selectLocation(const std::vector<std::pair<Location, Weather> >& locations)
@@ -213,7 +213,7 @@ DataType selectDataType(const ApiType selectedApi, const PlanWeatherbit planWb, 
     if (api->supportsDataType(dt))
       supportedDataTypes.push_back(dt);
   }
-  if (supportedDataTypes.size() == 0)
+  if (supportedDataTypes.empty())
   {
     throw std::logic_error("API " + toString(selectedApi) + " does not support"
         + std::string(" any data types. This should not happen and might be an")
