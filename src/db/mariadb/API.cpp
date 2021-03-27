@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,10 +21,7 @@
 #include "API.hpp"
 #include <iostream>
 
-namespace wic
-{
-
-namespace db
+namespace wic::db
 {
 
 int API::getId(const ConnectionInformation& ci, const ApiType type)
@@ -64,7 +61,5 @@ int API::getId(const mariadb::Connection& conn, const ApiType type)
   result = nullptr;
   return apiId;
 }
-
-} // namespace
 
 } // namespace

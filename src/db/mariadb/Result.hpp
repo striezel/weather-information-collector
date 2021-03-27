@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,13 +28,7 @@
 #include "Field.hpp"
 #include "Row.hpp"
 
-namespace wic
-{
-
-namespace db
-{
-
-namespace mariadb
+namespace wic::db::mariadb
 {
 
 /** \brief Represents a result of an SQL query. */
@@ -101,10 +95,6 @@ class Result
     std::vector<Field> fieldData; /**< information about fields in result */
     std::vector<Row> data; /**< rows of the result, i. e. the actual data */
 }; // class
-
-} // namespace
-
-} // namespace
 
 } // namespace
 

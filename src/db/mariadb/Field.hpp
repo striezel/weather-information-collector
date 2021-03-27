@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,13 +24,7 @@
 #include <string>
 #include <mariadb/mysql.h>
 
-namespace wic
-{
-
-namespace db
-{
-
-namespace mariadb
+namespace wic::db::mariadb
 {
 
 /** \brief Enumeration type for common field types. */
@@ -65,10 +59,6 @@ struct Field
   FieldType type; /**< type of the field, if known */
   std::string name; /**< name of the field */
 }; // struct
-
-} // namespace
-
-} // namespace
 
 } // namespace
 

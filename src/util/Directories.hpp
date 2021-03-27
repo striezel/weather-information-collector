@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,10 +23,7 @@
 
 #include <string>
 
-namespace wic
-{
-
-namespace filesystem
+namespace wic::filesystem
 {
 
 #if defined(_WIN32)
@@ -47,8 +44,6 @@ namespace filesystem
  *         Returns false otherwise.
  */
 bool getHome(std::string& result);
-
-} // namespace
 
 } // namespace
 

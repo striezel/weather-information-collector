@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,13 +27,7 @@
 #include <string>
 #include <vector>
 
-namespace wic
-{
-
-namespace db
-{
-
-namespace mariadb
+namespace wic::db::mariadb
 {
 
 /** \brief Represents a row from a result of a database query. */
@@ -140,10 +134,6 @@ class Row
   private:
     std::vector<Value> data; /**< data of the row as strings, one per columns */
 }; // class
-
-} // namespace
-
-} // namespace
 
 } // namespace
 

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,13 +22,7 @@
 #include <climits>
 #include <stdexcept>
 
-namespace wic
-{
-
-namespace db
-{
-
-namespace mariadb
+namespace wic::db::mariadb
 {
 
 Row::Value::Value(const bool _isNull, const std::string& _data)
@@ -184,9 +178,5 @@ std::chrono::time_point<std::chrono::system_clock> Row::getDateTime(const std::s
   }
   return std::chrono::system_clock::from_time_t(tt);
 }
-
-} // namespace
-
-} // namespace
 
 } // namespace

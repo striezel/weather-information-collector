@@ -29,10 +29,7 @@
 #include "../tasks/TaskManager.hpp"
 #include "../util/Strings.hpp"
 
-namespace wic
-{
-
-namespace creator
+namespace wic::creator
 {
 
 double niceFloat(const float val)
@@ -383,7 +380,5 @@ bool writeTaskFile(const std::string& fileName, const Task& t)
 
   return true;
 }
-
-} // namespace
 
 } // namespace

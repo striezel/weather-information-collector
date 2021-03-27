@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,13 +22,7 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace wic
-{
-
-namespace db
-{
-
-namespace mariadb
+namespace wic::db::mariadb
 {
 
 Result::Result()
@@ -77,9 +71,5 @@ std::size_t Result::fieldIndex(const std::string& name) const
   }
   throw std::invalid_argument("The result has no field named '" + name + "'.");
 }
-
-} // namespace
-
-} // namespace
 
 } // namespace

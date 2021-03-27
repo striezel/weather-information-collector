@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018  Dirk Stolle
+    Copyright (C) 2018, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,10 +28,7 @@
   #include <pwd.h> // for getpwuid_r()
 #endif
 
-namespace wic
-{
-
-namespace filesystem
+namespace wic::filesystem
 {
 
 bool getHome(std::string& result)
@@ -68,7 +65,5 @@ bool getHome(std::string& result)
     #error Unknown operating system!
   #endif
 }
-
-} // namespace
 
 } // namespace

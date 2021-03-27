@@ -25,13 +25,7 @@
 #include <iostream>
 #include "Result.hpp"
 
-namespace wic
-{
-
-namespace db
-{
-
-namespace mariadb
+namespace wic::db::mariadb
 {
 
 Connection::Connection(const ConnectionInformation& ci)
@@ -238,9 +232,5 @@ std::string Connection::errorInfo()
   else
     return std::string(err);
 }
-
-} // namespace
-
-} // namespace
 
 } // namespace
