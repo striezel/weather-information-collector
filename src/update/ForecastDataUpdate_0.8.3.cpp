@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -66,7 +66,6 @@ void ForecastDataUpdate_083::operator()(const unsigned int startIdx, const unsig
         default:
              // Newer or unsupported API, go on.
              continue;
-             break;
       } // switch
       Forecast fc;
       const uint_least32_t dataId = result.row(i).getInt64(1); // dataID is second field

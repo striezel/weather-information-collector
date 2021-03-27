@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2020  Dirk Stolle
+    Copyright (C) 2017, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -129,7 +129,6 @@ bool UpdateTo055::updateData(const ConnectionInformation& ci)
         default:
              // Newer or unsupported API, go on.
              continue;
-             break;
       } // switch
       Weather w;
       const unsigned int dataId = row.getInt64(0);
