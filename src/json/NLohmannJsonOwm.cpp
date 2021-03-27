@@ -67,7 +67,7 @@ bool NLohmannJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& w
     find = main.find("humidity");
     if (find != main.end() && find->is_number_unsigned())
       weather.setHumidity(find->get<int>());
-    foundValidParts = true;;
+    foundValidParts = true;
   } // if main object
   find = value.find("wind");
   if (find != value.end() && find->is_object())

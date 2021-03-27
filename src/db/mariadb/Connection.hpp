@@ -39,7 +39,7 @@ class Connection
      *
      * \param ci   database connection information
      */
-    Connection(const ConnectionInformation& ci);
+    explicit Connection(const ConnectionInformation& ci);
 
     // No copy constructor.
     Connection(const Connection& conn) = delete;

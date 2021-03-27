@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class ForecastDataUpdate_083
      *
      * \param _ci  database connection information
      */
-    ForecastDataUpdate_083(const ConnectionInformation& _ci);
+    explicit ForecastDataUpdate_083(const ConnectionInformation& _ci);
 
 
     /** \brief Overloaded function operator doing the real work here.

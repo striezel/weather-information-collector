@@ -186,7 +186,7 @@ Result Connection::query(const std::string& sql)
     {
       currentRow.emplace_back(rowData[i] == nullptr, std::string(rowData[i], lengths[i]));
     }
-    res.data.push_back(std::move(currentRow));
+    res.data.emplace_back(std::move(currentRow));
   }
   mysql_free_result(result);
 

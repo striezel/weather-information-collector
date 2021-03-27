@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -196,8 +196,8 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
   dataPoint["cloudCover"].tie(elem, error);
   if (!error && elem.is<double>())
   {
-    long int cloudCover = std::min(101l, std::lround(elem.get<double>().value() * 100));
-    cloudCover = std::max(-1l, cloudCover);
+    long int cloudCover = std::min(101L, std::lround(elem.get<double>().value() * 100));
+    cloudCover = std::max(-1L, cloudCover);
     weather.setCloudiness(cloudCover);
   }
   return weather.hasDataTime() && weather.hasTemperatureCelsius() && weather.hasHumidity();

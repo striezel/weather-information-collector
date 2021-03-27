@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2018, 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,12 +47,12 @@ class SourceMySQL
      *
      * \param ci  information for connection to the database
      */
-    SourceMySQL(const ConnectionInformation& ci);
+    explicit SourceMySQL(const ConnectionInformation& ci);
 
 
     /** \brief Destructor.
      */
-    virtual ~SourceMySQL();
+    virtual ~SourceMySQL() = default;
 
 
     /** \brief Gets the current weather data for a given location and API.

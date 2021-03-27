@@ -57,7 +57,7 @@ class Row
      *
      * \param data   vector that will be used as row data
      */
-    Row(std::vector<Value>&& _data);
+    explicit Row(std::vector<Value>&& _data);
 
     /** \brief Checks whether the value of the index-th column is NULL.
      *

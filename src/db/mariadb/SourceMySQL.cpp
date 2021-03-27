@@ -31,10 +31,6 @@ SourceMySQL::SourceMySQL(const ConnectionInformation& ci)
 {
 }
 
-SourceMySQL::~SourceMySQL()
-{
-}
-
 bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather)
 {
   const std::string apiName = toString(type);
