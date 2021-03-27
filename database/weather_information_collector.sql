@@ -19,7 +19,7 @@ USE `weather_information_collector`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE IF NOT EXISTS `api` (
-  `apiID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `apiID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID of the API',
   `name` varchar(255) NOT NULL COMMENT 'name of the API',
   `baseURL` varchar(255) NOT NULL COMMENT 'base URL for API calls',
   PRIMARY KEY (`apiID`)
@@ -40,7 +40,7 @@ INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE IF NOT EXISTS `forecast` (
-  `forecastID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `forecastID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID of the forecast request',
   `apiID` int(10) unsigned NOT NULL COMMENT 'ID of the API that delivered the data',
   `locationID` int(10) unsigned NOT NULL COMMENT 'ID of the corresponding location',
   `requestTime` datetime NOT NULL COMMENT 'time when the API request was performed',
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `forecast` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE IF NOT EXISTS `forecastdata` (
-  `dataID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `dataID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID of the data point (forecast data)',
   `forecastID` int(10) unsigned NOT NULL COMMENT 'ID of the forecast request in table forecast',
   `dataTime` datetime NOT NULL COMMENT 'time of the forecasted weather conditions',
   `temperature_K` float DEFAULT NULL COMMENT 'temperature in Kelvin',
@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS `forecastdata` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE IF NOT EXISTS `location` (
-  `locationID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `id` int(10) unsigned DEFAULT NULL COMMENT 'ID of the location in the API',
+  `locationID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID of the location',
+  `id` int(10) unsigned DEFAULT NULL COMMENT 'ID of the location in the OpenWeatherMap API',
   `latitude` float DEFAULT NULL COMMENT 'latitude of the location',
   `longitude` float DEFAULT NULL COMMENT 'longitude of the location',
   `name` varchar(255) DEFAULT NULL COMMENT 'name of the location / city',
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `location` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE IF NOT EXISTS `weatherdata` (
-  `dataID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+  `dataID` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID of the data point (current data)',
   `apiID` int(10) unsigned NOT NULL COMMENT 'ID of the API that delivered the data',
   `locationID` int(10) unsigned DEFAULT NULL COMMENT 'ID of the corresponding location data set',
   `dataTime` datetime NOT NULL COMMENT 'time when the data was received / measured',
