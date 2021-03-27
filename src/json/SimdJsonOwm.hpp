@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,10 +36,6 @@ namespace wic
 class SimdJsonOwm
 {
   public:
-    // alias for type that keeps JSON values / objects / arrays, etc.
-    typedef simdjson::dom::element value_type;
-
-
     /** \brief Parses the current weather information from JSON into the Weather object.
      *
      * \param json     string containing the JSON
@@ -70,6 +66,10 @@ class SimdJsonOwm
     static bool parseLocations(const std::string& json, std::vector<std::pair<Location, Weather> >& locations);
     #endif // wic_owm_find_location
   private:
+    // alias for type that keeps JSON values / objects / arrays, etc.
+    using value_type = simdjson::dom::element;
+
+
     /** \brief Parses weather data from a single JSON weather item into an
      * instance of Weather class.
      *

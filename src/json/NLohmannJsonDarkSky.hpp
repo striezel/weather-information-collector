@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,10 +33,6 @@ namespace wic
 class NLohmannJsonDarkSky
 {
   public:
-    // alias for type that keeps JSON values / objects / arrays, etc.
-    typedef nlohmann::json value_type;
-
-
     /** \brief Parses the current weather information from JSON into the Weather object.
      *
      * \param json     string containing the JSON
@@ -56,6 +52,10 @@ class NLohmannJsonDarkSky
      */
     static bool parseForecast(const std::string& json, Forecast& forecast);
   private:
+    // alias for type that keeps JSON values / objects / arrays, etc.
+    using value_type = nlohmann::json;
+
+
     /** \brief Parses weather data from a single JSON weather item into an
      * instance of Weather class.
      *

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_NLOHMANNJSONWEATHERSTACK_HPP
 #define WEATHER_INFORMATION_COLLECTOR_NLOHMANNJSONWEATHERSTACK_HPP
 
-#include "../../third-party/nlohmann/json.hpp"
 #include "../data/Forecast.hpp"
 #include "../data/Weather.hpp"
 
@@ -33,10 +32,6 @@ namespace wic
 class NLohmannJsonWeatherstack
 {
   public:
-    // alias for type that keeps JSON values / objects / arrays, etc.
-    typedef nlohmann::json value_type;
-
-
     /** \brief Parses the current weather information from JSON into the Weather object.
      *
      * \param json     string containing the JSON

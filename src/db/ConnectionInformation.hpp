@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -141,9 +141,6 @@ class ConnectionInformation
     std::string db_pass; /**< password for the database user */
     uint16_t db_port; /**< port number of the database server */
 }; //class
-
-//type alias
-typedef ConnectionInformation ConnInfo;
 
 } //namespace
 

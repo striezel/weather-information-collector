@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include "../../third-party/nlohmann/json.hpp"
 #include "WeatherstackFunctions.hpp"
 
 namespace wic
@@ -72,7 +73,7 @@ std::chrono::time_point<std::chrono::system_clock> parseDateTime(const nlohmann:
 
 bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather& weather)
 {
-  value_type root; // will contain the root value after parsing.
+  nlohmann::json root; // will contain the root value after parsing.
   try
   {
     root = nlohmann::json::parse(json);
@@ -90,7 +91,7 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
   auto find = root.find("current");
   if (find != root.end() && find->is_object())
   {
-    const value_type current = *find;
+    const nlohmann::json current = *find;
     // temperature
     auto v2 = current.find("temperature");
     if (v2 != current.end() && v2->is_number())
