@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ class Weatherbit: public API
      *
      * \param key  the API key
      */
-    virtual void setApiKey(const std::string& key);
+    void setApiKey(const std::string& key) override;
 
 
     /** \brief Checks whether the given location can be used for a request.
@@ -54,7 +54,7 @@ class Weatherbit: public API
      * \return Returns true, if the location can be used for a request.
      *         Returns false otherwise.
      */
-    virtual bool validLocation(const Location& location) const;
+    bool validLocation(const Location& location) const override;
 
 
     /** \brief Checks whether the given data type is supported by the API.
@@ -63,7 +63,7 @@ class Weatherbit: public API
      * \return Returns true, if the data type is supported.
      *         Returns false otherwise.
      */
-    virtual bool supportsDataType(const DataType data) const;
+    bool supportsDataType(const DataType data) const override;
 
 
     #ifndef wic_no_network_requests
@@ -74,7 +74,7 @@ class Weatherbit: public API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool currentWeather(const Location& location, Weather& weather);
+    bool currentWeather(const Location& location, Weather& weather) override;
 
 
     /** \brief Retrieves the weather forecast for a given location.
@@ -84,7 +84,7 @@ class Weatherbit: public API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool forecastWeather(const Location& location, Forecast& forecast);
+    bool forecastWeather(const Location& location, Forecast& forecast) override;
 
 
     /** \brief Retrieves the current weather and the forecast for a given location.
@@ -95,7 +95,7 @@ class Weatherbit: public API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast);
+    bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast) override;
     #endif // wic_no_network_requests
 
 
@@ -107,7 +107,7 @@ class Weatherbit: public API
      * \return Returns true, if the parsing was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const;
+    bool parseCurrentWeather(const std::string& json, Weather& weather) const override;
 
 
     /** \brief Parses the weather forecast information from JSON into Weather objects.
@@ -117,7 +117,7 @@ class Weatherbit: public API
      * \return Returns true, if the parsing was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool parseForecast(const std::string& json, Forecast& forecast) const;
+    bool parseForecast(const std::string& json, Forecast& forecast) const override;
     #endif // wic_no_json_parsing
   private:
     std::string m_apiKey; /**< the API key for requests */
