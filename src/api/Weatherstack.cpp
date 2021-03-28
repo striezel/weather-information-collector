@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,16 +55,9 @@ bool Weatherstack::validLocation(const Location& location) const
 bool Weatherstack::supportsDataType(const DataType data) const
 {
   // At the moment only current weather is supported.
-  switch (data)
-  {
-    case DataType::Current:
-         return true;
-    case DataType::Forecast:
-    case DataType::CurrentAndForecast:
-    case DataType::none:
-    default:
-         return false;
-  }
+  // Other types (DataType::Forecast, DataType::CurrentAndForecast, and of
+  // course DataType::none) are not supported.
+  return (data == DataType::Current);
 }
 
 #ifndef wic_no_json_parsing

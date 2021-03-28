@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,17 +54,9 @@ bool DarkSky::validLocation(const Location& location) const
 
 bool DarkSky::supportsDataType(const DataType data) const
 {
-  // All three data types are supported.
-  switch (data)
-  {
-    case DataType::Current:
-    case DataType::Forecast:
-    case DataType::CurrentAndForecast:
-         return true;
-    case DataType::none:
-    default:
-         return false;
-  } // switch
+  // All three data types (DataType::Current, DataType::Forecast, and
+  // DataType::CurrentAndForecast) are supported.
+  return (data != DataType::none);
 }
 
 #ifndef wic_no_json_parsing

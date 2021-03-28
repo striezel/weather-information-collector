@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,30 +31,22 @@ namespace wic
 
 std::unique_ptr<API> Factory::create(const ApiType api, const PlanWeatherbit planWb, const PlanWeatherstack planWs, const std::string& key)
 {
-  std::unique_ptr<API> result = nullptr;
   switch (api)
   {
     case ApiType::OpenWeatherMap:
-         result.reset(new OpenWeatherMap(key));
-         break;
+         return std::make_unique<OpenWeatherMap>(key);
     case ApiType::Apixu:
-         result.reset(new Apixu(key));
-         break;
+         return std::make_unique<Apixu>(key);
     case ApiType::DarkSky:
-         result.reset(new DarkSky(key));
-         break;
+         return std::make_unique<DarkSky>(key);
     case ApiType::Weatherbit:
-         result.reset(new Weatherbit(planWb, key));
-         break;
+         return std::make_unique<Weatherbit>(planWb, key);
     case ApiType::Weatherstack:
-         result.reset(new Weatherstack(planWs, key));
-         break;
-    case ApiType::none:
-    default:
+         return std::make_unique<Weatherstack>(planWs, key);
+    default: // ApiType::none
          std::cerr << "Error: API type " << toString(api) << " is not supported by API factory!" << std::endl;
          return nullptr;
   } // switch
-  return result;
 }
 
 } // namespace

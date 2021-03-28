@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -60,8 +60,7 @@ std::string toString(const ApiType type)
          return "Weatherbit";
     case ApiType::Weatherstack:
          return "Weatherstack";
-    case ApiType::none:
-    default:
+    default: // i. e. ApiType::none
          return "none";
   } // switch
 }
@@ -94,8 +93,7 @@ std::string toString(const DataType type)
          return "forecast";
     case DataType::CurrentAndForecast:
          return "current+forecast";
-    case DataType::none:
-    default:
+    default: // i. e. DataType::none
          return "none";
   } // switch
 }

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,8 +38,7 @@ std::string toString(const PlanOwm type)
          return "professional";
     case PlanOwm::Enterprise:
          return "enterprise";
-    case PlanOwm::none:
-    default:
+    default: // i. e. PlanOwm::none
          return "none";
   }
 }
@@ -74,8 +73,7 @@ std::string toString(const PlanWeatherbit type)
          return "developer";
     case PlanWeatherbit::Advanced:
          return "advanced";
-    case PlanWeatherbit::none:
-    default:
+    default: // i. e. PlanWeatherbit::none
          return "none";
   }
 }
@@ -108,8 +106,7 @@ std::string toString(const PlanWeatherstack type)
          return "professional";
     case PlanWeatherstack::Business:
          return "business";
-    case PlanWeatherstack::none:
-    default:
+    default: // i. e. PlanWeatherstack::none
          return "none";
   }
 }

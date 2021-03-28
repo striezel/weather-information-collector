@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -68,8 +68,7 @@ bool OpenWeatherMap::supportsDataType(const DataType data) const
     case DataType::Current:
     case DataType::Forecast:
          return true;
-    case DataType::CurrentAndForecast:
-    default:
+    default: // i. e. DataType::none and DataType::CurrentAndForecast
          return false;
   }
 }

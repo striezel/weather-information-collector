@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -74,9 +74,7 @@ bool Weatherbit::supportsDataType(const DataType data) const
     case DataType::Current:
     case DataType::Forecast:
          return true;
-    case DataType::CurrentAndForecast:
-    case DataType::none:
-    default:
+    default: // i. e. DataType::CurrentAndForecast and DataType::none
          return false;
   } // switch
 }
