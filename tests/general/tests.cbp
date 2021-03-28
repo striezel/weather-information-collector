@@ -72,6 +72,7 @@
 		<Unit filename="../../src/util/Strings.cpp" />
 		<Unit filename="../../src/util/Strings.hpp" />
 		<Unit filename="api/Plans.cpp" />
+		<Unit filename="api/SupportedDataTypes.cpp" />
 		<Unit filename="api/Types.cpp" />
 		<Unit filename="conf/Configuration.cpp" />
 		<Unit filename="data/Location.cpp" />
@@ -85,9 +86,6 @@
 		<Unit filename="util/SemVer.cpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

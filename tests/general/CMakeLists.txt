@@ -25,6 +25,7 @@ set(weather_information_collector_tests_sources
     ../../src/util/SemVer.cpp
     ../../src/util/Strings.cpp
     api/Plans.cpp
+    api/SupportedDataTypes.cpp
     api/Types.cpp
     conf/Configuration.cpp
     data/Location.cpp
