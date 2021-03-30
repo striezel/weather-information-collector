@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_COLLECTOR_HPP
 #define WEATHER_INFORMATION_COLLECTOR_COLLECTOR_HPP
 
+#include "../api/API.hpp"
 #include "../conf/Configuration.hpp"
 
 namespace wic
@@ -86,6 +87,33 @@ class Collector
      *         Returns -1, if the task list is empty.
      */
     int_least32_t nextIndex() const;
+
+
+    /** \brief Handles data collection and storage for current weather.
+     *
+     * \param api   the API implementation that is used for collection
+     * \param type  enumeration that indicates the API type
+     * \param loc   location for which the data will be collected
+     */
+    void collectCurrent(API& api, const ApiType type, const Location& loc) const;
+
+
+    /** \brief Handles data collection and storage for forecast data.
+     *
+     * \param api   the API implementation that is used for collection
+     * \param type  enumeration that indicates the API type
+     * \param loc   location for which the data will be collected
+     */
+    void collectForecast(API& api, const ApiType type, const Location& loc) const;
+
+
+    /** \brief Handles data collection and storage for current + forecast data.
+     *
+     * \param api   the API implementation that is used for collection
+     * \param type  enumeration that indicates the API type
+     * \param loc   location for which the data will be collected
+     */
+    void collectCurrentAndForecast(API& api, const ApiType type, const Location& loc) const;
 
 
     std::vector<TaskData> tasksContainer; /**< container with all tasks */
