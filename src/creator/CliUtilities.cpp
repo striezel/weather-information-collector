@@ -47,10 +47,65 @@ std::string dataTypeToHumanString(const DataType dt)
          return "weather forecast data";
     case DataType::CurrentAndForecast:
          return "data about current weather and forecast data";
-    case DataType::none:
-    default:
+    default: // i. e. DataType::none
          return "none";
   } // switch
+}
+
+void writeLocationLine(const int idx, const Location& location)
+{
+  // index for later use
+  std::cout << "[" << idx << "]: "
+  // name of the location
+            << location.name();
+  // country, if any
+  if (location.hasCountryCode())
+    std::cout << ", " << location.countryCode();
+  // latitude,longitude
+  if (location.hasCoordinates())
+    std::cout << " @ " << location.coordinatesToString();
+  std::cout << std::endl;
+}
+
+void writeWeatherLine(const Weather& weather)
+{
+  std::cout << "     Weather: ";
+  // -- temperature
+  bool hasPrevOutput = false;
+  if (weather.hasTemperatureCelsius())
+  {
+    std::cout << niceFloat(weather.temperatureCelsius()) << " °C";
+    hasPrevOutput = true;
+  }
+  if (weather.hasTemperatureFahrenheit())
+  {
+    if (hasPrevOutput)
+      std::cout << " / ";
+    std::cout << niceFloat(weather.temperatureFahrenheit()) << " °F";
+    hasPrevOutput = true;
+  }
+  if (weather.hasTemperatureKelvin())
+  {
+    if (hasPrevOutput)
+      std::cout << " / ";
+    std::cout << niceFloat(weather.temperatureKelvin()) << " K";
+  }
+  // -- wind speed
+  if (weather.hasWindSpeed())
+  {
+    if (hasPrevOutput)
+      std::cout << ", ";
+    std::cout << "wind " << niceFloat(weather.windSpeed()) << " m/s";
+    hasPrevOutput = true;
+  }
+  // -- air pressure
+  if (weather.hasPressure())
+  {
+    if (hasPrevOutput)
+      std::cout << ", ";
+    std::cout << weather.pressure() << " hPa";
+  }
+  std::cout << std::endl;
 }
 
 void writeLocationList(const std::vector<std::pair<Location, Weather> >& locations)
@@ -58,54 +113,11 @@ void writeLocationList(const std::vector<std::pair<Location, Weather> >& locatio
   int idx = 1;
   for (const auto& [location, weather] : locations)
   {
-    // index for later use
-    std::cout << "[" << idx << "]: "
-    // name of the location
-              << location.name();
-    // country, if any
-    if (location.hasCountryCode())
-      std::cout << ", " << location.countryCode();
-    // latitude,longitude
-    if (location.hasCoordinates())
-      std::cout << " @ " << location.coordinatesToString();
-    std::cout << std::endl;
-    // weather
-    std::cout << "     Weather: ";
-    // -- temperature
-    bool hasTempOutput = false;
-    if (weather.hasTemperatureCelsius())
-    {
-      std::cout << niceFloat(weather.temperatureCelsius()) << " °C";
-      hasTempOutput = true;
-    }
-    if (weather.hasTemperatureFahrenheit())
-    {
-      if (hasTempOutput)
-        std::cout << " / ";
-      std::cout << niceFloat(weather.temperatureFahrenheit()) << " °F";
-      hasTempOutput = true;
-    }
-    if (weather.hasTemperatureKelvin())
-    {
-      if (hasTempOutput)
-        std::cout << " / ";
-      std::cout << niceFloat(weather.temperatureKelvin()) << " K";
-    }
-    // -- wind speed
-    if (weather.hasWindSpeed())
-    {
-      if (hasTempOutput)
-        std::cout << ", ";
-      std::cout << "wind " << niceFloat(weather.windSpeed()) << " m/s";
-      hasTempOutput = true;
-    }
-    if (weather.hasPressure())
-    {
-      if (hasTempOutput)
-        std::cout << ", ";
-      std::cout << weather.pressure() << " hPa";
-    }
-    std::cout << std::endl;
+    // location data
+    writeLocationLine(idx, location);
+    // weather for that location
+    writeWeatherLine(weather);
+    // increase index for next iteration
     ++idx;
   } // range-based for over locations
 }
@@ -261,7 +273,7 @@ DataType selectDataType(const ApiType selectedApi, const PlanWeatherbit planWb, 
 
 std::chrono::seconds selectInterval()
 {
-  const int minCount = TaskManager::minimumRequestInterval.count();
+  const auto minCount = TaskManager::minimumRequestInterval.count();
   std::cout << "Enter data collection interval in seconds (>=" << minCount << "): ";
   std::string userInput;
   std::getline(std::cin, userInput);

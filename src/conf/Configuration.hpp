@@ -139,7 +139,7 @@ class Configuration
      *
      * \param realName  name of the configuration file, if any
      */
-    void findConfigurationFile(std::string& realName);
+    static void findConfigurationFile(std::string& realName);
 
 
     /** \brief Loads the configuration file with "core" settings.
@@ -155,7 +155,7 @@ class Configuration
      *
      * \param realName  directory name, if any
      */
-    void findTaskDirectory(std::string& realName);
+    static void findTaskDirectory(std::string& realName);
 
 
     #ifndef wic_no_tasks_in_config

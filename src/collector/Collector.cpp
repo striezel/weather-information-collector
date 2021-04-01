@@ -102,7 +102,7 @@ int_least32_t Collector::nextIndex() const
     return -1;
 
   auto minTime = tasksContainer[0].nextRequest;
-  int_least32_t minIndex = 0;
+  std::vector<TaskData>::size_type minIndex = 0;
   const auto taskLength = tasksContainer.size();
   for (std::vector<TaskData>::size_type i = 1; i < taskLength; ++i)
   {

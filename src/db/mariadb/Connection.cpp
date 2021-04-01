@@ -161,7 +161,7 @@ Result Connection::query(const std::string& sql)
 
   // Fill field names.
   {
-    MYSQL_FIELD* fields = mysql_fetch_fields(result);
+    const MYSQL_FIELD* fields = mysql_fetch_fields(result);
     for (unsigned int i = 0; i < fieldCount; ++i)
     {
       res.fieldData.emplace_back(typeFromDbEnum(fields[i].type), std::string(fields[i].name, fields[i].name_length));

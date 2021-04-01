@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 */
 
 #include <iostream>
+#include <utility>
 #include "CliUtilities.hpp"
 #include "../api/OpenWeatherMap.hpp"
 #include "../conf/Configuration.hpp"
@@ -56,29 +57,27 @@ void showHelp()
             << "                           in some predefined locations.\n";
 }
 
-int main(int argc, char** argv)
+std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile)
 {
-  std::string configurationFile; /**< path of configuration file */
-
-if ((argc > 1) && (argv != nullptr))
+  if ((argc > 1) && (argv != nullptr))
   {
     for (int i = 1; i < argc; ++i)
     {
       if (argv[i] == nullptr)
       {
         std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
-        return wic::rcInvalidParameter;
+        return std::make_pair(wic::rcInvalidParameter, true);
       }
       const std::string param(argv[i]);
       if ((param == "-v") || (param == "--version"))
       {
         showVersion();
-        return 0;
+        return std::make_pair(0, true);
       } // if version
       else if ((param == "-?") || (param == "/?") || (param == "--help"))
       {
         showHelp();
-        return 0;
+        return std::make_pair(0, true);
       } // if help
       else if ((param == "--conf") || (param == "-c"))
       {
@@ -86,7 +85,7 @@ if ((argc > 1) && (argv != nullptr))
         {
           std::cerr << "Error: Configuration was already set to "
                     << configurationFile << "!" << std::endl;
-          return wic::rcInvalidParameter;
+          return std::make_pair(wic::rcInvalidParameter, true);
         }
         // enough parameters?
         if ((i+1 < argc) && (argv[i+1] != nullptr))
@@ -99,17 +98,28 @@ if ((argc > 1) && (argv != nullptr))
         {
           std::cerr << "Error: You have to enter a file path after \""
                     << param << "\"." << std::endl;
-          return wic::rcInvalidParameter;
+          return std::make_pair(wic::rcInvalidParameter, true);
         }
       } // if configuration file
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
                   << "Use --help to show available parameters." << std::endl;
-        return wic::rcInvalidParameter;
+        return std::make_pair(wic::rcInvalidParameter, true);
       }
     } // for i
   } // if arguments are there
+
+  return std::make_pair(0, false);
+}
+
+int main(int argc, char** argv)
+{
+  std::string configurationFile; /**< path of configuration file */
+
+  const auto [exitCode, exitNow] = parseArguments(argc, argv, configurationFile);
+  if (exitNow || (exitCode != 0))
+    return exitCode;
 
   // load configuration file + configured tasks
   wic::Configuration config;

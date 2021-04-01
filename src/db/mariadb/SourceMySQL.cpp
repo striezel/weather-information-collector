@@ -114,7 +114,7 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
       }
       if (!elem.isNull(idxPressure))
       {
-        w.setPressure(elem.getInt32(idxPressure));
+        w.setPressure(static_cast<int16_t>(elem.getInt32(idxPressure)));
       }
       if (!elem.isNull(idxWindSpeed))
       {
@@ -122,7 +122,7 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
       }
       if (!elem.isNull(idxWindDegrees))
       {
-        w.setWindDegrees(elem.getInt32(idxWindDegrees));
+        w.setWindDegrees(static_cast<int16_t>(elem.getInt32(idxWindDegrees)));
       }
       if (!elem.isNull(idxCloudiness))
       {
@@ -313,7 +313,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
         }
         if (!dp.isNull(idxPressure))
         {
-          w.setPressure(dp.getInt32(idxPressure));
+          w.setPressure(static_cast<int16_t>(dp.getInt32(idxPressure)));
         }
         if (!dp.isNull(idxWindSpeed))
         {
@@ -321,7 +321,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
         }
         if (!dp.isNull(idxWindDegrees))
         {
-          w.setWindDegrees(dp.getInt32(idxWindDegrees));
+          w.setWindDegrees(static_cast<int16_t>(dp.getInt32(idxWindDegrees)));
         }
         if (!dp.isNull(idxCloudiness))
         {

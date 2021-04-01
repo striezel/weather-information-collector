@@ -42,7 +42,7 @@ bool Result::hasRows() const
   return !data.empty();
 }
 
-unsigned int Result::rowCount() const
+std::vector<Row>::size_type Result::rowCount() const
 {
   return data.size();
 }

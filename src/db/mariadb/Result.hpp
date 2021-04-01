@@ -59,7 +59,7 @@ class Result
      *
      * \return Returns the number of rows in the result.
      */
-    unsigned int rowCount() const;
+    std::vector<Row>::size_type rowCount() const;
 
     /** \brief Gets the result rows, all of them.
      *

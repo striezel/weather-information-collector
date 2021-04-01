@@ -53,7 +53,7 @@ class StoreMySQL: public Store
      * \return Returns true, if the data was saved.
      *         Returns false, if an error occurred.
      */
-    virtual bool saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather);
+    bool saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather) final;
 
 
     /** \brief Saves weather forecast data for a given location and API.
@@ -64,7 +64,7 @@ class StoreMySQL: public Store
      * \return Returns true, if the data was saved.
      *         Returns false, if an error occurred.
      */
-    virtual bool saveForecast(const ApiType type, const Location& location, const Forecast& forecast);
+    bool saveForecast(const ApiType type, const Location& location, const Forecast& forecast) final;
   private:
     ConnectionInformation connInfo; /**< MySQL connection information */
 }; // class

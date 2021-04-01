@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ struct Limits
    * \param planWs the pricing plan for Weatherstack
    * \return Returns the request limit for the specified API.
    */
-  static const Limit forApi(const ApiType api, const PlanOwm planOwm, const PlanWeatherbit planWb, const PlanWeatherstack planWs);
+  static Limit forApi(const ApiType api, const PlanOwm planOwm, const PlanWeatherbit planWb, const PlanWeatherstack planWs);
 }; // struct
 
 } // namespace

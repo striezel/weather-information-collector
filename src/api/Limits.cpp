@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ const Limit Limits::weatherstack = Limit(1000, std::chrono::hours(24 * 31));
 /* There's no limit here for "none" API, but set it to zero. */
 const Limit Limits::none = Limit(0, std::chrono::hours(1));
 
-const Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeatherbit planWb, const PlanWeatherstack planWs)
+Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeatherbit planWb, const PlanWeatherstack planWs)
 {
   switch(api)
   {
@@ -68,8 +68,7 @@ const Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanW
              case PlanOwm::Enterprise:
                   /* Limit for OpenWeatherMap is 200000 calls per minute on the Professional plan. */
                   return Limit(200000, std::chrono::minutes(1));
-             case PlanOwm ::none:
-             default:
+             default: // i. e. PlanOwm ::none
                  return Limits::none;
          }
     case ApiType::DarkSky:
@@ -91,8 +90,7 @@ const Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanW
                   /* Limit for Weatherbit is 5000000 calls per day on the Starter plan,
                      which is ca. 208333.33 requests per hour. */
                  return Limit(5000000, std::chrono::hours(24));
-             case PlanWeatherbit::none:
-             default:
+             default: // i. e. PlanWeatherbit::none
                   return Limits::none;
          }
     case ApiType::Weatherstack:
@@ -112,16 +110,13 @@ const Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanW
                  /* Limit for Weatherstack is one million calls per month on the Business plan,
                     which is ca. 1344.09 requests per hour. */
                  return Limit(1000000, std::chrono::hours(24 * 31));
-             case PlanWeatherstack::none:
-             default:
+             default: // i. e. PlanWeatherstack::none
                   return Limits::none;
          }
-    case ApiType::none:
+    default: // i. e. ApiType::none
          // no limit
          return Limits::none;
   }
-  // Fallback, just in case there might be more APIs in the future.
-  return Limits::none;
 }
 
 } // namespace

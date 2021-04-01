@@ -68,8 +68,7 @@ std::string toString(const FieldType ft)
          return "string";
     case FieldType::Blob:
          return "blob";
-    case FieldType::unknown:
-    default:
+    default: // i. e. FieldType::unknown
          return "unknown";
   }
 }

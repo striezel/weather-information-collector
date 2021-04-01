@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -137,56 +137,56 @@ void Configuration::findConfigurationFile(std::string& realName)
 {
   namespace fs = std::filesystem;
 
-  if (realName.empty())
+  if (!realName.empty())
+    return;
+
+  for(const auto& file : potentialFileNames())
   {
-    for(const auto& file : potentialFileNames())
+    const fs::path path(file);
+    try
     {
-      const fs::path path(file);
-      try
+      if (fs::exists(path) && fs::is_regular_file(path))
       {
-        if (fs::exists(path) && fs::is_regular_file(path))
-        {
-          realName = file;
-          std::cout << "Info: Using configuration file " << file
-                    << ", because none has been specified explicitly." << std::endl;
-          break;
-        }
+        realName = file;
+        std::cout << "Info: Using configuration file " << file
+                  << ", because none has been specified explicitly." << std::endl;
+        break;
       }
-      catch (const fs::filesystem_error& ex)
-      {
-        std::cerr << "File system error while checking existence of file "
-                  << file << ": " << ex.what() << std::endl;
-      } // try-catch
-    } // for
-  } // if
+    }
+    catch (const fs::filesystem_error& ex)
+    {
+      std::cerr << "File system error while checking existence of file "
+                << file << ": " << ex.what() << std::endl;
+    } // try-catch
+  } // for
 }
 
 void Configuration::findTaskDirectory(std::string& realName)
 {
   namespace fs = std::filesystem;
 
-  if (realName.empty())
+  if (!realName.empty())
+    return;
+
+  for(const auto& dir : potentialTaskDirectories())
   {
-    for(const auto& dir : potentialTaskDirectories())
+    const fs::path path(dir);
+    try
     {
-      const fs::path path(dir);
-      try
+      if (fs::exists(path) && fs::is_directory(path))
       {
-        if (fs::exists(path) && fs::is_directory(path))
-        {
-          realName = dir;
-          std::cout << "Info: Using task directory " << dir << ", because none"
-                    << " has been specified explicitly." << std::endl;
-          break;
-        }
+        realName = dir;
+        std::cout << "Info: Using task directory " << dir << ", because none"
+                  << " has been specified explicitly." << std::endl;
+        break;
       }
-      catch (const fs::filesystem_error& ex)
-      {
-        std::cerr << "File system error while checking existence of directory "
-                  << dir << ": " << ex.what() << std::endl;
-      } // try-catch
-    } // for
-  } // if
+    }
+    catch (const fs::filesystem_error& ex)
+    {
+      std::cerr << "File system error while checking existence of directory "
+                << dir << ": " << ex.what() << std::endl;
+    } // try-catch
+  } // for
 }
 
 bool Configuration::loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed)
@@ -485,7 +485,11 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
   return true;
 }
 
+#ifndef wic_no_tasks_in_config
 bool Configuration::load(const std::string& fileName, const bool skipTasks, const bool missingKeysAllowed)
+#else
+bool Configuration::load(const std::string& fileName, [[maybe_unused]] const bool skipTasks, const bool missingKeysAllowed)
+#endif
 {
   namespace fs = std::filesystem;
 
