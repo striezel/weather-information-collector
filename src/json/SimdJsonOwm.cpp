@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -132,7 +132,8 @@ bool SimdJsonOwm::parseCurrentWeather(const std::string& json, Weather& weather)
   const auto [doc, error] = parser.parse(json);
   if (error)
   {
-    std::cerr << "Error in SimdJsonOwm::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonOwm::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(error) << std::endl;
     return false;
   }
 
@@ -147,7 +148,8 @@ bool SimdJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
   const auto [doc, error] = parser.parse(json);
   if (error)
   {
-    std::cerr << "Error in SimdJsonOwm::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonOwm::parseForecast(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(error) << std::endl;
     return false;
   }
 
@@ -199,7 +201,8 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
   const auto [doc, error] = parser.parse(json);
   if (error)
   {
-    std::cerr << "Error in SimdJsonOwm::parseLocations(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonOwm::parseLocations(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(error) << std::endl;
     return false;
   }
 

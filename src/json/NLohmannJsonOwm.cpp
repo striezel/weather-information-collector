@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -136,9 +136,10 @@ bool NLohmannJsonOwm::parseCurrentWeather(const std::string& json, Weather& weat
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonOwm::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonOwm::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 
@@ -154,9 +155,10 @@ bool NLohmannJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonOwm::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonOwm::parseForecast(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 
@@ -212,9 +214,10 @@ bool NLohmannJsonOwm::parseLocations(const std::string& json, std::vector<std::p
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonOwm::parseLocations(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonOwm::parseLocations(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 

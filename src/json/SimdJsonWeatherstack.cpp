@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,7 +77,8 @@ bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather&
   const auto [doc, parseError] = parser.parse(json);
   if (parseError)
   {
-    std::cerr << "Error in SimdJsonWeatherstack::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonWeatherstack::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(parseError) << std::endl;
     return false;
   }
 

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,9 +32,10 @@ bool NLohmannJsonApixu::parseCurrentWeather(const std::string& json, Weather& we
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonApixu::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonApixu::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 
@@ -112,9 +113,10 @@ bool NLohmannJsonApixu::parseForecast(const std::string& json, Forecast& forecas
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonApixu::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonApixu::parseForecast(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 

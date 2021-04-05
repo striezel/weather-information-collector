@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,8 @@ bool SimdJsonApixu::parseCurrentWeather(const std::string& json, Weather& weathe
   const auto [doc, parseError] = parser.parse(json);
   if (parseError)
   {
-    std::cerr << "Error in SimdJsonApixu::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonApixu::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(parseError) << std::endl;
     return false;
   }
 
@@ -106,7 +107,8 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
   const auto [doc, parseError] = parser.parse(json);
   if (parseError)
   {
-    std::cerr << "Error in SimdJsonApixu::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonApixu::parseForecast(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(parseError) << std::endl;
     return false;
   }
 

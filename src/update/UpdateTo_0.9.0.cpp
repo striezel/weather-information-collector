@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -83,9 +83,10 @@ bool setCountryCodes(const ConnectionInformation& ci)
       {
         jsonRoot = nlohmann::json::parse(json);
       }
-      catch(...)
+      catch(const nlohmann::json::parse_error& ex)
       {
-        std::cerr << "Error: Unable to parse JSON data of dataID " << jsonResult.row(0).column(jsonResult.fieldIndex("dataID")) << "!" << std::endl;
+        std::cerr << "Error: Unable to parse JSON data of dataID " << jsonResult.row(0).column(jsonResult.fieldIndex("dataID")) << "!" << std::endl
+                  << "Parser error: " << ex.what() << std::endl;
         return false;
       }
       auto sys = jsonRoot.find("sys");

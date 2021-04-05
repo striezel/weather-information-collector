@@ -1,5 +1,9 @@
 # Version history of weather-information-collector
 
+## Version 0.9.16 (2021-04-??)
+
+Parser errors will now show more information why JSON parsing failed.
+
 ## Version 0.9.15 (2020-11-11)
 
 simdjson, the library used for JSON parsing, has been updated from version 0.3.1

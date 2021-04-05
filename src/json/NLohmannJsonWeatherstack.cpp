@@ -78,9 +78,10 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonWeatherstack::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonWeatherstack::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 

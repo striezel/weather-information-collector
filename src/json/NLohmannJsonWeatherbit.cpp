@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -96,9 +96,10 @@ bool NLohmannJsonWeatherbit::parseCurrentWeather(const std::string& json, Weathe
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonWeatherbit::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonWeatherbit::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 
@@ -135,9 +136,10 @@ bool NLohmannJsonWeatherbit::parseForecast(const std::string& json, Forecast& fo
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonWeatherbit::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonWeatherbit::parseForecast(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 

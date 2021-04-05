@@ -31,7 +31,8 @@ bool SimdJsonDarkSky::parseCurrentWeather(const std::string& json, Weather& weat
   const auto [doc, error] = parser.parse(json);
   if (error)
   {
-    std::cerr << "Error in SimdJsonDarkSky::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonDarkSky::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(error) << std::endl;
     return false;
   }
 
@@ -55,7 +56,8 @@ bool SimdJsonDarkSky::parseForecast(const std::string& json, Forecast& forecast)
   const auto [doc, error] = parser.parse(json);
   if (error)
   {
-    std::cerr << "Error in SimdJsonDarkSky::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in SimdJsonDarkSky::parseForecast(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(error) << std::endl;
     return false;
   }
 

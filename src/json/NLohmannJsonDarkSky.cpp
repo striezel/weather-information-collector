@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,9 +32,10 @@ bool NLohmannJsonDarkSky::parseCurrentWeather(const std::string& json, Weather& 
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonDarkSky::parseCurrentWeather(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonDarkSky::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 
@@ -61,9 +62,10 @@ bool NLohmannJsonDarkSky::parseForecast(const std::string& json, Forecast& forec
   {
     root = nlohmann::json::parse(json);
   }
-  catch(...)
+  catch(const nlohmann::json::parse_error& ex)
   {
-    std::cerr << "Error in NLohmannJsonDarkSky::parseForecast(): Unable to parse JSON data!" << std::endl;
+    std::cerr << "Error in NLohmannJsonDarkSky::parseForecast(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << ex.what() << std::endl;
     return false;
   }
 
