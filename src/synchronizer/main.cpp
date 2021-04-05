@@ -367,7 +367,7 @@ int main(int argc, char** argv)
       auto sourceIterator = sourceWeather.begin();
       const auto sourceEnd = sourceWeather.end();
       auto destinationIterator = destinationWeatherMeta.begin();
-      auto destinationEnd = destinationWeatherMeta.end();
+      const auto destinationEnd = destinationWeatherMeta.end();
       while (sourceIterator != sourceEnd)
       {
         while (destinationIterator != destinationEnd && isLess(*destinationIterator, *sourceIterator))
@@ -431,7 +431,7 @@ int main(int argc, char** argv)
       auto sourceIterator = sourceForecast.begin();
       const auto sourceEnd = sourceForecast.end();
       auto destinationIterator = destinationForecastMeta.begin();
-      auto destinationEnd = destinationForecastMeta.end();
+      const auto destinationEnd = destinationForecastMeta.end();
       while (sourceIterator != sourceEnd)
       {
         while (destinationIterator != destinationEnd && isLess(*destinationIterator, *sourceIterator))

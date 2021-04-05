@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class StoreMySQLBatch
 
     /** \brief Destructor.
      */
-    virtual ~StoreMySQLBatch();
+    ~StoreMySQLBatch();
 
 
     /** \brief Saves a current weather entry for a given location and API.
@@ -53,7 +53,7 @@ class StoreMySQLBatch
      * \return Returns true, if the data was saved.
      *         Returns false, if an error occurred.
      */
-    virtual bool saveCurrentWeather(const int apiId, const int locationId, const Weather& weather);
+    bool saveCurrentWeather(const int apiId, const int locationId, const Weather& weather);
   private:
     bool commit();
     unsigned int records;

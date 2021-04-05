@@ -42,7 +42,7 @@ class StoreMySQL: public Store
 
     /** \brief Destructor.
      */
-    virtual ~StoreMySQL() = default;
+    ~StoreMySQL() final = default;
 
 
     /** \brief Saves a current weather entry for a given location and API.
