@@ -59,56 +59,56 @@ void showHelp()
 
 std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile)
 {
-  if ((argc > 1) && (argv != nullptr))
+  if ((argc <= 1) || (argv == nullptr))
+    return std::make_pair(0, false);
+
+  for (int i = 1; i < argc; ++i)
   {
-    for (int i = 1; i < argc; ++i)
+    if (argv[i] == nullptr)
     {
-      if (argv[i] == nullptr)
+      std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
+      return std::make_pair(wic::rcInvalidParameter, true);
+    }
+    const std::string param(argv[i]);
+    if ((param == "-v") || (param == "--version"))
+    {
+      showVersion();
+      return std::make_pair(0, true);
+    } // if version
+    else if ((param == "-?") || (param == "/?") || (param == "--help"))
+    {
+      showHelp();
+      return std::make_pair(0, true);
+    } // if help
+    else if ((param == "--conf") || (param == "-c"))
+    {
+      if (!configurationFile.empty())
       {
-        std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
+        std::cerr << "Error: Configuration was already set to "
+                  << configurationFile << "!" << std::endl;
         return std::make_pair(wic::rcInvalidParameter, true);
       }
-      const std::string param(argv[i]);
-      if ((param == "-v") || (param == "--version"))
+      // enough parameters?
+      if ((i+1 < argc) && (argv[i+1] != nullptr))
       {
-        showVersion();
-        return std::make_pair(0, true);
-      } // if version
-      else if ((param == "-?") || (param == "/?") || (param == "--help"))
-      {
-        showHelp();
-        return std::make_pair(0, true);
-      } // if help
-      else if ((param == "--conf") || (param == "-c"))
-      {
-        if (!configurationFile.empty())
-        {
-          std::cerr << "Error: Configuration was already set to "
-                    << configurationFile << "!" << std::endl;
-          return std::make_pair(wic::rcInvalidParameter, true);
-        }
-        // enough parameters?
-        if ((i+1 < argc) && (argv[i+1] != nullptr))
-        {
-          configurationFile = std::string(argv[i+1]);
-          // Skip next parameter, because it's already used as file path.
-          ++i;
-        }
-        else
-        {
-          std::cerr << "Error: You have to enter a file path after \""
-                    << param << "\"." << std::endl;
-          return std::make_pair(wic::rcInvalidParameter, true);
-        }
-      } // if configuration file
+        configurationFile = std::string(argv[i+1]);
+        // Skip next parameter, because it's already used as file path.
+        ++i;
+      }
       else
       {
-        std::cerr << "Error: Unknown parameter " << param << "!\n"
-                  << "Use --help to show available parameters." << std::endl;
+        std::cerr << "Error: You have to enter a file path after \""
+                  << param << "\"." << std::endl;
         return std::make_pair(wic::rcInvalidParameter, true);
       }
-    } // for i
-  } // if arguments are there
+    } // if configuration file
+    else
+    {
+      std::cerr << "Error: Unknown parameter " << param << "!\n"
+                << "Use --help to show available parameters." << std::endl;
+      return std::make_pair(wic::rcInvalidParameter, true);
+    }
+  } // for i
 
   return std::make_pair(0, false);
 }

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 */
 
 #include <iostream>
+#include <utility>
 #include "../conf/Configuration.hpp"
 #include "../db/mariadb/guess.hpp"
 #include "../util/GitInfos.hpp"
@@ -69,71 +70,80 @@ void showHelp()
             << "                           database structure.\n"  ;
 }
 
+std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile, bool& fullUpdate)
+{
+  if ((argc <= 1) || (argv == nullptr))
+    return std::make_pair(0, false);
+
+  for (int i = 1; i < argc; ++i)
+  {
+    if (argv[i] == nullptr)
+    {
+      std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
+      return std::make_pair(wic::rcInvalidParameter, true);
+    }
+    const std::string param(argv[i]);
+    if ((param == "-v") || (param == "--version"))
+    {
+      showVersion();
+      return std::make_pair(0, true);
+    } // if version
+    else if ((param == "-?") || (param == "/?") || (param == "--help"))
+    {
+      showHelp();
+      return std::make_pair(0, true);
+    } // if help
+    else if ((param == "--conf") || (param == "-c"))
+    {
+      if (!configurationFile.empty())
+      {
+        std::cerr << "Error: Configuration was already set to "
+                  << configurationFile << "!" << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      // Are there enough parameters?
+      if ((i+1 < argc) && (argv[i+1] != nullptr))
+      {
+        configurationFile = std::string(argv[i+1]);
+        // Skip next parameter, because it's already used as file path.
+        ++i;
+      }
+      else
+      {
+        std::cerr << "Error: You have to enter a file path after \""
+                  << param << "\"." << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+    } // if configuration file
+    else if ((param == "--full") || (param == "-f") || (param == "--all") || (param == "-a"))
+    {
+      if (fullUpdate)
+      {
+        std::cerr << "Error: Parameter " << param << " must not be specified more than once!"
+                  << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      fullUpdate = true;
+    } // if full update procedure / all updates
+    else
+    {
+      std::cerr << "Error: Unknown parameter " << param << "!\n"
+                << "Use --help to show available parameters." << std::endl;
+      return std::make_pair(wic::rcInvalidParameter, true);
+    }
+  } // for i
+
+  return std::make_pair(0, false);
+}
+
 int main(int argc, char** argv)
 {
   std::string configurationFile; /**< path of configuration file */
   bool fullUpdate = false;       /**< whether user wants a full update */
 
-  if ((argc > 1) && (argv != nullptr))
-  {
-    for (int i = 1; i < argc; ++i)
-    {
-      if (argv[i] == nullptr)
-      {
-        std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
-        return wic::rcInvalidParameter;
-      }
-      const std::string param(argv[i]);
-      if ((param == "-v") || (param == "--version"))
-      {
-        showVersion();
-        return 0;
-      } // if version
-      else if ((param == "-?") || (param == "/?") || (param == "--help"))
-      {
-        showHelp();
-        return 0;
-      } // if help
-      else if ((param == "--conf") || (param == "-c"))
-      {
-        if (!configurationFile.empty())
-        {
-          std::cerr << "Error: Configuration was already set to "
-                    << configurationFile << "!" << std::endl;
-          return wic::rcInvalidParameter;
-        }
-        // Are there enough parameters?
-        if ((i+1 < argc) && (argv[i+1] != nullptr))
-        {
-          configurationFile = std::string(argv[i+1]);
-          // Skip next parameter, because it's already used as file path.
-          ++i;
-        }
-        else
-        {
-          std::cerr << "Error: You have to enter a file path after \""
-                    << param << "\"." << std::endl;
-          return wic::rcInvalidParameter;
-        }
-      } // if configuration file
-      else if ((param == "--full") || (param == "-f") || (param == "--all") || (param == "-a"))
-      {
-        if (fullUpdate)
-        {
-          std::cerr << "Error: Parameter " << param << " must not be specified more than once!"
-                    << std::endl;
-          return wic::rcInvalidParameter;
-        }
-        fullUpdate = true;
-      } // if full update procedure / all updates
-      else
-      {
-        std::cerr << "Error: Unknown parameter " << param << "!\n"
-                  << "Use --help to show available parameters." << std::endl;
-        return wic::rcInvalidParameter;
-      }
-    } // for i
-  } // if arguments are there
+  const auto [exitCode, forceExit] = parseArguments(argc, argv, configurationFile, fullUpdate);
+  if (forceExit || (exitCode != 0))
+    return exitCode;
 
   // load configuration file, but skip configured tasks
   wic::Configuration config;
