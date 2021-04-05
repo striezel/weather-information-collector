@@ -77,8 +77,8 @@ void weatherstackPrecipitationDistinction(const float amount, Weather& weather, 
     case 362: // Light sleet showers
     case 365: // Moderate or heavy sleet showers
          // Sleet could be described as mixture of snow and rain.
-         weather.setRain(0.5 * amount);
-         weather.setSnow(0.5 * amount);
+         weather.setRain(0.5f * amount);
+         weather.setSnow(0.5f * amount);
          return;
   } // switch
 

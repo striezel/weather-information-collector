@@ -46,47 +46,47 @@ bool SimdJsonApixu::parseCurrentWeather(const std::string& json, Weather& weathe
     current["temp_c"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      weather.setTemperatureCelsius(v2.get<double>().value());
+      weather.setTemperatureCelsius(static_cast<float>(v2.get<double>().value()));
     }
     current["temp_f"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      weather.setTemperatureFahrenheit(v2.get<double>().value());
+      weather.setTemperatureFahrenheit(static_cast<float>(v2.get<double>().value()));
     }
     // wind
     current["wind_degree"].tie(v2, error);
     if (!error && v2.is<int64_t>())
-      weather.setWindDegrees(v2.get<int64_t>());
+      weather.setWindDegrees(static_cast<int16_t>(v2.get<int64_t>()));
     current["wind_kph"].tie(v2, error);
     if (!error && v2.is<double>())
-      weather.setWindSpeed(v2.get<double>().value() / 3.6);
+      weather.setWindSpeed(static_cast<float>(v2.get<double>().value() / 3.6));
     else
     {
       current["wind_mph"].tie(v2, error);
       if (!error && v2.is<double>())
-        weather.setWindSpeed(v2.get<double>().value() * 1.609344 / 3.6);
+        weather.setWindSpeed(static_cast<float>(v2.get<double>().value() * 1.609344 / 3.6));
     }
     // humidity
     current["humidity"].tie(v2, error);
     if (!error && v2.is<int64_t>())
-      weather.setHumidity(v2.get<int64_t>().value());
+      weather.setHumidity(static_cast<int8_t>(v2.get<int64_t>().value()));
     // rain or snow
     current["precip_mm"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      const float amount = v2.get<double>().value();
+      const float amount = static_cast<float>(v2.get<double>().value());
       precipitationDistinction(amount, weather);
     }
     // pressure
     current["pressure_mb"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      weather.setPressure(v2.get<double>().value());
+      weather.setPressure(static_cast<float>(v2.get<double>().value()));
     }
     // cloudiness
     current["cloud"].tie(v2, error);
     if (!error && v2.is<int64_t>())
-      weather.setCloudiness(v2.get<int64_t>().value());
+      weather.setCloudiness(static_cast<int8_t>(v2.get<int64_t>().value()));
     // date of data update
     current["last_updated_epoch"].tie(v2, error);
     if (!error && v2.is<int64_t>())
@@ -158,36 +158,36 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
         // temperature
         elem["temp_c"].tie(v2, error);
         if (!error && v2.is<double>())
-          w.setTemperatureCelsius(v2.get<double>());
+          w.setTemperatureCelsius(static_cast<float>(v2.get<double>()));
         elem["temp_f"].tie(v2, error);
         if (!error && v2.is<double>())
-          w.setTemperatureFahrenheit(v2.get<double>());
+          w.setTemperatureFahrenheit(static_cast<float>(v2.get<double>()));
         // wind
         elem["wind_kph"].tie(v2, error);
         if (!error && v2.is<double>())
-          w.setWindSpeed(v2.get<double>() / 3.6);
+          w.setWindSpeed(static_cast<float>(v2.get<double>() / 3.6));
         elem["wind_degree"].tie(v2, error);
         if (!error && v2.is<int64_t>())
-          w.setWindDegrees(v2.get<int64_t>());
+          w.setWindDegrees(static_cast<int16_t>(v2.get<int64_t>()));
         // air pressure: pressure_mb
         elem["pressure_mb"].tie(v2, error);
         if (!error && v2.is<double>())
-          w.setPressure(v2.get<double>().value());
+          w.setPressure(static_cast<int16_t>(v2.get<double>().value()));
         // rain or snow: precip_mm
         elem["precip_mm"].tie(v2, error);
         if (!error && v2.is<double>())
         {
-          const float amount = v2.get<double>().value();
+          const float amount = static_cast<float>(v2.get<double>().value());
           precipitationDistinction(amount, w);
         }
         // humidity
         elem["humidity"].tie(v2, error);
         if (!error && v2.is<int64_t>())
-          w.setHumidity(v2.get<int64_t>().value());
+          w.setHumidity(static_cast<int8_t>(v2.get<int64_t>().value()));
         // cloudiness
         elem["cloud"].tie(v2, error);
         if (!error && v2.is<int64_t>())
-          w.setCloudiness(v2.get<int64_t>().value());
+          w.setCloudiness(static_cast<int8_t>(v2.get<int64_t>().value()));
         // Push data of current element onto result.
         data.push_back(w);
       } // for (range-based)
@@ -205,20 +205,20 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
       day["mintemp_c"].tie(v2, error);
       if (!error && v2.is<double>())
       {
-        w_min.setTemperatureCelsius(v2.get<double>().value());
+        w_min.setTemperatureCelsius(static_cast<float>(v2.get<double>().value()));
       }
       day["mintemp_f"].tie(v2, error);
       if (!error && v2.is<double>())
       {
-        w_min.setTemperatureFahrenheit(v2.get<double>().value());
+        w_min.setTemperatureFahrenheit(static_cast<float>(v2.get<double>().value()));
       }
       const auto [avghumidity, errorHum] = day["avghumidity"];
       if (!errorHum && avghumidity.is<double>())
-        w_min.setHumidity(avghumidity.get<double>().value());
+        w_min.setHumidity(static_cast<int8_t>(avghumidity.get<double>().value()));
       const auto [totalprecip_mm, errorPrecip] = day["totalprecip_mm"];
       if (!errorPrecip && totalprecip_mm.is<double>())
       {
-        const float amount = totalprecip_mm.get<double>().value();
+        const float amount = static_cast<float>(totalprecip_mm.get<double>().value());
         precipitationDistinction(amount, w_min);
       }
       data.push_back(w_min);
@@ -228,18 +228,18 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
       day["maxtemp_c"].tie(v2, error);
       if (!error && v2.is<double>())
       {
-        w_max.setTemperatureCelsius(v2.get<double>().value());
+        w_max.setTemperatureCelsius(static_cast<float>(v2.get<double>().value()));
       }
       day["maxtemp_f"].tie(v2, error);
       if (!error && v2.is<double>())
       {
-        w_max.setTemperatureFahrenheit(v2.get<double>().value());
+        w_max.setTemperatureFahrenheit(static_cast<float>(v2.get<double>().value()));
       }
       if (!errorHum && avghumidity.is<double>())
-        w_max.setHumidity(avghumidity.get<double>().value());
+        w_max.setHumidity(static_cast<int8_t>(avghumidity.get<double>().value()));
       if (!errorPrecip && totalprecip_mm.is<double>())
       {
-        const float amount = totalprecip_mm.get<double>().value();
+        const float amount = static_cast<float>(totalprecip_mm.get<double>().value());
         precipitationDistinction(amount, w_max);
       }
       data.push_back(w_max);

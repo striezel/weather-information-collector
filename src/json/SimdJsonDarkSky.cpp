@@ -110,30 +110,30 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
   dataPoint["temperature"].tie(elem, error);
   if (!error && elem.is<double>())
   {
-    weather.setTemperatureCelsius(elem.get<double>().value());
+    weather.setTemperatureCelsius(static_cast<float>(elem.get<double>().value()));
     // Since there are no other values (Fahrenheit or Kelvin), we can just
     // calculate them on the fly.
-    weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32);
+    weather.setTemperatureFahrenheit(static_cast<float>(weather.temperatureCelsius() * 1.8 + 32.0));
     // Avoid values like 6.9999... ° F by rounding, if appropriate.
     const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
     if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
     {
       weather.setTemperatureFahrenheit(fahrenheitRounded);
     }
-    weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15);
+    weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15f);
   }
   // relative humidity, [0;1]
   dataPoint["humidity"].tie(elem, error);
   if (!error && elem.is<double>())
   {
     const long int humidity = std::lround(elem.get<double>().value() * 100);
-    weather.setHumidity(humidity);
+    weather.setHumidity(static_cast<int8_t>(humidity));
   }
   // rain or snow (mm/m² in an hour)
   dataPoint["precipIntensity"].tie(elem, error);
   if (!error && elem.is<double>())
   {
-    const double amount = elem.get<double>().value();
+    const float amount = static_cast<float>(elem.get<double>().value());
     const auto [findType, typeError] = dataPoint["precipType"];
     if (!typeError && findType.is<std::string_view>())
     {
@@ -178,20 +178,20 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
   dataPoint["pressure"].tie(elem, error);
   if (!error && elem.is<double>())
   {
-    const int16_t press = std::lround(elem.get<double>().value());
+    const int16_t press = static_cast<int16_t>(std::lround(elem.get<double>().value()));
     weather.setPressure(press);
   }
   // wind speed [m/s]
   dataPoint["windSpeed"].tie(elem, error);
   if (!error && elem.is<double>())
   {
-    weather.setWindSpeed(elem.get<double>().value());
+    weather.setWindSpeed(static_cast<float>(elem.get<double>().value()));
   }
   // wind windBearing [°], with 0=N,90=E,180=S,270=W
   dataPoint["windBearing"].tie(elem, error);
   if (!error && elem.is<double>())
   {
-    const int16_t degrees = std::lround(elem.get<double>().value());
+    const int16_t degrees = static_cast<int16_t>(std::lround(elem.get<double>().value()));
     weather.setWindDegrees(degrees);
   }
   // cloud cover, [0;1]
@@ -200,7 +200,7 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
   {
     long int cloudCover = std::min(101L, std::lround(elem.get<double>().value() * 100));
     cloudCover = std::max(-1L, cloudCover);
-    weather.setCloudiness(cloudCover);
+    weather.setCloudiness(static_cast<int8_t>(cloudCover));
   }
   return weather.hasDataTime() && weather.hasTemperatureCelsius() && weather.hasHumidity();
 }

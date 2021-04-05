@@ -97,17 +97,17 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
     auto v2 = current.find("temperature");
     if (v2 != current.end() && v2->is_number())
     {
-      weather.setTemperatureCelsius(v2->get<double>());
+      weather.setTemperatureCelsius(v2->get<float>());
       // Since there are no other values (Fahrenheit or Kelvin), we can just
       // calculate them on the fly.
-      weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32);
+      weather.setTemperatureFahrenheit(static_cast<float>(weather.temperatureCelsius() * 1.8 + 32.0));
       // Avoid values like 6.9999... ° F by rounding, if appropriate.
       const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
       if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
       {
         weather.setTemperatureFahrenheit(fahrenheitRounded);
       }
-      weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15);
+      weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15f);
     }
     // wind
     v2 = current.find("wind_degree");
@@ -115,16 +115,16 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
       weather.setWindDegrees(v2->get<int>());
     v2 = current.find("wind_speed");
     if (v2 != current.end() && v2->is_number())
-      weather.setWindSpeed(v2->get<double>() / 3.6);
+      weather.setWindSpeed(static_cast<float>(v2->get<double>() / 3.6));
     // humidity
     v2 = current.find("humidity");
     if (v2 != current.end() && v2->is_number_integer())
-      weather.setHumidity(v2->get<int>());
+      weather.setHumidity(static_cast<int8_t>(v2->get<int>()));
     // pressure
     v2 = current.find("pressure");
     if (v2 != current.end() && v2->is_number())
     {
-      weather.setPressure(v2->get<double>());
+      weather.setPressure(static_cast<int16_t>(v2->get<double>()));
     }
     // rain or snow
     v2 = current.find("precip");
@@ -140,7 +140,7 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
     // cloudiness
     v2 = current.find("cloudcover");
     if (v2 != current.end() && v2->is_number_integer())
-      weather.setCloudiness(v2->get<int>());
+      weather.setCloudiness(static_cast<int8_t>(v2->get<int>()));
     // date of data update
     const auto dt = parseDateTime(root);
     if (dt != std::chrono::time_point<std::chrono::system_clock>())

@@ -35,7 +35,7 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
     main["temp"].tie(elem, error);
     if (!error && elem.is<double>())
     {
-      const float kelvinRaw = elem.get<double>().value();
+      const float kelvinRaw = static_cast<float>(elem.get<double>().value());
       weather.setTemperatureKelvin(kelvinRaw);
       // Avoid values like 280.9999... K by rounding, if appropriate.
       const float kelvinRounded = std::round(weather.temperatureKelvin());
@@ -43,14 +43,14 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
       {
         weather.setTemperatureKelvin(kelvinRounded);
       }
-      weather.setTemperatureCelsius(kelvinRaw - 273.15);
+      weather.setTemperatureCelsius(kelvinRaw - 273.15f);
       // Avoid values like 6.9999... ° C by rounding, if appropriate.
       const float celsiusRounded = std::round(weather.temperatureCelsius());
       if (std::fabs(celsiusRounded - weather.temperatureCelsius()) < 0.005)
       {
         weather.setTemperatureCelsius(celsiusRounded);
       }
-      weather.setTemperatureFahrenheit((kelvinRaw - 273.15) * 1.8 + 32.0f);
+      weather.setTemperatureFahrenheit(static_cast<float>((kelvinRaw - 273.15) * 1.8 + 32.0));
       // Avoid values like 6.9999... ° F by rounding, if appropriate.
       const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
       if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
@@ -63,7 +63,7 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
       weather.setPressure(static_cast<int16_t>(elem.get<double>()));
     main["humidity"].tie(elem, error);
     if (!error && elem.is<uint64_t>())
-      weather.setHumidity(elem.get<uint64_t>());
+      weather.setHumidity(static_cast<int8_t>(elem.get<uint64_t>()));
     foundValidParts = true;
   } // if main object
   value["wind"].tie(elem, error);
@@ -72,7 +72,7 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
     const value_type wind = elem;
     wind["speed"].tie(elem, error);
     if (!error && elem.is<double>())
-      weather.setWindSpeed(elem.get<double>().value());
+      weather.setWindSpeed(static_cast<float>(elem.get<double>().value()));
     wind["deg"].tie(elem, error);
     if (!error && elem.is<double>())
       weather.setWindDegrees(static_cast<int16_t>(elem.get<double>().value()));
@@ -83,7 +83,7 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
     const value_type clouds = elem;
     clouds["all"].tie(elem, error);
     if (!error && elem.is<int64_t>())
-      weather.setCloudiness(elem.get<int64_t>().value());
+      weather.setCloudiness(static_cast<int8_t>(elem.get<int64_t>().value()));
   } // if clouds object
   value["rain"].tie(elem, error);
   if (!error && elem.type() == simdjson::dom::element_type::OBJECT)
@@ -93,7 +93,7 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
     if (!error)
     {
       if (elem.is<double>())
-        weather.setRain(elem.get<double>().value());
+        weather.setRain(static_cast<float>(elem.get<double>().value()));
     }
     else
     {
@@ -109,7 +109,7 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
     if (!error)
     {
       if (elem.is<double>())
-        weather.setSnow(elem.get<double>().value());
+        weather.setSnow(static_cast<float>(elem.get<double>().value()));
     }
     else
     {
@@ -228,7 +228,7 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
     Location loc;
     auto [val, err] = elem["id"];
     if (!err && val.is<uint64_t>())
-      loc.setOwmId(val.get<uint64_t>());
+      loc.setOwmId(static_cast<uint32_t>(val.get<uint64_t>()));
     elem["name"].tie(val, err);
     if (!err && val.is<std::string_view>())
       loc.setName(std::string(val.get<std::string_view>().value()));
@@ -239,7 +239,8 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
       const auto [lon, errorLon] = coord["lon"];
       if (!errorLat && !errorLon && lat.is<double>() && lon.is<double>())
       {
-        loc.setCoordinates(lat.get<double>().value(), lon.get<double>().value());
+        loc.setCoordinates(static_cast<float>(lat.get<double>().value()),
+                           static_cast<float>(lon.get<double>().value()));
       }
     } // coord
     if (loc.empty())

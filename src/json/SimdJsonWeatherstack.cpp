@@ -93,34 +93,34 @@ bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather&
     current["temperature"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      weather.setTemperatureCelsius(v2.get<double>().value());
+      weather.setTemperatureCelsius(static_cast<float>(v2.get<double>().value()));
       // Since there are no other values (Fahrenheit or Kelvin), we can just
       // calculate them on the fly.
-      weather.setTemperatureFahrenheit(weather.temperatureCelsius() * 1.8 + 32);
+      weather.setTemperatureFahrenheit(static_cast<float>(weather.temperatureCelsius() * 1.8 + 32.0));
       // Avoid values like 6.9999... ° F by rounding, if appropriate.
       const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
       if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
       {
         weather.setTemperatureFahrenheit(fahrenheitRounded);
       }
-      weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15);
+      weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15f);
     }
     // wind
     current["wind_degree"].tie(v2, error);
     if (!error && v2.is<int64_t>())
-      weather.setWindDegrees(v2.get<int64_t>().value());
+      weather.setWindDegrees(static_cast<int16_t>(v2.get<int64_t>().value()));
     current["wind_speed"].tie(v2, error);
     if (!error && v2.is<double>())
-      weather.setWindSpeed(v2.get<double>().value() / 3.6);
+      weather.setWindSpeed(static_cast<float>(v2.get<double>().value() / 3.6));
     // humidity
     current["humidity"].tie(v2, error);
     if (!error && v2.is<int64_t>())
-      weather.setHumidity(v2.get<int64_t>().value());
+      weather.setHumidity(static_cast<int8_t>(v2.get<int64_t>().value()));
     // pressure
     current["pressure"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      weather.setPressure(v2.get<double>().value());
+      weather.setPressure(static_cast<float>(v2.get<double>().value()));
     }
     // rain or snow
     current["precip"].tie(v2, error);
@@ -128,15 +128,15 @@ bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather&
     {
       const auto [weather_code, errorCode] = current["weather_code"];
       const int code = (!errorCode && weather_code.is<int64_t>())
-                       ? weather_code.get<int64_t>().value()
+                       ? static_cast<int>(weather_code.get<int64_t>().value())
                        : 0;
-      weatherstackPrecipitationDistinction(v2.get<double>().value(), weather, code);
+      weatherstackPrecipitationDistinction(static_cast<float>(v2.get<double>().value()), weather, code);
     }
 
     // cloudiness
     current["cloudcover"].tie(v2, error);
     if (!error && v2.is<int64_t>())
-      weather.setCloudiness(v2.get<int64_t>().value());
+      weather.setCloudiness(static_cast<int8_t>(v2.get<int64_t>().value()));
     // date of data update
     const auto dt = parseDateTime(doc);
     if (dt != std::chrono::time_point<std::chrono::system_clock>())

@@ -35,7 +35,7 @@ bool SimdJsonWeatherbit::parseSingleWeatherItem(const value_type& value, Weather
   auto [elem, error] = value["temp"];
   if (!error && elem.is<double>())
   {
-    const float celsiusRaw = elem.get<double>().value();
+    const float celsiusRaw = static_cast<float>(elem.get<double>().value());
     weather.setTemperatureCelsius(celsiusRaw);
     // Avoid values like 5.9999... °C by rounding, if appropriate.
     const float celsiusRounded = std::round(weather.temperatureCelsius());
@@ -43,14 +43,14 @@ bool SimdJsonWeatherbit::parseSingleWeatherItem(const value_type& value, Weather
     {
       weather.setTemperatureCelsius(celsiusRounded);
     }
-    weather.setTemperatureKelvin(celsiusRaw + 273.15);
+    weather.setTemperatureKelvin(celsiusRaw + 273.15f);
     // Avoid values like 280.9999... K by rounding, if appropriate.
     const float kelvinRounded = std::round(weather.temperatureKelvin());
     if (std::fabs(kelvinRounded - weather.temperatureKelvin()) < 0.005)
     {
       weather.setTemperatureKelvin(kelvinRounded);
     }
-    weather.setTemperatureFahrenheit(celsiusRaw * 1.8 + 32.0f);
+    weather.setTemperatureFahrenheit(static_cast<float>(celsiusRaw * 1.8 + 32.0));
     // Avoid values like 6.9999... ° F by rounding, if appropriate.
     const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
     if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
@@ -60,25 +60,25 @@ bool SimdJsonWeatherbit::parseSingleWeatherItem(const value_type& value, Weather
   }
   value["rh"].tie(elem, error);
   if (!error && elem.is<uint64_t>())
-    weather.setHumidity(elem.get<int64_t>().value());
+    weather.setHumidity(static_cast<int8_t>(elem.get<int64_t>().value()));
   value["precip"].tie(elem, error);
   if (!error && elem.is<double>())
-    weather.setRain(elem.get<double>().value());
+    weather.setRain(static_cast<float>(elem.get<double>().value()));
   value["snow"].tie(elem, error);
   if (!error && elem.is<double>())
-    weather.setSnow(elem.get<double>().value());
+    weather.setSnow(static_cast<float>(elem.get<double>().value()));
   value["pres"].tie(elem, error);
   if (!error && elem.is<double>())
     weather.setPressure(static_cast<int16_t>(elem.get<double>().value()));
   value["wind_spd"].tie(elem, error);
   if (!error && elem.is<double>())
-    weather.setWindSpeed(elem.get<double>().value());
+    weather.setWindSpeed(static_cast<float>(elem.get<double>().value()));
   value["wind_dir"].tie(elem, error);
   if (!error && elem.is<uint64_t>())
     weather.setWindDegrees(static_cast<int16_t>(elem.get<int64_t>().value()));
   value["clouds"].tie(elem, error);
   if (!error && elem.is<uint64_t>())
-      weather.setCloudiness(elem.get<int64_t>());
+      weather.setCloudiness(static_cast<int8_t>(elem.get<int64_t>()));
 
   value["ts"].tie(elem, error);
   if (!error && elem.is<double>())
