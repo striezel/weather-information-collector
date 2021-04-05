@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 #include "../conf/Configuration.hpp"
 #include "../db/mariadb/SourceMySQL.hpp"
 #include "../db/mariadb/StoreMySQL.hpp"
@@ -80,129 +81,139 @@ bool isLess(const wic::ForecastMeta& lhs, const wic::Forecast& rhs)
   return (lhs.requestTime() < rhs.requestTime());
 }
 
+std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& srcConfigurationFile, std::string& destConfigurationFile, int& batchSize, bool& skipUpdateCheck)
+{
+  if ((argc <= 1) || (argv == nullptr))
+    return std::make_pair(0, false);
+
+  for (int i = 1; i < argc; ++i)
+  {
+    if (argv[i] == nullptr)
+    {
+      std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
+      return std::make_pair(wic::rcInvalidParameter, true);
+    }
+    const std::string param(argv[i]);
+    if ((param == "-v") || (param == "--version"))
+    {
+      showVersion();
+      return std::make_pair(0, true);
+    } // if version
+    else if ((param == "-?") || (param == "/?") || (param == "--help"))
+    {
+      showHelp();
+      return std::make_pair(0, true);
+    } // if help
+    else if ((param == "--src-conf") || (param == "-c1"))
+    {
+      if (!srcConfigurationFile.empty())
+      {
+        std::cerr << "Error: Source configuration was already set to "
+                  << srcConfigurationFile << "!" << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      // enough parameters?
+      if ((i+1 < argc) && (argv[i+1] != nullptr))
+      {
+        srcConfigurationFile = std::string(argv[i+1]);
+        // Skip next parameter, because it's already used as file path.
+        ++i;
+      }
+      else
+      {
+        std::cerr << "Error: You have to enter a file path after \""
+                  << param << "\"." << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+    } // if source configuration file
+    else if ((param == "--dest-conf") || (param == "-c2"))
+    {
+      if (!destConfigurationFile.empty())
+      {
+        std::cerr << "Error: Destination configuration was already set to "
+                  << destConfigurationFile << "!" << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      // enough parameters?
+      if ((i+1 < argc) && (argv[i+1] != nullptr))
+      {
+        destConfigurationFile = std::string(argv[i+1]);
+        // Skip next parameter, because it's already used as file path.
+        ++i;
+      }
+      else
+      {
+        std::cerr << "Error: You have to enter a file path after \""
+                  << param << "\"." << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+    } // if destination configuration file
+    else if ((param == "--batch-size") || (param == "-b"))
+    {
+      if (batchSize >= 0)
+      {
+        std::cerr << "Error: Batch size was already set to "
+                  << batchSize << "!" << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      // enough parameters?
+      if ((i+1 < argc) && (argv[i+1] != nullptr))
+      {
+        const std::string bsString = std::string(argv[i+1]);
+        if (!wic::stringToInt(bsString, batchSize) || (batchSize <=0 ))
+        {
+          std::cerr << "Error: Batch size must be a positive integer!"
+                    << std::endl;
+          return std::make_pair(wic::rcInvalidParameter, true);
+        }
+        if (batchSize > 1000)
+        {
+          std::cout << "Info: Batch size " << batchSize << " will be reduced "
+                    << " to 1000, because too large batch sizes might cause "
+                    << "the database server to reject inserts." << std::endl;
+          batchSize = 1000;
+        }
+        // Skip next parameter, because it's already used as batch size.
+        ++i;
+      }
+      else
+      {
+        std::cerr << "Error: You have to enter a number after \""
+                  << param << "\"." << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+    } // if batch size
+    else if ((param == "--skip-update-check") || (param == "--no-update-check"))
+    {
+      if (skipUpdateCheck)
+      {
+        std::cerr << "Error: Parameter " << param << " was already specified!"
+                  << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      skipUpdateCheck = true;
+    } // if database update check shall be skipped
+    else
+    {
+      std::cerr << "Error: Unknown parameter " << param << "!\n"
+                << "Use --help to show available parameters." << std::endl;
+      return std::make_pair(wic::rcInvalidParameter, true);
+    }
+  } // for i
+
+  return std::make_pair(0, false);
+}
+
 int main(int argc, char** argv)
 {
   std::string srcConfigurationFile; /**< path of configuration file for source */
   std::string destConfigurationFile; /**< path of configuration file for destination */
   int batchSize = -1; /**< number of records per batch insert */
   bool skipUpdateCheck = false; /**< whether to skip check for up to date DB */
-  if ((argc > 1) && (argv != nullptr))
-  {
-    for (int i = 1; i < argc; ++i)
-    {
-      if (argv[i] == nullptr)
-      {
-        std::cerr << "Error: Parameter at index " << i << " is null pointer!\n";
-        return wic::rcInvalidParameter;
-      }
-      const std::string param(argv[i]);
-      if ((param == "-v") || (param == "--version"))
-      {
-        showVersion();
-        return 0;
-      } // if version
-      else if ((param == "-?") || (param == "/?") || (param == "--help"))
-      {
-        showHelp();
-        return 0;
-      } // if help
-      else if ((param == "--src-conf") || (param == "-c1"))
-      {
-        if (!srcConfigurationFile.empty())
-        {
-          std::cerr << "Error: Source configuration was already set to "
-                    << srcConfigurationFile << "!" << std::endl;
-          return wic::rcInvalidParameter;
-        }
-        // enough parameters?
-        if ((i+1 < argc) && (argv[i+1] != nullptr))
-        {
-          srcConfigurationFile = std::string(argv[i+1]);
-          // Skip next parameter, because it's already used as file path.
-          ++i;
-        }
-        else
-        {
-          std::cerr << "Error: You have to enter a file path after \""
-                    << param << "\"." << std::endl;
-          return wic::rcInvalidParameter;
-        }
-      } // if source configuration file
-      else if ((param == "--dest-conf") || (param == "-c2"))
-      {
-        if (!destConfigurationFile.empty())
-        {
-          std::cerr << "Error: Destination configuration was already set to "
-                    << destConfigurationFile << "!" << std::endl;
-          return wic::rcInvalidParameter;
-        }
-        // enough parameters?
-        if ((i+1 < argc) && (argv[i+1] != nullptr))
-        {
-          destConfigurationFile = std::string(argv[i+1]);
-          // Skip next parameter, because it's already used as file path.
-          ++i;
-        }
-        else
-        {
-          std::cerr << "Error: You have to enter a file path after \""
-                    << param << "\"." << std::endl;
-          return wic::rcInvalidParameter;
-        }
-      } // if destination configuration file
-      else if ((param == "--batch-size") || (param == "-b"))
-      {
-        if (batchSize >= 0)
-        {
-          std::cerr << "Error: Batch size was already set to "
-                    << batchSize << "!" << std::endl;
-          return wic::rcInvalidParameter;
-        }
-        // enough parameters?
-        if ((i+1 < argc) && (argv[i+1] != nullptr))
-        {
-          const std::string bsString = std::string(argv[i+1]);
-          if (!wic::stringToInt(bsString, batchSize) || (batchSize <=0 ))
-          {
-            std::cerr << "Error: Batch size must be a positive integer!"
-                      << std::endl;
-            return wic::rcInvalidParameter;
-          }
-          if (batchSize > 1000)
-          {
-            std::cout << "Info: Batch size " << batchSize << " will be reduced "
-                      << " to 1000, because too large batch sizes might cause "
-                      << "the database server to reject inserts." << std::endl;
-            batchSize = 1000;
-          }
-          // Skip next parameter, because it's already used as batch size.
-          ++i;
-        }
-        else
-        {
-          std::cerr << "Error: You have to enter a number after \""
-                    << param << "\"." << std::endl;
-          return wic::rcInvalidParameter;
-        }
-      } // if batch size
-      else if ((param == "--skip-update-check") || (param == "--no-update-check"))
-      {
-        if (skipUpdateCheck)
-        {
-          std::cerr << "Error: Parameter " << param << " was already specified!"
-                    << std::endl;
-          return wic::rcInvalidParameter;
-        }
-        skipUpdateCheck = true;
-      } // if database update check shall be skipped
-      else
-      {
-        std::cerr << "Error: Unknown parameter " << param << "!\n"
-                  << "Use --help to show available parameters." << std::endl;
-        return wic::rcInvalidParameter;
-      }
-    } // for i
-  } // if arguments are there
+
+  const auto [exitCode, forceExit] = parseArguments(argc, argv, srcConfigurationFile, destConfigurationFile, batchSize, skipUpdateCheck);
+  if (forceExit || (exitCode != 0))
+    return exitCode;
 
   if (srcConfigurationFile.empty())
   {
