@@ -55,7 +55,7 @@ jobs:
       - name: Install Debian packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y catch clang-10 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
+          sudo apt-get install -y catch clang-8 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
       - name: Build
         run: |
           export CXX=clang++-8
