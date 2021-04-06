@@ -1,0 +1,43 @@
+name: SonarCloud
+
+on: push
+
+jobs:
+  sonarcloud_ubuntu_20_04_gcc10:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+      - name: Install Debian packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y catch cmake g++-10 git libcurl4-gnutls-dev libmariadb-dev pkg-config unzip wget
+      - name: Prepare build
+        run: |
+          export CXX=g++-10
+          export CC=gcc-10
+          cd $GITHUB_WORKSPACE && pwd && ls -lah
+          mkdir build
+          cd build
+          cmake ../
+      - name: Download SonarCloud build wrapper
+        run: |
+          cd "$GITHUB_WORKSPACE"/build
+          wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+          unzip build-wrapper-linux-x86.zip
+          mv build-wrapper-linux-x86/* .
+      - name: SonarCloud build
+        run: |
+          cd "$GITHUB_WORKSPACE"/build
+          ./build-wrapper-linux-x86-64 --out-dir sc-output make -j4
+      - name: Setup sonarqube
+        uses: warchant/setup-sonar-scanner@v3
+      - name: Run sonarqube
+        env:
+          # to get access to secrets.SONAR_TOKEN, provide GITHUB_TOKEN
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: sonar-scanner
+             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+             -Dsonar.cfamily.build-wrapper-output=${{ github.workspace }}/build/sc-output
+             -Dsonar.verbose=false
+             -Dsonar.host.url=https://sonarcloud.io/
