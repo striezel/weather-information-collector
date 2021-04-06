@@ -161,7 +161,7 @@ bool UpdateTo083::updateWeatherData(const ConnectionInformation& ci)
       updates.emplace_back(ci);
     }
 
-    std::vector<unsigned int> startIndices;
+    std::vector<decltype(result.rowCount())> startIndices;
     for (unsigned int i = 0; i < threadsOfExecution; ++i)
     {
       startIndices.push_back(std::min(i * rows / threadsOfExecution, rows -1));
@@ -252,7 +252,7 @@ bool UpdateTo083::updateForecastData(const ConnectionInformation& ci)
       updates.emplace_back(ci);
     }
 
-    std::vector<unsigned int> startIndices;
+    std::vector<decltype(result.rowCount())> startIndices;
     for (unsigned int i = 0; i < threadsOfExecution; ++i)
     {
       startIndices.push_back(std::min(i * rows / threadsOfExecution, rows -1));

@@ -35,7 +35,7 @@ ForecastDataUpdate_083::ForecastDataUpdate_083(const ConnectionInformation& _ci)
 {
 }
 
-void ForecastDataUpdate_083::operator()(const unsigned int startIdx, const unsigned int endIdx, const std::map<int, ApiType>& id_to_type, const db::mariadb::Result& result)
+void ForecastDataUpdate_083::operator()(const std::size_t startIdx, const std::size_t endIdx, const std::map<int, ApiType>& id_to_type, const db::mariadb::Result& result)
 {
   m_failed = false;
   try
