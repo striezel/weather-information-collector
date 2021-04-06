@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,30 +80,31 @@ void weatherstackPrecipitationDistinction(const float amount, Weather& weather, 
          weather.setRain(0.5f * amount);
          weather.setSnow(0.5f * amount);
          return;
+    default:
+         // No known code.
+         // Second idea: If temperature is above zero, it is rain. Below zero it
+         // is snow, because water freezes at zero °C.
+         if (weather.temperatureCelsius() >= 0.0f)
+         {
+           weather.setRain(amount);
+           weather.setSnow(0.0f);
+         }
+         else if (weather.temperatureCelsius() < 0.0f)
+         {
+           weather.setRain(0.0f);
+           weather.setSnow(amount);
+         }
+         else
+         {
+           // Temperature (°C) is NaN, so let's have a guess and go with rain.
+           weather.setRain(amount);
+           if (amount == 0.0f)
+           {
+             weather.setSnow(0.0f);
+           }
+         }
+         return;
   } // switch
-
-  // No known code.
-  // Second idea: If temperature is above zero, it is rain. Below zero it
-  // is snow, because water freezes at zero °C.
-  if (weather.temperatureCelsius() >= 0.0f)
-  {
-    weather.setRain(amount);
-    weather.setSnow(0.0f);
-  }
-  else if (weather.temperatureCelsius() < 0.0f)
-  {
-    weather.setRain(0.0f);
-    weather.setSnow(amount);
-  }
-  else
-  {
-    // Temperature (°C) is NaN, so let's have a guess and go with rain.
-    weather.setRain(amount);
-    if (amount == 0.0f)
-    {
-      weather.setSnow(0.0f);
-    }
-  }
 }
 
 } // namespace
