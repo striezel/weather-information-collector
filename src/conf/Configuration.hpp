@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -149,6 +149,16 @@ class Configuration
      * \return Returns true, if file was loaded successfully.
      */
     bool loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed = false);
+
+
+    /** \brief Loads a single value from the core configuration.
+     *
+     * \param name    name of the configuration setting
+     * \param value   value of the setting
+     * \param fileName  file name of the configuration file
+     * \return Returns true, if setting was processed successfully.
+     */
+    bool loadCoreConfigurationValue(const std::string& name, const std::string& value, const std::string& fileName);
 
 
     /** \brief Finds the first existing task directory from a preset list.

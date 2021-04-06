@@ -189,6 +189,231 @@ void Configuration::findTaskDirectory(std::string& realName)
   } // for
 }
 
+bool Configuration::loadCoreConfigurationValue(const std::string& name, const std::string& value, const std::string& fileName)
+{
+  if (value.empty() && (name != "task.extension") && (name != "tasks.extension"))
+  {
+    // Only useful empty value is the file extension for task files (empty
+    // extension means all files are matched).
+    // Someone might have an "empty" database password, i.e. no password, but
+    // that is not really helpful, from a security standpoint. So there's no
+    // exception for that here.
+    std::cerr << "Error: Empty values are not allowed in configuration file "
+              << fileName << "!" << std::endl;
+    return false;
+  }
+
+  if ((name == "task.directory") || (name == "tasks.directory"))
+  {
+    if (!tasksDirectory.empty())
+    {
+      std::cerr << "Error: Tasks directory is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    tasksDirectory = value;
+  } // if tasks.directory
+  else if ((name == "task.extension") || (name == "tasks.extension"))
+  {
+    if (!tasksExtension.empty())
+    {
+      std::cerr << "Error: Task file extension is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    tasksExtension = value;
+  } // if tasks.extension
+  else if ((name == "db.host") || (name == "database.host"))
+  {
+    if (!connInfo.hostname().empty())
+    {
+      std::cerr << "Error: Database host name is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    connInfo.setHostname(value);
+  } // if db.host
+  else if ((name == "db.name") || (name == "database.name"))
+  {
+    if (!connInfo.db().empty())
+    {
+      std::cerr << "Error: Database name is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    connInfo.setDb(value);
+  } // if db.name
+  else if ((name == "db.user") || (name == "database.user"))
+  {
+    if (!connInfo.user().empty())
+    {
+      std::cerr << "Error: Database user is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    connInfo.setUser(value);
+  } // if db.user
+  else if ((name == "db.password") || (name == "database.password"))
+  {
+    if (!connInfo.password().empty())
+    {
+      std::cerr << "Error: Database password is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    connInfo.setPassword(value);
+  } // if db.password
+  else if ((name == "db.port") || (name == "database.port"))
+  {
+    if (connInfo.port() != 0)
+    {
+      std::cerr << "Error: Database port is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    int port = -1;
+    if (!stringToInt(value, port))
+    {
+      std::cerr << "Error: Port number in file " << fileName << " must be a "
+                << " positive integer!" << std::endl;
+      return false;
+    }
+    if ((port <= 0) || (port > 65535))
+    {
+      std::cerr << "Error: Port number in file " << fileName << " must be "
+                << " within the range [1;65535]!" << std::endl;
+      return false;
+    }
+    connInfo.setPort(static_cast<uint16_t>(port));
+  } // if db.port
+  else if ((name == "key.OpenWeatherMap") || (name == "key.owm") || (name == "key.openweathermap"))
+  {
+    if (!key(ApiType::OpenWeatherMap).empty())
+    {
+      std::cerr << "Error: API key for OpenWeatherMap is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    apiKeys[ApiType::OpenWeatherMap] = value;
+  } // if key.owm
+  else if ((name == "key.DarkSky") || (name == "key.darksky") || (name == "key.darkskynet"))
+  {
+    if (!key(ApiType::DarkSky).empty())
+    {
+      std::cerr << "Error: API key for DarkSky is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    apiKeys[ApiType::DarkSky] = value;
+  } // if key.darksky
+  else if ((name == "key.Weatherbit") || (name == "key.weatherbit"))
+  {
+    if (!key(ApiType::Weatherbit).empty())
+    {
+      std::cerr << "Error: API key for Weatherbit is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    apiKeys[ApiType::Weatherbit] = value;
+  } // if key.weatherbit
+  else if ((name == "key.weatherstack") || (name == "key.Weatherstack"))
+  {
+    if (!key(ApiType::Weatherstack).empty())
+    {
+      std::cerr << "Error: API key for Weatherstack is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    apiKeys[ApiType::Weatherstack] = value;
+  } // if key.weatherstack
+  else if ((name == "key.apixu") || (name == "key.Apixu"))
+  {
+    if (!key(ApiType::Apixu).empty())
+    {
+      std::cerr << "Error: API key for Apixu is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    apiKeys[ApiType::Apixu] = value;
+  } // if key.apixu
+  else if ((name == "plan.OpenWeatherMap") || (name == "plan.owm") || (name == "plan.openweathermap"))
+  {
+    if (planOpenWeatherMap() != PlanOwm::none)
+    {
+      std::cerr << "Error: Plan for OpenWeatherMap is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    const auto plan = toPlanOwm(value);
+    if (plan == PlanOwm::none)
+    {
+      std::cerr << "Error: \"" << value << "\" in file " << fileName
+                << " is not a recognized plan for OpenWeatherMap!" << std::endl;
+      std::cerr << "Hint: Recognized OpenWeatherMap plans are:" << std::endl
+                << "\t" << toString(PlanOwm::Free) << std::endl
+                << "\t" << toString(PlanOwm::Startup) << std::endl
+                << "\t" << toString(PlanOwm::Developer) << std::endl
+                << "\t" << toString(PlanOwm::Professional) << std::endl
+                << "\t" << toString(PlanOwm::Enterprise) << std::endl;
+      return false;
+    }
+    planOwm = plan;
+  } // if plan.owm
+  else if ((name == "plan.weatherbit") || (name == "plan.Weatherbit"))
+  {
+    if (planWeatherbit() != PlanWeatherbit::none)
+    {
+      std::cerr << "Error: Plan for Weatherbit is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    const auto plan = toPlanWeatherbit(value);
+    if (plan == PlanWeatherbit::none)
+    {
+      std::cerr << "Error: \"" << value << "\" in file " << fileName
+                << " is not a recognized plan for Weatherbit!" << std::endl;
+      std::cerr << "Hint: Recognized Weatherbit plans are:" << std::endl
+                << "\t" << toString(PlanWeatherbit::Free) << std::endl
+                << "\t" << toString(PlanWeatherbit::Starter) << std::endl
+                << "\t" << toString(PlanWeatherbit::Developer) << std::endl
+                << "\t" << toString(PlanWeatherbit::Advanced) << std::endl;
+      return false;
+    }
+    planWb = plan;
+  } // if plan.weatherbit
+  else if ((name == "plan.weatherstack") || (name == "plan.Weatherstack"))
+  {
+    if (planWeatherstack() != PlanWeatherstack::none)
+    {
+      std::cerr << "Error: Plan for Weatherstack is specified more than once in file "
+                << fileName << "!" << std::endl;
+      return false;
+    }
+    const auto plan = toPlanWeatherstack(value);
+    if (plan == PlanWeatherstack::none)
+    {
+      std::cerr << "Error: \"" << value << "\" in file " << fileName
+                << " is not a recognized plan for Weatherstack!" << std::endl;
+      std::cerr << "Hint: Recognized Weatherstack plans are:" << std::endl
+                << "\t" << toString(PlanWeatherstack::Free) << std::endl
+                << "\t" << toString(PlanWeatherstack::Standard) << std::endl
+                << "\t" << toString(PlanWeatherstack::Professional) << std::endl
+                << "\t" << toString(PlanWeatherstack::Business) << std::endl;
+      return false;
+    }
+    planWs = plan;
+  } // if plan.weatherstack
+  else
+  {
+    std::cerr << "Error while reading configuration file " << fileName
+              << ": There is no setting named \"" << name << "\"!" << std::endl;
+    return false;
+  } // else (unrecognized setting name)
+
+  // Success.
+  return true;
+}
+
 bool Configuration::loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed)
 {
   std::ifstream stream(fileName, std::ios_base::in | std::ios_base::binary);
@@ -224,224 +449,9 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
     std::string value = line.substr(sepPos);
     value.erase(0, 1);
     trim(value);
-    if (value.empty() && (name != "task.extension") && (name != "tasks.extension"))
-    {
-      // Only useful empty value is the file extension for task files (empty
-      // extension means all files are matched).
-      // Someone might have an "empty" database password, i.e. no password, but
-      // that is not really helpful, from a security standpoint. So there's no
-      // exception for that here.
-      std::cerr << "Error: Empty values are not allowed in configuration file "
-                << fileName << "!" << std::endl;
-      return false;
-    }
 
-    if ((name == "task.directory") || (name == "tasks.directory"))
-    {
-      if (!tasksDirectory.empty())
-      {
-        std::cerr << "Error: Tasks directory is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      tasksDirectory = value;
-    } // if tasks.directory
-    else if ((name == "task.extension") || (name == "tasks.extension"))
-    {
-      if (!tasksExtension.empty())
-      {
-        std::cerr << "Error: Task file extension is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      tasksExtension = value;
-    } // if tasks.extension
-    else if ((name == "db.host") || (name == "database.host"))
-    {
-      if (!connInfo.hostname().empty())
-      {
-        std::cerr << "Error: Database host name is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      connInfo.setHostname(value);
-    } // if db.host
-    else if ((name == "db.name") || (name == "database.name"))
-    {
-      if (!connInfo.db().empty())
-      {
-        std::cerr << "Error: Database name is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      connInfo.setDb(value);
-    } // if db.name
-    else if ((name == "db.user") || (name == "database.user") )
-    {
-      if (!connInfo.user().empty())
-      {
-        std::cerr << "Error: Database user is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      connInfo.setUser(value);
-    } // if db.user
-    else if ((name == "db.password") || (name == "database.password"))
-    {
-      if (!connInfo.password().empty())
-      {
-        std::cerr << "Error: Database password is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      connInfo.setPassword(value);
-    } // if db.password
-    else if ((name == "db.port") || (name == "database.port"))
-    {
-      if (connInfo.port() != 0)
-      {
-        std::cerr << "Error: Database port is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      int port = -1;
-      if (!stringToInt(value, port))
-      {
-        std::cerr << "Error: Port number in file " << fileName << " must be a "
-                  << " positive integer!" << std::endl;
-        return false;
-      }
-      if ((port <= 0) || (port > 65535))
-      {
-        std::cerr << "Error: Port number in file " << fileName << " must be "
-                  << " within the range [1;65535]!" << std::endl;
-        return false;
-      }
-      connInfo.setPort(static_cast<uint16_t>(port));
-    } // if db.port
-    else if ((name == "key.OpenWeatherMap") || (name == "key.owm") || (name == "key.openweathermap"))
-    {
-      if (!key(ApiType::OpenWeatherMap).empty())
-      {
-        std::cerr << "Error: API key for OpenWeatherMap is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      apiKeys[ApiType::OpenWeatherMap] = value;
-    } // if key.owm
-    else if ((name == "key.DarkSky") || (name == "key.darksky") || (name == "key.darkskynet"))
-    {
-      if (!key(ApiType::DarkSky).empty())
-      {
-        std::cerr << "Error: API key for DarkSky is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      apiKeys[ApiType::DarkSky] = value;
-    } // if key.darksky
-    else if ((name == "key.Weatherbit") || (name == "key.weatherbit"))
-    {
-      if (!key(ApiType::Weatherbit).empty())
-      {
-        std::cerr << "Error: API key for Weatherbit is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      apiKeys[ApiType::Weatherbit] = value;
-    } // if key.weatherbit
-    else if ((name == "key.weatherstack") || (name == "key.Weatherstack"))
-    {
-      if (!key(ApiType::Weatherstack).empty())
-      {
-        std::cerr << "Error: API key for Weatherstack is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      apiKeys[ApiType::Weatherstack] = value;
-    } // if key.weatherstack
-    else if ((name == "key.apixu") || (name == "key.Apixu"))
-    {
-      if (!key(ApiType::Apixu).empty())
-      {
-        std::cerr << "Error: API key for Apixu is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      apiKeys[ApiType::Apixu] = value;
-    } // if key.apixu
-    else if ((name == "plan.OpenWeatherMap") || (name == "plan.owm") || (name == "plan.openweathermap"))
-    {
-      if (planOpenWeatherMap() != PlanOwm::none)
-      {
-        std::cerr << "Error: Plan for OpenWeatherMap is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      const auto plan = toPlanOwm(value);
-      if (plan == PlanOwm::none)
-      {
-        std::cerr << "Error: \"" << value << "\" in file " << fileName
-                  << " is not a recognized plan for OpenWeatherMap!" << std::endl;
-        std::cerr << "Hint: Recognized OpenWeatherMap plans are:" << std::endl
-                  << "\t" << toString(PlanOwm::Free) << std::endl
-                  << "\t" << toString(PlanOwm::Startup) << std::endl
-                  << "\t" << toString(PlanOwm::Developer) << std::endl
-                  << "\t" << toString(PlanOwm::Professional) << std::endl
-                  << "\t" << toString(PlanOwm::Enterprise) << std::endl;
-        return false;
-      }
-      planOwm = plan;
-    } // if plan.owm
-    else if ((name == "plan.weatherbit") || (name == "plan.Weatherbit"))
-    {
-      if (planWeatherbit() != PlanWeatherbit::none)
-      {
-        std::cerr << "Error: Plan for Weatherbit is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      const auto plan = toPlanWeatherbit(value);
-      if (plan == PlanWeatherbit::none)
-      {
-        std::cerr << "Error: \"" << value << "\" in file " << fileName
-                  << " is not a recognized plan for Weatherbit!" << std::endl;
-        std::cerr << "Hint: Recognized Weatherbit plans are:" << std::endl
-                  << "\t" << toString(PlanWeatherbit::Free) << std::endl
-                  << "\t" << toString(PlanWeatherbit::Starter) << std::endl
-                  << "\t" << toString(PlanWeatherbit::Developer) << std::endl
-                  << "\t" << toString(PlanWeatherbit::Advanced) << std::endl;
-        return false;
-      }
-      planWb = plan;
-    } // if plan.weatherbit
-    else if ((name == "plan.weatherstack") || (name == "plan.Weatherstack"))
-    {
-      if (planWeatherstack() != PlanWeatherstack::none)
-      {
-        std::cerr << "Error: Plan for Weatherstack is specified more than once in file "
-                  << fileName << "!" << std::endl;
-        return false;
-      }
-      const auto plan = toPlanWeatherstack(value);
-      if (plan == PlanWeatherstack::none)
-      {
-        std::cerr << "Error: \"" << value << "\" in file " << fileName
-                  << " is not a recognized plan for Weatherstack!" << std::endl;
-        std::cerr << "Hint: Recognized Weatherstack plans are:" << std::endl
-                  << "\t" << toString(PlanWeatherstack::Free) << std::endl
-                  << "\t" << toString(PlanWeatherstack::Standard) << std::endl
-                  << "\t" << toString(PlanWeatherstack::Professional) << std::endl
-                  << "\t" << toString(PlanWeatherstack::Business) << std::endl;
-        return false;
-      }
-      planWs = plan;
-    } // if plan.weatherstack
-    else
-    {
-      std::cerr << "Error while reading configuration file " << fileName
-                << ": There is no setting named \"" << name << "\"!" << std::endl;
+    if (!loadCoreConfigurationValue(name, value, fileName))
       return false;
-    } // else (unrecognized setting name)
   } // while
 
   // Set database port to default for MySQL, if it has not been set yet.
