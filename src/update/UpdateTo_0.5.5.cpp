@@ -131,7 +131,7 @@ bool UpdateTo055::updateData(const ConnectionInformation& ci)
              continue;
       } // switch
       Weather w;
-      const unsigned int dataId = row.getInt64(0);
+      const uint32_t dataId = static_cast<uint32_t>(row.getInt64(0));
       if (!api->parseCurrentWeather(row[2].c_str(), w))
       {
         std::cerr << "Error: Could not parse JSON data for data ID " << dataId

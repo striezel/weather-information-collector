@@ -66,7 +66,7 @@ void WeatherDataUpdate_083::operator()(const unsigned int startIdx, const unsign
              continue;
       } // switch
       Weather w;
-      const uint_least32_t dataId = result.row(i).getInt64(0); // dataID is first field
+      const uint32_t dataId = static_cast<uint32_t>(result.row(i).getInt64(0)); // dataID is first field
       if (!api->parseCurrentWeather(result.row(i).column(2), w)) // json is third field
       {
         std::cerr << "Error: Could not parse JSON data for data ID " << dataId

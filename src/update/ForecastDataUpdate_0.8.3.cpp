@@ -68,7 +68,7 @@ void ForecastDataUpdate_083::operator()(const unsigned int startIdx, const unsig
              continue;
       } // switch
       Forecast fc;
-      const uint_least32_t dataId = result.row(i).getInt64(1); // dataID is second field
+      const uint32_t dataId = static_cast<uint32_t>(result.row(i).getInt64(1)); // dataID is second field
       if (!api->parseForecast(result.row(i).column(3), fc)) // json is fourth field
       {
         std::cerr << "Error: Could not parse JSON data for data ID " << dataId
@@ -78,8 +78,8 @@ void ForecastDataUpdate_083::operator()(const unsigned int startIdx, const unsig
       }
       const auto dataTime = result.row(i).getDateTime(2); // dataTime is third field
       // Find proper weather entry.
-      unsigned int idx = fc.data().size();
-      for (unsigned int i = 0; i < fc.data().size(); ++i)
+      auto idx = fc.data().size();
+      for (std::vector<Weather>::size_type i = 0; i < fc.data().size(); ++i)
       {
         if (dataTime == fc.data()[i].dataTime())
         {
