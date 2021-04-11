@@ -27,7 +27,7 @@
 #else
 #include "../json/NLohmannJsonOwm.hpp"
 #endif // __SIZEOF_INT128__
-#include "../net/Curly.hpp"
+#include "../net/Request.hpp"
 #endif // wic_owm_find_location
 #ifndef wic_no_json_parsing
 #ifdef __SIZEOF_INT128__
@@ -37,7 +37,7 @@
 #endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
-#include "../net/Curly.hpp"
+#include "../net/Request.hpp"
 #endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
@@ -116,32 +116,13 @@ bool OpenWeatherMap::currentWeather(const Location& location, Weather& weather)
     return false;
   const std::string url = "https://api.openweathermap.org/data/2.5/weather?appid="
                         + m_apiKey + "&" + toRequestString(location);
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    weather.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in OpenWeatherMap::currentWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
+  weather.setRequestTime(std::chrono::system_clock::now());
+  const auto response = Request::get(url, "OpenWeatherMap::currentWeather");
+  if (!response.has_value())
+    return false;
 
   // Parsing is done here.
-  return parseCurrentWeather(response, weather);
+  return parseCurrentWeather(response.value(), weather);
 }
 
 bool OpenWeatherMap::forecastWeather(const Location& location, Forecast& forecast)
@@ -151,32 +132,13 @@ bool OpenWeatherMap::forecastWeather(const Location& location, Forecast& forecas
     return false;
   const std::string url = "https://api.openweathermap.org/data/2.5/forecast?appid="
                         + m_apiKey + "&" + toRequestString(location);
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    forecast.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in OpenWeatherMap::forecastWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
+  forecast.setRequestTime(std::chrono::system_clock::now());
+  const auto response = Request::get(url, "OpenWeatherMap::forecastWeather");
+  if (!response.has_value())
+    return false;
 
   // Parsing is done here.
-  return parseForecast(response, forecast);
+  return parseForecast(response.value(), forecast);
 }
 
 bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
@@ -221,30 +183,14 @@ bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair
     return false;
 
   const std::string url = "https://api.openweathermap.org/data/2.5/find?q=" + urlEncode(name) + "&appid=" + m_apiKey;
-  Curly curly;
-  curly.setURL(url);
-  std::string response;
-  if (!curly.perform(response))
-  {
+  const auto response = Request::get(url, "OpenWeatherMap::findLocation");
+  if (!response.has_value())
     return false;
-  }
-  if (curly.getResponseCode() != 200)
-  {
-    std::cerr << "Error in OpenWeatherMap::findLocation(): Unexpected HTTP status code "
-              << curly.getResponseCode() << "!" << std::endl;
-    const auto & rh = curly.responseHeaders();
-    std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-    for (const auto & s : rh)
-    {
-      std::cerr << "    " << s << std::endl;
-    }
-    return false;
-  }
 
 #ifdef __SIZEOF_INT128__
-  return SimdJsonOwm::parseLocations(response, locations);
+  return SimdJsonOwm::parseLocations(response.value(), locations);
 #else
-  return NLohmannJsonOwm::parseLocations(response, locations);
+  return NLohmannJsonOwm::parseLocations(response.value(), locations);
 #endif
 }
 #endif // wic_owm_find_location

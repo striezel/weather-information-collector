@@ -30,6 +30,7 @@ set(weather-information-collector_sources
     ../json/ApixuFunctions.cpp
     ../json/WeatherstackFunctions.cpp
     ../net/Curly.cpp
+    ../net/Request.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
     ../util/Directories.cpp

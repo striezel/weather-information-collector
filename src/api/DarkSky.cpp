@@ -29,7 +29,7 @@
 #endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
-#include "../net/Curly.hpp"
+#include "../net/Request.hpp"
 #endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
@@ -97,32 +97,13 @@ bool DarkSky::currentWeather(const Location& location, Weather& weather)
   const std::string url = "https://api.darksky.net/forecast/" + m_apiKey
                         + "/" + toRequestString(location) + "?units=si"
                         + "&exclude=minutely";
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    weather.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in DarkSky::currentWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
+  weather.setRequestTime(std::chrono::system_clock::now());
+  const auto response = Request::get(url, "DarkSky::currentWeather");
+  if (!response.has_value())
+    return false;
 
   // Parsing is done here.
-  return parseCurrentWeather(response, weather);
+  return parseCurrentWeather(response.value(), weather);
 }
 
 bool DarkSky::forecastWeather(const Location& location, Forecast& forecast)
@@ -133,32 +114,13 @@ bool DarkSky::forecastWeather(const Location& location, Forecast& forecast)
   const std::string url = "https://api.darksky.net/forecast/" + m_apiKey
                         + "/" + toRequestString(location) + "?units=si"
                         + "&exclude=minutely";
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    forecast.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in DarkSky::forecastWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
+  forecast.setRequestTime(std::chrono::system_clock::now());
+  const auto response = Request::get(url, "DarkSky::forecastWeather");
+  if (!response.has_value())
+    return false;
 
   // Parsing is done in another method.
-  return parseForecast(response, forecast);
+  return parseForecast(response.value(), forecast);
 }
 
 bool DarkSky::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
@@ -170,35 +132,16 @@ bool DarkSky::currentAndForecastWeather(const Location& location, Weather& weath
   const std::string url = "https://api.darksky.net/forecast/" + m_apiKey
                         + "/" + toRequestString(location) + "?units=si"
                         + "&exclude=minutely";
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    forecast.setRequestTime(std::chrono::system_clock::now());
-    weather.setRequestTime(forecast.requestTime());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in DarkSky::currentAndForecastWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
+  forecast.setRequestTime(std::chrono::system_clock::now());
+  weather.setRequestTime(forecast.requestTime());
+  const auto response = Request::get(url, "DarkSky::currentAndForecastWeather");
+  if (!response.has_value())
+    return false;
 
   // Parse current weather and forecast with the already existing functions.
-  if (!parseCurrentWeather(response, weather))
+  if (!parseCurrentWeather(response.value(), weather))
     return false;
-  return parseForecast(response, forecast);
+  return parseForecast(response.value(), forecast);
 }
 #endif // wic_no_network_requests
 

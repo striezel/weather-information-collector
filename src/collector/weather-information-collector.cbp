@@ -119,6 +119,8 @@
 		<Unit filename="../json/WeatherstackFunctions.hpp" />
 		<Unit filename="../net/Curly.cpp" />
 		<Unit filename="../net/Curly.hpp" />
+		<Unit filename="../net/Request.cpp" />
+		<Unit filename="../net/Request.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />
@@ -135,9 +137,6 @@
 		<Unit filename="Collector.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

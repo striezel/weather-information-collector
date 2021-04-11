@@ -28,7 +28,7 @@
 #endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
-#include "../net/Curly.hpp"
+#include "../net/Request.hpp"
 #endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
@@ -101,31 +101,12 @@ bool Weatherstack::currentWeather(const Location& location, Weather& weather)
           ? "http://api.weatherstack.com/current?access_key="
           : "https://api.weatherstack.com/current?access_key=")
                   + m_apiKey + "&" + toRequestString(location);
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
+  weather.setRequestTime(std::chrono::system_clock::now());
+  const auto response = Request::get(url, "Weatherstack::currentWeather");
+  if (!response.has_value())
+    return false;
 
-    weather.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in Weatherstack::currentWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
-
-  return parseCurrentWeather(response, weather);
+  return parseCurrentWeather(response.value(), weather);
 }
 
 bool Weatherstack::forecastWeather(const Location& location, Forecast& forecast)

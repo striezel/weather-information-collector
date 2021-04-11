@@ -29,7 +29,7 @@
 #endif
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
-#include "../net/Curly.hpp"
+#include "../net/Request.hpp"
 #endif // wic_no_network_requests
 #include "../util/Strings.hpp"
 
@@ -132,32 +132,13 @@ bool Weatherbit::currentWeather(const Location& location, Weather& weather)
                         // Use the metric system, because we don't want any quarter pounder with cheese today.
                         + std::string("&units=M")
                         + "&" + toRequestString(location);
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    weather.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in Weatherbit::currentWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
+  weather.setRequestTime(std::chrono::system_clock::now());
+  const auto response = Request::get(url, "Weatherbit::currentWeather");
+  if (!response.has_value())
+    return false;
 
   // Parsing is done here.
-  return parseCurrentWeather(response, weather);
+  return parseCurrentWeather(response.value(), weather);
 }
 
 bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
@@ -190,32 +171,13 @@ bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
                + "&" + toRequestString(location);
          break;
   }
-  std::string response;
-  {
-    Curly curly;
-    curly.setURL(url);
-
-    forecast.setRequestTime(std::chrono::system_clock::now());
-    if (!curly.perform(response))
-    {
-      return false;
-    }
-    if (curly.getResponseCode() != 200)
-    {
-      std::cerr << "Error in Weatherbit::forecastWeather(): Unexpected HTTP status code "
-                << curly.getResponseCode() << "!" << std::endl;
-      const auto & rh = curly.responseHeaders();
-      std::cerr << "HTTP response headers (" << rh.size() << "):" << std::endl;
-      for (const auto & s : rh)
-      {
-        std::cerr << "    " << s << std::endl;
-      }
-      return false;
-    }
-  } // scope of curly
+  forecast.setRequestTime(std::chrono::system_clock::now());
+  const auto response = Request::get(url, "Weatherbit::forecastWeather");
+  if (!response.has_value())
+    return false;
 
   // Parsing is done in another method.
-  return parseForecast(response, forecast);
+  return parseForecast(response.value(), forecast);
 }
 
 bool Weatherbit::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
