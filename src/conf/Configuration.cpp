@@ -469,18 +469,16 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
   }
 
   // Only check key presence, if missing keys are not allowed.
-  if (!missingKeysAllowed)
-  {
+  if (!missingKeysAllowed
     // If there are no API keys, then the collector won't be able to collect
     // information later on.
-    if (apiKeys.empty())
-    {
-      std::cerr << "Error: There are no API keys in configuration file "
-                << fileName << ", and thus the weather-information-collector "
-                << "will not be able to work properly." << std::endl;
-      return false;
-    } // if keys are missing
-  } // if keys must be present
+    && apiKeys.empty())
+  {
+    std::cerr << "Error: There are no API keys in configuration file "
+              << fileName << ", and thus the weather-information-collector "
+              << "will not be able to work properly." << std::endl;
+    return false;
+  } // if keys must be present, but keys are missing
 
   // For backwards compatibility with configuration files from version 0.9.8 and
   // earlier the unset plans are assumed to be free plans.
