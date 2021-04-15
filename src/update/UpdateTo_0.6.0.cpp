@@ -35,8 +35,7 @@ bool UpdateTo060::perform(const ConnectionInformation& ci) noexcept
 
 bool UpdateTo060::updateData(const ConnectionInformation& ci) noexcept
 {
-  const int id = db::API::getId(ci, ApiType::DarkSky);
-  if (id > 0)
+  if (db::API::getId(ci, ApiType::DarkSky) > 0)
   {
     // Nothing to do here.
     std::cout << "Info: API entry for DarkSky already exists." << std::endl;

@@ -160,7 +160,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& sr
       if ((i+1 < argc) && (argv[i+1] != nullptr))
       {
         const std::string bsString = std::string(argv[i+1]);
-        if (!wic::stringToInt(bsString, batchSize) || (batchSize <=0 ))
+        if (!wic::stringToInt(bsString, batchSize) || (batchSize <= 0))
         {
           std::cerr << "Error: Batch size must be a positive integer!"
                     << std::endl;

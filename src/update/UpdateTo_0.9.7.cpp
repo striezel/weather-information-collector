@@ -32,8 +32,7 @@ bool UpdateTo097::perform(const ConnectionInformation& ci) noexcept
 
 bool UpdateTo097::updateData(const ConnectionInformation& ci) noexcept
 {
-  const int id = db::API::getId(ci, ApiType::Weatherstack);
-  if (id > 0)
+  if (db::API::getId(ci, ApiType::Weatherstack) > 0)
   {
     // Nothing to do here.
     std::cout << "Info: API entry for Weatherstack already exists." << std::endl;

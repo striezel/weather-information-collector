@@ -217,7 +217,7 @@ int main(int argc, char** argv)
                 << "new task was active." << std::endl;
       return wic::rcTasksExceedApiRequestLimit;
     }
-    if (!currentWithinLimits)
+    else
     {
       std::cout << "WARNING: The API requests limits would be exceeded, if the"
                 << " new task was active. However, the limits are already "
@@ -226,8 +226,7 @@ int main(int argc, char** argv)
     }
   }
   std::cout << "Checking for duplicate and overlapping tasks ...";
-  const bool newHasDuplicates = wic::TaskManager::hasDuplicates(newTasks, true);
-  if (!newHasDuplicates)
+  if (!wic::TaskManager::hasDuplicates(newTasks, true))
   {
     std::cout << " OK." << std::endl;
   }

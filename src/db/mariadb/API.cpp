@@ -43,8 +43,7 @@ int API::getId(const mariadb::Connection& conn, const ApiType type)
   // get API id
   const std::string apiName = toString(type);
   const std::string query = "SELECT apiID FROM api WHERE name=" + conn.quote(apiName) + " LIMIT 1";
-  const int ret = mysql_real_query(conn.raw(), query.c_str(), query.length());
-  if (ret != 0)
+  if (mysql_real_query(conn.raw(), query.c_str(), query.length()) != 0)
   {
     std::cerr << "Error: SQL query failed! " << mysql_error(conn.raw()) << std::endl;
     return -1;

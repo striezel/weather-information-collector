@@ -130,8 +130,7 @@ Result Connection::query(const std::string& sql)
   if (sql.empty())
     return Result();
 
-  const int ret = mysql_real_query(conn, sql.c_str(), sql.length());
-  if (ret != 0)
+  if (mysql_real_query(conn, sql.c_str(), sql.length()) != 0)
   {
     std::cerr << "Error: SQL query failed! " << mysql_error(conn) << std::endl;
     return Result();
@@ -196,8 +195,7 @@ Result Connection::query(const std::string& sql)
 
 long long int Connection::exec(const std::string& sql)
 {
-  const int ret = mysql_real_query(conn, sql.c_str(), sql.length());
-  if (ret != 0)
+  if (mysql_real_query(conn, sql.c_str(), sql.length()) != 0)
   {
     std::cerr << "Error: SQL query failed! " << mysql_error(conn) << std::endl;
     return -1;

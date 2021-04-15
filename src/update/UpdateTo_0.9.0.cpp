@@ -164,8 +164,7 @@ bool UpdateTo090::updateStructure(const ConnectionInformation& ci) noexcept
 
 bool UpdateTo090::updateData(const ConnectionInformation& ci) noexcept
 {
-  const int id = db::API::getId(ci, ApiType::Weatherbit);
-  if (id > 0)
+  if (db::API::getId(ci, ApiType::Weatherbit) > 0)
   {
     // Nothing to do here.
     std::cout << "Info: API entry for Weatherbit already exists." << std::endl;
