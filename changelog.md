@@ -2,7 +2,8 @@
 
 ## Version 0.9.16 (2021-04-??)
 
-Parser errors will now show more information why JSON parsing failed.
+- Parser errors will now show more information why JSON parsing failed.
+- A potential error with finding the user's home directory has been fixed.
 
 ## Version 0.9.15 (2020-11-11)
 
