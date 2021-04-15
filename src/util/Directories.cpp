@@ -54,7 +54,7 @@ bool getHome(std::string& result)
     // return zero, if no matching entry is found. In that case, the pointer is
     // set to null.
     if ((getpwuid_r(getuid(), &info, buffer, buf_size, &pwd_ptr) != 0)
-        || (pwd_ptr = nullptr))
+        || (pwd_ptr == nullptr))
     {
       // getpwuid_r() failed or found not matching entry.
       delete [] buffer;
