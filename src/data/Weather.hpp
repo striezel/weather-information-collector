@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <chrono>
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace wic
 {
@@ -333,7 +334,7 @@ class Weather
      *
      * \param newJson  the new JSON data
      */
-    void setJson(const std::string& newJson);
+    void setJson(const std::string_view newJson);
 
     #ifdef wic_weather_comparison
     /** \brief Equality operator for Weather class.

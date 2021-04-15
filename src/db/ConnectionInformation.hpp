@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace wic
 {
@@ -64,7 +65,7 @@ class ConnectionInformation
      *
      * \param host  the new hostname
      */
-    void setHostname(const std::string& host);
+    void setHostname(const std::string_view host);
 
 
     /** \brief Gets the database name.
@@ -78,7 +79,7 @@ class ConnectionInformation
      *
      * \param database  the new database name
      */
-    void setDb(const std::string& database);
+    void setDb(const std::string_view database);
 
 
     /** \brief Gets the name of the database user.
@@ -92,7 +93,7 @@ class ConnectionInformation
      *
      * \param username  the new user
      */
-    void setUser(const std::string& username);
+    void setUser(const std::string_view username);
 
 
     /** \brief Gets the password for the database user.
@@ -106,7 +107,7 @@ class ConnectionInformation
      *
      * \param pw  the new password
      */
-    void setPassword(const std::string& pw);
+    void setPassword(const std::string_view pw);
 
 
     /** \brief Gets the port of the database server.

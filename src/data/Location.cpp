@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ const std::string& Location::name() const
   return m_name;
 }
 
-void Location::setName(const std::string& newName)
+void Location::setName(const std::string_view newName)
 {
   m_name = newName;
 }
@@ -92,7 +92,7 @@ const std::string& Location::countryCode() const
   return m_countryCode;
 }
 
-void Location::setCountryCode(const std::string& newIso3166Code)
+void Location::setCountryCode(const std::string_view newIso3166Code)
 {
   // Limit country code to two characters before assignment happens.
   m_countryCode = newIso3166Code.substr(0, 2);
@@ -108,7 +108,7 @@ const std::string& Location::postcode() const
   return m_postcode;
 }
 
-void Location::setPostcode(const std::string& newPostcode)
+void Location::setPostcode(const std::string_view newPostcode)
 {
   m_postcode = newPostcode;
 }

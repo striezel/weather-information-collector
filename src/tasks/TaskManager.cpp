@@ -51,13 +51,11 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
     if (line.empty() || line[0] == commentCharacter)
       continue;
 
-    // check for possible carriage return at end (happens on Windows systems)
-    if (!line.empty())
+    // Check for possible carriage return at end (happens on Windows systems)
+    // and remove it. Line is guaranteed to be not empty, due to previous check.
+    if (line.at(line.length() - 1) == '\r')
     {
-      if (line.at(line.length() - 1) == '\r')
-      {
-        line.erase(line.length() - 1);
-      } // if
+      line.erase(line.length() - 1);
     }
 
     const auto sepPos = line.find('=');

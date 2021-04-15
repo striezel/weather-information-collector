@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ const std::string& ConnectionInformation::hostname() const
   return db_host;
 }
 
-void ConnectionInformation::setHostname(const std::string& host)
+void ConnectionInformation::setHostname(const std::string_view host)
 {
   db_host = host;
 }
@@ -58,7 +58,7 @@ const std::string& ConnectionInformation::db() const
   return db_name;
 }
 
-void ConnectionInformation::setDb(const std::string& database)
+void ConnectionInformation::setDb(const std::string_view database)
 {
   db_name = database;
 }
@@ -68,7 +68,7 @@ const std::string& ConnectionInformation::user() const
   return db_user;
 }
 
-void ConnectionInformation::setUser(const std::string& username)
+void ConnectionInformation::setUser(const std::string_view username)
 {
   db_user = username;
 }
@@ -78,7 +78,7 @@ const std::string& ConnectionInformation::password() const
   return db_pass;
 }
 
-void ConnectionInformation::setPassword(const std::string& pw)
+void ConnectionInformation::setPassword(const std::string_view pw)
 {
   db_pass = pw;
 }

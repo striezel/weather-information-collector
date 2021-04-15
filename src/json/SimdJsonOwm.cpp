@@ -231,7 +231,7 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
       loc.setOwmId(static_cast<uint32_t>(val.get<uint64_t>()));
     elem["name"].tie(val, err);
     if (!err && val.is<std::string_view>())
-      loc.setName(std::string(val.get<std::string_view>().value()));
+      loc.setName(val.get<std::string_view>().value());
     const auto [coord, errorCoord] = elem["coord"];
     if (!errorCoord && coord.type() == simdjson::dom::element_type::OBJECT)
     {
@@ -253,7 +253,7 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
     {
       const auto [country, errCountry] = val["country"];
       if (!errCountry && country.is<std::string_view>())
-        loc.setCountryCode(std::string(country.get<std::string_view>().value()));
+        loc.setCountryCode(country.get<std::string_view>().value());
     }
     Weather w;
     if (!SimdJsonOwm::parseSingleWeatherItem(elem, w))

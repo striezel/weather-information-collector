@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019  Dirk Stolle
+    Copyright (C) 2018, 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ const std::string& Forecast::json() const
   return m_json;
 }
 
-void Forecast::setJson(const std::string& newJson)
+void Forecast::setJson(const std::string_view newJson)
 {
   m_json = newJson;
 }

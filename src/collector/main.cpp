@@ -193,7 +193,7 @@ int main(int argc, char** argv)
       }
       if (currentVersion < wic::mostUpToDateVersion)
       {
-        const auto ci = config.connectionInfo();
+        const auto& ci = config.connectionInfo();
         std::cerr << "Error: The database " << ci.db() << " at " << ci.hostname()
                   << ":" << ci.port() << " seems to be from an older version of"
                   << " weather-information-collector. Please run "

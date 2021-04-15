@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace wic
 {
@@ -103,7 +104,7 @@ class Location
      *
      * \param newName  the new name of the location
      */
-    void setName(const std::string& newName);
+    void setName(const std::string_view newName);
 
 
     /** \brief Checks whether the location has a name.
@@ -128,7 +129,7 @@ class Location
      * \param newIso3166Code  the new ISO 3166 ALPHA-2 country code of the location
      * \remarks The code has to be the ISO 3166 ALPHA-2 two letter country code.
      */
-    void setCountryCode(const std::string& newIso3166Code);
+    void setCountryCode(const std::string_view newIso3166Code);
 
 
     /** \brief Checks whether the location has a country code.
@@ -151,7 +152,7 @@ class Location
      *
      * \param newPostcode  the new postcode of the location
      */
-    void setPostcode(const std::string& newPostcode);
+    void setPostcode(const std::string_view newPostcode);
 
 
     /** \brief Checks whether the location has a postcode.

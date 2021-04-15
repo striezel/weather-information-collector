@@ -112,7 +112,7 @@ int_least32_t Collector::nextIndex() const
       minIndex = i;
     }
   } // for
-  return minIndex;
+  return static_cast<int_least32_t>(minIndex);
 }
 
 void Collector::collect()

@@ -254,7 +254,7 @@ const std::string& Weather::json() const
   return m_json;
 }
 
-void Weather::setJson(const std::string& newJson)
+void Weather::setJson(const std::string_view newJson)
 {
   m_json = newJson;
 }
