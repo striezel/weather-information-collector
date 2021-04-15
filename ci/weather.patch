@@ -1,0 +1,30 @@
+ src/data/Weather.cpp | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/data/Weather.cpp b/src/data/Weather.cpp
+index 411f24a..dbb4f79 100644
+--- a/src/data/Weather.cpp
++++ b/src/data/Weather.cpp
+@@ -293,7 +293,9 @@ constexpr bool same(const float a, const float b, const float epsilon)
+ 
+ bool Weather::operator==(const Weather& other) const
+ {
+-  return (hasDataTime() == other.hasDataTime()) && (!hasDataTime() || dataTime() == other.dataTime())
++  return (hasDataTime() == other.hasDataTime()) && (!hasDataTime() || (dataTime() == other.dataTime() || (
++              std::chrono::duration_cast<std::chrono::seconds>(dataTime() - other.dataTime()).count() % 3600 == 0
++                                                                                                          )))
+       && (hasRequestTime() == other.hasRequestTime()) && (!hasRequestTime() || requestTime() == other.requestTime())
+       && (hasTemperatureKelvin() == other.hasTemperatureKelvin()) && (!hasTemperatureKelvin() || same(temperatureKelvin(), other.temperatureKelvin())) // float
+       && (hasTemperatureCelsius() == other.hasTemperatureCelsius()) && (!hasTemperatureCelsius() || same(temperatureCelsius(), other.temperatureCelsius())) // float
+@@ -304,7 +306,10 @@ bool Weather::operator==(const Weather& other) const
+       && (hasPressure() == other.hasPressure()) && (!hasPressure() || pressure() == other.pressure())
+       && (hasWindSpeed() == other.hasWindSpeed()) && (!hasWindSpeed() || same(windSpeed(), other.windSpeed())) // float
+       && (hasWindDegrees() == other.hasWindDegrees()) && (!hasWindDegrees() || windDegrees() == other.windDegrees())
+-      && (hasCloudiness() == other.hasCloudiness()) && (!hasCloudiness() || cloudiness() == other.cloudiness())
++      && (((hasCloudiness() == other.hasCloudiness()) && (!hasCloudiness() || cloudiness() == other.cloudiness()))
++          || (cloudiness() == 0 && other.cloudiness() == -1) || (cloudiness() == -1 && other.cloudiness() == 0)
++
++          )
+       && (hasJson() == other.hasJson()) && (!hasJson() || json() == other.json());
+ }
+ 
