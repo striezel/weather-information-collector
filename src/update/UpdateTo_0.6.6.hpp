@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ class UpdateTo066
      * \return Returns true, if the update was successful.
      *         Returns false otherwise.
      */
-    static bool perform(const ConnectionInformation& ci);
+    static bool perform(const ConnectionInformation& ci) noexcept;
 
 
     /** \brief Performs the database structure changes of the update.
@@ -58,7 +58,7 @@ class UpdateTo066
      *         Returns 0, if no update was necessary.
      *         Returns -1, if an error occurred.
      */
-    static int updateStructure(const ConnectionInformation& ci);
+    static int updateStructure(const ConnectionInformation& ci) noexcept;
 
 
     /** \brief Performs the data changes of the update.
@@ -67,7 +67,7 @@ class UpdateTo066
      * \return Returns true, if the update was successful.
      *         Returns false otherwise.
      */
-    static bool updateData(const ConnectionInformation& ci);
+    static bool updateData(const ConnectionInformation& ci) noexcept;
 }; // class
 
 } // namespace

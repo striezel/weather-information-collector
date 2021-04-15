@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@
 namespace wic
 {
 
-bool UpdateTo070::perform(const ConnectionInformation& ci)
+bool UpdateTo070::perform(const ConnectionInformation& ci) noexcept
 {
   if (!updateStructure(ci))
     return false;
   return updateData(ci);
 }
 
-bool UpdateTo070::updateStructure(const ConnectionInformation& ci)
+bool UpdateTo070::updateStructure(const ConnectionInformation& ci) noexcept
 {
   if (Structure::tableExists(ci, "forecast"))
   {
@@ -126,7 +126,7 @@ bool UpdateTo070::updateStructure(const ConnectionInformation& ci)
   return true;
 }
 
-bool UpdateTo070::updateData(const ConnectionInformation& ci)
+bool UpdateTo070::updateData(const ConnectionInformation& ci) noexcept
 {
   try
   {

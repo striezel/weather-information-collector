@@ -33,14 +33,14 @@
 namespace wic
 {
 
-bool UpdateTo055::perform(const ConnectionInformation& ci)
+bool UpdateTo055::perform(const ConnectionInformation& ci) noexcept
 {
   if (!updateStructure(ci))
     return false;
   return updateData(ci);
 }
 
-bool UpdateTo055::updateStructure(const ConnectionInformation& ci)
+bool UpdateTo055::updateStructure(const ConnectionInformation& ci) noexcept
 {
   if (!Structure::tableExists(ci, "weatherdata"))
   {
@@ -73,7 +73,7 @@ bool UpdateTo055::updateStructure(const ConnectionInformation& ci)
   }
 }
 
-bool UpdateTo055::updateData(const ConnectionInformation& ci)
+bool UpdateTo055::updateData(const ConnectionInformation& ci) noexcept
 {
   std::map<int, ApiType> id_to_type;
   // Note: ApiType::DarkSky is not handled here, because that API was not

@@ -52,14 +52,14 @@ unsigned int determineThreadNumber()
   return threadsOfExecution;
 }
 
-bool UpdateTo083::perform(const ConnectionInformation& ci)
+bool UpdateTo083::perform(const ConnectionInformation& ci) noexcept
 {
   if (!updateStructure(ci))
     return false;
   return updateData(ci);
 }
 
-bool UpdateTo083::updateStructure(const ConnectionInformation& ci)
+bool UpdateTo083::updateStructure(const ConnectionInformation& ci) noexcept
 {
   for (const std::string& table : {"forecastdata", "weatherdata"})
   {
@@ -109,7 +109,7 @@ bool UpdateTo083::updateStructure(const ConnectionInformation& ci)
   return true;
 }
 
-bool UpdateTo083::updateData(const ConnectionInformation& ci)
+bool UpdateTo083::updateData(const ConnectionInformation& ci) noexcept
 {
   // Update weather data first.
   if (!updateWeatherData(ci))
@@ -118,7 +118,7 @@ bool UpdateTo083::updateData(const ConnectionInformation& ci)
   return updateForecastData(ci);
 }
 
-bool UpdateTo083::updateWeatherData(const ConnectionInformation& ci)
+bool UpdateTo083::updateWeatherData(const ConnectionInformation& ci) noexcept
 {
   std::map<int, ApiType> id_to_type;
   for (const ApiType type : { ApiType::Apixu, ApiType::DarkSky, ApiType::OpenWeatherMap})
@@ -207,7 +207,7 @@ bool UpdateTo083::updateWeatherData(const ConnectionInformation& ci)
   return true;
 }
 
-bool UpdateTo083::updateForecastData(const ConnectionInformation& ci)
+bool UpdateTo083::updateForecastData(const ConnectionInformation& ci) noexcept
 {
   std::map<int, ApiType> id_to_type;
   for (const ApiType type : { ApiType::Apixu, ApiType::DarkSky, ApiType::OpenWeatherMap})

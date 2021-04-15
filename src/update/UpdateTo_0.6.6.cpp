@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 namespace wic
 {
 
-bool UpdateTo066::perform(const ConnectionInformation& ci)
+bool UpdateTo066::perform(const ConnectionInformation& ci) noexcept
 {
   const int rc = updateStructure(ci);
   // If return value is -1, then something went wrong.
@@ -38,7 +38,7 @@ bool UpdateTo066::perform(const ConnectionInformation& ci)
   return updateData(ci);
 }
 
-int UpdateTo066::updateStructure(const ConnectionInformation& ci)
+int UpdateTo066::updateStructure(const ConnectionInformation& ci) noexcept
 {
   if (!Structure::tableExists(ci, "weatherdata"))
   {
@@ -109,7 +109,7 @@ int UpdateTo066::updateStructure(const ConnectionInformation& ci)
   }
 }
 
-bool UpdateTo066::updateData(const ConnectionInformation& ci)
+bool UpdateTo066::updateData(const ConnectionInformation& ci) noexcept
 {
   try
   {

@@ -28,7 +28,7 @@
 namespace wic
 {
 
-bool setCountryCodes(const ConnectionInformation& ci)
+bool setCountryCodes(const ConnectionInformation& ci) noexcept
 {
   const int owmApiId = db::API::getId(ci, ApiType::OpenWeatherMap);
   if (owmApiId <= 0)
@@ -123,7 +123,7 @@ bool setCountryCodes(const ConnectionInformation& ci)
   return true;
 }
 
-bool UpdateTo090::perform(const ConnectionInformation& ci)
+bool UpdateTo090::perform(const ConnectionInformation& ci) noexcept
 {
   if (!updateStructure(ci))
     return false;
@@ -132,7 +132,7 @@ bool UpdateTo090::perform(const ConnectionInformation& ci)
   return setCountryCodes(ci);
 }
 
-bool UpdateTo090::updateStructure(const ConnectionInformation& ci)
+bool UpdateTo090::updateStructure(const ConnectionInformation& ci) noexcept
 {
   if (Structure::columnExists(ci, "location", "country_code"))
   {
@@ -162,7 +162,7 @@ bool UpdateTo090::updateStructure(const ConnectionInformation& ci)
   }
 }
 
-bool UpdateTo090::updateData(const ConnectionInformation& ci)
+bool UpdateTo090::updateData(const ConnectionInformation& ci) noexcept
 {
   const int id = db::API::getId(ci, ApiType::Weatherbit);
   if (id > 0)
