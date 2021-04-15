@@ -39,66 +39,66 @@ bool SimdJsonApixu::parseCurrentWeather(const std::string& json, Weather& weathe
   weather.setJson(json);
 
   auto [current, error] = doc["current"];
-  if (!error && current.type() == simdjson::dom::element_type::OBJECT)
+  if (error || current.type() != simdjson::dom::element_type::OBJECT)
   {
-    // temperature
-    simdjson::dom::element v2;
-    current["temp_c"].tie(v2, error);
-    if (!error && v2.is<double>())
-    {
-      weather.setTemperatureCelsius(static_cast<float>(v2.get<double>().value()));
-    }
-    current["temp_f"].tie(v2, error);
-    if (!error && v2.is<double>())
-    {
-      weather.setTemperatureFahrenheit(static_cast<float>(v2.get<double>().value()));
-    }
-    // wind
-    current["wind_degree"].tie(v2, error);
-    if (!error && v2.is<int64_t>())
-      weather.setWindDegrees(static_cast<int16_t>(v2.get<int64_t>()));
-    current["wind_kph"].tie(v2, error);
-    if (!error && v2.is<double>())
-      weather.setWindSpeed(static_cast<float>(v2.get<double>().value() / 3.6));
-    else
-    {
-      current["wind_mph"].tie(v2, error);
-      if (!error && v2.is<double>())
-        weather.setWindSpeed(static_cast<float>(v2.get<double>().value() * 1.609344 / 3.6));
-    }
-    // humidity
-    current["humidity"].tie(v2, error);
-    if (!error && v2.is<int64_t>())
-      weather.setHumidity(static_cast<int8_t>(v2.get<int64_t>().value()));
-    // rain or snow
-    current["precip_mm"].tie(v2, error);
-    if (!error && v2.is<double>())
-    {
-      const float amount = static_cast<float>(v2.get<double>().value());
-      precipitationDistinction(amount, weather);
-    }
-    // pressure
-    current["pressure_mb"].tie(v2, error);
-    if (!error && v2.is<double>())
-    {
-      weather.setPressure(static_cast<int16_t>(v2.get<double>().value()));
-    }
-    // cloudiness
-    current["cloud"].tie(v2, error);
-    if (!error && v2.is<int64_t>())
-      weather.setCloudiness(static_cast<int8_t>(v2.get<int64_t>().value()));
-    // date of data update
-    current["last_updated_epoch"].tie(v2, error);
-    if (!error && v2.is<int64_t>())
-    {
-      const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2.get<int64_t>().value()));
-      weather.setDataTime(dt);
-    }
-    return true;
-  } // if current object
+    // No current object - return false to indicate failure.
+    return false;
+  }
 
-  // No current object - return false to indicate failure.
-  return false;
+  // temperature
+  simdjson::dom::element v2;
+  current["temp_c"].tie(v2, error);
+  if (!error && v2.is<double>())
+  {
+    weather.setTemperatureCelsius(static_cast<float>(v2.get<double>().value()));
+  }
+  current["temp_f"].tie(v2, error);
+  if (!error && v2.is<double>())
+  {
+    weather.setTemperatureFahrenheit(static_cast<float>(v2.get<double>().value()));
+  }
+  // wind
+  current["wind_degree"].tie(v2, error);
+  if (!error && v2.is<int64_t>())
+    weather.setWindDegrees(static_cast<int16_t>(v2.get<int64_t>()));
+  current["wind_kph"].tie(v2, error);
+  if (!error && v2.is<double>())
+    weather.setWindSpeed(static_cast<float>(v2.get<double>().value() / 3.6));
+  else
+  {
+    current["wind_mph"].tie(v2, error);
+    if (!error && v2.is<double>())
+      weather.setWindSpeed(static_cast<float>(v2.get<double>().value() * 1.609344 / 3.6));
+  }
+  // humidity
+  current["humidity"].tie(v2, error);
+  if (!error && v2.is<int64_t>())
+    weather.setHumidity(static_cast<int8_t>(v2.get<int64_t>().value()));
+  // rain or snow
+  current["precip_mm"].tie(v2, error);
+  if (!error && v2.is<double>())
+  {
+    const float amount = static_cast<float>(v2.get<double>().value());
+    precipitationDistinction(amount, weather);
+  }
+  // pressure
+  current["pressure_mb"].tie(v2, error);
+  if (!error && v2.is<double>())
+  {
+    weather.setPressure(static_cast<int16_t>(v2.get<double>().value()));
+  }
+  // cloudiness
+  current["cloud"].tie(v2, error);
+  if (!error && v2.is<int64_t>())
+    weather.setCloudiness(static_cast<int8_t>(v2.get<int64_t>().value()));
+  // date of data update
+  current["last_updated_epoch"].tie(v2, error);
+  if (!error && v2.is<int64_t>())
+  {
+    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2.get<int64_t>().value()));
+    weather.setDataTime(dt);
+  }
+  return true;
 }
 
 bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)

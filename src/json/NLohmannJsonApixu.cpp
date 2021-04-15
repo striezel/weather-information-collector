@@ -44,66 +44,66 @@ bool NLohmannJsonApixu::parseCurrentWeather(const std::string& json, Weather& we
   if (root.empty())
     return false;
   auto find = root.find("current");
-  if (find != root.end() && find->is_object())
+  if (find == root.end() || !find->is_object())
   {
-    const value_type val = *find;
-    // temperature
-    auto v2 = val.find("temp_c");
-    if (v2 != val.end() && v2->is_number())
-    {
-      weather.setTemperatureCelsius(v2->get<double>());
-    }
-    v2 = val.find("temp_f");
-    if (v2 != val.end() && v2->is_number())
-    {
-      weather.setTemperatureFahrenheit(v2->get<double>());
-    }
-    // wind
-    v2 = val.find("wind_degree");
-    if (v2 != val.end() && v2->is_number_integer())
-      weather.setWindDegrees(v2->get<int>());
-    v2 = val.find("wind_kph");
-    if (v2 != val.end() && v2->is_number_float())
-      weather.setWindSpeed(v2->get<double>() / 3.6);
-    else
-    {
-      v2 = val.find("wind_mph");
-      if (v2 != val.end() && v2->is_number_float())
-        weather.setWindSpeed(v2->get<double>() * 1.609344 / 3.6);
-    }
-    // humidity
-    v2 = val.find("humidity");
-    if (v2 != val.end() && v2->is_number_integer())
-      weather.setHumidity(v2->get<int>());
-    // rain or snow
-    v2 = val.find("precip_mm");
-    if (v2 != val.end() && v2->is_number())
-    {
-      const float amount = v2->get<float>();
-      precipitationDistinction(amount, weather);
-    }
-    // pressure
-    v2 = val.find("pressure_mb");
-    if (v2 != val.end() && v2->is_number())
-    {
-      weather.setPressure(v2->get<double>());
-    }
-    // cloudiness
-    v2 = val.find("cloud");
-    if (v2 != val.end() && v2->is_number_integer())
-      weather.setCloudiness(v2->get<int>());
-    // date of data update
-    v2 = val.find("last_updated_epoch");
-    if (v2 != val.end() && v2->is_number_integer())
-    {
-      const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2->get<int64_t>()));
-      weather.setDataTime(dt);
-    }
-    return true;
-  } // if current object
+   // No current object - return false to indicate failure.
+    return false;
+  }
 
-  // No current object - return false to indicate failure.
-  return false;
+  const value_type val = *find;
+  // temperature
+  auto v2 = val.find("temp_c");
+  if (v2 != val.end() && v2->is_number())
+  {
+    weather.setTemperatureCelsius(v2->get<double>());
+  }
+  v2 = val.find("temp_f");
+  if (v2 != val.end() && v2->is_number())
+  {
+    weather.setTemperatureFahrenheit(v2->get<double>());
+  }
+  // wind
+  v2 = val.find("wind_degree");
+  if (v2 != val.end() && v2->is_number_integer())
+    weather.setWindDegrees(v2->get<int>());
+  v2 = val.find("wind_kph");
+  if (v2 != val.end() && v2->is_number_float())
+    weather.setWindSpeed(v2->get<double>() / 3.6);
+  else
+  {
+    v2 = val.find("wind_mph");
+    if (v2 != val.end() && v2->is_number_float())
+      weather.setWindSpeed(v2->get<double>() * 1.609344 / 3.6);
+  }
+  // humidity
+  v2 = val.find("humidity");
+  if (v2 != val.end() && v2->is_number_integer())
+    weather.setHumidity(v2->get<int>());
+  // rain or snow
+  v2 = val.find("precip_mm");
+  if (v2 != val.end() && v2->is_number())
+  {
+    const float amount = v2->get<float>();
+    precipitationDistinction(amount, weather);
+  }
+  // pressure
+  v2 = val.find("pressure_mb");
+  if (v2 != val.end() && v2->is_number())
+  {
+    weather.setPressure(v2->get<double>());
+  }
+  // cloudiness
+  v2 = val.find("cloud");
+  if (v2 != val.end() && v2->is_number_integer())
+    weather.setCloudiness(v2->get<int>());
+  // date of data update
+  v2 = val.find("last_updated_epoch");
+  if (v2 != val.end() && v2->is_number_integer())
+  {
+    const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2->get<int64_t>()));
+    weather.setDataTime(dt);
+  }
+  return true;
 }
 
 bool NLohmannJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
