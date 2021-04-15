@@ -50,10 +50,13 @@ bool getHome(std::string& result)
     std::memset(buffer, 0, buf_size);
     struct passwd info;
     struct passwd * pwd_ptr = nullptr;
-    const int error = getpwuid_r(getuid(), &info, buffer, buf_size, &pwd_ptr);
-    if (error != 0)
+    // getpwuid_r() failed, if return value is non-zero. However, it can still
+    // return zero, if no matching entry is found. In that case, the pointer is
+    // set to null.
+    if ((getpwuid_r(getuid(), &info, buffer, buf_size, &pwd_ptr) != 0)
+        || (pwd_ptr = nullptr))
     {
-      // getpwuid_r() failed.
+      // getpwuid_r() failed or found not matching entry.
       delete [] buffer;
       return false;
     }
