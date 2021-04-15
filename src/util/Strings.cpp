@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2020  Dirk Stolle
+    Copyright (C) 2017, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "Strings.hpp"
 #include <limits>
 #include <sstream>
+#include <type_traits>
 
 namespace wic
 {
@@ -30,7 +31,7 @@ std::string toLowerString(std::string str)
   // Assume ASCII or compatible charset, where distance of the codepoint of
   // the uppercase and lowercase version of a letter is always the same.
   const int diff = 'a'-'A';
-  for (unsigned int i = 0; i < str.size(); ++i)
+  for (std::string::size_type i = 0; i < str.size(); ++i)
   {
     if ((str[i] >= 'A') && (str[i] <= 'Z'))
     {
@@ -44,8 +45,8 @@ void trimLeft(std::string& str1)
 {
   if (str1.empty()) return;
   // trim stuff at begin
-  const int len = str1.length();
-  int pos = 0;
+  const auto len = str1.length();
+  std::string::size_type pos = 0;
   bool go_on = true;
   while (go_on)
   {
@@ -53,7 +54,7 @@ void trimLeft(std::string& str1)
     if ((ch == ' ') || (ch == '\t'))
     {
       ++pos;
-      go_on = (pos<len);
+      go_on = (pos < len);
     }
     else
     {
@@ -76,8 +77,8 @@ void trimRight(std::string& str1)
 {
   if (str1.empty()) return;
   // trim stuff at end
-  const int len = str1.length();
-  int pos = len - 1;
+  const auto len = str1.length();
+  std::make_signed<std::string::size_type>::type pos = len - 1;
   bool go_on = true;
   while (go_on)
   {
@@ -96,7 +97,7 @@ void trimRight(std::string& str1)
   {
     str1.clear();
   }
-  else if (pos < len - 1)
+  else if (pos < static_cast<decltype(pos)>(len) - 1)
   {
     str1.erase(pos + 1);
   }
@@ -122,7 +123,7 @@ bool stringToInt(const std::string& str, int& value)
   if (str.empty())
     return false;
   value = 0;
-  unsigned int i;
+  std::string::size_type i;
   constexpr int cTenthLimit = std::numeric_limits<int>::max() / 10;
   constexpr int cRealLimit = std::numeric_limits<int>::max();
   bool negative;
@@ -174,7 +175,7 @@ bool stringToFloat(const std::string& str, float& value)
   if (str.empty())
     return false;
   value = 0.0f;
-  unsigned int i, next_look;
+  std::string::size_type i, next_look;
   bool negative;
   if (str[0] == '-')
   {
