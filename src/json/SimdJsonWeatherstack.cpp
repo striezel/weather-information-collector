@@ -120,7 +120,7 @@ bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather&
     current["pressure"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      weather.setPressure(static_cast<float>(v2.get<double>().value()));
+      weather.setPressure(static_cast<int16_t>(v2.get<double>().value()));
     }
     // rain or snow
     current["precip"].tie(v2, error);
