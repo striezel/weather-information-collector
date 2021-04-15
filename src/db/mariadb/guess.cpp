@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,12 +20,83 @@
 
 #include "guess.hpp"
 #include <iostream>
+#include <optional>
 #include "Connection.hpp"
 #include "Result.hpp"
 #include "Structure.hpp"
 
 namespace wic
 {
+
+/** \brief Checks for existing database features of version 0.8.6.
+ *
+ * \param  ci  database connection information
+ * \return Returns an optional containing the detected version, if any.
+ *         Returns an empty optional, if no version or an older version was found.
+ */
+std::optional<SemVer> check_db_v086(const ConnectionInformation& ci)
+{
+  // Change in version 0.8.6: cloudiness is nullable.
+  db::mariadb::Connection conn(ci);
+  const std::string sql = "SELECT IS_NULLABLE FROM information_schema.columns "
+        + std::string("  WHERE TABLE_SCHEMA=") + conn.quote(ci.db())
+        + "    AND TABLE_NAME='weatherdata' AND COLUMN_NAME='cloudiness';";
+  const auto result = conn.query(sql);
+  if (!result.good())
+  {
+    std::cerr << "Error: Could not get column information of column \"cloudiness\" in table weatherdata.\n"
+              << "Internal error: " << conn.errorInfo() << std::endl;
+    return SemVer();
+  }
+  // SELECT was successful, but do we have some data?
+  if (!result.hasRows())
+  {
+    std::cerr << "Error: Result of column information query is empty!" << std::endl;
+    return SemVer();
+  }
+  const std::string isNullable = result.rows().at(0).column(0);
+  if (isNullable == "YES")
+  {
+    return SemVer(0, 8, 6);
+  }
+
+  // Database is older than v0.8.6.
+  return std::optional<SemVer>();
+}
+
+/** \brief Checks for existing database features of version 0.6.6.
+ *
+ * \param  ci  database connection information
+ * \return Returns an optional containing the detected version, if any.
+ *         Returns an empty optional, if no version or an older version was found.
+ */
+std::optional<SemVer> check_db_v066(const ConnectionInformation& ci)
+{
+  // Changes in version 0.6.6: Column `json` in the table `weatherdata` changed
+  // from TEXT to MEDIUMTEXT.
+  db::mariadb::Connection conn(ci);
+  const std::string sql = "SELECT LOWER(DATA_TYPE) AS jdt FROM information_schema.COLUMNS "
+        + std::string("WHERE TABLE_NAME='weatherdata' AND COLUMN_NAME='json' ")
+        + "  AND TABLE_SCHEMA=" + conn.quote(ci.db()) + " LIMIT 1;";
+  const auto result = conn.query(sql);
+  if (!result.good())
+  {
+    std::cerr << "Error: Could not get data type of column \"json\" in table weatherdata.\n"
+              << "Internal error: " << conn.errorInfo() << std::endl;
+    return SemVer();
+  }
+  if (!result.hasRows())
+  {
+    std::cerr << "Error: Result of data type query is empty!" << std::endl;
+    return SemVer();
+  }
+  const std::string type = result.rows().at(0).column(0);
+  if (type == "mediumtext")
+    return SemVer(0, 6, 6);
+
+  // Database is older than v0.6.6.
+  return std::optional<SemVer>();
+}
 
 SemVer guessVersionFromDatabase(const ConnectionInformation& ci)
 {
@@ -34,7 +105,7 @@ SemVer guessVersionFromDatabase(const ConnectionInformation& ci)
   {
     Connection conn(ci);
   }
-  catch (const std::exception& ex)
+  catch (...)
   {
     std::cerr << "Error: Could not connect to database!" << std::endl;
     return SemVer();
@@ -47,30 +118,9 @@ SemVer guessVersionFromDatabase(const ConnectionInformation& ci)
   }
 
   // 0.8.6: cloudiness is nullable.
-  {
-    Connection conn(ci);
-    const std::string sql = "SELECT IS_NULLABLE FROM information_schema.columns "
-          + std::string("  WHERE TABLE_SCHEMA=") + conn.quote(ci.db())
-          + "    AND TABLE_NAME='weatherdata' AND COLUMN_NAME='cloudiness';";
-    const auto result = conn.query(sql);
-    if (!result.good())
-    {
-      std::cerr << "Error: Could not get column information of column \"cloudiness\" in table weatherdata.\n"
-                << "Internal error: " << conn.errorInfo() << std::endl;
-      return SemVer();
-    }
-    // SELECT was successful, but do we have some data?
-    if (!result.hasRows())
-    {
-      std::cerr << "Error: Result of column information query is empty!" << std::endl;
-      return SemVer();
-    }
-    const std::string isNullable = result.rows().at(0).column(0);
-    if (isNullable == "YES")
-    {
-      return SemVer(0, 8, 6);
-    }
-  }
+  const auto v086 = check_db_v086(ci);
+  if (v086.has_value())
+    return v086.value();
 
   // 0.8.3: Column `snow` was added to weatherdata and forecastdata.
   // If column already exists, database is at least from version 0.8.3.
@@ -86,27 +136,9 @@ SemVer guessVersionFromDatabase(const ConnectionInformation& ci)
   }
 
   // 0.6.6: Column `json` in the table `weatherdata` changed from TEXT to MEDIUMTEXT.
-  {
-    Connection conn(ci);
-    const std::string sql = "SELECT LOWER(DATA_TYPE) AS jdt FROM information_schema.COLUMNS "
-          + std::string("WHERE TABLE_NAME='weatherdata' AND COLUMN_NAME='json' ")
-          + "  AND TABLE_SCHEMA=" + conn.quote(ci.db()) + " LIMIT 1;";
-    const auto result = conn.query(sql);
-    if (!result.good())
-    {
-      std::cerr << "Error: Could not get data type of column \"json\" in table weatherdata.\n"
-                << "Internal error: " << conn.errorInfo() << std::endl;
-      return SemVer();
-    }
-    if (!result.hasRows())
-    {
-      std::cerr << "Error: Result of data type query is empty!" << std::endl;
-      return SemVer();
-    }
-    const std::string type = result.rows().at(0).column(0);
-    if (type == "mediumtext")
-      return SemVer(0, 6, 6);
-  }
+  const auto v066 = check_db_v066(ci);
+  if (v066.has_value())
+    return v066.value();
 
   // 0.5.5: Column `rain` was added to weatherdata table.
   if (Structure::columnExists(ci, "weatherdata", "rain"))
