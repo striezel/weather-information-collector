@@ -46,7 +46,7 @@ bool getHome(std::string& result)
     const long int buf_size = sysconf(_SC_GETPW_R_SIZE_MAX);
     if (buf_size <= -1)
       return false; // -1 means: sysconf() error / EINVAL
-    char * buffer = new char[buf_size];
+    auto buffer = new char[buf_size];
     std::memset(buffer, 0, buf_size);
     struct passwd info;
     struct passwd * pwd_ptr = nullptr;

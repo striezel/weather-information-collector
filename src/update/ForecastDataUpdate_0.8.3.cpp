@@ -68,7 +68,7 @@ void ForecastDataUpdate_083::operator()(const std::size_t startIdx, const std::s
              continue;
       } // switch
       Forecast fc;
-      const uint32_t dataId = static_cast<uint32_t>(result.row(i).getInt64(1)); // dataID is second field
+      const auto dataId = result.row(i).getInt64(1); // dataID is second field
       if (!api->parseForecast(result.row(i).column(3), fc)) // json is fourth field
       {
         std::cerr << "Error: Could not parse JSON data for data ID " << dataId

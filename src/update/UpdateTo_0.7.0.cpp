@@ -163,7 +163,7 @@ bool UpdateTo070::updateData(const ConnectionInformation& ci) noexcept
     const OpenWeatherMap owm;
     for (std::size_t i = 0; i < rows; ++i)
     {
-      const uint32_t dataId = static_cast<uint32_t>(result.row(i).getInt64(0));
+      const auto dataId = result.row(i).getInt64(0);
       const std::string json = result.row(i)[1];
       Weather w;
       if (!owm.parseCurrentWeather(json, w))
