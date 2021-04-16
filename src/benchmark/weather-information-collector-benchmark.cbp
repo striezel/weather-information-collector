@@ -58,6 +58,8 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../db/Exceptions.cpp" />
+		<Unit filename="../db/Exceptions.hpp" />
 		<Unit filename="../db/mariadb/Connection.cpp" />
 		<Unit filename="../db/mariadb/Connection.hpp" />
 		<Unit filename="../db/mariadb/Field.cpp" />
@@ -102,10 +104,6 @@
 		<Unit filename="../util/Strings.hpp" />
 		<Unit filename="benchmark.hpp" />
 		<Unit filename="main.cpp" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

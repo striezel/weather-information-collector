@@ -11,6 +11,7 @@ set(db_tests_mariadb_sources
     ../../../src/data/Weather.cpp
     ../../../src/data/WeatherMeta.cpp
     ../../../src/db/ConnectionInformation.cpp
+    ../../../src/db/Exceptions.cpp
     ../../../src/db/mariadb/API.cpp
     ../../../src/db/mariadb/Connection.cpp
     ../../../src/db/mariadb/Field.cpp

@@ -11,6 +11,7 @@ set(weather-information-collector-benchmark_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
+    ../db/Exceptions.cpp
     ../db/mariadb/Connection.cpp
     ../db/mariadb/Field.cpp
     ../db/mariadb/Result.cpp

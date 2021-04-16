@@ -43,6 +43,8 @@
 		<Unit filename="../../../src/data/WeatherMeta.hpp" />
 		<Unit filename="../../../src/db/ConnectionInformation.cpp" />
 		<Unit filename="../../../src/db/ConnectionInformation.hpp" />
+		<Unit filename="../../../src/db/Exceptions.cpp" />
+		<Unit filename="../../../src/db/Exceptions.hpp" />
 		<Unit filename="../../../src/db/mariadb/API.cpp" />
 		<Unit filename="../../../src/db/mariadb/API.hpp" />
 		<Unit filename="../../../src/db/mariadb/Connection.cpp" />
@@ -89,10 +91,6 @@
 		<Unit filename="Utilities.cpp" />
 		<Unit filename="guess.cpp" />
 		<Unit filename="main.cpp" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

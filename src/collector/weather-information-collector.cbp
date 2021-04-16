@@ -76,6 +76,8 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../db/Exceptions.cpp" />
+		<Unit filename="../db/Exceptions.hpp" />
 		<Unit filename="../db/Store.hpp" />
 		<Unit filename="../db/mariadb/Connection.cpp" />
 		<Unit filename="../db/mariadb/Connection.hpp" />

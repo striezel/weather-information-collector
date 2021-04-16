@@ -23,6 +23,7 @@
 #include <cstring>
 #include <ctime>
 #include <iostream>
+#include "../Exceptions.hpp"
 #include "Result.hpp"
 
 namespace wic::db::mariadb
@@ -35,7 +36,7 @@ Connection::Connection(const ConnectionInformation& ci)
   if (nullptr == conn)
   {
     std::cerr << "Error: Could not allocate database handle!" << std::endl;
-    throw std::runtime_error("Error: Could not allocate database handle!");
+    throw AllocationFailure();
   }
   // Workaround to avoid unconfigured socket location: Use IP for localhost instead of hostname.
   const std::string realHost = ci.hostname() != "localhost" ? ci.hostname() : "127.0.0.1";
@@ -51,7 +52,7 @@ Connection::Connection(const ConnectionInformation& ci)
     std::cerr << message << std::endl;
     mysql_close(conn);
     conn = nullptr;
-    throw std::runtime_error(message);
+    throw ConnectionFailure(message);
   }
 }
 
@@ -70,15 +71,11 @@ MYSQL* Connection::raw() const
 
 std::string Connection::escape(const std::string& str) const
 {
-  if (conn == nullptr)
-  {
-    std::cerr << "Error: Database handle has not been allocated!" << std::endl;
-    throw std::runtime_error("Error: Database handle has not been allocated!");
-  }
   const auto len = str.size();
   const std::string::size_type bufferSize = 2 * len + 1;
   char buffer[bufferSize];
   std::memset(buffer, 0, bufferSize);
+  // Connection `conn` cannot be nullptr, because constructor enforces it.
   const auto escapedLen = mysql_real_escape_string(conn, buffer, str.c_str(), len);
   return std::string(buffer, escapedLen);
 }
@@ -98,7 +95,7 @@ std::string Connection::quote(const std::chrono::time_point<std::chrono::system_
   if (ptr == nullptr)
   {
     std::cerr << "Error: Date conversion with localtime_r() failed!" << std::endl;
-    throw std::runtime_error("Date conversion with localtime_r() failed!");
+    throw std::invalid_argument("Date conversion with localtime_r() failed!");
   }
   const int realYear = tm.tm_year + 1900;
   const int realMonth = tm.tm_mon + 1;

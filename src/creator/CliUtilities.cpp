@@ -224,7 +224,7 @@ DataType selectDataType(const ApiType selectedApi, const PlanWeatherbit planWb, 
   }
   if (supportedDataTypes.empty())
   {
-    throw std::logic_error("API " + toString(selectedApi) + " does not support"
+    throw std::domain_error("API " + toString(selectedApi) + " does not support"
         + std::string(" any data types. This should not happen and might be an")
         + " indication for an incomplete implementation of that API.");
   }
