@@ -30,12 +30,12 @@ std::string toLowerString(std::string str)
 {
   // Assume ASCII or compatible charset, where distance of the codepoint of
   // the uppercase and lowercase version of a letter is always the same.
-  const int diff = 'a'-'A';
-  for (std::string::size_type i = 0; i < str.size(); ++i)
+  const int diff = 'a' - 'A';
+  for (auto& c: str)
   {
-    if ((str[i] >= 'A') && (str[i] <= 'Z'))
+    if ((c >= 'A') && (c <= 'Z'))
     {
-      str[i] = str[i] + diff;
+      c = c + diff;
     }
   } // for
   return str;
@@ -43,7 +43,8 @@ std::string toLowerString(std::string str)
 
 void trimLeft(std::string& str1)
 {
-  if (str1.empty()) return;
+  if (str1.empty())
+    return;
   // trim stuff at begin
   const auto len = str1.length();
   std::string::size_type pos = 0;
@@ -78,7 +79,7 @@ void trimRight(std::string& str1)
   if (str1.empty()) return;
   // trim stuff at end
   const auto len = str1.length();
-  std::make_signed<std::string::size_type>::type pos = len - 1;
+  std::make_signed_t<std::string::size_type> pos = len - 1;
   bool go_on = true;
   while (go_on)
   {
@@ -175,7 +176,8 @@ bool stringToFloat(const std::string& str, float& value)
   if (str.empty())
     return false;
   value = 0.0f;
-  std::string::size_type i, next_look;
+  std::string::size_type i;
+  std::string::size_type next_look;
   bool negative;
   if (str[0] == '-')
   {
