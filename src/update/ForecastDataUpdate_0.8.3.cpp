@@ -79,11 +79,11 @@ void ForecastDataUpdate_083::operator()(const std::size_t startIdx, const std::s
       const auto dataTime = result.row(i).getDateTime(2); // dataTime is third field
       // Find proper weather entry.
       auto idx = fc.data().size();
-      for (std::vector<Weather>::size_type i = 0; i < fc.data().size(); ++i)
+      for (std::vector<Weather>::size_type j = 0; j < fc.data().size(); ++j)
       {
-        if (dataTime == fc.data()[i].dataTime())
+        if (dataTime == fc.data()[j].dataTime())
         {
-          idx = i;
+          idx = j;
           break;
         }
       } // for
