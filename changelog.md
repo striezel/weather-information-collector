@@ -4,6 +4,9 @@
 
 - Parser errors will now show more information why JSON parsing failed.
 - A potential error with finding the user's home directory has been fixed.
+- HTTPS connections will now try to use TLS v1.2 or newer by default, if your
+  system uses cURL 7.54.0 or newer. For older cURL versions, the minimum TLS
+  version is 1.0 as it was before.
 
 ## Version 0.9.15 (2020-11-11)
 
