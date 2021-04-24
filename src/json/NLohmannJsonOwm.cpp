@@ -46,14 +46,14 @@ bool NLohmannJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& w
       {
         weather.setTemperatureKelvin(kelvinRounded);
       }
-      weather.setTemperatureCelsius(kelvinRaw - 273.15f);
+      weather.setTemperatureCelsius(static_cast<float>(kelvinRaw - 273.15));
       // Avoid values like 6.9999... ° C by rounding, if appropriate.
       const float celsiusRounded = std::round(weather.temperatureCelsius());
       if (std::fabs(celsiusRounded - weather.temperatureCelsius()) < 0.005)
       {
         weather.setTemperatureCelsius(celsiusRounded);
       }
-      weather.setTemperatureFahrenheit(static_cast<float>((kelvinRaw - 273.15f) * 1.8 + 32.0));
+      weather.setTemperatureFahrenheit(static_cast<float>((kelvinRaw - 273.15) * 1.8 + 32.0));
       // Avoid values like 6.9999... ° F by rounding, if appropriate.
       const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
       if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)

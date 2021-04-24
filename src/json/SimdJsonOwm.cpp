@@ -35,15 +35,15 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
     main["temp"].tie(elem, error);
     if (!error && elem.is<double>())
     {
-      const float kelvinRaw = static_cast<float>(elem.get<double>().value());
-      weather.setTemperatureKelvin(kelvinRaw);
+      const double kelvinRaw = elem.get<double>().value();
+      weather.setTemperatureKelvin(static_cast<float>(kelvinRaw));
       // Avoid values like 280.9999... K by rounding, if appropriate.
       const float kelvinRounded = std::round(weather.temperatureKelvin());
       if (std::fabs(kelvinRounded - weather.temperatureKelvin()) < 0.005)
       {
         weather.setTemperatureKelvin(kelvinRounded);
       }
-      weather.setTemperatureCelsius(kelvinRaw - 273.15f);
+      weather.setTemperatureCelsius(static_cast<float>(kelvinRaw - 273.15));
       // Avoid values like 6.9999... ° C by rounding, if appropriate.
       const float celsiusRounded = std::round(weather.temperatureCelsius());
       if (std::fabs(celsiusRounded - weather.temperatureCelsius()) < 0.005)

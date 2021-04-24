@@ -120,7 +120,7 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
     {
       weather.setTemperatureFahrenheit(fahrenheitRounded);
     }
-    weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15f);
+    weather.setTemperatureKelvin(static_cast<float>(weather.temperatureCelsius() + 273.15));
   }
   // relative humidity, [0;1]
   dataPoint["humidity"].tie(elem, error);

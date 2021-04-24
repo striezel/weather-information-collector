@@ -103,7 +103,7 @@ bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather&
       {
         weather.setTemperatureFahrenheit(fahrenheitRounded);
       }
-      weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15f);
+      weather.setTemperatureKelvin(static_cast<float>(weather.temperatureCelsius() + 273.15));
     }
     // wind
     current["wind_degree"].tie(v2, error);

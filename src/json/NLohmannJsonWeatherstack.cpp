@@ -107,7 +107,7 @@ bool NLohmannJsonWeatherstack::parseCurrentWeather(const std::string& json, Weat
       {
         weather.setTemperatureFahrenheit(fahrenheitRounded);
       }
-      weather.setTemperatureKelvin(weather.temperatureCelsius() + 273.15f);
+      weather.setTemperatureKelvin(static_cast<float>(weather.temperatureCelsius() + 273.15));
     }
     // wind
     v2 = current.find("wind_degree");
