@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.9.17-pre (2021-04-25)
+## Version 0.9.17 (2021-04-26)
 
 Precision of temperature values is now limited to three decimal digits after
 the decimal separator, i. e. values like 23.4560001 °C will become 23.456 °C
