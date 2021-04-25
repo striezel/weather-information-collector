@@ -19,8 +19,8 @@
 */
 
 #include "SimdJsonDarkSky.hpp"
-#include <cmath>
 #include <iostream>
+#include "../util/NumericPrecision.hpp"
 
 namespace wic
 {
@@ -115,8 +115,8 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
     // calculate them on the fly.
     weather.setTemperatureFahrenheit(static_cast<float>(weather.temperatureCelsius() * 1.8 + 32.0));
     // Avoid values like 6.9999... ° F by rounding, if appropriate.
-    const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
-    if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
+    const float fahrenheitRounded = NumericPrecision<float>::enforce(weather.temperatureFahrenheit());
+    if (fahrenheitRounded != weather.temperatureFahrenheit())
     {
       weather.setTemperatureFahrenheit(fahrenheitRounded);
     }

@@ -36,6 +36,7 @@ set(weather_information_collector_tests_sources
     tasks/Task.cpp
     tasks/TaskManager.cpp
     util/Directories.cpp
+    util/NumericPrecision.cpp
     util/SemVer.cpp
     util/Strings.cpp
     main.cpp)

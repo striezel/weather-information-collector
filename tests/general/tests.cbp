@@ -67,6 +67,7 @@
 		<Unit filename="../../src/tasks/TaskManager.hpp" />
 		<Unit filename="../../src/util/Directories.cpp" />
 		<Unit filename="../../src/util/Directories.hpp" />
+		<Unit filename="../../src/util/NumericPrecision.hpp" />
 		<Unit filename="../../src/util/SemVer.cpp" />
 		<Unit filename="../../src/util/SemVer.hpp" />
 		<Unit filename="../../src/util/Strings.cpp" />
@@ -84,6 +85,7 @@
 		<Unit filename="tasks/Task.cpp" />
 		<Unit filename="tasks/TaskManager.cpp" />
 		<Unit filename="util/Directories.cpp" />
+		<Unit filename="util/NumericPrecision.cpp" />
 		<Unit filename="util/SemVer.cpp" />
 		<Unit filename="util/Strings.cpp" />
 		<Extensions>

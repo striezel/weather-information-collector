@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,17 +18,34 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
-#define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+#include <catch.hpp>
+#include <utility>
+#include <vector>
+#include "../../../src/util/NumericPrecision.hpp"
 
-#include <string>
-
-namespace wic
+TEST_CASE("NumericPrecision")
 {
+  using namespace wic;
 
-/** \brief version information */
-const std::string version = "version 0.9.17-pre, 2021-04-25";
+  std::vector<std::pair<float, float> > numbers = {
+    { -1.54999, -1.55 },
+    { -0.440009f, -0.44f },
+    { 3.36001, 3.36 },
+    { 9.47865f, 9.479f },
+    { 38.3f, 38.3f },
+    { 42.602f, 42.602f },
+    { 43.952f, 43.952f },
+    { 275.123f, 275.123f },
+    // old v0.8.1 rounding
+    { 3.999f, 4.0f },
+    { 4.001f, 4.0f }
+  };
 
-} // namespace
-
-#endif // WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
+  SECTION("enforce")
+  {
+    for (const auto& pair: numbers)
+    {
+      REQUIRE( NumericPrecision<float>::enforce(pair.first) == pair.second );
+    }
+  }
+}

@@ -139,6 +139,8 @@
 		<Unit filename="UpdateTo_0.8.6.hpp" />
 		<Unit filename="UpdateTo_0.9.0.cpp" />
 		<Unit filename="UpdateTo_0.9.0.hpp" />
+		<Unit filename="UpdateTo_0.9.17.cpp" />
+		<Unit filename="UpdateTo_0.9.17.hpp" />
 		<Unit filename="UpdateTo_0.9.7.cpp" />
 		<Unit filename="UpdateTo_0.9.7.hpp" />
 		<Unit filename="WeatherDataUpdate_0.8.3.cpp" />

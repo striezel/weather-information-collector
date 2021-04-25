@@ -19,8 +19,8 @@
 */
 
 #include "SimdJsonWeatherbit.hpp"
-#include <cmath>
 #include <iostream>
+#include "../util/NumericPrecision.hpp"
 
 namespace wic
 {
@@ -38,22 +38,22 @@ bool SimdJsonWeatherbit::parseSingleWeatherItem(const value_type& value, Weather
     const double celsiusRaw = elem.get<double>().value();
     weather.setTemperatureCelsius(static_cast<float>(celsiusRaw));
     // Avoid values like 5.9999... °C by rounding, if appropriate.
-    const float celsiusRounded = std::round(weather.temperatureCelsius());
-    if (std::fabs(celsiusRounded - weather.temperatureCelsius()) < 0.005)
+    const float celsiusRounded = NumericPrecision<float>::enforce(weather.temperatureCelsius());
+    if (celsiusRounded != weather.temperatureCelsius())
     {
       weather.setTemperatureCelsius(celsiusRounded);
     }
     weather.setTemperatureKelvin(static_cast<float>(celsiusRaw + 273.15));
     // Avoid values like 280.9999... K by rounding, if appropriate.
-    const float kelvinRounded = std::round(weather.temperatureKelvin());
-    if (std::fabs(kelvinRounded - weather.temperatureKelvin()) < 0.005)
+    const float kelvinRounded = NumericPrecision<float>::enforce(weather.temperatureKelvin());
+    if (kelvinRounded != weather.temperatureKelvin())
     {
       weather.setTemperatureKelvin(kelvinRounded);
     }
     weather.setTemperatureFahrenheit(static_cast<float>(celsiusRaw * 1.8 + 32.0));
     // Avoid values like 6.9999... ° F by rounding, if appropriate.
-    const float fahrenheitRounded = std::round(weather.temperatureFahrenheit());
-    if (std::fabs(fahrenheitRounded - weather.temperatureFahrenheit()) < 0.005)
+    const float fahrenheitRounded = NumericPrecision<float>::enforce(weather.temperatureFahrenheit());
+    if (fahrenheitRounded != weather.temperatureFahrenheit())
     {
       weather.setTemperatureFahrenheit(fahrenheitRounded);
     }
