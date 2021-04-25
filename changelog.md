@@ -4,7 +4,7 @@
 
 Precision of temperature values is now limited to three decimal digits after
 the decimal separator, i. e. values like 23.4560001 °C will become 23.456 °C
-instead.
+instead. The update program will adjust the values accordingly when executed.
 
 ## Version 0.9.16 (2021-04-23)
 
