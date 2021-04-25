@@ -3,7 +3,7 @@ Upstream-Name: weather-information-collector
 Source: https://gitlab.com/striezel/weather-information-collector
 
 Files: *
-Copyright: 2017, 2018, 2019, 2020 Dirk Stolle <striezel-dev@web.de>
+Copyright: 2017, 2018, 2019, 2020, 2021 Dirk Stolle <striezel-dev@web.de>
 License: GPL-3+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
