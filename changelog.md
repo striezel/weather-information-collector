@@ -191,15 +191,17 @@ It will create task files based on the user's choices.
 The list of predefined paths to look for the configuration file (if it is not
 specified on the command line) has been extended by the following values:
 
-* <HOME>/.wic/wic.conf
-* <HOME>/.weather-information-collector/wic.conf
-* <HOME>/.weather-information-collector/weather-information-collector.conf
+* `<HOME>/.wic/wic.conf`
+* `<HOME>/.weather-information-collector/wic.conf`
+* `<HOME>/.weather-information-collector/weather-information-collector.conf`
 
 The list of predefined paths to look for the task files (if it is not specified
 in the configuration file) has been extended by the following values:
 
-* <HOME>/.wic/task.d
-* <HOME>/.weather-information-collector/task.d
+* `<HOME>/.wic/task.d`
+* `<HOME>/.weather-information-collector/task.d`
+
+In all these cases `<HOME>` stands for the current user's home directory.
 
 ## Version 0.7.0 (2018-11-24)
 
