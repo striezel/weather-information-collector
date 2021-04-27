@@ -7,9 +7,9 @@ set(simdjson-compile-test_sources
     ../../third-party/simdjson/simdjson.cpp
     main.cpp)
 
-if (CMAKE_COMPILER_IS_GNUCC)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     add_definitions (-Wall -O2 -fexceptions)
-endif (CMAKE_COMPILER_IS_GNUCC)
+endif ()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-O2)

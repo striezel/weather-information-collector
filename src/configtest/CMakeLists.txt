@@ -27,9 +27,12 @@ set(weather-information-collector-configtest_sources
     ../Version.cpp
     main.cpp)
 
-if (CMAKE_COMPILER_IS_GNUCC)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_definitions (-Wall -O3 -Weffc++ -pedantic -fexceptions)
-endif (CMAKE_COMPILER_IS_GNUCC)
+endif ()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_definitions (-Wall -O3 -pedantic -fexceptions)
+endif ()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Dwic_no_json_parsing -Dwic_no_network_requests)

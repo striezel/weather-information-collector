@@ -67,9 +67,9 @@ else()
   message(STATUS "Compiler is not fit for simdjson, won't use it in collector.")
 endif(CAN_HAVE_SIMDJSON)
 
-if (CMAKE_COMPILER_IS_GNUCC)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     add_definitions (-Wall -O3 -fexceptions)
-endif (CMAKE_COMPILER_IS_GNUCC)
+endif ()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

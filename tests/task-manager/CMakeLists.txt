@@ -24,9 +24,12 @@ set(task_manager_tests_sources
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-O3 -Dwic_no_json_parsing -Dwic_no_network_requests)
-if (CMAKE_COMPILER_IS_GNUCC)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_definitions(-Wall -Weffc++ -fexceptions)
-endif (CMAKE_COMPILER_IS_GNUCC)
+endif ()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_definitions(-Wall -fexceptions)
+endif ()
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
