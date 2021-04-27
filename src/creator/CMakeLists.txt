@@ -50,10 +50,12 @@ endif(CAN_HAVE_SIMDJSON)
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # We can safely add the -Dwic_no_network_requests to remove unnecessary methods
 # from the API classes, because -Dwic_owm_find_location takes care of all the
 # cURL-related stuff, so we can still do web requests for everything we need.
-add_definitions(-std=c++17 -Dwic_owm_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
+add_definitions(-Dwic_owm_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
