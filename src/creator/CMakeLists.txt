@@ -26,6 +26,7 @@ set(weather-information-collector-task-creator_sources
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
+    ../Version.cpp
     CliUtilities.cpp
     main.cpp)
 

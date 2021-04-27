@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector benchmark tool.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,18 +36,8 @@
 #include "../json/SimdJsonWeatherstack.hpp"
 #endif
 #include "../tasks/TaskManager.hpp"
-#include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
-
-void showVersion()
-{
-  wic::GitInfos info;
-  std::cout << "weather-information-collector-benchmark, " << wic::version << "\n"
-            << "\n"
-            << "Version control commit: " << info.commit() << "\n"
-            << "Version control date:   " << info.date() << std::endl;
-}
 
 void showHelp()
 {
@@ -79,7 +69,7 @@ int main(int argc, char** argv)
       const std::string param(argv[i]);
       if ((param == "-v") || (param == "--version"))
       {
-        showVersion();
+        wic::showVersion("weather-information-collector-benchmark");
         return 0;
       } // if version
       else if ((param == "-?") || (param == "/?") || (param == "--help"))

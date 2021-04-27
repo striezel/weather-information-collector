@@ -27,22 +27,12 @@
 #include "../db/mariadb/StoreMySQLBatch.hpp"
 #include "../db/mariadb/Utilities.hpp"
 #include "../db/mariadb/guess.hpp"
-#include "../util/GitInfos.hpp"
 #include "../util/SemVer.hpp"
 #include "../util/Strings.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
 
 const int defaultBatchSize = 40;
-
-void showVersion()
-{
-  wic::GitInfos info;
-  std::cout << "weather-information-collector-synchronizer, " << wic::version << "\n"
-            << "\n"
-            << "Version control commit: " << info.commit() << "\n"
-            << "Version control date:   " << info.date() << std::endl;
-}
 
 void showHelp()
 {
@@ -96,7 +86,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& sr
     const std::string param(argv[i]);
     if ((param == "-v") || (param == "--version"))
     {
-      showVersion();
+      wic::showVersion("weather-information-collector-synchronizer");
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))

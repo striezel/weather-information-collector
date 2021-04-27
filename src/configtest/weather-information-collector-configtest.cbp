@@ -42,6 +42,7 @@
 			<Add library="stdc++fs" />
 		</Linker>
 		<Unit filename="../ReturnCodes.hpp" />
+		<Unit filename="../Version.cpp" />
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/API.hpp" />
 		<Unit filename="../api/Apixu.cpp" />
@@ -86,9 +87,6 @@
 		<Unit filename="../util/Strings.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

@@ -35,6 +35,7 @@ set(weather-information-collector-update_sources
     ../util/GitInfos.cpp
     ../util/SemVer.cpp
     ../util/Strings.cpp
+    ../Version.cpp
     ForecastDataUpdate_0.8.3.cpp
     UpdateTo_0.5.5.cpp
     UpdateTo_0.6.0.cpp

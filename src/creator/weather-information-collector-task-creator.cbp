@@ -43,6 +43,7 @@
 		<Unit filename="../../third-party/simdjson/simdjson.cpp" />
 		<Unit filename="../../third-party/simdjson/simdjson.h" />
 		<Unit filename="../ReturnCodes.hpp" />
+		<Unit filename="../Version.cpp" />
 		<Unit filename="../Version.hpp" />
 		<Unit filename="../api/API.hpp" />
 		<Unit filename="../api/Apixu.cpp" />

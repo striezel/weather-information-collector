@@ -27,25 +27,10 @@
 #include "../db/mariadb/StoreMySQL.hpp"
 #include "../db/mariadb/guess.hpp"
 #include "../tasks/TaskManager.hpp"
-#include "../util/GitInfos.hpp"
 #include "../util/SemVer.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
 #include "Collector.hpp"
-
-void showVersion()
-{
-  wic::GitInfos info;
-  std::cout << "weather-information-collector, " << wic::version << "\n"
-            << "\n"
-            << "Version control commit: " << info.commit() << "\n"
-            << "Version control date:   " << info.date() << "\n"
-#ifdef __SIZEOF_INT128__
-            << "JSON library:           simdjson" << std::endl;
-#else
-            << "JSON library:           nlohmann/json" << std::endl;
-#endif // __SIZEOF_INT128__
-}
 
 void showHelp()
 {
@@ -78,7 +63,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     const std::string param(argv[i]);
     if ((param == "-v") || (param == "--version"))
     {
-      showVersion();
+      wic::showVersion("weather-information-collector");
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))

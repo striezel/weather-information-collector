@@ -24,6 +24,7 @@ set(weather-information-collector-configtest_sources
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
+    ../Version.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)

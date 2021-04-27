@@ -22,12 +22,20 @@
 #define WEATHER_INFORMATION_COLLECTOR_VERSION_HPP
 
 #include <string>
+#include <string_view>
 
 namespace wic
 {
 
 /** \brief version information */
 const std::string version = "version 0.9.17, 2021-04-26";
+
+
+/** \brief Prints version information to the standard output.
+ *
+ * \param name     name of the program to show
+ */
+void showVersion(const std::string_view name);
 
 } // namespace
 

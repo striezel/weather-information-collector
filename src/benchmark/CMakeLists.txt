@@ -28,6 +28,7 @@ set(weather-information-collector-benchmark_sources
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
+    ../Version.cpp
     benchmark.hpp
     main.cpp)
 

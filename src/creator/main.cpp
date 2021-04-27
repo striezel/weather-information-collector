@@ -26,23 +26,8 @@
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
 #include "../tasks/TaskManager.hpp"
-#include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
-
-void showVersion()
-{
-  wic::GitInfos info;
-  std::cout << "weather-information-collector-task-creator, " << wic::version << "\n"
-            << "\n"
-            << "Version control commit: " << info.commit() << "\n"
-            << "Version control date:   " << info.date() << std::endl
-#ifdef __SIZEOF_INT128__
-            << "JSON library:           simdjson" << std::endl;
-#else
-            << "JSON library:           nlohmann/json" << std::endl;
-#endif // __SIZEOF_INT128__
-}
 
 void showHelp()
 {
@@ -72,7 +57,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     const std::string param(argv[i]);
     if ((param == "-v") || (param == "--version"))
     {
-      showVersion();
+      wic::showVersion("weather-information-collector-task-creator");
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))

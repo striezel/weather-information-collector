@@ -38,6 +38,7 @@ set(weather-information-collector_sources
     ../util/GitInfos.cpp
     ../util/SemVer.cpp
     ../util/Strings.cpp
+    ../Version.cpp
     Collector.cpp
     main.cpp)
 

@@ -28,12 +28,13 @@ set(weather-information-collector-synchronizer_sources
     ../util/GitInfos.cpp
     ../util/SemVer.cpp
     ../util/Strings.cpp
+    ../Version.cpp
     main.cpp)
 
 if (CMAKE_COMPILER_IS_GNUCC)
     add_definitions (-Wall -O3 -fexceptions)
 endif (CMAKE_COMPILER_IS_GNUCC)
-add_definitions(-std=c++17 -Dwic_no_tasks_in_config)
+add_definitions(-std=c++17 -Dwic_no_tasks_in_config -Dwic_no_json_parsing)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 

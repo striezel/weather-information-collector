@@ -22,7 +22,6 @@
 #include <utility>
 #include "../conf/Configuration.hpp"
 #include "../db/mariadb/guess.hpp"
-#include "../util/GitInfos.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
 #include "UpdateTo_0.5.5.hpp"
@@ -37,20 +36,6 @@
 #include "UpdateTo_0.9.0.hpp"
 #include "UpdateTo_0.9.7.hpp"
 #include "UpdateTo_0.9.17.hpp"
-
-void showVersion()
-{
-  wic::GitInfos info;
-  std::cout << "weather-information-collector-update, " << wic::version << "\n"
-            << "\n"
-            << "Version control commit: " << info.commit() << "\n"
-            << "Version control date:   " << info.date() << std::endl
-#ifdef __SIZEOF_INT128__
-            << "JSON library:           simdjson" << std::endl;
-#else
-            << "JSON library:           nlohmann/json" << std::endl;
-#endif // __SIZEOF_INT128__
-}
 
 void showHelp()
 {
@@ -86,7 +71,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     const std::string param(argv[i]);
     if ((param == "-v") || (param == "--version"))
     {
-      showVersion();
+      wic::showVersion("weather-information-collector-update");
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))
