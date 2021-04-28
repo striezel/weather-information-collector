@@ -28,7 +28,7 @@ See the [documentation](doc/readme.md) for more information.
 ### Prerequisites
 
 To build the weather-information-collector from source you need a C++ compiler
-with support for C++17, CMake 2.8 or later, the cURL library (>=7.17), and the
+with support for C++17, CMake 3.8 or later, the cURL library (>=7.17), and the
 MariaDB library. pkg-config is required to make it easier to find compiler
 options for the installed libraries. Additionally, the program uses Catch (C++
 Automated Test Cases in Headers) to perform some tests.
