@@ -53,7 +53,7 @@ class ConnectionFailure: public std::runtime_error
      *
      * \param reason   a string explaining why the connection failed
      */
-    ConnectionFailure(const std::string& reason);
+    explicit ConnectionFailure(const std::string& reason);
 }; // class
 
 } // namespace
