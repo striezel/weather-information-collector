@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Next Version 0.?.? (2021-04-??)
+## Version 0.9.18 (2021-04-28)
 
 The minimum required CMake version for compiling the project is raised from 2.8
 to 3.8.
