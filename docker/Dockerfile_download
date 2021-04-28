@@ -5,7 +5,7 @@
 FROM debian:10-slim
 MAINTAINER Dirk Stolle <striezel-dev@web.de>
 
-ENV DEB_DOWNLOAD_URL https://gitlab.com/striezel/weather-information-collector/-/jobs/1210422449/artifacts/download
+ENV DEB_DOWNLOAD_URL https://gitlab.com/striezel/weather-information-collector/-/jobs/1217754200/artifacts/download
 RUN mkdir -p /opt
 WORKDIR /opt
 # Update packages, install dependencies + cleanup afterwards.
