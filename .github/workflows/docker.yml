@@ -1,0 +1,32 @@
+name: Build Docker images
+
+on: push
+
+jobs:
+  build_from_download:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+      - name: Build Dockerfile_download
+        run: |
+          cd docker
+          docker build . -f Dockerfile_download
+  build_single_stage:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+      - name: Build Dockerfile_build
+        run: |
+          cd docker
+          docker build . -f Dockerfile_build
+  build_multiple_stages:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+      - name: Build Dockerfile_multistage_build
+        run: |
+          cd docker
+          docker build . -f Dockerfile_multistage_build
