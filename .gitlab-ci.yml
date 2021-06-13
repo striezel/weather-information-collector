@@ -53,3 +53,14 @@ package_debian10:
   artifacts:
     paths:
       - "weather-information-collector*.deb"
+
+# Build the Docker image using the downloaded *.deb.
+docker_in_docker:
+  image: docker:20
+  stage: build
+  services:
+    - docker:20-dind
+  before_script:
+    - docker info
+  script:
+    - cd docker && docker build . -f Dockerfile_download
