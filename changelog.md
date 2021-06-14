@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.?.? (2021-06-??)
+
+simdjson, the library used for JSON parsing, has been updated from version 0.6.0
+to version 0.7.1.
+
 ## Version 0.9.18 (2021-04-28)
 
 The minimum required CMake version for compiling the project is raised from 2.8
