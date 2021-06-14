@@ -22,7 +22,7 @@ License: GPL-3+
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
 
 Files: third-party/nlohmann/json.hpp
-Copyright: 2013-2018 Niels Lohmann <http://nlohmann.me>
+Copyright: 2013-2020 Niels Lohmann <http://nlohmann.me>
 License: MIT
  Permission is hereby  granted, free of charge, to any  person obtaining a copy
  of this software and associated  documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ License: MIT
  SOFTWARE.
 
 Files: third-party/simdjson/simdjson.*
-Copyright: 2018-2019 simdjson authors
+Copyright: 2018-2020 simdjson authors
 License: Apache-2.0
  Copyright 2018-2019 The simdjson authors
  .
