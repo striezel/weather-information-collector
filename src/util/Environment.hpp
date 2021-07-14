@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,6 +56,14 @@ std::string getEnvVar(const std::string& name);
  *         Returns false otherwise.
  */
 bool isGitlabCi();
+
+/** \brief Determines whether the application runs within GitHub Actions
+ *         environment.
+ *
+ * \return Returns true, if the program runs in GitHub Actions environment.
+ *         Returns false otherwise.
+ */
+bool isGithubActions();
 
 /** \brief Determines whether the application runs within Travis CI environment.
  *

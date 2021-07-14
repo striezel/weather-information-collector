@@ -12,6 +12,20 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y catch clang-10 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
+      - name: Start MySQL database
+        run: sudo systemctl start mysql.service
+      - name: Show MySQL version information
+        run: |
+          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
+      - name: Prepare MySQL database
+        run: |
+          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
+      - name: Adjust MySQL 8.0 authentication
+        run: |
+          mysql -uroot -proot -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY ''; ALTER USER root@localhost IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
       - name: Build
         run: |
           export CXX=clang++-10
@@ -34,6 +48,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y catch clang-9 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
+      - name: Start MySQL database
+        run: sudo systemctl start mysql.service
+      - name: Show MySQL version information
+        run: |
+          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
+      - name: Prepare MySQL database
+        run: |
+          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
       - name: Build
         run: |
           export CXX=clang++-9
@@ -56,6 +80,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y catch clang-8 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
+      - name: Start MySQL database
+        run: sudo systemctl start mysql.service
+      - name: Show MySQL version information
+        run: |
+          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
+      - name: Prepare MySQL database
+        run: |
+          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
       - name: Build
         run: |
           export CXX=clang++-8

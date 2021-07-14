@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 TEST_CASE("Get API ids")
 {
   using namespace wic;
-  const bool isCI = isGitlabCi() || isTravisCi();
+  const bool isCI = isGitlabCi() || isGithubActions() || isTravisCi();
 
   // Only run this test, if we are within the CI environment.
   if (isCI)
