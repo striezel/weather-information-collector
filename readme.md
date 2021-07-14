@@ -20,8 +20,6 @@ See the [documentation](doc/readme.md) for more information.
   * [![GitHub CI GCC status](https://github.com/striezel/weather-information-collector/workflows/GitHub%20CI%20with%20GCC%208,%209,%2010/badge.svg)](https://github.com/striezel/weather-information-collector/actions)
 * GitLab CI:
 [![GitLab pipeline status](https://gitlab.com/striezel/weather-information-collector/badges/master/pipeline.svg)](https://gitlab.com/striezel/weather-information-collector/)
-* Travis CI:
-[![Build Status](https://travis-ci.org/striezel/weather-information-collector.svg?branch=master)](https://travis-ci.org/striezel/weather-information-collector)
 
 ## Building from source
 
