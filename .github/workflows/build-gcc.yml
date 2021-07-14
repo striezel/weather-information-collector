@@ -34,7 +34,7 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           mkdir build
           cd build
-          cmake ../
+          cmake ../ -DJSON_BENCHMARK=ON
           make -j4
       - name: Tests
         run: |
@@ -70,7 +70,7 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           mkdir build
           cd build
-          cmake ../
+          cmake ../ -DJSON_BENCHMARK=ON
           make -j4
       - name: Tests
         run: |
@@ -102,7 +102,7 @@ jobs:
           cd "$GITHUB_WORKSPACE"
           mkdir build
           cd build
-          cmake ../
+          cmake ../ -DJSON_BENCHMARK=ON
           make -j4
       - name: Tests
         run: |
