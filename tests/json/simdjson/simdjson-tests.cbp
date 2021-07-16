@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="simdjson-tests" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/simdjson-tests" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Weffc++" />
+			<Add option="-pedantic" />
+			<Add option="-Wall" />
+			<Add option="-std=c++17" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../../../src/data/Forecast.cpp" />
+		<Unit filename="../../../src/data/Forecast.hpp" />
+		<Unit filename="../../../src/data/Weather.cpp" />
+		<Unit filename="../../../src/data/Weather.hpp" />
+		<Unit filename="../../../src/json/ApixuFunctions.cpp" />
+		<Unit filename="../../../src/json/ApixuFunctions.hpp" />
+		<Unit filename="../../../src/json/SimdJsonApixu.cpp" />
+		<Unit filename="../../../src/json/SimdJsonApixu.hpp" />
+		<Unit filename="../../../src/json/SimdJsonDarkSky.cpp" />
+		<Unit filename="../../../src/json/SimdJsonDarkSky.hpp" />
+		<Unit filename="../../../src/json/SimdJsonOwm.cpp" />
+		<Unit filename="../../../src/json/SimdJsonOwm.hpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherbit.cpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherbit.hpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherstack.cpp" />
+		<Unit filename="../../../src/json/SimdJsonWeatherstack.hpp" />
+		<Unit filename="../../../src/json/WeatherstackFunctions.cpp" />
+		<Unit filename="../../../src/json/WeatherstackFunctions.hpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../../third-party/simdjson/simdjson.h" />
+		<Unit filename="SimdJsonApixu.cpp" />
+		<Unit filename="SimdJsonDarkSky.cpp" />
+		<Unit filename="SimdJsonOwm.cpp" />
+		<Unit filename="SimdJsonWeatherbit.cpp" />
+		<Unit filename="SimdJsonWeatherstack.cpp" />
+		<Unit filename="main.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

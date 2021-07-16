@@ -19,6 +19,9 @@ add_subdirectory (api/weatherbit)
 # Recurse into subdirectory for Weatherstack tests.
 add_subdirectory (api/weatherstack)
 
+# Recurse into subdirectory for JSON (non-)parsing tests.
+add_subdirectory (json)
+
 if (JSON_BENCHMARK)
   # Recurse into subdirectory for benchmark executable tests.
   add_subdirectory (benchmark)
