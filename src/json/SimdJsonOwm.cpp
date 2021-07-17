@@ -116,7 +116,7 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
       // Empty snow object means zero snow.
       weather.setSnow(0.0f);
     }
-  } // if rain object
+  } // if snow object
   value["dt"].tie(elem, error);
   if (!error && elem.is<int64_t>())
   {
@@ -158,7 +158,7 @@ bool SimdJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
   const auto [list, e2] = doc["list"];
   if (e2 || list.type() != simdjson::dom::element_type::ARRAY)
   {
-    std::cerr << "Error in SimdJsonOwm::parseForecast(): list is either empty or not an array!" << std::endl;
+    std::cerr << "Error in SimdJsonOwm::parseForecast(): list is either missing or not an array!" << std::endl;
     return false;
   }
   forecast.setData({ });
@@ -179,7 +179,7 @@ bool SimdJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
   const auto [cnt, e3] = doc["cnt"];
   if (e3 || !cnt.is<uint64_t>())
   {
-    std::cerr << "Error in SimdJsonOwm::parseForecast(): cnt is empty or not an integer!" << std::endl;
+    std::cerr << "Error in SimdJsonOwm::parseForecast(): cnt is either missing or not an integer!" << std::endl;
     return false;
   }
   const decltype(data.size()) cntValue = cnt.get<uint64_t>();
