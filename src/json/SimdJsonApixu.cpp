@@ -117,14 +117,14 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
   const auto [jsForecast, forecastError] = doc["forecast"];
   if (forecastError || jsForecast.type() != simdjson::dom::element_type::OBJECT)
   {
-    std::cerr << "Error in SimdJsonApixu::parseForecast(): forecast element is missing!" << std::endl;
+    std::cerr << "Error in SimdJsonApixu::parseForecast(): forecast element is missing or it is not an object!" << std::endl;
     return false;
   }
   auto [forecastday, error] = jsForecast["forecastday"];
   // forecastday must be a non-empty array.
   if (error || forecastday.type() != simdjson::dom::element_type::ARRAY)
   {
-    std::cerr << "Error in SimdJsonApixu::parseForecast(): forecastday element is missing!" << std::endl;
+    std::cerr << "Error in SimdJsonApixu::parseForecast(): forecastday element is missing or it is not an array!" << std::endl;
     return false;
   }
   forecast.setData({ });
@@ -141,8 +141,14 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
     const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.get<int64_t>().value()));
     w_min.setDataTime(dt);
     auto [hour, errorHour] = value["hour"];
-    if (!errorHour && hour.type() == simdjson::dom::element_type::ARRAY)
+    if (!errorHour)
     {
+      // If hour is present but not an array, then it is an error.
+      if (hour.type() != simdjson::dom::element_type::ARRAY)
+      {
+        std::cerr << "Error in SimdJsonApixu::parseForecast(): hour element is not an array!" << std::endl;
+        return false;
+      }
       // hourly data is present, use that.
       simdjson::dom::element v2;
       for (const value_type& elem: hour)
@@ -198,7 +204,7 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
       // day must be a non-empty object.
       if (errorDay || day.type() != simdjson::dom::element_type::OBJECT)
       {
-        std::cout << "Error in SimdJsonApixu::parseForecast(): JSON element 'day' is empty or not an object!" << std::endl;
+        std::cerr << "Error in SimdJsonApixu::parseForecast(): JSON element 'day' is missing or not an object!" << std::endl;
         return false;
       }
       simdjson::dom::element v2;
@@ -245,6 +251,12 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
       data.push_back(w_max);
     } // else (daily data)
   } // for (range-based)
+
+  if (data.empty())
+  {
+    std::cerr << "Error in SimdJsonApixu::parseForecast(): JSON does not contain any forecast data!" << std::endl;
+    return false;
+  }
 
   forecast.setData(data);
   return true;
