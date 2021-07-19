@@ -11,7 +11,7 @@ e.g. https://api.apixu.com/v1/current.json?key=API-key-here&q=auto:ip.
 
 ## Formats
 
-The API provides two formats, JSON and XML. Just change the extenstion to .json
+The API provides two formats, JSON and XML. Just change the extension to .json
 or .xml, as required:
 
 * https://api.apixu.com/v1/current.json?key=API-key-here&q=auto:ip
