@@ -26,7 +26,7 @@ TEST_CASE("Class TaskManager")
   /* Note:
 
      The tests for loading configuration files are part of a separate test
-     application. It can be found in the manger/ subdirectory.
+     application. It can be found in the task-manager/ subdirectory.
   */
 
   using namespace wic;
