@@ -79,7 +79,7 @@ jobs:
       - name: Install Debian packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y catch clang-8 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
+          sudo apt-get install -y catch clang-8 cmake git libc++-8-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
       - name: Start MySQL database
         run: sudo systemctl start mysql.service
       - name: Show MySQL version information

@@ -41,10 +41,15 @@ set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather-information-collector-configtest ${weather-information-collector-configtest_sources})
 
-if (NOT MSVC)
-  # link static library for std::filesystem on GNU C++ compiler
+# GNU GCC before 9.1.0 needs to link to libstdc++fs explicitly.
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.1.0")
   target_link_libraries(weather-information-collector-configtest stdc++fs)
-endif (NOT MSVC)
+endif ()
+
+# Clang before 9.0 needs to link to libc++fs explicitly.
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.0")
+  target_link_libraries(weather-information-collector-configtest c++fs)
+endif ()
 
 # create git-related constants
 # -- get the current commit hash

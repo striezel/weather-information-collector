@@ -31,7 +31,7 @@ build_clang:
     MYSQL_PASSWORD: "ci_password"
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
-    - apt-get update && apt-get -y install catch clang cmake libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - apt-get update && apt-get -y install catch clang cmake libc++-7-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
     - export CC=clang && export CXX=clang++
   script:
     - ./ci/cpplint.sh
