@@ -3,7 +3,7 @@ image: debian:11-slim
 build_gcc:
   stage: build
   services:
-  - mariadb:10.4
+  - mariadb:10.5
   variables:
     MYSQL_DATABASE: "weather_information_collector"
     MYSQL_USER: "ci_user"
@@ -24,7 +24,7 @@ build_gcc:
 build_clang:
   stage: build
   services:
-  - mariadb:10.4
+  - mariadb:10.5
   variables:
     MYSQL_DATABASE: "weather_information_collector"
     MYSQL_USER: "ci_user"
