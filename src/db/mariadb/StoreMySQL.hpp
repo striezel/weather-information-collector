@@ -30,7 +30,7 @@ namespace wic
 {
 
 /** \brief Stores weather data in a MySQL database. */
-class StoreMySQL: public Store
+class StoreMySQL final: public Store
 {
   public:
     /** \brief Constructor.
