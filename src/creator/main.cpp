@@ -25,6 +25,7 @@
 #include "../conf/Configuration.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
+#include "../net/curl_version.hpp"
 #include "../tasks/TaskManager.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
@@ -58,6 +59,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     if ((param == "-v") || (param == "--version"))
     {
       wic::showVersion("weather-information-collector-task-creator");
+      showCurlVersion();
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))

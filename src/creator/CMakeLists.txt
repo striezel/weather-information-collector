@@ -21,6 +21,7 @@ set(weather-information-collector-task-creator_sources
     ../db/ConnectionInformation.cpp
     ../net/Curly.cpp
     ../net/Request.cpp
+    ../net/curl_version.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
     ../util/Directories.cpp

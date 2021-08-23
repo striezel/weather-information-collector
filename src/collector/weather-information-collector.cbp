@@ -124,6 +124,8 @@
 		<Unit filename="../net/Curly.hpp" />
 		<Unit filename="../net/Request.cpp" />
 		<Unit filename="../net/Request.hpp" />
+		<Unit filename="../net/curl_version.cpp" />
+		<Unit filename="../net/curl_version.hpp" />
 		<Unit filename="../tasks/Task.cpp" />
 		<Unit filename="../tasks/Task.hpp" />
 		<Unit filename="../tasks/TaskManager.cpp" />
