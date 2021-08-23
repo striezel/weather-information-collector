@@ -175,7 +175,7 @@ bool NLohmannJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
   const value_type list = *findList;
   forecast.setData({ });
   auto data = forecast.data();
-  for (const value_type val : list)
+  for (const value_type& val : list)
   {
     Weather w;
     if (parseSingleWeatherItem(val, w))
@@ -239,7 +239,7 @@ bool NLohmannJsonOwm::parseLocations(const std::string& json, std::vector<std::p
   }
   const value_type list = *listFind;
 
-  for (const value_type elem : list)
+  for (const value_type& elem : list)
   {
     Location loc;
     auto val = elem.find("id");

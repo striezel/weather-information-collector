@@ -156,7 +156,7 @@ bool NLohmannJsonWeatherbit::parseForecast(const std::string& json, Forecast& fo
   const value_type dataJson = *findData;
   forecast.setData({ });
   auto data = forecast.data();
-  for (const value_type val : dataJson)
+  for (const value_type& val : dataJson)
   {
     Weather w;
     if (parseSingleWeatherItem(val, w))
