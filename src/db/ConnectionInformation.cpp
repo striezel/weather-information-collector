@@ -23,14 +23,14 @@
 namespace wic
 {
 
-const uint16_t ConnectionInformation::defaultMySqlPort = 3306;
+const uint16_t ConnectionInformation::defaultMariaDbPort = 3306;
 
 ConnectionInformation::ConnectionInformation()
 : db_host("localhost"),
   db_name("database"),
   db_user("root"),
   db_pass(""),
-  db_port(defaultMySqlPort)
+  db_port(defaultMariaDbPort)
 {
 }
 
@@ -111,4 +111,4 @@ void ConnectionInformation::clear()
   db_port = 0;
 }
 
-} //namespace
+} // namespace

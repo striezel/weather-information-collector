@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector benchmark tool.
-    Copyright (C) 2019, 2020  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
 #include "../data/Forecast.hpp"
 #include "../data/Location.hpp"
 #include "../data/Weather.hpp"
-#include "../db/mariadb/SourceMySQL.hpp"
+#include "../db/mariadb/SourceMariaDB.hpp"
 #include "../ReturnCodes.hpp"
 
 namespace wic
@@ -121,7 +121,7 @@ void printForecast(const Forecast& f)
 
 /* ********* Weather data ********* */
 template<typename simdJsonT, typename nlohmannJsonT>
-int weatherDataBench(const ApiType api, SourceMySQL& source)
+int weatherDataBench(const ApiType api, SourceMariaDB& source)
 {
   // Find all locations with weather data.
   std::vector<std::pair<Location, ApiType>> weatherLocations;
@@ -252,7 +252,7 @@ int weatherDataBench(const ApiType api, SourceMySQL& source)
 
 /* ********* Forecast data ********* */
 template<typename simdJsonT, typename nlohmannJsonT>
-int forecastBench(const ApiType api, SourceMySQL& source)
+int forecastBench(const ApiType api, SourceMariaDB& source)
 {
   // Find all locations with forecast data.
   std::vector<std::pair<Location, ApiType>> forecastLocations;

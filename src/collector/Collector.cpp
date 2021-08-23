@@ -24,7 +24,7 @@
 #include <thread>
 #include "../api/Factory.hpp"
 #include "../data/Weather.hpp"
-#include "../db/mariadb/StoreMySQL.hpp"
+#include "../db/mariadb/StoreMariaDB.hpp"
 
 namespace wic
 {
@@ -175,7 +175,7 @@ void Collector::collectCurrent(API& api, const ApiType type, const Location& loc
   Weather weather;
   if (api.currentWeather(loc, weather))
   {
-    StoreMySQL sql(connInfo);
+    StoreMariaDB sql(connInfo);
     if (!sql.saveCurrentWeather(type, loc, weather))
     {
       std::cerr << "Error: Could not save weather data to database!" << std::endl;
@@ -193,7 +193,7 @@ void Collector::collectForecast(API& api, const ApiType type, const Location& lo
   Forecast forecast;
   if (api.forecastWeather(loc, forecast))
   {
-    StoreMySQL sql(connInfo);
+    StoreMariaDB sql(connInfo);
     if (!sql.saveForecast(type, loc, forecast))
     {
       std::cerr << "Error: Could not save forecast data to database!" << std::endl;
@@ -212,7 +212,7 @@ void Collector::collectCurrentAndForecast(API& api, const ApiType type, const Lo
   Forecast forecast;
   if (api.currentAndForecastWeather(loc, weather, forecast))
   {
-    StoreMySQL sql(connInfo);
+    StoreMariaDB sql(connInfo);
     if (!sql.saveCurrentWeather(type, loc, weather))
     {
       std::cerr << "Error: Could not save weather data to database!" << std::endl;

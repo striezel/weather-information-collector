@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include "SourceMySQL.hpp"
+#include "SourceMariaDB.hpp"
 #include <iostream>
 #include "Result.hpp"
 #include "Utilities.hpp"
@@ -26,12 +26,12 @@
 namespace wic
 {
 
-SourceMySQL::SourceMySQL(const ConnectionInformation& ci)
+SourceMariaDB::SourceMariaDB(const ConnectionInformation& ci)
 : connInfo(ci)
 {
 }
 
-bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather)
+bool SourceMariaDB::getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather)
 {
   const std::string apiName = toString(type);
   try
@@ -147,7 +147,7 @@ bool SourceMySQL::getCurrentWeather(const ApiType type, const Location& location
 }
 
 #ifndef wic_no_metadata
-bool SourceMySQL::getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather)
+bool SourceMariaDB::getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather)
 {
   const std::string apiName = toString(type);
   try
@@ -205,7 +205,7 @@ bool SourceMySQL::getMetaCurrentWeather(const ApiType type, const Location& loca
 }
 #endif // wic_no_metadata
 
-bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast)
+bool SourceMariaDB::getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast)
 {
   const std::string apiName = toString(type);
   try
@@ -345,7 +345,7 @@ bool SourceMySQL::getForecasts(const ApiType type, const Location& location, std
 }
 
 #ifndef wic_no_metadata
-bool SourceMySQL::getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast)
+bool SourceMariaDB::getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast)
 {
   const std::string apiName = toString(type);
   try
@@ -401,7 +401,7 @@ bool SourceMySQL::getMetaForecasts(const ApiType type, const Location& location,
 }
 #endif
 
-bool SourceMySQL::listApis(std::map<ApiType, int>& apis)
+bool SourceMariaDB::listApis(std::map<ApiType, int>& apis)
 {
   try
   {
@@ -436,7 +436,7 @@ bool SourceMySQL::listApis(std::map<ApiType, int>& apis)
   }
 }
 
-bool SourceMySQL::listWeatherLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations)
+bool SourceMariaDB::listWeatherLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations)
 {
   try
   {
@@ -473,7 +473,7 @@ bool SourceMySQL::listWeatherLocationsWithApi(std::vector<std::pair<Location, Ap
   }
 }
 
-bool SourceMySQL::listForecastLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations)
+bool SourceMariaDB::listForecastLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations)
 {
   try
   {
@@ -510,7 +510,7 @@ bool SourceMySQL::listForecastLocationsWithApi(std::vector<std::pair<Location, A
   }
 }
 
-int SourceMySQL::getLocationId(const Location& location)
+int SourceMariaDB::getLocationId(const Location& location)
 {
   try
   {

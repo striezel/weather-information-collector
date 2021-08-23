@@ -22,9 +22,9 @@
 #include <string>
 #include <utility>
 #include "../conf/Configuration.hpp"
-#include "../db/mariadb/SourceMySQL.hpp"
-#include "../db/mariadb/StoreMySQL.hpp"
-#include "../db/mariadb/StoreMySQLBatch.hpp"
+#include "../db/mariadb/SourceMariaDB.hpp"
+#include "../db/mariadb/StoreMariaDB.hpp"
+#include "../db/mariadb/StoreMariaDBBatch.hpp"
 #include "../db/mariadb/Utilities.hpp"
 #include "../db/mariadb/guess.hpp"
 #include "../util/SemVer.hpp"
@@ -290,7 +290,7 @@ int main(int argc, char** argv)
   } // else
 
   // Get list of location-API pairs that need to be synchronized.
-  wic::SourceMySQL dataSource = wic::SourceMySQL(srcConfig.connectionInfo());
+  wic::SourceMariaDB dataSource = wic::SourceMariaDB(srcConfig.connectionInfo());
   std::vector<std::pair<wic::Location, wic::ApiType> > locations;
   if (!dataSource.listWeatherLocationsWithApi(locations))
   {
@@ -304,7 +304,7 @@ int main(int argc, char** argv)
   } // for
 
   // Get available APIs in destination database.
-  wic::SourceMySQL dataDest = wic::SourceMySQL(destConfig.connectionInfo());
+  wic::SourceMariaDB dataDest = wic::SourceMariaDB(destConfig.connectionInfo());
   std::map<wic::ApiType, int> apis;
   if (!dataDest.listApis(apis))
   {
@@ -327,7 +327,7 @@ int main(int argc, char** argv)
 
   // scope for synchronization of weather data
   {
-    wic::StoreMySQLBatch destinationStore(destConfig.connectionInfo(), batchSize);
+    wic::StoreMariaDBBatch destinationStore(destConfig.connectionInfo(), batchSize);
     for(const auto& [location, api] : locations)
     {
       std::cout << "Synchronizing weather data for " << location.toString()
@@ -426,7 +426,7 @@ int main(int argc, char** argv)
         return wic::rcDatabaseError;
       }
 
-      wic::StoreMySQL destinationStore = wic::StoreMySQL(destConfig.connectionInfo());
+      wic::StoreMariaDB destinationStore = wic::StoreMariaDB(destConfig.connectionInfo());
 
       // Iterate over data.
       auto sourceIterator = sourceForecast.begin();

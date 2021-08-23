@@ -22,7 +22,7 @@
 #include "benchmark.hpp"
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
-#include "../db/mariadb/SourceMySQL.hpp"
+#include "../db/mariadb/SourceMariaDB.hpp"
 #include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
 #include "../json/NLohmannJsonOwm.hpp"
@@ -117,7 +117,7 @@ int main(int argc, char** argv)
   }
 
 #ifdef __SIZEOF_INT128__
-  SourceMySQL source(config.connectionInfo());
+  SourceMariaDB source(config.connectionInfo());
 
   /* ********* Weather data ********* */
   // OpenWeatherMap

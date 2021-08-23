@@ -18,8 +18,8 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_SOURCEMYSQL_HPP
-#define WEATHER_INFORMATION_COLLECTOR_SOURCEMYSQL_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_SOURCEMARIADB_HPP
+#define WEATHER_INFORMATION_COLLECTOR_SOURCEMARIADB_HPP
 
 #include <chrono>
 #include <map>
@@ -39,20 +39,20 @@
 namespace wic
 {
 
-/** \brief Retrieves data from a MySQL database. */
-class SourceMySQL
+/** \brief Retrieves data from a MariaDB (or compatible) database. */
+class SourceMariaDB
 {
   public:
     /** \brief Constructor
      *
      * \param ci  information for connection to the database
      */
-    explicit SourceMySQL(const ConnectionInformation& ci);
+    explicit SourceMariaDB(const ConnectionInformation& ci);
 
 
     /** \brief Destructor.
      */
-    virtual ~SourceMySQL() = default;
+    virtual ~SourceMariaDB() = default;
 
 
     /** \brief Gets the current weather data for a given location and API.
@@ -144,9 +144,9 @@ class SourceMySQL
      */
     virtual int getLocationId(const Location& location);
   private:
-    ConnectionInformation connInfo; /**< MySQL connection information */
+    ConnectionInformation connInfo; /**< MariaDB connection information */
 }; // class
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_SOURCEMYSQL_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_SOURCEMARIADB_HPP

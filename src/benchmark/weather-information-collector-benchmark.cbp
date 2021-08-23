@@ -69,8 +69,8 @@
 		<Unit filename="../db/mariadb/Result.hpp" />
 		<Unit filename="../db/mariadb/Row.cpp" />
 		<Unit filename="../db/mariadb/Row.hpp" />
-		<Unit filename="../db/mariadb/SourceMySQL.cpp" />
-		<Unit filename="../db/mariadb/SourceMySQL.hpp" />
+		<Unit filename="../db/mariadb/SourceMariaDB.cpp" />
+		<Unit filename="../db/mariadb/SourceMariaDB.hpp" />
 		<Unit filename="../db/mariadb/Utilities.cpp" />
 		<Unit filename="../db/mariadb/Utilities.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />

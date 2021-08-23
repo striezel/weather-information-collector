@@ -22,13 +22,13 @@
 #include <catch.hpp>
 #include "../../../src/db/mariadb/API.hpp"
 #include "../../../src/db/mariadb/Result.hpp"
-#include "../../../src/db/mariadb/StoreMySQL.hpp"
+#include "../../../src/db/mariadb/StoreMariaDB.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../CiData.hpp"
 #include "../InitDB.hpp"
 
-TEST_CASE("StoreMySQL tests")
+TEST_CASE("StoreMariaDB tests")
 {
   using namespace wic;
   const bool isCI = isGitlabCi() || isGithubActions() || isTravisCi();
@@ -48,7 +48,7 @@ TEST_CASE("StoreMySQL tests")
 
     SECTION("storing weather data")
     {
-      StoreMySQL store(connInfo);
+      StoreMariaDB store(connInfo);
       const auto Dresden = CiData::getDresden();
       const auto weather = CiData::sampleWeatherDresden();
 
@@ -82,7 +82,7 @@ TEST_CASE("StoreMySQL tests")
 
     SECTION("storing forecast data")
     {
-      StoreMySQL store(connInfo);
+      StoreMariaDB store(connInfo);
       const auto Dresden = CiData::getDresden();
       const auto forecast = CiData::sampleForecastDresden();
 

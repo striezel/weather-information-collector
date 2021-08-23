@@ -33,9 +33,9 @@ namespace wic
 class ConnectionInformation
 {
   public:
-    /** \brief default port number for MySQL database servers
+    /** \brief default port number for MariaDB database servers
      */
-    static const uint16_t defaultMySqlPort;
+    static const uint16_t defaultMariaDbPort;
 
 
     /** \brief Default constructor.
@@ -51,7 +51,7 @@ class ConnectionInformation
      * \param pass  password for the database user
      * \param port  port number of the database server
      */
-    ConnectionInformation(const std::string& host, const std::string& db, const std::string& user, const std::string& pass, const uint16_t port = defaultMySqlPort);
+    ConnectionInformation(const std::string& host, const std::string& db, const std::string& user, const std::string& pass, const uint16_t port = defaultMariaDbPort);
 
 
     /** \brief Gets the hostname of the database server.
@@ -127,7 +127,7 @@ class ConnectionInformation
     /** \brief Checks whether the connection information is complete.
      *
      * \return Returns true, if the object has all information required to
-     *         connect to a MySQL database. Returns false otherwise.
+     *         connect to a MariaDB server. Returns false otherwise.
      */
     bool isComplete() const;
 
@@ -141,8 +141,8 @@ class ConnectionInformation
     std::string db_user; /**< database user */
     std::string db_pass; /**< password for the database user */
     uint16_t db_port; /**< port number of the database server */
-}; //class
+}; // class
 
-} //namespace
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_CONNECTIONINFORMATION_HPP

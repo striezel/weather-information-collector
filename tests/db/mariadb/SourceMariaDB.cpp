@@ -20,14 +20,14 @@
 
 #include <iostream>
 #include <catch.hpp>
-#include "../../../src/db/mariadb/SourceMySQL.hpp"
-#include "../../../src/db/mariadb/StoreMySQL.hpp"
+#include "../../../src/db/mariadb/SourceMariaDB.hpp"
+#include "../../../src/db/mariadb/StoreMariaDB.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../CiData.hpp"
 #include "../InitDB.hpp"
 
-TEST_CASE("SourceMySQL tests")
+TEST_CASE("SourceMariaDB tests")
 {
   using namespace wic;
   const bool isCI = isGitlabCi() || isGithubActions() || isTravisCi();
@@ -47,14 +47,14 @@ TEST_CASE("SourceMySQL tests")
 
     SECTION("storing and retrieving weather data")
     {
-      StoreMySQL store(connInfo);
+      StoreMariaDB store(connInfo);
       const auto Dresden = CiData::getDresden();
       const auto weather = CiData::sampleWeatherDresden();
 
       REQUIRE( store.saveCurrentWeather(ApiType::OpenWeatherMap, Dresden, weather) );
 
       // Weather data should also exist in DB now. Query some of it.
-      SourceMySQL source(connInfo);
+      SourceMariaDB source(connInfo);
       std::vector<Weather> dbWeather;
       // -- Retrieval should succeed.
       REQUIRE( source.getCurrentWeather(ApiType::OpenWeatherMap, Dresden, dbWeather) );
@@ -67,14 +67,14 @@ TEST_CASE("SourceMySQL tests")
 
     SECTION("storing weather data and retrieving its meta data")
     {
-      StoreMySQL store(connInfo);
+      StoreMariaDB store(connInfo);
       const auto Dresden = CiData::getDresden();
       const auto weather = CiData::sampleWeatherDresden();
 
       REQUIRE( store.saveCurrentWeather(ApiType::OpenWeatherMap, Dresden, weather) );
 
       // Weather data should also exist in DB now. Query some of it.
-      SourceMySQL source(connInfo);
+      SourceMariaDB source(connInfo);
       std::vector<WeatherMeta> metaWeather;
       // -- Retrieval should succeed.
       REQUIRE( source.getMetaCurrentWeather(ApiType::OpenWeatherMap, Dresden, metaWeather) );
@@ -91,14 +91,14 @@ TEST_CASE("SourceMySQL tests")
 
     SECTION("storing and retrieving forecast data")
     {
-      StoreMySQL store(connInfo);
+      StoreMariaDB store(connInfo);
       const auto Dresden = CiData::getDresden();
       const auto forecast = CiData::sampleForecastDresden();
 
       REQUIRE( store.saveForecast(ApiType::OpenWeatherMap, Dresden, forecast) );
 
       // Forecast data should also exist in DB now. Query some of it.
-      SourceMySQL source(connInfo);
+      SourceMariaDB source(connInfo);
       std::vector<Forecast> dbForecast;
       // -- Retrieval should succeed.
       REQUIRE( source.getForecasts(ApiType::OpenWeatherMap, Dresden, dbForecast) );
@@ -112,14 +112,14 @@ TEST_CASE("SourceMySQL tests")
 
     SECTION("storing forecast data and retrieving its meta data")
     {
-      StoreMySQL store(connInfo);
+      StoreMariaDB store(connInfo);
       const auto Dresden = CiData::getDresden();
       const auto forecast = CiData::sampleForecastDresden();
 
       REQUIRE( store.saveForecast(ApiType::OpenWeatherMap, Dresden, forecast) );
 
       // Forecast data should also exist in DB now. Query metadata of it.
-      SourceMySQL source(connInfo);
+      SourceMariaDB source(connInfo);
       std::vector<ForecastMeta> metaForecast;
       // -- Retrieval should succeed.
       REQUIRE( source.getMetaForecasts(ApiType::OpenWeatherMap, Dresden, metaForecast) );

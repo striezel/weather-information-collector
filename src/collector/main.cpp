@@ -24,7 +24,7 @@
 #include "../api/Apixu.hpp"
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
-#include "../db/mariadb/StoreMySQL.hpp"
+#include "../db/mariadb/StoreMariaDB.hpp"
 #include "../db/mariadb/guess.hpp"
 #include "../tasks/TaskManager.hpp"
 #include "../util/SemVer.hpp"

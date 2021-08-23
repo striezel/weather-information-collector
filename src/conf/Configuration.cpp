@@ -454,16 +454,16 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
       return false;
   } // while
 
-  // Set database port to default for MySQL, if it has not been set yet.
+  // Set database port to default for MariaDB, if it has not been set yet.
   if (connInfo.port() == 0)
   {
-    connInfo.setPort(ConnectionInformation::defaultMySqlPort);
+    connInfo.setPort(ConnectionInformation::defaultMariaDbPort);
   }
   if (!connInfo.isComplete())
   {
     std::cerr << "Error: Database connection setting in file " << fileName
               << " are incomplete! Specify hostname, database name, user, "
-              << "password and (if not " << ConnectionInformation::defaultMySqlPort
+              << "password and (if not " << ConnectionInformation::defaultMariaDbPort
               << ") the port number!" << std::endl;
     return false;
   }

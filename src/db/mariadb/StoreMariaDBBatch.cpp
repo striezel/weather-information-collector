@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,14 +18,14 @@
  -------------------------------------------------------------------------------
 */
 
-#include "StoreMySQLBatch.hpp"
+#include "StoreMariaDBBatch.hpp"
 #include <iostream>
 #include "Utilities.hpp"
 
 namespace wic
 {
 
-StoreMySQLBatch::StoreMySQLBatch(const ConnectionInformation& ci, const unsigned int batchSize)
+StoreMariaDBBatch::StoreMariaDBBatch(const ConnectionInformation& ci, const unsigned int batchSize)
 : records(0),
   batchLimit(batchSize),
   conn(ci),
@@ -33,12 +33,12 @@ StoreMySQLBatch::StoreMySQLBatch(const ConnectionInformation& ci, const unsigned
 {
 }
 
-StoreMySQLBatch::~StoreMySQLBatch()
+StoreMariaDBBatch::~StoreMariaDBBatch()
 {
   commit();
 }
 
-bool StoreMySQLBatch::saveCurrentWeather(const int apiId, const int locationId, const Weather& weather)
+bool StoreMariaDBBatch::saveCurrentWeather(const int apiId, const int locationId, const Weather& weather)
 {
   if (records == 0)
   {
@@ -155,7 +155,7 @@ bool StoreMySQLBatch::saveCurrentWeather(const int apiId, const int locationId, 
     return true;
 }
 
-bool StoreMySQLBatch::commit()
+bool StoreMariaDBBatch::commit()
 {
   if (records == 0)
     return true;

@@ -18,57 +18,50 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_STOREMYSQL_HPP
-#define WEATHER_INFORMATION_COLLECTOR_STOREMYSQL_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_STOREMARIADBBATCH_HPP
+#define WEATHER_INFORMATION_COLLECTOR_STOREMARIADBBATCH_HPP
 
-#include "../Store.hpp"
-#include <fstream>
+#include <string>
+#include "../../data/Weather.hpp"
 #include "Connection.hpp"
-#include "../ConnectionInformation.hpp"
 
 namespace wic
 {
 
-/** \brief Stores weather data in a MySQL database. */
-class StoreMySQL final: public Store
+/** \brief Class to store data in a MariaDB (or compatible) database in batches.  */
+class StoreMariaDBBatch
 {
   public:
     /** \brief Constructor.
      *
      * \param ci  information for connection to the database
+     * \param batchSize  number of records per insert statement
      */
-    explicit StoreMySQL(const ConnectionInformation& ci);
+    StoreMariaDBBatch(const ConnectionInformation& ci, const unsigned int batchSize);
 
 
     /** \brief Destructor.
      */
-    ~StoreMySQL() final = default;
+    ~StoreMariaDBBatch();
 
 
     /** \brief Saves a current weather entry for a given location and API.
      *
-     * \param type      API that was used to gather the information
-     * \param location  location for the weather information
-     * \param weather   weather information
+     * \param apiId       id of the API that was used to gather the information
+     * \param locationId  id of the location for the weather information
+     * \param weather     weather information
      * \return Returns true, if the data was saved.
      *         Returns false, if an error occurred.
      */
-    bool saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather) final;
-
-
-    /** \brief Saves weather forecast data for a given location and API.
-     *
-     * \param type      API that was used to gather the information
-     * \param location  location for the weather information
-     * \param forecast  weather forecast information
-     * \return Returns true, if the data was saved.
-     *         Returns false, if an error occurred.
-     */
-    bool saveForecast(const ApiType type, const Location& location, const Forecast& forecast) final;
+    bool saveCurrentWeather(const int apiId, const int locationId, const Weather& weather);
   private:
-    ConnectionInformation connInfo; /**< MySQL connection information */
+    bool commit();
+    unsigned int records;
+    unsigned int batchLimit;
+    db::mariadb::Connection conn; /**< MariaDB connection */
+    std::string insertQuery;
 }; // class
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_STOREMYSQL_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_STOREMARIADBBATCH_HPP

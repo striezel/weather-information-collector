@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include "StoreMySQL.hpp"
+#include "StoreMariaDB.hpp"
 #include <iostream>
 #include "Result.hpp"
 #include "Utilities.hpp"
@@ -26,12 +26,12 @@
 namespace wic
 {
 
-StoreMySQL::StoreMySQL(const ConnectionInformation& ci)
+StoreMariaDB::StoreMariaDB(const ConnectionInformation& ci)
 : connInfo(ci)
 {
 }
 
-bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather)
+bool StoreMariaDB::saveCurrentWeather(const ApiType type, const Location& location, const Weather& weather)
 {
   // get API id
   const std::string apiName = toString(type);
@@ -122,7 +122,7 @@ bool StoreMySQL::saveCurrentWeather(const ApiType type, const Location& location
   }
 }
 
-bool StoreMySQL::saveForecast(const ApiType type, const Location& location, const Forecast& forecast)
+bool StoreMariaDB::saveForecast(const ApiType type, const Location& location, const Forecast& forecast)
 {
   if (forecast.data().empty())
   {

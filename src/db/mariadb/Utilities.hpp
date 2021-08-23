@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ namespace wic
 /** \brief Gets the ID of a location from the database. If no such location
  * exists, it will be created.
  *
- * \param conn      MySQL database connection
+ * \param conn      MariaDB connection
  * \param location  the location to look for
  * \return Returns the ID of the location in case of success.
  * Returns -1, if an error occurred.
@@ -41,7 +41,7 @@ int_least32_t getLocationId(db::mariadb::Connection& conn, const Location& locat
 
 /** \brief Gets a location by ID from the database.
  *
- * \param conn MySQL database connection
+ * \param conn MariaDB connection
  * \param locationId ID of the location
  * \return Returns the location with the given ID, if it was found.
  *         Returns an empty location otherwise.

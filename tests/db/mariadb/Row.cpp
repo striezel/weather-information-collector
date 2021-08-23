@@ -52,7 +52,7 @@ TEST_CASE("Row class tests")
       // There should be one row.
       REQUIRE( result.rows().size() == 1 );
 
-      // First two columns should be NULL, MySQL converts div. by zero to NULL.
+      // First two columns should be NULL, MariaDB (and MySQL) converts div. by zero to NULL.
       REQUIRE( result.rows().at(0).isNull(0) );
       REQUIRE( result.rows().at(0).isNull(1) );
       // Other columns should not be NULL.

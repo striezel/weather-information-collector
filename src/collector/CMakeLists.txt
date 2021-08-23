@@ -24,7 +24,7 @@ set(weather-information-collector_sources
     ../db/mariadb/Field.cpp
     ../db/mariadb/Result.cpp
     ../db/mariadb/Row.cpp
-    ../db/mariadb/StoreMySQL.cpp
+    ../db/mariadb/StoreMariaDB.cpp
     ../db/mariadb/Structure.cpp
     ../db/mariadb/Utilities.cpp
     ../db/mariadb/guess.cpp

@@ -46,7 +46,7 @@ class WeatherDataUpdate_083
      * \param startIdx   starting index
      * \param endIdx     end index
      * \param id_to_type map that maps database id to actual API type
-     * \param result     MySQL/MariaDB query result containing dataID, apiID and json for each index
+     * \param result     MariaDB query result containing dataID, apiID and json for each index
      */
     void operator()(const std::size_t startIdx, const std::size_t endIdx, const std::map<int, ApiType>& id_to_type, const db::mariadb::Result& result);
 

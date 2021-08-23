@@ -21,15 +21,15 @@
 #include <iostream>
 #include <catch.hpp>
 #include "../../../src/db/mariadb/API.hpp"
-#include "../../../src/db/mariadb/SourceMySQL.hpp"
-#include "../../../src/db/mariadb/StoreMySQLBatch.hpp"
+#include "../../../src/db/mariadb/SourceMariaDB.hpp"
+#include "../../../src/db/mariadb/StoreMariaDBBatch.hpp"
 #include "../../../src/db/mariadb/Utilities.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
 #include "../CiData.hpp"
 #include "../InitDB.hpp"
 
-TEST_CASE("StoreMySQLBatch tests")
+TEST_CASE("StoreMariaDBBatch tests")
 {
   using namespace wic;
   const bool isCI = isGitlabCi() || isGithubActions() || isTravisCi();
@@ -53,7 +53,7 @@ TEST_CASE("StoreMySQLBatch tests")
       const std::size_t count = 12;
       const auto weatherBatch = CiData::generate(CiData::sampleWeatherDresden(), count);
 
-      SourceMySQL source(connInfo);
+      SourceMariaDB source(connInfo);
 
       // Get amount of data before insertion.
       std::vector<Weather> weather;
@@ -64,7 +64,7 @@ TEST_CASE("StoreMySQLBatch tests")
       const auto apiId = db::API::getId(conn, ApiType::OpenWeatherMap);
 
       {
-        StoreMySQLBatch store(connInfo, 6);
+        StoreMariaDBBatch store(connInfo, 6);
         // Insert five  data points - one less than batch size.
         // Data amount should still be the same in database.
         for (std::size_t i = 0; i < 5; ++i)
@@ -90,7 +90,7 @@ TEST_CASE("StoreMySQLBatch tests")
         REQUIRE( weather.size() == beforeInsert + 6 );
       }
 
-      // Weather data should still change, because StoreMySQLBatch commits before destruction.
+      // Weather data should still change, because StoreMariaDBBatch commits before destruction.
       REQUIRE( source.getCurrentWeather(ApiType::OpenWeatherMap, Staplehurst, weather) );
       REQUIRE( weather.size() == beforeInsert + count - 1 );
     }

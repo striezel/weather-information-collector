@@ -16,7 +16,7 @@ set(weather-information-collector-benchmark_sources
     ../db/mariadb/Field.cpp
     ../db/mariadb/Result.cpp
     ../db/mariadb/Row.cpp
-    ../db/mariadb/SourceMySQL.cpp
+    ../db/mariadb/SourceMariaDB.cpp
     ../db/mariadb/Utilities.cpp
     ../json/ApixuFunctions.cpp
     ../json/NLohmannJsonApixu.cpp

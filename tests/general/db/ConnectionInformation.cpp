@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ TEST_CASE("ConnectionInformation class for db")
     REQUIRE( connInfo.db() == "database" );
     REQUIRE( connInfo.user() == "root" );
     REQUIRE( connInfo.password() == "" );
-    REQUIRE( connInfo.port() == ConnectionInformation::defaultMySqlPort );
+    REQUIRE( connInfo.port() == ConnectionInformation::defaultMariaDbPort );
   }
 
   SECTION("constructor with parameters")
@@ -68,7 +68,7 @@ TEST_CASE("ConnectionInformation class for db")
 
     connInfo = ConnectionInformation("db-server", "db_one", "foo", "bar");
     REQUIRE( connInfo.isComplete() );
-    // empty password - still complete
+    // empty password - still complete, although empty passwords are a bad idea
     connInfo = ConnectionInformation("db-server", "db_one", "foo", "", 3307);
     REQUIRE( connInfo.isComplete() );
   }
