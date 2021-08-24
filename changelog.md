@@ -1,5 +1,11 @@
 # Version history of weather-information-collector
 
+## Version 0.?.? (2021-08-??)
+
+weather-information-collector and weather-information-collector-task-creator do
+now show the version of the cURL library as part of their version information,
+too.
+
 ## Version 0.9.19 (2021-06-14)
 
 simdjson, the library used for JSON parsing, has been updated from version 0.6.0
