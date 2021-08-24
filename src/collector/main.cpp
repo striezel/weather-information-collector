@@ -25,6 +25,7 @@
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
 #include "../db/mariadb/StoreMariaDB.hpp"
+#include "../db/mariadb/client_version.hpp"
 #include "../db/mariadb/guess.hpp"
 #include "../net/curl_version.hpp"
 #include "../tasks/TaskManager.hpp"
@@ -65,6 +66,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     if ((param == "-v") || (param == "--version"))
     {
       wic::showVersion("weather-information-collector");
+      showMariaDbClientVersion();
       showCurlVersion();
       return std::make_pair(0, true);
     } // if version

@@ -94,6 +94,8 @@
 		<Unit filename="../db/mariadb/Structure.hpp" />
 		<Unit filename="../db/mariadb/Utilities.cpp" />
 		<Unit filename="../db/mariadb/Utilities.hpp" />
+		<Unit filename="../db/mariadb/client_version.cpp" />
+		<Unit filename="../db/mariadb/client_version.hpp" />
 		<Unit filename="../db/mariadb/guess.cpp" />
 		<Unit filename="../db/mariadb/guess.hpp" />
 		<Unit filename="../json/ApixuFunctions.cpp" />

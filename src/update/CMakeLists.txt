@@ -21,6 +21,7 @@ set(weather-information-collector-update_sources
     ../db/ConnectionInformation.cpp
     ../db/Exceptions.cpp
     ../db/mariadb/API.cpp
+    ../db/mariadb/client_version.cpp
     ../db/mariadb/Connection.cpp
     ../db/mariadb/Field.cpp
     ../db/mariadb/Result.cpp

@@ -21,6 +21,7 @@
 #include <iostream>
 #include <utility>
 #include "../conf/Configuration.hpp"
+#include "../db/mariadb/client_version.hpp"
 #include "../db/mariadb/guess.hpp"
 #include "../ReturnCodes.hpp"
 #include "../Version.hpp"
@@ -72,6 +73,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     if ((param == "-v") || (param == "--version"))
     {
       wic::showVersion("weather-information-collector-update");
+      showMariaDbClientVersion();
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))

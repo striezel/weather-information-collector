@@ -22,6 +22,7 @@
 #include "benchmark.hpp"
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
+#include "../db/mariadb/client_version.hpp"
 #include "../db/mariadb/SourceMariaDB.hpp"
 #include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
@@ -70,6 +71,7 @@ int main(int argc, char** argv)
       if ((param == "-v") || (param == "--version"))
       {
         wic::showVersion("weather-information-collector-benchmark");
+        showMariaDbClientVersion();
         return 0;
       } // if version
       else if ((param == "-?") || (param == "/?") || (param == "--help"))

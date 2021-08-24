@@ -14,6 +14,7 @@ set(weather-information-collector-synchronizer_sources
     ../data/WeatherMeta.cpp
     ../db/ConnectionInformation.cpp
     ../db/Exceptions.cpp
+    ../db/mariadb/client_version.cpp
     ../db/mariadb/Connection.cpp
     ../db/mariadb/Field.cpp
     ../db/mariadb/Result.cpp
