@@ -105,3 +105,14 @@ mariadb_10_4:
   <<: *mariadb_configuration
   services:
   - mariadb:10.4
+
+percona_5_7:
+  <<: *mariadb_configuration
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
+    MYSQL_HOST: "percona"
+  services:
+  - percona:5.7
