@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.?.? (2021-08-??)
+## Version 0.9.20 (2021-08-24)
 
 weather-information-collector and weather-information-collector-task-creator do
 now show the version of the cURL library as part of their version information,
