@@ -29,15 +29,17 @@ to accomplish that.
 
 Additionally you should create a MySQL user that has full access to the created
 database tables. (Please do not just use the root user for any database access,
-that's ugly.) A database user named `wic' can be created with SQL commands like
+that's ugly.) A database user named `wic` can be created with SQL commands like
 the following:
 
-    -- don't allow anything ("USAGE") to user wic
-    GRANT USAGE ON *.* TO 'wic'@'localhost' IDENTIFIED BY 'secret-password';
-    -- give the user wic all rights ("ALL PRIVILEGES") for tables of the database weather_information_collector
-    GRANT ALL PRIVILEGES ON weather_information_collector.* TO 'wic'@'localhost' IDENTIFIED BY 'secret-password';
-    -- flush database privilege cache to make changes effective immediately
-    FLUSH PRIVILEGES;
+```sql
+-- don't allow anything ("USAGE") to user wic
+GRANT USAGE ON *.* TO 'wic'@'localhost' IDENTIFIED BY 'secret-password';
+-- give the user wic all rights ("ALL PRIVILEGES") for tables of the database weather_information_collector
+GRANT ALL PRIVILEGES ON weather_information_collector.* TO 'wic'@'localhost' IDENTIFIED BY 'secret-password';
+-- flush database privilege cache to make changes effective immediately
+FLUSH PRIVILEGES;
+```
 
 For more details on GRANT and the complete syntax see the
 [MySQL documentation for GRANT](https://dev.mysql.com/doc/refman/5.7/en/grant.html).
