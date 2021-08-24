@@ -10,17 +10,22 @@ the compiled program (see the readme in the root directory for build
 instructions) and a MySQL database server - or any compatible database server
 like MariaDB or Percona Server.
 
-## MySQL server setup
+## MariaDB / MySQL / Percona server setup
 
 I assume that you know how to install such a database server, as it usually
 boils down to one of the following commands in a root terminal:
 
-    apt-get install mysql-server
+    apt-get install mariadb-server
     # or
-    sudo apt-get install mysql-server
+    sudo apt-get install mariadb-server
+    # or
+    sudo yum install mariadb-server
 
 and the configuration of a password for the root user. I'll leave that to you
 as an exercise.
+
+Known compatible database servers are listed in the
+[supported databases document](./supported-databases.md).
 
 After that the database and table structure for weather-information-collector
 needs to be created. You can use the SQL dump file provided in
