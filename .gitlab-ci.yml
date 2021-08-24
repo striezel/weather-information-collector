@@ -20,6 +20,10 @@ build_gcc:
     - cmake ../ -DJSON_BENCHMARK=ON
     - make -j4
     - ctest -V
+  # Keep build artifacts for later database tests.
+  artifacts:
+    paths:
+      - build/
 
 # build with Clang
 build_clang:
@@ -65,3 +69,44 @@ docker_in_docker:
     - docker info
   script:
     - cd docker && docker build . -f Dockerfile_download
+
+
+# hidden YAML configuration to define an anchor named 'mariadb_configuration'
+# See <https://docs.gitlab.com/ee/ci/yaml/#anchors> for more information.
+.db_template: &mariadb_configuration
+  stage: test
+  needs: ["build_gcc"]
+  dependencies:
+  - build_gcc
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
+  before_script:
+    - apt-get update && apt-get -y install cmake libcurl3-gnutls libmariadb3 libstdc++6
+  script:
+    - cd ./build
+    - ctest -V
+
+# Run tests with various MariaDB versions.
+# (Versions 10.5 and 10.6 are already tested in the GCC and Clang builds.)
+mariadb_10_2:
+  <<: *mariadb_configuration
+  services:
+  - mariadb:10.2
+
+mariadb_10_3:
+  <<: *mariadb_configuration
+  services:
+  - mariadb:10.3
+
+mariadb_10_4:
+  <<: *mariadb_configuration
+  services:
+  - mariadb:10.4
+
+mysql_5_7:
+  <<: *mariadb_configuration
+  services:
+  - mysql:5.7
