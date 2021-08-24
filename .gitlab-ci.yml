@@ -84,7 +84,7 @@ docker_in_docker:
     MYSQL_PASSWORD: "ci_password"
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
-    - apt-get update && apt-get -y install cmake libcurl3-gnutls libmariadb3 libstdc++6
+    - apt-get update && apt-get -y --no-install-suggests --no-install-recommends install cmake libcurl3-gnutls libmariadb3 libstdc++6
   script:
     - cd ./build
     - ctest -V
@@ -105,8 +105,3 @@ mariadb_10_4:
   <<: *mariadb_configuration
   services:
   - mariadb:10.4
-
-mysql_5_7:
-  <<: *mariadb_configuration
-  services:
-  - mysql:5.7
