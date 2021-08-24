@@ -1,5 +1,6 @@
 image: debian:11-slim
 
+# build with GCC
 build_gcc:
   stage: build
   services:
@@ -20,11 +21,11 @@ build_gcc:
     - make -j4
     - ctest -V
 
-# There is no official clang image at Docker Hub.
+# build with Clang
 build_clang:
   stage: build
   services:
-  - mariadb:10.5
+  - mariadb:10.6
   variables:
     MYSQL_DATABASE: "weather_information_collector"
     MYSQL_USER: "ci_user"
