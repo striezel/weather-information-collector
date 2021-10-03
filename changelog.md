@@ -3,7 +3,7 @@
 ## Version 0.?.? (2021-10-??)
 
 simdjson, the library used for JSON parsing, has been updated from version 0.7.1
-to version 0.9.1.
+to version 1.0.0.
 
 nlohmann/json, the library used for JSON parsing when simdjson is not supported,
 has been updated from version 3.9.1 to version 3.10.2.
