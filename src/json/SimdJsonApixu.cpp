@@ -28,7 +28,8 @@ namespace wic
 bool SimdJsonApixu::parseCurrentWeather(const std::string& json, Weather& weather)
 {
   simdjson::dom::parser parser;
-  const auto [doc, parseError] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto parseError = parser.parse(json).get(doc);
   if (parseError)
   {
     std::cerr << "Error in SimdJsonApixu::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
@@ -38,7 +39,8 @@ bool SimdJsonApixu::parseCurrentWeather(const std::string& json, Weather& weathe
 
   weather.setJson(json);
 
-  auto [current, error] = doc["current"];
+  simdjson::dom::element current;
+  auto error = doc["current"].get(current);
   if (error || current.type() != simdjson::dom::element_type::OBJECT)
   {
     // No current object - return false to indicate failure.
@@ -104,7 +106,8 @@ bool SimdJsonApixu::parseCurrentWeather(const std::string& json, Weather& weathe
 bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
 {
   simdjson::dom::parser parser;
-  const auto [doc, parseError] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto parseError = parser.parse(json).get(doc);
   if (parseError)
   {
     std::cerr << "Error in SimdJsonApixu::parseForecast(): Unable to parse JSON data!" << std::endl
@@ -114,13 +117,15 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
 
   forecast.setJson(json);
 
-  const auto [jsForecast, forecastError] = doc["forecast"];
+  simdjson::dom::element jsForecast;
+  const auto forecastError = doc["forecast"].get(jsForecast);
   if (forecastError || jsForecast.type() != simdjson::dom::element_type::OBJECT)
   {
     std::cerr << "Error in SimdJsonApixu::parseForecast(): forecast element is missing or it is not an object!" << std::endl;
     return false;
   }
-  auto [forecastday, error] = jsForecast["forecastday"];
+  simdjson::dom::element forecastday;
+  auto error = jsForecast["forecastday"].get(forecastday);
   // forecastday must be a non-empty array.
   if (error || forecastday.type() != simdjson::dom::element_type::ARRAY)
   {
@@ -132,7 +137,8 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
   for (const value_type& value : forecastday)
   {
     Weather w_min;
-    const auto [date_epoch, err] = value["date_epoch"];
+    simdjson::dom::element date_epoch;
+    const auto err = value["date_epoch"].get(date_epoch);
     if (err || !date_epoch.is<int64_t>())
     {
       std::cerr << "Error in SimdJsonApixu::parseForecast(): date_epoch element is missing or not an integer!" << std::endl;
@@ -140,7 +146,8 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
     }
     const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch.get<int64_t>().value()));
     w_min.setDataTime(dt);
-    auto [hour, errorHour] = value["hour"];
+    simdjson::dom::element hour;
+    auto errorHour = value["hour"].get(hour);
     if (!errorHour)
     {
       // If hour is present but not an array, then it is an error.
@@ -200,7 +207,8 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
     } // if (hourly data)
     else
     {
-      auto [day, errorDay] = value["day"];
+      simdjson::dom::element day;
+      auto errorDay = value["day"].get(day);
       // day must be a non-empty object.
       if (errorDay || day.type() != simdjson::dom::element_type::OBJECT)
       {
@@ -218,10 +226,12 @@ bool SimdJsonApixu::parseForecast(const std::string& json, Forecast& forecast)
       {
         w_min.setTemperatureFahrenheit(static_cast<float>(v2.get<double>().value()));
       }
-      const auto [avghumidity, errorHum] = day["avghumidity"];
+      simdjson::dom::element avghumidity;
+      const auto errorHum = day["avghumidity"].get(avghumidity);
       if (!errorHum && avghumidity.is<double>())
         w_min.setHumidity(static_cast<int8_t>(avghumidity.get<double>().value()));
-      const auto [totalprecip_mm, errorPrecip] = day["totalprecip_mm"];
+      simdjson::dom::element totalprecip_mm;
+      const auto errorPrecip = day["totalprecip_mm"].get(totalprecip_mm);
       if (!errorPrecip && totalprecip_mm.is<double>())
       {
         const float amount = static_cast<float>(totalprecip_mm.get<double>().value());

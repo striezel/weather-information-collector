@@ -28,7 +28,8 @@ namespace wic
 bool SimdJsonDarkSky::parseCurrentWeather(const std::string& json, Weather& weather)
 {
   simdjson::dom::parser parser;
-  const auto [doc, error] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto error = parser.parse(json).get(doc);
   if (error)
   {
     std::cerr << "Error in SimdJsonDarkSky::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
@@ -53,7 +54,8 @@ bool SimdJsonDarkSky::parseCurrentWeather(const std::string& json, Weather& weat
 bool SimdJsonDarkSky::parseForecast(const std::string& json, Forecast& forecast)
 {
   simdjson::dom::parser parser;
-  const auto [doc, error] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto error = parser.parse(json).get(doc);
   if (error)
   {
     std::cerr << "Error in SimdJsonDarkSky::parseForecast(): Unable to parse JSON data!" << std::endl
@@ -63,14 +65,16 @@ bool SimdJsonDarkSky::parseForecast(const std::string& json, Forecast& forecast)
 
   forecast.setJson(json);
 
-  const auto [hourly, e] = doc["hourly"];
+  simdjson::dom::element hourly;
+  const auto e = doc["hourly"].get(hourly);
   if (e || hourly.type() != simdjson::dom::element_type::OBJECT)
   {
     std::cerr << "Error in SimdJsonDarkSky::parseForecast(): The element \"hourly\" is missing or is not an object!" << std::endl;
     return false;
   }
 
-  const auto [hourlyData, e2] = hourly["data"];
+  simdjson::dom::element hourlyData;
+  const auto e2 = hourly["data"].get(hourlyData);
   if (e2 || hourlyData.type() != simdjson::dom::element_type::ARRAY)
   {
     std::cerr << "Error in SimdJsonDarkSky::parseForecast(): The element \"data\" is missing or is not an array!" << std::endl;
@@ -100,7 +104,8 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
   if (dataPoint.type() != simdjson::dom::element_type::OBJECT)
     return false;
 
-  auto [elem, error] = dataPoint["time"];
+  simdjson::dom::element elem;
+  auto error = dataPoint["time"].get(elem);
   if (!error && elem.is<int64_t>())
   {
     const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(elem.get<int64_t>().value()));
@@ -134,7 +139,8 @@ bool SimdJsonDarkSky::parseSingleWeatherItem(const value_type& dataPoint, Weathe
   if (!error && elem.is<double>())
   {
     const float amount = static_cast<float>(elem.get<double>().value());
-    const auto [findType, typeError] = dataPoint["precipType"];
+    simdjson::dom::element findType;
+    const auto typeError = dataPoint["precipType"].get(findType);
     if (!typeError && findType.is<std::string_view>())
     {
       const std::string_view typeStr = findType.get<std::string_view>().value();

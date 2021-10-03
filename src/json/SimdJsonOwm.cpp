@@ -28,7 +28,8 @@ namespace wic
 bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weather)
 {
   bool foundValidParts = false;
-  auto [elem, error] = value["main"];
+  simdjson::dom::element elem;
+  auto error = value["main"].get(elem);
   if (!error && elem.type() == simdjson::dom::element_type::OBJECT)
   {
     const value_type main = value["main"];
@@ -129,7 +130,8 @@ bool SimdJsonOwm::parseSingleWeatherItem(const value_type& value, Weather& weath
 bool SimdJsonOwm::parseCurrentWeather(const std::string& json, Weather& weather)
 {
   simdjson::dom::parser parser;
-  const auto [doc, error] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto error = parser.parse(json).get(doc);
   if (error)
   {
     std::cerr << "Error in SimdJsonOwm::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
@@ -145,7 +147,8 @@ bool SimdJsonOwm::parseCurrentWeather(const std::string& json, Weather& weather)
 bool SimdJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
 {
   simdjson::dom::parser parser;
-  const auto [doc, error] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto error = parser.parse(json).get(doc);
   if (error)
   {
     std::cerr << "Error in SimdJsonOwm::parseForecast(): Unable to parse JSON data!" << std::endl
@@ -155,7 +158,8 @@ bool SimdJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
 
   forecast.setJson(json);
 
-  const auto [list, e2] = doc["list"];
+  simdjson::dom::element list;
+  const auto e2 = doc["list"].get(list);
   if (e2 || list.type() != simdjson::dom::element_type::ARRAY)
   {
     std::cerr << "Error in SimdJsonOwm::parseForecast(): list is either missing or not an array!" << std::endl;
@@ -176,7 +180,8 @@ bool SimdJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
       return false;
     }
   } // for (range-based)
-  const auto [cnt, e3] = doc["cnt"];
+  simdjson::dom::element cnt;
+  const auto e3 = doc["cnt"].get(cnt);
   if (e3 || !cnt.is<uint64_t>())
   {
     std::cerr << "Error in SimdJsonOwm::parseForecast(): cnt is either missing or not an integer!" << std::endl;
@@ -198,7 +203,8 @@ bool SimdJsonOwm::parseForecast(const std::string& json, Forecast& forecast)
 bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<Location, Weather> >& locations)
 {
   simdjson::dom::parser parser;
-  const auto [doc, error] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto error = parser.parse(json).get(doc);
   if (error)
   {
     std::cerr << "Error in SimdJsonOwm::parseLocations(): Unable to parse JSON data!" << std::endl
@@ -206,7 +212,8 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
     return false;
   }
 
-  const auto [count, e2] = doc["count"];
+  simdjson::dom::element count;
+  const auto e2 = doc["count"].get(count);
   if (e2 || !count.is<int64_t>())
   {
     std::cerr << "Error in SimdJsonOwm::parseLocations(): JSON element for count is missing!" << std::endl;
@@ -216,7 +223,8 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
   if (count.get<int64_t>().value() == 0)
     return true;
 
-  const auto [list, e3] = doc["list"];
+  simdjson::dom::element list;
+  const auto e3 = doc["list"].get(list);
   if (e3 || list.type() != simdjson::dom::element_type::ARRAY)
   {
     std::cerr << "Error in SimdJsonOwm::parseLocations(): JSON list element is missing!" << std::endl;
@@ -226,17 +234,21 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
   for (const value_type elem : list)
   {
     Location loc;
-    auto [val, err] = elem["id"];
+    simdjson::dom::element val;
+    auto err = elem["id"].get(val);
     if (!err && val.is<uint64_t>())
       loc.setOwmId(static_cast<uint32_t>(val.get<uint64_t>()));
     elem["name"].tie(val, err);
     if (!err && val.is<std::string_view>())
       loc.setName(val.get<std::string_view>().value());
-    const auto [coord, errorCoord] = elem["coord"];
+    simdjson::dom::element coord;
+    const auto errorCoord = elem["coord"].get(coord);
     if (!errorCoord && coord.type() == simdjson::dom::element_type::OBJECT)
     {
-      const auto [lat, errorLat] = coord["lat"];
-      const auto [lon, errorLon] = coord["lon"];
+      simdjson::dom::element lat;
+      const auto errorLat = coord["lat"].get(lat);
+      simdjson::dom::element lon;
+      const auto errorLon = coord["lon"].get(lon);
       if (!errorLat && !errorLon && lat.is<double>() && lon.is<double>())
       {
         loc.setCoordinates(static_cast<float>(lat.get<double>().value()),
@@ -251,7 +263,8 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
     elem["sys"].tie(val, err);
     if (!err && val.type() == simdjson::dom::element_type::OBJECT)
     {
-      const auto [country, errCountry] = val["country"];
+      simdjson::dom::element country;
+      const auto errCountry = val["country"].get(country);
       if (!errCountry && country.is<std::string_view>())
         loc.setCountryCode(country.get<std::string_view>().value());
     }

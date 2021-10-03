@@ -33,10 +33,12 @@ namespace wic
 std::chrono::time_point<std::chrono::system_clock> parseDateTime(const simdjson::dom::element& root)
 {
   // date of data update
-  const auto [location, errorLoc] = root["location"];
+  simdjson::dom::element location;
+  const auto errorLoc = root["location"].get(location);
   if (!errorLoc && location.type() == simdjson::dom::element_type::OBJECT)
   {
-    const auto [v1, e1] = location["localtime"];
+    simdjson::dom::element v1;
+    const auto e1 = location["localtime"].get(v1);
     if (!e1 && v1.is<std::string_view>())
     {
       // This string streams and C-style function stuff is a mess.
@@ -53,7 +55,8 @@ std::chrono::time_point<std::chrono::system_clock> parseDateTime(const simdjson:
       return std::chrono::system_clock::from_time_t(tt);
     }
     // fall back to localtime_epoch - less precise / may be wrong timezone
-    const auto [v2, e2] = location["localtime_epoch"];
+    simdjson::dom::element v2;
+    const auto e2 = location["localtime_epoch"].get(v2);
     if (!e2 && v2.is<int64_t>())
     {
       return std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(v2.get<int64_t>().value()));
@@ -74,7 +77,8 @@ std::chrono::time_point<std::chrono::system_clock> parseDateTime(const simdjson:
 bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather& weather)
 {
   simdjson::dom::parser parser;
-  const auto [doc, parseError] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto parseError = parser.parse(json).get(doc);
   if (parseError)
   {
     std::cerr << "Error in SimdJsonWeatherstack::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
@@ -84,7 +88,8 @@ bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather&
 
   weather.setJson(json);
 
-  auto [elem, error] = doc["current"];
+  simdjson::dom::element elem;
+  auto error = doc["current"].get(elem);
   if (!error &&  elem.type() == simdjson::dom::element_type::OBJECT)
   {
     const auto current = elem;
@@ -126,7 +131,8 @@ bool SimdJsonWeatherstack::parseCurrentWeather(const std::string& json, Weather&
     current["precip"].tie(v2, error);
     if (!error && v2.is<double>())
     {
-      const auto [weather_code, errorCode] = current["weather_code"];
+      simdjson::dom::element weather_code;
+      const auto errorCode = current["weather_code"].get(weather_code);
       const int code = (!errorCode && weather_code.is<int64_t>())
                        ? static_cast<int>(weather_code.get<int64_t>().value())
                        : 0;

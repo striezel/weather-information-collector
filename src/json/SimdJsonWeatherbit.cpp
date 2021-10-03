@@ -32,7 +32,8 @@ bool SimdJsonWeatherbit::parseSingleWeatherItem(const value_type& value, Weather
     std::cerr << "Error: Type of item is " << value.type() << ", but it should be object!\n";
     return false;
   }
-  auto [elem, error] = value["temp"];
+  simdjson::dom::element elem;
+  auto error = value["temp"].get(elem);
   if (!error && elem.is<double>())
   {
     const double celsiusRaw = elem.get<double>().value();
@@ -95,7 +96,8 @@ bool SimdJsonWeatherbit::parseSingleWeatherItem(const value_type& value, Weather
 bool SimdJsonWeatherbit::parseCurrentWeather(const std::string& json, Weather& weather)
 {
   simdjson::dom::parser parser;
-  const auto [doc, parseError] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto parseError = parser.parse(json).get(doc);
   if (parseError)
   {
     std::cerr << "Error in SimdJsonWeatherbit::parseCurrentWeather(): Unable to parse JSON data!" << std::endl
@@ -103,7 +105,8 @@ bool SimdJsonWeatherbit::parseCurrentWeather(const std::string& json, Weather& w
     return false;
   }
 
-  const auto [data, errorData] = doc["data"];
+  simdjson::dom::element data;
+  const auto errorData = doc["data"].get(data);
   if (errorData || data.type() != simdjson::dom::element_type::ARRAY /*|| data.size() != 1*/)
   {
     std::cerr << "Error in SimdJsonWeatherbit::parseCurrentWeather(): JSON "
@@ -111,7 +114,8 @@ bool SimdJsonWeatherbit::parseCurrentWeather(const std::string& json, Weather& w
               << "array containing a single element!" << std::endl;
     return false;
   }
-  const auto [count, errorCount] = doc["count"];
+  simdjson::dom::element count;
+  const auto errorCount = doc["count"].get(count);
   if (errorCount || !count.is<uint64_t>())
   {
     std::cerr << "Error in SimdJsonWeatherbit::parseCurrentWeather(): JSON does not contain a count element or the element is not a valid number!" << std::endl;
@@ -132,7 +136,8 @@ bool SimdJsonWeatherbit::parseCurrentWeather(const std::string& json, Weather& w
 bool SimdJsonWeatherbit::parseForecast(const std::string& json, Forecast& forecast)
 {
   simdjson::dom::parser parser;
-  const auto [doc, parseError] = parser.parse(json);
+  simdjson::dom::element doc;
+  const auto parseError = parser.parse(json).get(doc);
   if (parseError)
   {
     std::cerr << "Error in SimdJsonWeatherbit::parseForecast(): Unable to parse JSON data!" << std::endl
@@ -142,7 +147,8 @@ bool SimdJsonWeatherbit::parseForecast(const std::string& json, Forecast& foreca
 
   forecast.setJson(json);
 
-  const auto [dataJson, errorData] = doc["data"];
+  simdjson::dom::element dataJson;
+  const auto errorData = doc["data"].get(dataJson);
   if (errorData || dataJson.type() != simdjson::dom::element_type::ARRAY)
   {
     std::cerr << "Error in SimdJsonWeatherbit::parseForecast(): data is not an array!" << std::endl;
