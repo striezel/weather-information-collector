@@ -25,13 +25,14 @@ _(*)_ = MySQL 8.0.4 introduced a backwards incompatible, breaking change and
 changed the default authentication plugin from `mysql_native_password` to
 `caching_sha2_password`. (See <https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-4.html>.)
 This may cause connection problems when using certain older versions of the
-MariaDB client library cannot handle that authentication mechanism correctly.
-_(MariaDB just went for the more secure `client_ed25519` authentication plugin
-using elliptic curves to replace the old `mysql_native_password`.)_ If the
-database account you want to use to connect to the database uses the
-`caching_sha2_password` plugin authentication, then you may need to change that
-to be able to use weather-information-collector with it. You can see that the
-database user is affected by this, if a warning that looks like
+MariaDB client library which cannot handle that authentication mechanism
+correctly. _(MariaDB just went for the more secure `client_ed25519`
+authentication plugin using elliptic curves to replace the old
+`mysql_native_password`.)_ If the database account you want to use to connect to
+the database uses the `caching_sha2_password` plugin authentication, then you
+may need to change that to be able to use weather-information-collector with it.
+You can see that the database user is affected by this, if a warning that looks
+like
 
 > Authentication plugin 'caching_sha2_password'
   cannot be loaded: /usr/lib/mysql/plugin/caching_sha2_password.so: cannot open
