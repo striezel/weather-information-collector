@@ -154,11 +154,11 @@ int main(int argc, char** argv)
 
     if (currentVersion == wic::ancientVersion)
     {
-      std::cout << "Detected program version is very ancient, so a full update will be performed." << std::endl;
+      std::cout << "Detected database version is very ancient, so a full update will be performed." << std::endl;
     }
     else
     {
-      std::cout << "Detected program version is " << currentVersion.toString()
+      std::cout << "Detected database version is " << currentVersion.toString()
                 << " or newer. Updates for older versions will be skipped." << std::endl;
     }
   } // if no full update is requested
