@@ -90,13 +90,7 @@ int UpdateTo066::updateStructure(const ConnectionInformation& ci) noexcept
       return -1;
     }
     std::clog << "Info: Column data type was successfully updated." << std::endl;
-    // Do an ANALYZE TABLE to update it.
-    if (conn.exec("ANALYZE TABLE `weatherdata`;") < 0)
-    {
-      std::cerr << "Error: Key distribution analysis of table weatherdata failed!"
-                << std::endl;
-      return -1;
-    }
+
     // All queries were successful.
     return 1;
   }
