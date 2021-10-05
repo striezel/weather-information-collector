@@ -2,6 +2,8 @@
 
 ## Version 0.?.? (2021-10-??)
 
+A possible null-pointer dereference in the update program has been fixed.
+
 simdjson, the library used for JSON parsing, has been updated from version 0.7.1
 to version 1.0.0.
 

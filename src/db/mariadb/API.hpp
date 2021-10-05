@@ -37,6 +37,7 @@ class API
      * \param ci   database connection information
      * \param type API type for which the ID shall be determined.
      * \return Returns the ID in case of success.
+     *         Returns zero, if no matching entry was found.
      *         Returns -1, if an error occurred.
      */
     static int getId(const ConnectionInformation& ci, const ApiType type);
@@ -47,6 +48,7 @@ class API
      * \param conn   open database connection
      * \param type API type for which the ID shall be determined.
      * \return Returns the ID in case of success.
+     *         Returns zero, if no matching entry was found.
      *         Returns -1, if an error occurred.
      */
     static int getId(const mariadb::Connection& conn, const ApiType type);

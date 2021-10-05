@@ -53,6 +53,14 @@ class InitDB
     static bool fillTableApi(const ConnectionInformation& ci);
 
 
+    /** \brief Truncates the table api on the DB server, removing all values.
+     *
+     * \param ci  the database connection information
+     * \return Returns true, if operation was successful. Returns false otherwise.
+     */
+    static bool truncateTableApi(const ConnectionInformation& ci);
+
+
     /** \brief Creates the table forecast on the MariaDB server.
      *
      * \param ci  the database connection information

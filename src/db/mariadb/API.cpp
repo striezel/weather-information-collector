@@ -55,6 +55,13 @@ int API::getId(const mariadb::Connection& conn, const ApiType type)
     return -1;
   }
   MYSQL_ROW row = mysql_fetch_row(result);
+  if (row == nullptr)
+  {
+    // Null pointer means no matching row / empty data set.
+    mysql_free_result(result);
+    result = nullptr;
+    return 0;
+  }
   const int apiId = std::stoi(row[0]);
   mysql_free_result(result);
   result = nullptr;

@@ -38,46 +38,90 @@ TEST_CASE("Get API ids")
 
     REQUIRE( InitDB::createDb(connInfo) );
     REQUIRE( InitDB::createTableApi(connInfo) );
-    REQUIRE( InitDB::fillTableApi(connInfo) );
 
-    SECTION("id of Apixu")
+    SECTION("query filled api table")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::Apixu);
+      REQUIRE( InitDB::fillTableApi(connInfo) );
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 1 );
+      SECTION("id of Apixu")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::Apixu);
+
+        REQUIRE( id != -1 );
+        REQUIRE( id == 1 );
+      }
+
+      SECTION("id of OpenWeatherMap")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::OpenWeatherMap);
+
+        REQUIRE( id != -1 );
+        REQUIRE( id == 2 );
+      }
+
+      SECTION("id of DarkSky")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::DarkSky);
+
+        REQUIRE( id != -1 );
+        REQUIRE( id == 3 );
+      }
+
+      SECTION("id of Weatherbit")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::Weatherbit);
+
+        REQUIRE( id != -1 );
+        REQUIRE( id == 4 );
+      }
+
+      SECTION("id of Weatherstack")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::Weatherstack);
+
+        REQUIRE( id != -1 );
+        REQUIRE( id == 5 );
+      }
     }
 
-    SECTION("id of OpenWeatherMap")
+    SECTION("query empty api table")
     {
-      const int id = wic::db::API::getId(connInfo, ApiType::OpenWeatherMap);
+      REQUIRE( InitDB::truncateTableApi(connInfo) );
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 2 );
-    }
+      SECTION("id of Apixu")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::Apixu);
 
-    SECTION("id of DarkSky")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::DarkSky);
+        REQUIRE( id == 0 );
+      }
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 3 );
-    }
+      SECTION("id of OpenWeatherMap")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::OpenWeatherMap);
 
-    SECTION("id of Weatherbit")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherbit);
+        REQUIRE( id == 0 );
+      }
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 4 );
-    }
+      SECTION("id of DarkSky")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::DarkSky);
 
-    SECTION("id of Weatherstack")
-    {
-      const int id = wic::db::API::getId(connInfo, ApiType::Weatherstack);
+        REQUIRE( id == 0 );
+      }
 
-      REQUIRE( id != -1 );
-      REQUIRE( id == 5 );
+      SECTION("id of Weatherbit")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::Weatherbit);
+
+        REQUIRE( id == 0 );
+      }
+
+      SECTION("id of Weatherstack")
+      {
+        const int id = wic::db::API::getId(connInfo, ApiType::Weatherstack);
+
+        REQUIRE( id == 0 );
+      }
     }
   }
   else

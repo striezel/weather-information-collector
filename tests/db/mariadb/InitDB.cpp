@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2021  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -105,6 +105,30 @@ bool InitDB::fillTableApi(const ConnectionInformation& ci)
   catch(const std::exception& ex)
   {
     std::cerr << "Error: Could not connect to database during InitDb::fillTableApi!" << std::endl;
+    std::cerr << "Exception message: " << ex.what() << std::endl;
+    return false;
+  }
+}
+
+bool InitDB::truncateTableApi(const ConnectionInformation& ci)
+{
+  try
+  {
+    wic::db::mariadb::Connection conn(ci);
+    const std::string sql = std::string("TRUNCATE TABLE `api`;");
+    const int ret = mysql_real_query(conn.raw(), sql.c_str(), sql.size());
+    if (ret != 0)
+    {
+      std::cerr << "Error: Error: Could not truncate table `api` during InitDB::truncateTableApi!" << std::endl;
+      std::cerr << "Error code " << conn.errorCode() << ": " << conn.errorInfo() << std::endl;
+      return false;
+    }
+    else
+      return true;
+  }
+  catch(const std::exception& ex)
+  {
+    std::cerr << "Error: Could not connect to database during InitDb::truncateTableApi!" << std::endl;
     std::cerr << "Exception message: " << ex.what() << std::endl;
     return false;
   }
