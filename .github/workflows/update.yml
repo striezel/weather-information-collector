@@ -1,0 +1,47 @@
+name: Test update program
+
+on: push
+
+jobs:
+  update_structure_v0_5_3:
+    runs-on: ubuntu-18.04
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v2
+      - name: Install Debian packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y catch cmake g++-8 git libcurl4-gnutls-dev libmariadb-dev pkg-config
+      - name: Start MySQL database
+        run: sudo systemctl start mysql.service
+      - name: Show MySQL version information
+        run: |
+          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
+      - name: Prepare MySQL database
+        run: |
+          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
+      - name: Build weather-information-collector-update
+        run: |
+          export CXX=g++-8
+          export CC=gcc-8
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          cmake ../ -DJSON_BENCHMARK=OFF
+          make -j4 weather-information-collector-update
+      - name: Prepare table structure and connection information
+        run: |
+          sudo apt-get install -y mysql-client
+          cd "$GITHUB_WORKSPACE"
+          mysql -proot -u root -hlocalhost < ci/structure_v0.5.3.sql
+          touch connection.conf
+          echo "database.host=localhost" >> connection.conf
+          echo "database.name=weather_information_collector" >> connection.conf
+          echo "database.user=root" >> connection.conf
+          echo "database.password=root" >> connection.conf
+      - name: Tests
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          ./build/src/update/weather-information-collector-update -c connection.conf
