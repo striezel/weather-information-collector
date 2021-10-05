@@ -204,8 +204,10 @@ long long int Connection::exec(const std::string& sql)
   // Therefore the implementation of mysql_affected_rows() must use some type
   // juggling or casting for -1. Let's catch that by mapping everything not in
   // the positive range of long long int to -1.
-  if (affected > LLONG_MAX || affected < 0)
+  if (affected > LLONG_MAX || static_cast<long long int>(affected) < 0)
+  {
     return -1;
+  }
   return affected;
 }
 
