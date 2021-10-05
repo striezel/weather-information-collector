@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.?.? (2021-10-??)
+## Version 0.9.21 (2021-10-05)
 
 A possible null-pointer dereference in the update program has been fixed.
 

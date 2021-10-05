@@ -28,7 +28,7 @@ namespace wic
 {
 
 /** \brief version information */
-const std::string version = "version 0.9.20, 2021-08-24";
+const std::string version = "version 0.9.21, 2021-10-05";
 
 
 /** \brief Prints version information to the standard output.
