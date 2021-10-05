@@ -116,3 +116,19 @@ percona_5_7:
     MYSQL_HOST: "percona"
   services:
   - percona:5.7
+
+# Tests whether update program can update old table structure from version 0.5.3
+# of the program.
+updater_v0.5.3_structure:
+  <<: *mariadb_configuration
+  services:
+  - mariadb:10.2
+  script:
+    - apt-get -y --no-install-suggests --no-install-recommends install mariadb-client
+    - mysql -pci_password -u ci_user -hmariadb < ci/structure_v0.5.3.sql
+    - touch connection.conf
+    - echo "database.host=mariadb" >> connection.conf
+    - echo "database.name=weather_information_collector" >> connection.conf
+    - echo "database.user=ci_user" >> connection.conf
+    - echo "database.password=ci_password" >> connection.conf
+    - ./build/src/update/weather-information-collector-update -c connection.conf
