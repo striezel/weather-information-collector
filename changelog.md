@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.?.? (2021-11-??)
+
+simdjson, the library used for JSON parsing, has been updated from version 1.0.0
+to version 1.0.2.
+
 ## Version 0.9.21 (2021-10-05)
 
 A possible null-pointer dereference in the update program has been fixed.
