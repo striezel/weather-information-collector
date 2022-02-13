@@ -117,6 +117,17 @@ percona_5_7:
   services:
   - percona:5.7
 
+percona_8_0:
+  <<: *mariadb_configuration
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
+    MYSQL_HOST: "percona"
+  services:
+  - percona:8.0
+
 # Tests whether update program can update old table structure from version 0.5.3
 # of the program.
 updater_v0.5.3_structure:
