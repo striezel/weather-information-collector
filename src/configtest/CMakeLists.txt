@@ -28,7 +28,12 @@ set(weather-information-collector-configtest_sources
     main.cpp)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    add_definitions (-Wall -O3 -Weffc++ -pedantic -fexceptions)
+    add_definitions (-Wall -Weffc++ -pedantic -fexceptions)
+    if (CODE_COVERAGE)
+        add_definitions (-O0)
+    else ()
+        add_definitions (-O3)
+    endif ()
 endif ()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     add_definitions (-Wall -O3 -pedantic -fexceptions)

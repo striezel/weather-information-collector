@@ -59,6 +59,48 @@ package_debian10:
     paths:
       - "weather-information-collector*.deb"
 
+coverage:
+  stage: build
+  services:
+  - mariadb:10.5
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
+  before_script:
+    - apt-get update && apt-get -y install catch cmake g++ lcov libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - export CC=gcc && export CXX=g++
+  script:
+    - mkdir ./coverage
+    - cd ./coverage
+    - cmake ../ -DJSON_BENCHMARK=ON -DCODE_COVERAGE=ON
+    - make -j4
+    # tests
+    - ctest -V
+    # collect code coverage data
+    - lcov -c --directory . --output-file coverage.info
+    - lcov --remove coverage.info '/usr/*' '*tests/*' '*third-party/*' -o main_coverage.info
+    - genhtml main_coverage.info --output-directory ../public
+  coverage: /^[\t ]*lines\.*:\s*\d+.\d+\%/
+  artifacts:
+    name: ${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHA}
+    expire_in: 2 days
+    paths:
+      - public
+
+pages:
+  image: debian:11-slim
+  stage: deploy
+  needs: ["coverage"]
+  dependencies:
+  - coverage
+  script:
+    - ls -l
+  artifacts:
+    paths:
+      - public
+
 # Build the Docker image using the downloaded *.deb.
 docker_in_docker:
   image: docker:20
