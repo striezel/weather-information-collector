@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2020  Dirk Stolle
+    Copyright (C) 2020, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,6 +47,12 @@ TEST_CASE("Different API plans")
     REQUIRE( prof.timespan == enterprise.timespan );
   }
 
+  SECTION("OpenWeatherMap plan 'none' returns limit with zero allowed requests")
+  {
+    const auto nothing = Limits::forApi(ApiType::OpenWeatherMap, PlanOwm::none, PlanWeatherbit::none, PlanWeatherstack::none);
+    REQUIRE( nothing.requests == 0 );
+  }
+
   SECTION("Weatherbit plans have different limits")
   {
     const auto free = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Free, PlanWeatherstack::none);
@@ -64,6 +70,12 @@ TEST_CASE("Different API plans")
     REQUIRE( dev.timespan == advanced.timespan );
   }
 
+  SECTION("Weatherbit plan 'none' returns limit with zero allowed requests")
+  {
+    const auto nothing = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::none, PlanWeatherstack::none);
+    REQUIRE( nothing.requests == 0 );
+  }
+
   SECTION("Weatherstack plans have different limits")
   {
     const auto free = Limits::forApi(ApiType::Weatherstack, PlanOwm::none, PlanWeatherbit::none, PlanWeatherstack::Free);
@@ -79,6 +91,12 @@ TEST_CASE("Different API plans")
 
     REQUIRE( prof.requests < business.requests );
     REQUIRE( prof.timespan == business.timespan );
+  }
+
+  SECTION("Weatherstack plan 'none' returns limit with zero allowed requests")
+  {
+    const auto nothing = Limits::forApi(ApiType::Weatherstack, PlanOwm::none, PlanWeatherbit::none, PlanWeatherstack::none);
+    REQUIRE( nothing.requests == 0 );
   }
 }
 
