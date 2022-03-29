@@ -19,6 +19,7 @@ set(weather_information_collector_tests_sources
     ../../src/data/Location.cpp
     ../../src/data/Weather.cpp
     ../../src/db/ConnectionInformation.cpp
+    ../../src/db/Exceptions.cpp
     ../../src/tasks/Task.cpp
     ../../src/tasks/TaskManager.cpp
     ../../src/util/Directories.cpp
@@ -32,6 +33,7 @@ set(weather_information_collector_tests_sources
     data/Location.cpp
     data/Weather.cpp
     db/ConnectionInformation.cpp
+    db/Exceptions.cpp
     tasks/Plans.cpp
     tasks/Task.cpp
     tasks/TaskManager.cpp

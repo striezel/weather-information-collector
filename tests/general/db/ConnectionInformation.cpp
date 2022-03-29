@@ -109,4 +109,29 @@ TEST_CASE("ConnectionInformation class for db")
     REQUIRE( connInfo.port() == 0 );
   }
 
+  SECTION("setters")
+  {
+    ConnectionInformation connInfo("db-server", "db_one", "foo", "bar", 3307);
+
+    REQUIRE( connInfo.hostname() == "db-server" );
+    connInfo.setHostname("sql-instance-5");
+    REQUIRE( connInfo.hostname() == "sql-instance-5" );
+
+    REQUIRE( connInfo.db() == "db_one" );
+    connInfo.setDb("another_db");
+    REQUIRE( connInfo.db() == "another_db" );
+
+    REQUIRE( connInfo.user() == "foo" );
+    connInfo.setUser("user1");
+    REQUIRE( connInfo.user() == "user1" );
+
+    REQUIRE( connInfo.password() == "bar" );
+    connInfo.setPassword("some secret password");
+    REQUIRE( connInfo.password() == "some secret password" );
+
+    REQUIRE( connInfo.port() == 3307 );
+    connInfo.setPort(6033);
+    REQUIRE( connInfo.port() == 6033 );
+  }
+
 }

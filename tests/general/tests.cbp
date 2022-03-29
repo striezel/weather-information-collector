@@ -60,6 +60,8 @@
 		<Unit filename="../../src/data/Weather.hpp" />
 		<Unit filename="../../src/db/ConnectionInformation.cpp" />
 		<Unit filename="../../src/db/ConnectionInformation.hpp" />
+		<Unit filename="../../src/db/Exceptions.cpp" />
+		<Unit filename="../../src/db/Exceptions.hpp" />
 		<Unit filename="../../src/store/Store.hpp" />
 		<Unit filename="../../src/tasks/Task.cpp" />
 		<Unit filename="../../src/tasks/Task.hpp" />
@@ -80,6 +82,7 @@
 		<Unit filename="data/Location.cpp" />
 		<Unit filename="data/Weather.cpp" />
 		<Unit filename="db/ConnectionInformation.cpp" />
+		<Unit filename="db/Exceptions.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="tasks/Plans.cpp" />
 		<Unit filename="tasks/Task.cpp" />
