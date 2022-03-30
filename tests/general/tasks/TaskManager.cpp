@@ -570,7 +570,7 @@ TEST_CASE("Class TaskManager")
 
     SECTION("multiple data types")
     {
-      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900\ndata=current\ndata=current"sv;
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=900\ndata=current\ndata=current"sv;
       const auto name = "loadFromFile-multiple-data-types.conf";
       {
         std::ofstream file(name);
@@ -584,7 +584,7 @@ TEST_CASE("Class TaskManager")
 
     SECTION("unknown data type")
     {
-      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900\ndata=thisisnotvalid\n"sv;
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=900\ndata=thisisnotvalid\n"sv;
       const auto name = "loadFromFile-unknown-data-type.conf";
       {
         std::ofstream file(name);
