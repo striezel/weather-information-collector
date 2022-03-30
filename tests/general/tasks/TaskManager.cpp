@@ -467,6 +467,21 @@ TEST_CASE("Class TaskManager")
       REQUIRE_FALSE( TaskManager::loadFromFile("/file/does-not/ex.ist", task) );
     }
 
+    SECTION("carriage return at end of line")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\r\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-carriage-return.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+      REQUIRE( task.location().name() == "Hammelburg" );
+    }
+
     SECTION("missing '=' separator")
     {
       const auto data = "location.id123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=900"sv;
@@ -495,6 +510,20 @@ TEST_CASE("Class TaskManager")
       REQUIRE( std::remove(name) == 0 );
     }
 
+    SECTION("unknown setting name")
+    {
+      const auto data = "blahblubbar=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-unknown-setting-name.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
     SECTION("unknown API value")
     {
       const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=whatisthis\ninterval=900"sv;
@@ -509,10 +538,110 @@ TEST_CASE("Class TaskManager")
       REQUIRE( std::remove(name) == 0 );
     }
 
+    SECTION("task using Apixu API")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=Apixu\ninterval=900"sv;
+      const auto name = "loadFromFile-apixu-api.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+      REQUIRE( task.api() == ApiType::Apixu );
+      // Note: This should print a deprecation warning.
+    }
+
     SECTION("multiple API values")
     {
       const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
       const auto name = "loadFromFile-multiple-apis.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple data types")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900\ndata=current\ndata=current"sv;
+      const auto name = "loadFromFile-multiple-data-types.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("unknown data type")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900\ndata=thisisnotvalid\n"sv;
+      const auto name = "loadFromFile-unknown-data-type.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple location ids")
+    {
+      const auto data = "location.id=123\nlocation.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-multiple-ids.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location id is zero")
+    {
+      const auto data = "location.id=0\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-id-is-zero.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location id is negative")
+    {
+      const auto data = "location.id=-123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-id-is-negative.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location id is not an integer")
+    {
+      const auto data = "location.id=blah\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-id-is-not-int.conf";
       {
         std::ofstream file(name);
         file.write(data.data(), data.size());
@@ -537,10 +666,192 @@ TEST_CASE("Class TaskManager")
       REQUIRE( std::remove(name) == 0 );
     }
 
+    SECTION("very long location name")
+    {
+      const auto data = "location.id=123\nlocation.name=HammelburgerJohann Gambolputty Der Müßiggang berappen das ausgemergelt Mettigel. Klabusterbeere und Flickschusterei stagnieren fidel Kummerspeck. Mettigel und Jungfer grämen hold Naseweis. Das Zeche anschwärzen das piesacken Fracksausen.\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-long-name.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
     SECTION("multiple location postcodes")
     {
       const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\nlocation.postcode=97761\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
       const auto name = "loadFromFile-multiple-postcodes.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("very long location postcode")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762123456789012345678901223334444\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-long-postcode.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple location country codes")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.countrycode=DE\nlocation.countrycode=DE\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-multiple-country-codes.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location country code is longer than two characters")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.countrycode=DEU\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-three-letter-country-code.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location country code is shorter than two characters")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.countrycode=D\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-one-letter-country-code.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple location coordinates")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-multiple-coordinates.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("wrong separator in location coordinates")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1/9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-wrong-coordinates-separator.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location coordinates: latitude is not a float")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=abc,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-coordinates-latitude-not-float.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location coordinates: longitude is not a float")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=9.8,abc\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-coordinates-longitude-not-float.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location coordinates: latitude is out of range (> 90)")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=92.5,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-coordinates-latitude-out-of-range.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location coordinates: latitude is out of range (< -90)")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=-92.5,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-coordinates-latitude-out-of-range-negative.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location coordinates: longitude is out of range (> 180)")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=52.5,190.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-coordinates-longitude-out-of-range.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("location coordinates: longitude is out of range (< -180)")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=52.5,-185.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-coordinates-longitude-out-of-range-negative.conf";
       {
         std::ofstream file(name);
         file.write(data.data(), data.size());
