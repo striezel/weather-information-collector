@@ -51,6 +51,34 @@ TEST_CASE("Class Task")
     REQUIRE( t.interval().count() == 3600 );
   }
 
+  SECTION("setters")
+  {
+    Location loc;
+    loc.setName("City");
+    loc.setOwmId(123456);
+
+    Task t(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(3600));
+
+    t.setApi(ApiType::DarkSky);
+    REQUIRE( t.api() == ApiType::DarkSky );
+
+    t.setData(DataType::Forecast);
+    REQUIRE( t.data() == DataType::Forecast );
+
+    Location loc2;
+    loc2.setName("Another Town");
+    loc2.setOwmId(654321);
+    t.setLocation(loc2);
+    REQUIRE( t.location() == loc2 );
+
+    t.setInterval(std::chrono::seconds(150));
+    REQUIRE( t.interval().count() == 150 );
+
+    // Negative interval should be reset to zero.
+    t.setInterval(std::chrono::seconds(-123));
+    REQUIRE( t.interval().count() == 0 );
+  }
+
   SECTION("complete")
   {
     Location loc;

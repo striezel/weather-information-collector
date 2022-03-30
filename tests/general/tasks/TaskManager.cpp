@@ -18,6 +18,9 @@
  -------------------------------------------------------------------------------
 */
 
+#include <cstdio> // for std::remove
+#include <fstream>
+#include <string_view>
 #include <catch.hpp>
 #include "../../../src/tasks/TaskManager.hpp"
 
@@ -452,4 +455,142 @@ TEST_CASE("Class TaskManager")
       REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::Free, PlanWeatherbit::Free, PlanWeatherstack::Free) );
     }
   } // withinLimits
+
+  SECTION("loadFromFile")
+  {
+    using namespace std::literals::string_view_literals;
+
+    Task task;
+
+    SECTION("file does not exist")
+    {
+      REQUIRE_FALSE( TaskManager::loadFromFile("/file/does-not/ex.ist", task) );
+    }
+
+    SECTION("missing '=' separator")
+    {
+      const auto data = "location.id123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-missing-separator.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("empty value")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=\ninterval=900"sv;
+      const auto name = "loadFromFile-empty-value.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("unknown API value")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=whatisthis\ninterval=900"sv;
+      const auto name = "loadFromFile-unknown-api.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple API values")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-multiple-apis.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple location names")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.name=Hamburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-multiple-names.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple location postcodes")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\nlocation.postcode=97761\napi=OpenWeatherMap\napi=OpenWeatherMap\ninterval=900"sv;
+      const auto name = "loadFromFile-multiple-postcodes.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("multiple interval values")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=900\ninterval=900"sv;
+      const auto name = "loadFromFile-multiple-intervals.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("negative interval value")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=-900"sv;
+      const auto name = "loadFromFile-negative-interval.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+
+    SECTION("non-integral interval value")
+    {
+      const auto data = "location.id=123\nlocation.name=Hammelburg\nlocation.coordinates=50.1,9.8\nlocation.postcode=97762\napi=OpenWeatherMap\ninterval=9.55"sv;
+      const auto name = "loadFromFile-float-interval.conf";
+      {
+        std::ofstream file(name);
+        file.write(data.data(), data.size());
+        file.close();
+      }
+
+      REQUIRE_FALSE( TaskManager::loadFromFile(name, task) );
+      REQUIRE( std::remove(name) == 0 );
+    }
+  }
 }
