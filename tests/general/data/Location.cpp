@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2019  Dirk Stolle
+    Copyright (C) 2017, 2019, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -220,5 +220,101 @@ TEST_CASE("LocationClass")
     REQUIRE_FALSE( loc1 == loc2 );
     loc2.setOwmId(5);
     REQUIRE( loc1 == loc2 );
+  }
+
+  SECTION("coordinatesToString")
+  {
+    Location loc;
+
+    SECTION("no coordinates")
+    {
+      REQUIRE( loc.coordinatesToString() == "<no coordinates present>" );
+    }
+
+    SECTION("northern latitude, eastern longitude")
+    {
+      loc.setCoordinates(12.25f, 25.0f);
+      REQUIRE( loc.coordinatesToString() == "12.250000°N, 25.000000°E" );
+    }
+
+    SECTION("northern latitude, western longitude")
+    {
+      loc.setCoordinates(12.345678f, -25.987654f);
+      REQUIRE( loc.coordinatesToString() == "12.345678°N, 25.987654°W" );
+    }
+
+    SECTION("southern latitude, eastern longitude")
+    {
+      loc.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( loc.coordinatesToString() == "12.345678°S, 25.987654°E" );
+    }
+
+    SECTION("southern latitude, western longitude")
+    {
+      loc.setCoordinates(-12.25f, -25.0f);
+      REQUIRE( loc.coordinatesToString() == "12.250000°S, 25.000000°W" );
+    }
+  }
+
+  SECTION("toString")
+  {
+    Location loc;
+
+    SECTION("empty")
+    {
+      REQUIRE( loc.toString() == "<empty location>" );
+    }
+
+    SECTION("name only")
+    {
+      loc.setName("Berlin");
+      REQUIRE( loc.toString() == "Berlin" );
+    }
+
+    SECTION("name and coordinates")
+    {
+      loc.setName("Wargarbl");
+      loc.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( loc.toString() == "Wargarbl (12.345678°S, 25.987654°E)" );
+    }
+
+    SECTION("name and country code")
+    {
+      loc.setName("Wargarbl");
+      loc.setCountryCode("FI");
+      REQUIRE( loc.toString() == "Wargarbl, FI" );
+    }
+
+    SECTION("name and country code and coordinates")
+    {
+      loc.setName("Wargarbl");
+      loc.setCountryCode("FI");
+      loc.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( loc.toString() == "Wargarbl, FI (12.345678°S, 25.987654°E)" );
+    }
+
+    SECTION("coordinates only")
+    {
+      loc.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( loc.toString() == "12.345678°S, 25.987654°E" );
+    }
+
+    SECTION("country code only")
+    {
+      loc.setCountryCode("FI");
+      REQUIRE( loc.toString() == "<empty location>" );
+    }
+
+    SECTION("OpenWeatherMap ID only")
+    {
+      loc.setOwmId(123);
+      REQUIRE( loc.toString() == "OWM ID 123" );
+    }
+
+    SECTION("postcode only")
+    {
+      loc.setPostcode("123ABC");
+      REQUIRE( loc.toString() == "Postcode 123ABC" );
+    }
   }
 }
