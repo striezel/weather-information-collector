@@ -45,7 +45,9 @@ class Factory
      * \return Returns a unique_ptr to the created instance.
      *         Returns nullptr, if api is ApiType::none or not supported.
      */
-    static std::unique_ptr<API> create(const ApiType api, const PlanWeatherbit planWb, const PlanWeatherstack planWs, const std::string& key = std::string());
+    static std::unique_ptr<API> create(const ApiType api, const PlanWeatherbit planWb,
+                                       const PlanWeatherstack planWs,
+                                       const std::string& key = std::string());
 }; // class
 
 } // namespace

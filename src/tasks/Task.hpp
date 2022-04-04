@@ -38,8 +38,9 @@ class Task
      * \param a         the API type to use for requests
      * \param _interval interval between two consecutive API requests
      */
-    Task(const Location& loc = Location(), const ApiType a = ApiType::none, const DataType d = DataType::none, const std::chrono::seconds& _interval = std::chrono::seconds::zero());
-
+    Task(const Location& loc = Location(), const ApiType a = ApiType::none,
+         const DataType d = DataType::none,
+         const std::chrono::seconds& _interval = std::chrono::seconds::zero());
 
     /** \brief Gets the location of the collection task.
      *

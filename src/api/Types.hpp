@@ -28,7 +28,15 @@ namespace wic
 
 /** \brief enumeration type for supported APIs
  */
-enum class ApiType { none, Apixu, OpenWeatherMap, DarkSky, Weatherbit, Weatherstack };
+enum class ApiType
+{
+    none,
+    Apixu,
+    OpenWeatherMap,
+    DarkSky,
+    Weatherbit,
+    Weatherstack
+};
 
 
 /** \brief Converts a name / string to a supported API type.
@@ -47,10 +55,15 @@ ApiType toApiType(const std::string& apiName);
  */
 std::string toString(const ApiType type);
 
-
 /** \brief enumeration type for requested weather data
  */
-enum class DataType { none, Current, Forecast, CurrentAndForecast };
+enum class DataType
+{
+    none,
+    Current,
+    Forecast,
+    CurrentAndForecast
+};
 
 
 /** \brief Converts a name / string to a supported data type.

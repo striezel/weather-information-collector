@@ -28,7 +28,15 @@ namespace wic
 
 /** \brief enumeration type for plans of OpenWeatherMap
  */
-enum class PlanOwm { none, Free, Startup, Developer, Professional, Enterprise };
+enum class PlanOwm
+{
+    none,
+    Free,
+    Startup,
+    Developer,
+    Professional,
+    Enterprise
+};
 
 
 /** \brief Gets the name of the OpenWeatherMap plan.
@@ -47,10 +55,16 @@ std::string toString(const PlanOwm type);
  */
 PlanOwm toPlanOwm(const std::string& planName);
 
-
 /** \brief enumeration type for plans of Weatherbit
  */
-enum class PlanWeatherbit { none, Free, Starter, Developer, Advanced };
+enum class PlanWeatherbit
+{
+    none,
+    Free,
+    Starter,
+    Developer,
+    Advanced
+};
 
 
 /** \brief Gets the name of the Weatherbit plan.
@@ -69,10 +83,16 @@ std::string toString(const PlanWeatherbit type);
  */
 PlanWeatherbit toPlanWeatherbit(const std::string& planName);
 
-
 /** \brief enumeration type for plans of Weatherstack
  */
-enum class PlanWeatherstack { none, Free, Standard, Professional, Business };
+enum class PlanWeatherstack
+{
+    none,
+    Free,
+    Standard,
+    Professional,
+    Business
+};
 
 
 /** \brief Gets the name of the Weatherstack plan.
