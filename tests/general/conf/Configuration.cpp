@@ -46,6 +46,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( fn.find(".conf") != std::string::npos );
     }
   }
+
   SECTION("potentialTaskDirectories")
   {
     const auto td = Configuration::potentialTaskDirectories();
