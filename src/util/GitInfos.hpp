@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2020, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,19 +29,19 @@ namespace wic
 class GitInfos
 {
   public:
-    /** \brief default constructor
+    /** \brief Default constructor.
      */
     GitInfos();
 
 
-    /** \brief gets the SHA1 hash of the current commit (40 hex digits)
+    /** \brief Gets the SHA1 hash of the current commit (40 hex digits).
      *
      * \return Returns the SHA1 hash of the current commit.
      */
     const std::string& commit() const;
 
 
-    /** \brief gets date of the last commit (e.g. "2017-01-29 14:59:33 +0200")
+    /** \brief Gets date of the last commit (e.g. "2017-01-29 14:59:33 +0200").
      *
      * \return Returns the date of the last commit.
      */
