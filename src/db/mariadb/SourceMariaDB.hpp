@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2021  Dirk Stolle
+    Copyright (C) 2018, 2019, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -50,11 +50,6 @@ class SourceMariaDB
     explicit SourceMariaDB(const ConnectionInformation& ci);
 
 
-    /** \brief Destructor.
-     */
-    virtual ~SourceMariaDB() = default;
-
-
     /** \brief Gets the current weather data for a given location and API.
      *
      * \param type      API that was used to gather the information
@@ -63,7 +58,7 @@ class SourceMariaDB
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather);
+    bool getCurrentWeather(const ApiType type, const Location& location, std::vector<Weather>& weather);
 
 
 #ifndef wic_no_metadata
@@ -75,7 +70,7 @@ class SourceMariaDB
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather);
+    bool getMetaCurrentWeather(const ApiType type, const Location& location, std::vector<WeatherMeta>& weather);
 #endif // wic_no_metadata
 
 
@@ -87,7 +82,7 @@ class SourceMariaDB
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast);
+    bool getForecasts(const ApiType type, const Location& location, std::vector<Forecast>& forecast);
 
 
 #ifndef wic_no_metadata
@@ -99,7 +94,7 @@ class SourceMariaDB
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast);
+    bool getMetaForecasts(const ApiType type, const Location& location, std::vector<ForecastMeta>& forecast);
 #endif // wic_no_metadata
 
 
@@ -110,7 +105,7 @@ class SourceMariaDB
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool listApis(std::map<ApiType, int>& apis);
+    bool listApis(std::map<ApiType, int>& apis);
 
 
     /** \brief Lists all named locations together with the APIs from which
@@ -121,7 +116,7 @@ class SourceMariaDB
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool listWeatherLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations);
+    bool listWeatherLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations);
 
 
     /** \brief Lists all named locations together with the APIs from which
@@ -132,7 +127,7 @@ class SourceMariaDB
      * \return Returns true, if the data was retrieved.
      *         Returns false, if an error occurred.
      */
-    virtual bool listForecastLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations);
+    bool listForecastLocationsWithApi(std::vector<std::pair<Location, ApiType> >& locations);
 
 
     /** \brief Gets the ID of a location from the database. If no such location
@@ -142,7 +137,7 @@ class SourceMariaDB
      * \return Returns the ID of the location in case of success.
      * Returns -1, if an error occurred.
      */
-    virtual int getLocationId(const Location& location);
+    int getLocationId(const Location& location);
   private:
     ConnectionInformation connInfo; /**< MariaDB connection information */
 }; // class
