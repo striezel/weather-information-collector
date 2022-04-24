@@ -20,7 +20,6 @@
 
 #include <iostream>
 #include <utility>
-#include <ctime>
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
 #include "../tasks/TaskManager.hpp"

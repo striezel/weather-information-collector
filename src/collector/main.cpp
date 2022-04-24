@@ -20,7 +20,6 @@
 
 #include <iostream>
 #include <utility>
-#include <ctime>
 #include "../api/Apixu.hpp"
 #include "../conf/Configuration.hpp"
 #include "../db/ConnectionInformation.hpp"
