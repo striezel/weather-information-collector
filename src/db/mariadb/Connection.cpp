@@ -88,15 +88,25 @@ std::string Connection::quote(const std::string& str) const
 std::string Connection::quote(const std::chrono::time_point<std::chrono::system_clock>& dateTime)
 {
   const std::time_t tt = std::chrono::system_clock::to_time_t(dateTime);
+  struct tm tm;
+  #if !defined(_MSC_VER)
   // Note: localtime() is NOT thread-safe. Therefore we use localtime_r(), which
   // is thread-safe but may not be available on all platforms or compilers.
-  struct tm tm;
   struct tm* ptr = localtime_r(&tt, &tm);
   if (ptr == nullptr)
   {
     std::cerr << "Error: Date conversion with localtime_r() failed!" << std::endl;
     throw std::invalid_argument("Date conversion with localtime_r() failed!");
   }
+  #else
+  // MSVC does not have localtime_r, so we use localtime_s instead.
+  const errno_t error = localtime_s(&tm, &tt);
+  if (error != 0)
+  {
+    std::cerr << "Error: Date conversion with localtime_s() failed!" << std::endl;
+    throw std::invalid_argument("Date conversion with localtime_s() failed!");
+  }
+  #endif
   const int realYear = tm.tm_year + 1900;
   const int realMonth = tm.tm_mon + 1;
   return std::string("'")
