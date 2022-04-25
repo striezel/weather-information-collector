@@ -19,6 +19,7 @@
 */
 
 #include <chrono>
+#include <ctime>
 #include <iostream>
 #include <catch.hpp>
 #include "../../../src/db/mariadb/Connection.hpp"
@@ -71,19 +72,60 @@ TEST_CASE("Connection tests")
       REQUIRE( conn.quote("line\r\nbreak") == "'line\\r\\nbreak'" );
       REQUIRE( conn.quote(std::string("NUL\0byte", 8)) == "'NUL\\0byte'" );
     }
-
-    SECTION("quote method for datetime")
-    {
-      const db::mariadb::Connection conn(connInfo);
-
-      const auto now = std::chrono::system_clock::now();
-      const std::string refString = "'2020-04-01 12:34:56'";
-      REQUIRE_NOTHROW( conn.quote(now) );
-      REQUIRE( conn.quote(now).size() == refString.size() );
-    }
   }
   else
   {
     std::clog << "Info: Test is not run within the CI environment, so it is not executed." << std::endl;
+  }
+}
+
+TEST_CASE("Connection::quote(time_point) tests")
+{
+  using namespace wic::db::mariadb;
+
+  SECTION("quote method for datetime")
+  {
+    const auto now = std::chrono::system_clock::now();
+    const std::string refString = "'2020-04-01 12:34:56'";
+    REQUIRE_NOTHROW( Connection::quote(now) );
+    REQUIRE( Connection::quote(now).size() == refString.size() );
+  }
+
+  SECTION("time with leading zeroes")
+  {
+    std::tm tm{};
+    tm.tm_year = 1990 - 1900; // 1990
+    tm.tm_mon = 5 - 1; // May
+    tm.tm_mday = 1; // 1st
+    tm.tm_hour = 6;
+    tm.tm_min = 7;
+    tm.tm_sec = 8;
+    tm.tm_isdst = -1; // no info on daylight saving time
+    const std::time_t tt = std::mktime(&tm);
+    REQUIRE( tt != static_cast<std::time_t>(-1) );
+
+    const auto date_time = std::chrono::system_clock::from_time_t(tt);
+    const auto date_time_string = Connection::quote(date_time);
+    REQUIRE_FALSE( date_time_string.empty() );
+    REQUIRE( date_time_string == "'1990-05-01 06:07:08'" );
+  }
+
+  SECTION("time without leading zeroes")
+  {
+    std::tm tm{};
+    tm.tm_year = 2030 - 1900; // 2030
+    tm.tm_mon = 12 - 1; // December
+    tm.tm_mday = 24; // 24th
+    tm.tm_hour = 19;
+    tm.tm_min = 20;
+    tm.tm_sec = 35;
+    tm.tm_isdst = -1; // no info on daylight saving time
+    const std::time_t tt = std::mktime(&tm);
+    REQUIRE( tt != static_cast<std::time_t>(-1) );
+
+    const auto date_time = std::chrono::system_clock::from_time_t(tt);
+    const auto date_time_string = Connection::quote(date_time);
+    REQUIRE_FALSE( date_time_string.empty() );
+    REQUIRE( date_time_string == "'2030-12-24 19:20:35'" );
   }
 }

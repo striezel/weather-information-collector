@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020, 2021  Dirk Stolle
+    Copyright (C) 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ std::string Connection::quote(const std::string& str) const
   return "'" + escape(str) + "'";
 }
 
-std::string Connection::quote(const std::chrono::time_point<std::chrono::system_clock>& dateTime) const
+std::string Connection::quote(const std::chrono::time_point<std::chrono::system_clock>& dateTime)
 {
   const std::time_t tt = std::chrono::system_clock::to_time_t(dateTime);
   // Note: localtime() is NOT thread-safe. Therefore we use localtime_r(), which

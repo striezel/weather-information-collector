@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020, 2021  Dirk Stolle
+    Copyright (C) 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ class Connection
      * \remarks This method is not thread-safe, i.e. multiple concurrent calls
      *          of this method will cause a data race and fail.
      */
-    std::string quote(const std::chrono::time_point<std::chrono::system_clock>& dateTime) const;
+    static std::string quote(const std::chrono::time_point<std::chrono::system_clock>& dateTime);
 
     /** \brief Executes the given SQL statement and returns its result.
      *
