@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020, 2021  Dirk Stolle
+    Copyright (C) 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -144,13 +144,13 @@ std::chrono::time_point<std::chrono::system_clock> Row::getDateTime(const std::s
   const int day = std::stoi(value.substr(8, 2), &pos);
   if (pos != 2 || day < 1 || day > 31)
   {
-    throw std::invalid_argument(value + " is not a valid datetime. Maybe '" + value.substr(8, 2) + "' is not a valid month.");
+    throw std::invalid_argument(value + " is not a valid datetime. Maybe '" + value.substr(8, 2) + "' is not a valid day.");
   }
 
   const int hour = std::stoi(value.substr(11, 2), &pos);
   if (pos != 2 || hour < 0 || hour > 23)
   {
-    throw std::invalid_argument(value + " is not a valid datetime. Maybe '" + value.substr(11, 2) + "' is not a valid day.");
+    throw std::invalid_argument(value + " is not a valid datetime. Maybe '" + value.substr(11, 2) + "' is not a valid hour.");
   }
   const int minute = std::stoi(value.substr(14, 2), &pos);
   if (pos != 2 || minute < 0 || minute > 59)
