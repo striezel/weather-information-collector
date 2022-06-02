@@ -41,10 +41,10 @@ void showVersion(const std::string_view name)
             << "Version control date:   " << info.date() << std::endl;
 #ifndef wic_no_json_parsing
 #ifdef __SIZEOF_INT128__
-  std::cout << "JSON library:           simdjson " << STRINGIFY(SIMDJSON_VERSION) << "\n"
+  std::cout << "JSON library:           simdjson " << SIMDJSON_STRINGIFY(SIMDJSON_VERSION) << "\n"
             << "                        using implementation "
-            << simdjson::active_implementation->name() << " ("
-            << simdjson::active_implementation->description() << ")" << std::endl;
+            << simdjson::get_active_implementation()->name() << " ("
+            << simdjson::get_active_implementation()->description() << ")" << std::endl;
 #else
   std::cout << "JSON library:           nlohmann/json "
             << NLOHMANN_JSON_VERSION_MAJOR << "." << NLOHMANN_JSON_VERSION_MINOR
