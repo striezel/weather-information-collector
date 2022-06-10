@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2021  Dirk Stolle
+    Copyright (C) 2017, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include <catch.hpp>
+#include "../../find_catch.hpp"
 #include "../../../src/db/ConnectionInformation.hpp"
 
 TEST_CASE("ConnectionInformation class for db")

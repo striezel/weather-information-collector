@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include <catch.hpp>
+#include "../../find_catch.hpp"
 #include "../../../src/util/SemVer.hpp"
 
 TEST_CASE("SemVer class")
@@ -35,7 +35,7 @@ TEST_CASE("SemVer class")
   {
     REQUIRE( SemVer(1, 2, 3).toString() == std::string("1.2.3") );
     REQUIRE( SemVer(0, 9, 1).toString() == std::string("0.9.1") );
-  } // constructor section
+  }
 
   SECTION("equality operator")
   {

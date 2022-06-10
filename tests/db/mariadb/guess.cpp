@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2020, 2021  Dirk Stolle
+    Copyright (C) 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include <catch.hpp>
+#include "../../find_catch.hpp"
 #include "../../../src/db/mariadb/guess.hpp"
 #include "../../../src/util/Environment.hpp"
 #include "../CiConnection.hpp"
@@ -55,7 +55,7 @@ TEST_CASE("database version guessing tests")
     {
       REQUIRE( InitDB::downgradeTo_0_8_6(connInfo) );
       const auto guessedVersion = guessVersionFromDatabase(connInfo);
-      // Database should be the most up to date version.
+      // Database should be the version 0.8.6.
       REQUIRE( guessedVersion == SemVer(0, 8, 6) );
     }
   }

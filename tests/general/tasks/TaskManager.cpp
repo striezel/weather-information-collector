@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2018, 2019, 2020  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include <cstdio> // for std::remove
 #include <fstream>
 #include <string_view>
-#include <catch.hpp>
+#include "../../find_catch.hpp"
 #include "../../../src/tasks/TaskManager.hpp"
 
 TEST_CASE("Class TaskManager")

@@ -74,6 +74,7 @@
 		<Unit filename="../../src/util/SemVer.hpp" />
 		<Unit filename="../../src/util/Strings.cpp" />
 		<Unit filename="../../src/util/Strings.hpp" />
+		<Unit filename="../find_catch.hpp" />
 		<Unit filename="api/Factory.cpp" />
 		<Unit filename="api/Plans.cpp" />
 		<Unit filename="api/SupportedDataTypes.cpp" />

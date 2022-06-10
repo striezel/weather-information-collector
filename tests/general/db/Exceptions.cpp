@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include <catch.hpp>
+#include "../../find_catch.hpp"
 #include "../../../src/db/Exceptions.hpp"
 
 TEST_CASE("db-related exceptions")

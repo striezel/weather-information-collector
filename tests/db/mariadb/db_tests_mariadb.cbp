@@ -73,6 +73,7 @@
 		<Unit filename="../../../src/util/SemVer.hpp" />
 		<Unit filename="../../../src/util/Strings.cpp" />
 		<Unit filename="../../../src/util/Strings.hpp" />
+		<Unit filename="../../find_catch.hpp" />
 		<Unit filename="../CiConnection.cpp" />
 		<Unit filename="../CiConnection.hpp" />
 		<Unit filename="../CiData.cpp" />

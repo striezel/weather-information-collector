@@ -18,7 +18,7 @@
  -------------------------------------------------------------------------------
 */
 
-#include <catch.hpp>
+#include "../../find_catch.hpp"
 #include "../../../src/api/Limits.hpp"
 #include "../../../src/tasks/TaskManager.hpp"
 

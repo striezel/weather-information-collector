@@ -19,4 +19,4 @@
 */
 
 #define CATCH_CONFIG_MAIN
-#include <catch.hpp>
+#include "../find_catch.hpp"

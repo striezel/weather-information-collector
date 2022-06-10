@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2018  Dirk Stolle
+    Copyright (C) 2017, 2018, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 */
 
 #include <cmath>
-#include <catch.hpp>
+#include "../../find_catch.hpp"
 
 #include "../../../src/data/Weather.hpp"
 
@@ -30,7 +30,7 @@ TEST_CASE("WeatherClass")
 
   SECTION("empty after construction")
   {
-    //no data should be set
+    // no data should be set
     REQUIRE_FALSE( weather.hasDataTime() );
     REQUIRE_FALSE( weather.hasRequestTime() );
     REQUIRE_FALSE( weather.hasTemperatureKelvin() );
