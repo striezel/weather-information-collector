@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2020, 2021  Dirk Stolle
+    Copyright (C) 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,21 +38,12 @@ ConnectionInformation getCiConn()
              getEnvVar("MYSQL_PASSWORD"));
   }
 
-  if (isGithubActions())
-  {
-    return ConnectionInformation(
-             "localhost",
-             "weather_information_collector",
-             "root",
-             "root");
-  }
-
-  // Assume Travis CI otherwise.
+  // Assume GitHub Actions otherwise.
   return ConnectionInformation(
-           "127.0.0.1",
+           "localhost",
            "weather_information_collector",
-           "travis", // user
-           "" /* Password is blank on Travis CI. */);
+           "root",
+           "root");
 }
 
 } // namespace

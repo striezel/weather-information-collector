@@ -31,10 +31,10 @@ TEST_CASE("Row class tests")
 {
   using namespace wic;
   using namespace wic::db::mariadb;
-  const bool isCI = isGitlabCi() || isGithubActions() || isTravisCi();
+  const bool hasDB = (isGitlabCi() || isGithubActions()) && !isMinGW();
 
-  // Only run this test, if we are within the CI environment.
-  if (isCI)
+  // Only run this test, if we have a database server.
+  if (hasDB)
   {
     const auto connInfo = getCiConn();
     REQUIRE( connInfo.isComplete() );
@@ -149,6 +149,6 @@ TEST_CASE("Row class tests")
   }
   else
   {
-    std::clog << "Info: Test is not run within the CI environment, so it is not executed." << std::endl;
+    std::clog << "Info: Test is run without a database instance, so it is not executed." << std::endl;
   }
 }

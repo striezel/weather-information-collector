@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020, 2021  Dirk Stolle
+    Copyright (C) 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -47,10 +47,13 @@ bool isGithubActions()
   return hasEnvVar("GITHUB_ACTIONS");
 }
 
-bool isTravisCi()
+bool isMinGW()
 {
-  // Travis CI defines the environment variable TRAVIS, so check that.
-  return hasEnvVar("TRAVIS");
+  #if defined(__MINGW32__) || defined(__MINGW64__)
+  return true;
+  #else
+  return false;
+  #endif
 }
 
 } // namespace
