@@ -153,6 +153,11 @@ mariadb_10_7:
   services:
   - mariadb:10.7
 
+mariadb_10_8:
+  <<: *mariadb_configuration
+  services:
+  - mariadb:10.8
+
 percona_5_7:
   <<: *mariadb_configuration
   variables:
