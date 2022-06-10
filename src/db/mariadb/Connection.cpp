@@ -89,7 +89,7 @@ std::string Connection::quote(const std::chrono::time_point<std::chrono::system_
 {
   const std::time_t tt = std::chrono::system_clock::to_time_t(dateTime);
   struct tm tm;
-  #if !defined(_MSC_VER)
+  #if !defined(_MSC_VER) && !defined(__MINGW32__) && !defined(__MINGW64__)
   // Note: localtime() is NOT thread-safe. Therefore we use localtime_r(), which
   // is thread-safe but may not be available on all platforms or compilers.
   struct tm* ptr = localtime_r(&tt, &tm);
