@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -61,7 +61,9 @@ bool UpdateTo083::perform(const ConnectionInformation& ci) noexcept
 
 bool UpdateTo083::updateStructure(const ConnectionInformation& ci) noexcept
 {
-  for (const std::string& table : {"forecastdata", "weatherdata"})
+  using namespace std::string_literals;
+
+  for (const auto& table : {"forecastdata"s, "weatherdata"s})
   {
     if (!Structure::tableExists(ci, table))
     {

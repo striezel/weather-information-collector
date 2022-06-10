@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ bool UpdateTo080::updateData(const ConnectionInformation& ci) noexcept
   try
   {
     db::mariadb::Connection conn(ci);
-    for (const std::string& table : { "weatherdata", "forecastdata"})
+    for (const auto& table : { "weatherdata", "forecastdata"})
     {
       std::cout << "Updating temperature (°F) in table " << table << "..." << std::endl;
       const std::string query = std::string("UPDATE ") + table

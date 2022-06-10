@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,11 +33,13 @@ bool UpdateTo086::perform(const ConnectionInformation& ci) noexcept
 
 bool UpdateTo086::updateStructure(const ConnectionInformation& ci) noexcept
 {
+  using namespace std::string_literals;
+
   try
   {
     db::mariadb::Connection conn(ci);
 
-    for (const std::string& table : { "weatherdata", "forecastdata"})
+    for (const auto& table : { "weatherdata"s, "forecastdata"s})
     {
       std::string query = "SELECT IS_NULLABLE FROM information_schema.columns "
           + std::string("  WHERE TABLE_SCHEMA=") + conn.quote(ci.db())

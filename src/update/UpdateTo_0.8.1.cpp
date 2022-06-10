@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,14 +32,16 @@ bool UpdateTo081::perform(const ConnectionInformation& ci) noexcept
 
 bool UpdateTo081::updateData(const ConnectionInformation& ci) noexcept
 {
+  using namespace std::string_literals;
+
   try
   {
     db::mariadb::Connection conn(ci);
 
-    for (const std::string& table : { "weatherdata", "forecastdata"})
+    for (const auto& table : { "weatherdata"s, "forecastdata"s})
     {
       std::cout << "Updating table " << table << "..." << std::endl;
-      for (const std::string& column : { "temperature_C", "temperature_F", "temperature_K" })
+      for (const auto& column : { "temperature_C"s, "temperature_F"s, "temperature_K"s })
       {
         // Update temperature values.
         std::cout << "  Updating column " << column << "..." << std::endl;
