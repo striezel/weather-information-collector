@@ -22,7 +22,16 @@
 #define WEATHER_INFORMATION_COLLECTOR_DB_MARIADB_CONNECTION_HPP
 
 #include <chrono>
-#include <mariadb/mysql.h>
+#if defined(__has_include)
+  #if __has_include(<mariadb/mysql.h>)
+    #include <mariadb/mysql.h>
+  #else
+    #include <mysql/mysql.h>
+  #endif
+#else
+  // If there is no __has_include, just go with mariadb.
+  #include <mariadb/mysql.h>
+#endif
 #include "../../api/Types.hpp"
 #include "../ConnectionInformation.hpp"
 

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2020, 2021  Dirk Stolle
+    Copyright (C) 2017, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,7 +21,16 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_DB_MARIADB_API_HPP
 #define WEATHER_INFORMATION_COLLECTOR_DB_MARIADB_API_HPP
 
-#include <mariadb/mysql.h>
+#if defined(__has_include)
+  #if __has_include(<mariadb/mysql.h>)
+    #include <mariadb/mysql.h>
+  #else
+    #include <mysql/mysql.h>
+  #endif
+#else
+  // If there is no __has_include, just go with mariadb.
+  #include <mariadb/mysql.h>
+#endif
 #include "../../api/Types.hpp"
 #include "../ConnectionInformation.hpp"
 #include "Connection.hpp"
