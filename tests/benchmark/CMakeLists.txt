@@ -19,5 +19,5 @@ add_test(NAME weather-information-collector-benchmark_help_question_mark_windows
          COMMAND $<TARGET_FILE:weather-information-collector-benchmark> /?)
 
 # parameter to show version number
-add_test(NAME weather-information-collector-configtest_version
+add_test(NAME weather-information-collector-benchmark_version
          COMMAND $<TARGET_FILE:weather-information-collector-benchmark> --version)
