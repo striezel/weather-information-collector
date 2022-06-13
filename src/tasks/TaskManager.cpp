@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,6 +56,8 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
     if (line.at(line.length() - 1) == '\r')
     {
       line.erase(line.length() - 1);
+      if (line.empty())
+        continue;
     }
 
     const auto sepPos = line.find('=');

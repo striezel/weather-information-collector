@@ -55,7 +55,14 @@ TEST_CASE("Class Configuration")
     REQUIRE( td.size() > 1 );
     for (const auto & dn : td)
     {
+      #if defined(_WIN32)
+      const bool hasSlash = dn.find("/") != std::string::npos;
+      const bool hasBackslash = dn.find("\\") != std::string::npos;
+      const bool hasSomeSeparator = hasSlash || hasBackslash;
+      REQUIRE( hasSomeSeparator );
+      #else
       REQUIRE( dn.find("/") != std::string::npos );
+      #endif
     }
   }
 }
