@@ -4,19 +4,19 @@ In general, weather-information-collector supports any somewhat recent MariaDB
 database server. This also includes compatible systems like MySQL or Percona
 Server.
 
-| DBMS          | Supported   | Tested |
-| ------------- | ----------- | ------ |
-| MariaDB 10.2  | yes         | yes    |
-| MariaDB 10.3  | yes         | yes    |
-| MariaDB 10.4  | yes         | yes    |
-| MariaDB 10.5  | yes         | yes    |
-| MariaDB 10.6  | yes         | yes    |
-| MariaDB 10.7  | yes         | yes    |
-| MariaDB 10.8  | yes         | yes    |
-| MySQL 5.7     | yes         | yes    |
-| MySQL 8.0     | yes _(*)_   | yes    |
-| Percona 5.7   | yes         | yes    |
-| Percona 8.0   | yes _(*)_   | yes    |
+| DBMS          | Supported   | Tested                   |
+| ------------- | ----------- | ------------------------ |
+| MariaDB 10.2  | yes         | no (reached end of life) |
+| MariaDB 10.3  | yes         | yes                      |
+| MariaDB 10.4  | yes         | yes                      |
+| MariaDB 10.5  | yes         | yes                      |
+| MariaDB 10.6  | yes         | yes                      |
+| MariaDB 10.7  | yes         | yes                      |
+| MariaDB 10.8  | yes         | yes                      |
+| MySQL 5.7     | yes         | yes                      |
+| MySQL 8.0     | yes _(*)_   | yes                      |
+| Percona 5.7   | yes         | yes                      |
+| Percona 8.0   | yes _(*)_   | yes                      |
 
 In theory, weather-information-collector should even be able to work with older
 DBMS versions down to MariaDB 5.5 / MySQL Server 5.5 / Percona Server 5.5.
