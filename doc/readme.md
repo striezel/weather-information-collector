@@ -95,3 +95,8 @@ Full details on the task files (supported settings, etc.) can be found
 
 Should you encounter any problems with weather-information-collector's programs,
 take a look at the [troubleshooting guide](troubleshooting.md).
+
+# Building from source on Windows
+
+For information how to build weather-information-collector on Windows, see the
+[MSYS2 build instructions](msys2-build.md).

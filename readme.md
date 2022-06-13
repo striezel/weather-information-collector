@@ -72,6 +72,11 @@ Starting in the root directory of the source, you can do the following steps:
 If you prefer Docker over the native approach, take a look into the `docker/`
 directory and refer to the [readme there](./docker/readme.md).
 
+## Building from source on Windows
+
+For information how to build weather-information-collector on Windows, see the
+[MSYS2 build instructions](./doc/msys2-build.md).
+
 ## Usage
 
     weather-information-collector [OPTIONS]
