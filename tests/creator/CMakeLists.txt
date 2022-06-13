@@ -15,8 +15,12 @@ add_test(NAME weather-information-collector-task-creator_help_question_mark
          COMMAND $<TARGET_FILE:weather-information-collector-task-creator> -?)
 
 # Windows-style help parameter "/?"
-add_test(NAME weather-information-collector-task-creator_help_question_mark_windows
-         COMMAND $<TARGET_FILE:weather-information-collector-task-creator> /?)
+if (NOT DEFINED ENV{GITHUB_ACTIONS} OR NOT MINGW)
+  add_test(NAME weather-information-collector-task-creator_help_question_mark_windows
+           COMMAND $<TARGET_FILE:weather-information-collector-task-creator> /?)
+else ()
+  message(STATUS "Not running creator question mark test on GHA with MinGW.")
+endif ()
 
 # parameter to show version number
 add_test(NAME weather-information-collector-task-creator_version

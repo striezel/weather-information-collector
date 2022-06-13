@@ -15,8 +15,12 @@ add_test(NAME weather-information-collector-update_help_question_mark
          COMMAND $<TARGET_FILE:weather-information-collector-update> -?)
 
 # Windows-style help parameter "/?"
-add_test(NAME weather-information-collector-update_help_question_mark_windows
-         COMMAND $<TARGET_FILE:weather-information-collector-update> /?)
+if (NOT DEFINED ENV{GITHUB_ACTIONS} OR NOT MINGW)
+  add_test(NAME weather-information-collector-update_help_question_mark_windows
+           COMMAND $<TARGET_FILE:weather-information-collector-update> /?)
+else ()
+  message(STATUS "Not running updater question mark test on GHA with MinGW.")
+endif ()
 
 # parameter to show version number
 add_test(NAME weather-information-collector-update_version
