@@ -21,10 +21,9 @@ endif(MARIADB_INCLUDE_PATH)
 find_library(MARIADB_LIBRARIES NAMES mariadb libmariadb
              HINTS ${PC_LIBMARIADB_LIBRARY_DIRS})
 
-if (MARIADB_LIBRARIES)
-else (MARIADB_LIBRARIES)
+if (NOT MARIADB_LIBRARIES)
    message( "Library of libmariadb was not found!")
-endif (MARIADB_LIBRARIES)
+endif (NOT MARIADB_LIBRARIES)
 
 
 if (MARIADB_INCLUDE_DIR AND MARIADB_LIBRARIES)
