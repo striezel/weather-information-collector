@@ -24,15 +24,15 @@ set(simdjson_parsing_tests_sources
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_definitions(-Wall -fexceptions)
+    add_definitions(-Wall -Wextra -pedantic -fexceptions)
     if (CODE_COVERAGE)
         add_definitions (-O0)
     else ()
         add_definitions (-O3)
     endif ()
-endif ()
 
-set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+    set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+endif ()
 
 add_executable(simdjson_parsing_tests ${simdjson_parsing_tests_sources})
 
