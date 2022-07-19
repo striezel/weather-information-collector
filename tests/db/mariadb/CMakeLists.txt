@@ -68,6 +68,12 @@ else()
   message ( FATAL_ERROR "libmariadb was not found!" )
 endif (MARIADB_FOUND)
 
+# MSYS2 / MinGW uses Catch 3.x.
+if (HAS_CATCH_V3)
+    find_package(Catch2 3 REQUIRED)
+    target_link_libraries(db_tests_mariadb Catch2::Catch2WithMain)
+endif ()
+
 # test run
 add_test(NAME db_tests_mariadb
         COMMAND $<TARGET_FILE:db_tests_mariadb>)

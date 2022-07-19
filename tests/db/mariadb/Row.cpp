@@ -20,6 +20,11 @@
 
 #include <iostream>
 #include "../../find_catch.hpp"
+#if defined(CATCH_VERSION_MAJOR)
+  #if CATCH_VERSION_MAJOR == 3
+  using Approx = Catch::Approx;
+  #endif
+#endif
 #include "../../../src/db/mariadb/Connection.hpp"
 #include "../../../src/db/mariadb/Result.hpp"
 #include "../../../src/db/mariadb/Row.hpp"

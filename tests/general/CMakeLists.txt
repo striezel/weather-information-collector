@@ -69,6 +69,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSIO
   target_link_libraries(weather_information_collector_tests c++fs)
 endif ()
 
+# MSYS2 / MinGW uses Catch 3.x.
+if (HAS_CATCH_V3)
+    find_package(Catch2 3 REQUIRED)
+    target_link_libraries(weather_information_collector_tests Catch2::Catch2WithMain)
+endif ()
+
 # test run
 add_test(NAME test-suite
          COMMAND $<TARGET_FILE:weather_information_collector_tests>)

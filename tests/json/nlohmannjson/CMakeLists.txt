@@ -25,6 +25,12 @@ endif ()
 
 add_executable(nlohmannjson_parsing_tests ${nlohmannjson_parsing_tests_sources})
 
+# MSYS2 / MinGW uses Catch 3.x.
+if (HAS_CATCH_V3)
+    find_package(Catch2 3 REQUIRED)
+    target_link_libraries(nlohmannjson_parsing_tests Catch2::Catch2WithMain)
+endif ()
+
 
 # test run
 add_test(NAME nlohmannjson_parsing_error_handling
