@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="nlohmannjson-tests" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/nlohmannjson-tests" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-pedantic" />
+			<Add option="-Wextra" />
+			<Add option="-Wall" />
+			<Add option="-std=c++17" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../../../src/data/Forecast.cpp" />
+		<Unit filename="../../../src/data/Forecast.hpp" />
+		<Unit filename="../../../src/data/Weather.cpp" />
+		<Unit filename="../../../src/data/Weather.hpp" />
+		<Unit filename="../../../src/json/NLohmannJsonDarkSky.cpp" />
+		<Unit filename="../../../src/json/NLohmannJsonDarkSky.hpp" />
+		<Unit filename="../../../third-party/nlohmann/json.hpp" />
+		<Unit filename="../../find_catch.hpp" />
+		<Unit filename="NLohmannJsonDarkSky.cpp" />
+		<Unit filename="main.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

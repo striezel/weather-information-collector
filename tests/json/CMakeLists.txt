@@ -14,3 +14,6 @@ if (CAN_HAVE_SIMDJSON)
 else()
   message(STATUS "Compiler is not fit for simdjson, won't include simdjson parsing tests.")
 endif(CAN_HAVE_SIMDJSON)
+
+# Recurse into subdirectory for nlohmann/json tests.
+add_subdirectory (nlohmannjson)

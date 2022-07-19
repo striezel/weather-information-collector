@@ -1,0 +1,31 @@
+cmake_minimum_required (VERSION 3.8)
+
+project(nlohmannjson_parsing_tests)
+
+set(nlohmannjson_parsing_tests_sources
+    ../../../src/data/Forecast.cpp
+    ../../../src/data/Weather.cpp
+    ../../../src/json/NLohmannJsonDarkSky.cpp
+    ../../../third-party/nlohmann/json.hpp
+    NLohmannJsonDarkSky.cpp
+    main.cpp)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_definitions(-Wall -Wextra -pedantic -fexceptions)
+    if (CODE_COVERAGE)
+        add_definitions (-O0)
+    else ()
+        add_definitions (-O3)
+    endif ()
+
+    set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+endif ()
+
+add_executable(nlohmannjson_parsing_tests ${nlohmannjson_parsing_tests_sources})
+
+
+# test run
+add_test(NAME nlohmannjson_parsing_error_handling
+         COMMAND $<TARGET_FILE:nlohmannjson_parsing_tests>)

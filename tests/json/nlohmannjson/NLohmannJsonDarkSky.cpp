@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2021, 2022  Dirk Stolle
+    Copyright (C) 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
 */
 
 #include "../../find_catch.hpp"
-#include "../../../src/json/SimdJsonDarkSky.hpp"
+#include "../../../src/json/NLohmannJsonDarkSky.hpp"
 
-TEST_CASE("Class SimdJsonDarkSky")
+TEST_CASE("NLohmannJsonDarkSky")
 {
   using namespace wic;
 
@@ -32,21 +32,21 @@ TEST_CASE("Class SimdJsonDarkSky")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("", weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather("", weather) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("    ", weather) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("\n", weather) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("\r", weather) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("\r\n\r\n", weather) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("\t\t\t\t", weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather("    ", weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather("\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather("\r", weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather("\r\n\r\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather("\t\t\t\t", weather) );
     }
 
     SECTION("no 'currently' element")
@@ -65,7 +65,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset":-7
       }
       )json";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
     }
 
     SECTION("'currently' element is not an object")
@@ -85,7 +85,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset":-7
       }
       )json";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
     }
 
     SECTION("current weather data only")
@@ -130,7 +130,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset": 2
       }
       )json";
-      REQUIRE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+      REQUIRE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
       // check parsed data
       REQUIRE( weather.temperatureCelsius() == 30.49f );
       REQUIRE( weather.humidity() == 40 );
@@ -186,7 +186,7 @@ TEST_CASE("Class SimdJsonDarkSky")
           "offset": 2
         }
         )json";
-        REQUIRE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+        REQUIRE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
         // check parsed data
         REQUIRE( weather.rain() == 0.25f );
         REQUIRE( weather.snow() == 0.0f );
@@ -234,7 +234,7 @@ TEST_CASE("Class SimdJsonDarkSky")
           "offset": 2
         }
         )json";
-        REQUIRE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+        REQUIRE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
         // check parsed data
         REQUIRE( weather.rain() == 0.0f );
         REQUIRE( weather.snow() == 0.75f );
@@ -282,7 +282,7 @@ TEST_CASE("Class SimdJsonDarkSky")
           "offset": 2
         }
         )json";
-        REQUIRE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+        REQUIRE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
         // check parsed data
         REQUIRE( weather.rain() == 0.5f );
         REQUIRE( weather.snow() == 0.5f );
@@ -329,7 +329,7 @@ TEST_CASE("Class SimdJsonDarkSky")
           "offset": 2
         }
         )json";
-        REQUIRE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+        REQUIRE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
         // check parsed data
         REQUIRE( weather.rain() == 0.0f );
         REQUIRE( weather.snow() == 0.0f );
@@ -377,7 +377,7 @@ TEST_CASE("Class SimdJsonDarkSky")
           "offset": 2
         }
         )json";
-        REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+        REQUIRE_FALSE( NLohmannJsonDarkSky::parseCurrentWeather(json, weather) );
       }
     }
   }
@@ -389,21 +389,21 @@ TEST_CASE("Class SimdJsonDarkSky")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast(json, forecast) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("", forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast("", forecast) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("    ", forecast) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("\n", forecast) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("\r", forecast) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("\r\n\r\n", forecast) );
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("\t\t\t\t", forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast("    ", forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast("\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast("\r", forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast("\r\n\r\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast("\t\t\t\t", forecast) );
     }
 
     SECTION("no 'hourly' element")
@@ -422,7 +422,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset":-7
       }
       )json";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast(json, forecast) );
     }
 
     SECTION("'hourly' element is not an object")
@@ -442,7 +442,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset":-7
       }
       )json";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast(json, forecast) );
     }
 
     SECTION("no 'hourly/data' element")
@@ -488,7 +488,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset": -7
       }
       )json";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast(json, forecast) );
     }
 
     SECTION("'hourly/data' element is not an array")
@@ -535,7 +535,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset": -7
       }
       )json";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast(json, forecast) );
     }
 
     SECTION("parsing of single element in 'hourly/data' fails")
@@ -589,7 +589,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset": -7
       }
       )json";
-      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonDarkSky::parseForecast(json, forecast) );
     }
 
     SECTION("successful parsing")
@@ -677,7 +677,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         "offset": -7
       }
       )json";
-      REQUIRE( SimdJsonDarkSky::parseForecast(json, forecast) );
+      REQUIRE( NLohmannJsonDarkSky::parseForecast(json, forecast) );
       // Check data.
       REQUIRE( forecast.data().size() == 2 );
       // Check first element.
