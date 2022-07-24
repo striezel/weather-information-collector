@@ -44,10 +44,7 @@ void precipitationDistinction(const float amount, Weather& weather)
   {
     // Temperature (°C) is NaN, so let's have a guess and go with rain.
     weather.setRain(amount);
-    if (amount == 0.0f)
-    {
-      weather.setSnow(0.0f);
-    }
+    weather.setSnow(0.0f);
   }
 }
 

@@ -17,3 +17,6 @@ endif(CAN_HAVE_SIMDJSON)
 
 # Recurse into subdirectory for nlohmann/json tests.
 add_subdirectory (nlohmannjson)
+
+# Recurse into subdirectory for generic tests.
+add_subdirectory (generic)
