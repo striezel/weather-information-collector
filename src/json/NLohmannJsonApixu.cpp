@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2021  Dirk Stolle
+    Copyright (C) 2019, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -153,8 +153,14 @@ bool NLohmannJsonApixu::parseForecast(const std::string& json, Forecast& forecas
     const auto dt = std::chrono::time_point<std::chrono::system_clock>(std::chrono::seconds(date_epoch->get<int64_t>()));
     w_min.setDataTime(dt);
     auto findHour = value.find("hour");
-    if (findHour != value.end() && findHour->is_array())
+    if (findHour != value.end())
     {
+      // If hour is present but not an array, then it is an error.
+      if (!findHour->is_array())
+      {
+        std::cerr << "Error in NLohmannJsonApixu::parseForecast(): hour element is not an array!" << std::endl;
+        return false;
+      }
       // hourly data is present, use that.
       const value_type hour = *findHour;
       for (const value_type& elem: hour)
@@ -257,6 +263,12 @@ bool NLohmannJsonApixu::parseForecast(const std::string& json, Forecast& forecas
       data.push_back(w_max);
     } // else (daily data)
   } // for (range-based)
+
+  if (data.empty())
+  {
+    std::cerr << "Error in NLohmannJsonApixu::parseForecast(): JSON does not contain any forecast data!" << std::endl;
+    return false;
+  }
 
   forecast.setData(data);
   return true;

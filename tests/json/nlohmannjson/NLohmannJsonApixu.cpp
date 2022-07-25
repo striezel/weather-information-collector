@@ -19,9 +19,9 @@
 */
 
 #include "../../find_catch.hpp"
-#include "../../../src/json/SimdJsonApixu.hpp"
+#include "../../../src/json/NLohmannJsonApixu.hpp"
 
-TEST_CASE("Class SimdJsonApixu")
+TEST_CASE("NLohmannJsonApixu")
 {
   using namespace wic;
 
@@ -32,21 +32,21 @@ TEST_CASE("Class SimdJsonApixu")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather(json, weather) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("", weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather("", weather) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("    ", weather) );
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("\n", weather) );
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("\r", weather) );
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("\r\n\r\n", weather) );
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("\t\t\t\t", weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather("    ", weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather("\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather("\r", weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather("\r\n\r\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather("\t\t\t\t", weather) );
     }
 
     SECTION("current element is missing")
@@ -65,7 +65,7 @@ TEST_CASE("Class SimdJsonApixu")
         }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather(json, weather) );
     }
 
     SECTION("current element is not an object")
@@ -85,7 +85,7 @@ TEST_CASE("Class SimdJsonApixu")
         "current": "I am not an object but a string."
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseCurrentWeather(json, weather) );
     }
 
     SECTION("successful parsing")
@@ -131,7 +131,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE( SimdJsonApixu::parseCurrentWeather(json, weather) );
+      REQUIRE( NLohmannJsonApixu::parseCurrentWeather(json, weather) );
 
       REQUIRE( weather.temperatureCelsius() == -28.0f );
       REQUIRE( weather.temperatureFahrenheit() == -18.4f );
@@ -186,7 +186,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE( SimdJsonApixu::parseCurrentWeather(json, weather) );
+      REQUIRE( NLohmannJsonApixu::parseCurrentWeather(json, weather) );
 
       REQUIRE( weather.temperatureCelsius() == -28.0f );
       REQUIRE( weather.temperatureFahrenheit() == -18.4f );
@@ -207,21 +207,21 @@ TEST_CASE("Class SimdJsonApixu")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast("", forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast("", forecast) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast("    ", forecast) );
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast("\n", forecast) );
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast("\r", forecast) );
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast("\r\n\r\n", forecast) );
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast("\t\t\t\t", forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast("    ", forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast("\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast("\r", forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast("\r\n\r\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast("\t\t\t\t", forecast) );
     }
 
     SECTION("forecast element is missing")
@@ -266,7 +266,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("forecast element is not an object")
@@ -312,7 +312,7 @@ TEST_CASE("Class SimdJsonApixu")
           "forecast": 123.4
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("forecastday element is missing")
@@ -359,7 +359,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("forecastday element is not an array")
@@ -407,7 +407,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("date_epoch element is missing")
@@ -486,7 +486,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("date_epoch element is not an integer")
@@ -566,7 +566,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("day element is missing")
@@ -625,7 +625,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("day element is not an object")
@@ -685,7 +685,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("hour element is present but not an array")
@@ -766,7 +766,7 @@ TEST_CASE("Class SimdJsonApixu")
         }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("time_epoch element is missing")
@@ -883,7 +883,7 @@ TEST_CASE("Class SimdJsonApixu")
         }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("time_epoch element is not an integer")
@@ -1001,7 +1001,7 @@ TEST_CASE("Class SimdJsonApixu")
         }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
 
     SECTION("JSON with no forecast data")
@@ -1050,7 +1050,7 @@ TEST_CASE("Class SimdJsonApixu")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
   }
 }

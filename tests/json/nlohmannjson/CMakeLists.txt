@@ -5,8 +5,11 @@ project(nlohmannjson_parsing_tests)
 set(nlohmannjson_parsing_tests_sources
     ../../../src/data/Forecast.cpp
     ../../../src/data/Weather.cpp
+    ../../../src/json/ApixuFunctions.cpp
+    ../../../src/json/NLohmannJsonApixu.cpp
     ../../../src/json/NLohmannJsonDarkSky.cpp
     ../../../third-party/nlohmann/json.hpp
+    NLohmannJsonApixu.cpp
     NLohmannJsonDarkSky.cpp
     main.cpp)
 
