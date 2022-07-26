@@ -1052,5 +1052,185 @@ TEST_CASE("NLohmannJsonApixu")
       )json";
       REQUIRE_FALSE( NLohmannJsonApixu::parseForecast(json, forecast) );
     }
+
+    SECTION("successful forecast parsing")
+    {
+      const std::string json = R"json(
+      {
+        "location": {
+            "name": "Paris",
+            "region": "Ile-de-France",
+            "country": "France",
+            "lat": 48.87,
+            "lon": 2.33,
+            "tz_id": "Europe/Paris",
+            "localtime_epoch": 1533055714,
+            "localtime": "2018-07-31 18:48"
+        },
+        "current": {
+            "last_updated_epoch": 1533054609,
+            "last_updated": "2018-07-31 18:30",
+            "temp_c": 28,
+            "temp_f": 82.4,
+            "is_day": 1,
+            "condition": {
+                "text": "Sunny",
+                "icon": "//cdn.apixu.com/weather/64x64/day/113.png",
+                "code": 1000
+            },
+            "wind_mph": 12.5,
+            "wind_kph": 20.2,
+            "wind_degree": 250,
+            "wind_dir": "WSW",
+            "pressure_mb": 1018,
+            "pressure_in": 30.5,
+            "precip_mm": 0,
+            "precip_in": 0,
+            "humidity": 42,
+            "cloud": 0,
+            "feelslike_c": 28,
+            "feelslike_f": 82.4,
+            "vis_km": 10,
+            "vis_miles": 6
+        },
+        "forecast": {
+            "forecastday": [
+                {
+                    "date": "2018-07-31",
+                    "date_epoch": 1532995200,
+                    "day": {
+                        "maxtemp_c": 26,
+                        "maxtemp_f": 78.8,
+                        "mintemp_c": 17,
+                        "mintemp_f": 62.6,
+                        "avgtemp_c": 22.2,
+                        "avgtemp_f": 72,
+                        "maxwind_mph": 5.6,
+                        "maxwind_kph": 9,
+                        "totalprecip_mm": 0.1,
+                        "totalprecip_in": 0,
+                        "avgvis_km": 10,
+                        "avgvis_miles": 6,
+                        "avghumidity": 53,
+                        "condition": {
+                            "text": "Patchy rain possible",
+                            "icon": "//cdn.apixu.com/weather/64x64/day/176.png",
+                            "code": 1063
+                        },
+                        "uv": 6.6
+                    },
+                    "astro": {
+                        "sunrise": "06:22 AM",
+                        "sunset": "09:31 PM",
+                        "moonrise": "11:24 PM",
+                        "moonset": "09:49 AM"
+                    }
+                },
+                {
+                    "date": "2018-08-01",
+                    "date_epoch": 1533081600,
+                    "day": {
+                        "maxtemp_c": 29.2,
+                        "maxtemp_f": 84.6,
+                        "mintemp_c": 22.7,
+                        "mintemp_f": 72.9,
+                        "avgtemp_c": 23.9,
+                        "avgtemp_f": 75,
+                        "maxwind_mph": 6.9,
+                        "maxwind_kph": 11.2,
+                        "totalprecip_mm": 0,
+                        "totalprecip_in": 0,
+                        "avgvis_km": 10,
+                        "avgvis_miles": 6,
+                        "avghumidity": 52,
+                        "condition": {
+                            "text": "Partly cloudy",
+                            "icon": "//cdn.apixu.com/weather/64x64/day/116.png",
+                            "code": 1003
+                        },
+                        "uv": 7.2
+                    },
+                    "astro": {
+                        "sunrise": "06:23 AM",
+                        "sunset": "09:30 PM",
+                        "moonrise": "11:47 PM",
+                        "moonset": "10:53 AM"
+                    }
+                },
+                {
+                    "date": "2018-08-02",
+                    "date_epoch": 1533168000,
+                    "day": {
+                        "maxtemp_c": 32.5,
+                        "maxtemp_f": 90.5,
+                        "mintemp_c": 22.2,
+                        "mintemp_f": 72,
+                        "avgtemp_c": 27.1,
+                        "avgtemp_f": 80.8,
+                        "maxwind_mph": 8.5,
+                        "maxwind_kph": 13.7,
+                        "totalprecip_mm": 0,
+                        "totalprecip_in": 0,
+                        "avgvis_km": 10,
+                        "avgvis_miles": 6,
+                        "avghumidity": 47,
+                        "condition": {
+                            "text": "Sunny",
+                            "icon": "//cdn.apixu.com/weather/64x64/day/113.png",
+                            "code": 1000
+                        },
+                        "uv": 7.8
+                    },
+                    "astro": {
+                        "sunrise": "06:25 AM",
+                        "sunset": "09:28 PM",
+                        "moonrise": "No moonrise",
+                        "moonset": "11:59 AM"
+                    }
+                }
+            ]
+          }
+      }
+      )json";
+      REQUIRE( NLohmannJsonApixu::parseForecast(json, forecast) );
+
+      REQUIRE( forecast.data().size() == 6 );
+
+      REQUIRE( forecast.data()[0].temperatureCelsius() == 17.0f );
+      REQUIRE( forecast.data()[0].temperatureFahrenheit() == 62.6f );
+      REQUIRE( forecast.data()[0].humidity() == 53 );
+      REQUIRE( forecast.data()[0].rain() == 0.1f );
+      REQUIRE( forecast.data()[0].snow() == 0.0f );
+
+      REQUIRE( forecast.data()[1].temperatureCelsius() == 26.0f );
+      REQUIRE( forecast.data()[1].temperatureFahrenheit() == 78.8f );
+      REQUIRE( forecast.data()[1].humidity() == 53 );
+      REQUIRE( forecast.data()[1].rain() == 0.1f );
+      REQUIRE( forecast.data()[1].snow() == 0.0f );
+
+      REQUIRE( forecast.data()[2].temperatureCelsius() == 22.7f );
+      REQUIRE( forecast.data()[2].temperatureFahrenheit() == 72.9f );
+      REQUIRE( forecast.data()[2].humidity() == 52 );
+      REQUIRE( forecast.data()[2].rain() == 0.0f );
+      REQUIRE( forecast.data()[2].snow() == 0.0f );
+
+      REQUIRE( forecast.data()[3].temperatureCelsius() == 29.2f );
+      REQUIRE( forecast.data()[3].temperatureFahrenheit() == 84.6f );
+      REQUIRE( forecast.data()[3].humidity() == 52 );
+      REQUIRE( forecast.data()[3].rain() == 0.0f );
+      REQUIRE( forecast.data()[3].snow() == 0.0f );
+
+      REQUIRE( forecast.data()[4].temperatureCelsius() == 22.2f );
+      REQUIRE( forecast.data()[4].temperatureFahrenheit() == 72.0f );
+      REQUIRE( forecast.data()[4].humidity() == 47 );
+      REQUIRE( forecast.data()[4].rain() == 0.0f );
+      REQUIRE( forecast.data()[4].snow() == 0.0f );
+
+      REQUIRE( forecast.data()[5].temperatureCelsius() == 32.5f );
+      REQUIRE( forecast.data()[5].temperatureFahrenheit() == 90.5f );
+      REQUIRE( forecast.data()[5].humidity() == 47 );
+      REQUIRE( forecast.data()[5].rain() == 0.0f );
+      REQUIRE( forecast.data()[5].snow() == 0.0f );
+    }
   }
 }
