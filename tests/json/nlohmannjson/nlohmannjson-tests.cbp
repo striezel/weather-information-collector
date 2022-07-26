@@ -36,10 +36,15 @@
 		<Unit filename="../../../src/json/NLohmannJsonApixu.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonDarkSky.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonDarkSky.hpp" />
+		<Unit filename="../../../src/json/NLohmannJsonWeatherstack.cpp" />
+		<Unit filename="../../../src/json/NLohmannJsonWeatherstack.hpp" />
+		<Unit filename="../../../src/json/WeatherstackFunctions.cpp" />
+		<Unit filename="../../../src/json/WeatherstackFunctions.hpp" />
 		<Unit filename="../../../third-party/nlohmann/json.hpp" />
 		<Unit filename="../../find_catch.hpp" />
 		<Unit filename="NLohmannJsonApixu.cpp" />
 		<Unit filename="NLohmannJsonDarkSky.cpp" />
+		<Unit filename="NLohmannJsonWeatherstack.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>

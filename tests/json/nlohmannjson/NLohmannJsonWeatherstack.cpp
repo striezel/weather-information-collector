@@ -19,9 +19,9 @@
 */
 
 #include "../../find_catch.hpp"
-#include "../../../src/json/SimdJsonWeatherstack.hpp"
+#include "../../../src/json/NLohmannJsonWeatherstack.hpp"
 
-TEST_CASE("Class SimdJsonWeatherstack")
+TEST_CASE("NLohmannJsonWeatherstack")
 {
   using namespace wic;
 
@@ -32,21 +32,21 @@ TEST_CASE("Class SimdJsonWeatherstack")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("", weather) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("    ", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("\n", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("\r", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("\r\n\r\n", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("\t\t\t\t", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("    ", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("\r", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("\r\n\r\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("\t\t\t\t", weather) );
     }
 
     SECTION("current element is missing")
@@ -74,7 +74,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("current element is not an object")
@@ -103,7 +103,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           "current": [ ]
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("location element is missing")
@@ -144,7 +144,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("location element is not an object")
@@ -186,7 +186,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     /*
@@ -243,7 +243,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("localtime's date is out of range")
@@ -296,7 +296,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("localtime's time is out of range")
@@ -349,7 +349,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
     */
 
@@ -401,7 +401,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("localtime is missing and localtime_epoch (fallback) is not an integer")
@@ -453,7 +453,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
     }
 
     SECTION("successful parsing")
@@ -497,7 +497,7 @@ TEST_CASE("Class SimdJsonWeatherstack")
           }
       }
       )json";
-      REQUIRE( SimdJsonWeatherstack::parseCurrentWeather(json, weather) );
+      REQUIRE( NLohmannJsonWeatherstack::parseCurrentWeather(json, weather) );
 
       REQUIRE( weather.temperatureCelsius() == -4.0f );
       REQUIRE( weather.windSpeed() == 9.166666666666f );

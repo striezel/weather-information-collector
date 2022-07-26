@@ -8,9 +8,12 @@ set(nlohmannjson_parsing_tests_sources
     ../../../src/json/ApixuFunctions.cpp
     ../../../src/json/NLohmannJsonApixu.cpp
     ../../../src/json/NLohmannJsonDarkSky.cpp
+    ../../../src/json/NLohmannJsonWeatherstack.cpp
+    ../../../src/json/WeatherstackFunctions.cpp
     ../../../third-party/nlohmann/json.hpp
     NLohmannJsonApixu.cpp
     NLohmannJsonDarkSky.cpp
+    NLohmannJsonWeatherstack.cpp
     main.cpp)
 
 set(CMAKE_CXX_STANDARD 17)
