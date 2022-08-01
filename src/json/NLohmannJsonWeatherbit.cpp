@@ -170,7 +170,7 @@ bool NLohmannJsonWeatherbit::parseForecast(const std::string& json, Forecast& fo
     }
   } // for (range-based)
   forecast.setData(data);
-  return true;
+  return !forecast.data().empty();
 }
 
 } // namespace

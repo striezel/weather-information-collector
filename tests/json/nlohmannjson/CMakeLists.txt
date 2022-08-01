@@ -8,11 +8,13 @@ set(nlohmannjson_parsing_tests_sources
     ../../../src/json/ApixuFunctions.cpp
     ../../../src/json/NLohmannJsonApixu.cpp
     ../../../src/json/NLohmannJsonDarkSky.cpp
+    ../../../src/json/NLohmannJsonWeatherbit.cpp
     ../../../src/json/NLohmannJsonWeatherstack.cpp
     ../../../src/json/WeatherstackFunctions.cpp
     ../../../third-party/nlohmann/json.hpp
     NLohmannJsonApixu.cpp
     NLohmannJsonDarkSky.cpp
+    NLohmannJsonWeatherbit.cpp
     NLohmannJsonWeatherstack.cpp
     main.cpp)
 

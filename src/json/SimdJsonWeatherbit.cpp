@@ -170,7 +170,7 @@ bool SimdJsonWeatherbit::parseForecast(const std::string& json, Forecast& foreca
     }
   } // for (range-based)
   forecast.setData(data);
-  return true;
+  return !forecast.data().empty();
 }
 
 } // namespace

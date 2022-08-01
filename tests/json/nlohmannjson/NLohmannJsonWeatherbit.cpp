@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2021, 2022  Dirk Stolle
+    Copyright (C) 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,9 +19,9 @@
 */
 
 #include "../../find_catch.hpp"
-#include "../../../src/json/SimdJsonWeatherbit.hpp"
+#include "../../../src/json/NLohmannJsonWeatherbit.hpp"
 
-TEST_CASE("SimdJsonWeatherbit")
+TEST_CASE("NLohmannJsonWeatherbit")
 {
   using namespace wic;
 
@@ -32,21 +32,21 @@ TEST_CASE("SimdJsonWeatherbit")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("", weather) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("    ", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("\n", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("\r", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("\r\n\r\n", weather) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("\t\t\t\t", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("    ", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("\r", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("\r\n\r\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("\t\t\t\t", weather) );
     }
 
     SECTION("data element is missing")
@@ -56,7 +56,7 @@ TEST_CASE("SimdJsonWeatherbit")
         "count": 1
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
     }
 
     SECTION("data element is not an array")
@@ -67,7 +67,7 @@ TEST_CASE("SimdJsonWeatherbit")
         "count": 1
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
     }
 
     SECTION("count element is missing")
@@ -120,7 +120,7 @@ TEST_CASE("SimdJsonWeatherbit")
         ]
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
     }
 
     SECTION("count element is not an integer")
@@ -174,7 +174,7 @@ TEST_CASE("SimdJsonWeatherbit")
         "count": {}
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
     }
 
     SECTION("count element is an integer, but it is not equal to one")
@@ -228,7 +228,7 @@ TEST_CASE("SimdJsonWeatherbit")
         "count": 2
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
     }
 
     SECTION("element of data array is not an object")
@@ -241,7 +241,7 @@ TEST_CASE("SimdJsonWeatherbit")
         "count": 1
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
     }
 
     SECTION("successful parsing of current weather")
@@ -295,7 +295,7 @@ TEST_CASE("SimdJsonWeatherbit")
         "count": 1
       }
       )json";
-      REQUIRE( SimdJsonWeatherbit::parseCurrentWeather(json, weather) );
+      REQUIRE( NLohmannJsonWeatherbit::parseCurrentWeather(json, weather) );
 
       REQUIRE( weather.temperatureCelsius() == 16.4f );
       REQUIRE( weather.temperatureKelvin() == 289.55f );
@@ -319,21 +319,21 @@ TEST_CASE("SimdJsonWeatherbit")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast(json, forecast) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("", forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("", forecast) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("    ", forecast) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("\n", forecast) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("\r", forecast) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("\r\n\r\n", forecast) );
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("\t\t\t\t", forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("    ", forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("\r", forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("\r\n\r\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("\t\t\t\t", forecast) );
     }
 
     SECTION("data element is missing")
@@ -348,7 +348,7 @@ TEST_CASE("SimdJsonWeatherbit")
           "state_code": "13"
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast(json, forecast) );
     }
 
     SECTION("data element is not an array")
@@ -364,7 +364,7 @@ TEST_CASE("SimdJsonWeatherbit")
           "state_code": "13"
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast(json, forecast) );
     }
 
     SECTION("data array does not contain valid data")
@@ -384,7 +384,7 @@ TEST_CASE("SimdJsonWeatherbit")
           "state_code": "13"
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast(json, forecast) );
     }
 
     SECTION("data array is empty")
@@ -400,7 +400,7 @@ TEST_CASE("SimdJsonWeatherbit")
           "state_code": "13"
       }
       )json";
-      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast(json, forecast) );
     }
   }
 }
