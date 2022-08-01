@@ -159,10 +159,16 @@ weather data:
   * automatic IP geolocation lookup: `query=fetch:ip`
   * IP address, e.g. `query=123.45.67.89`
 
-### Example output of forecast data (JSON format) on the free plan
+### Example output of forecast data (JSON format)
 
-__TODO__
+__Note:__ Forecast data is only available on the professional plan or higher
+plans, which would require to pay at least 50 USD per month to get access to the
+forecast API. Since I am not willing to pay that much just for the sake of
+completeness of this documentation and the Weatherstack implementation of this
+program, it is not documented here. If you are interested in this API, head
+over to <https://weatherstack.com/documentation#weather_forecast> for its
+documentation.
 
 ### Relevant forecast information
 
-__TODO__
+See note above.
