@@ -49,6 +49,11 @@ TEST_CASE("Class SimdJsonApixu")
       REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("\t\t\t\t", weather) );
     }
 
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonApixu::parseCurrentWeather("{ }", weather) );
+    }
+
     SECTION("current element is missing")
     {
       const std::string json = R"json(
@@ -222,6 +227,11 @@ TEST_CASE("Class SimdJsonApixu")
       REQUIRE_FALSE( SimdJsonApixu::parseForecast("\r", forecast) );
       REQUIRE_FALSE( SimdJsonApixu::parseForecast("\r\n\r\n", forecast) );
       REQUIRE_FALSE( SimdJsonApixu::parseForecast("\t\t\t\t", forecast) );
+    }
+
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonApixu::parseForecast("{ }", forecast) );
     }
 
     SECTION("forecast element is missing")
@@ -1053,7 +1063,7 @@ TEST_CASE("Class SimdJsonApixu")
       REQUIRE_FALSE( SimdJsonApixu::parseForecast(json, forecast) );
     }
 
-    SECTION("successful forecast parsing")
+    SECTION("successful forecast parsing with daily data")
     {
       const std::string json = R"json(
       {
@@ -1231,6 +1241,278 @@ TEST_CASE("Class SimdJsonApixu")
       REQUIRE( forecast.data()[5].humidity() == 47 );
       REQUIRE( forecast.data()[5].rain() == 0.0f );
       REQUIRE( forecast.data()[5].snow() == 0.0f );
+    }
+
+    SECTION("successful forecast parsing with hourly forecast data")
+    {
+      const std::string json = R"json(
+      {
+        "location": {
+          "name": "London",
+          "region": "City of London, Greater London",
+          "country": "United Kingdom",
+          "lat": 51.52,
+          "lon": -0.11,
+          "tz_id": "Europe/London",
+          "localtime_epoch": 1520074806,
+          "localtime": "2018-03-03 11:00"
+        },
+        "current": {
+          "last_updated_epoch": 1520073933,
+          "last_updated": "2018-03-03 10:45",
+          "temp_c": 2.0,
+          "temp_f": 35.6,
+          "is_day": 1,
+          "condition": {
+            "text": "Mist",
+            "icon": "//cdn.apixu.com/weather/64x64/day/143.png",
+            "code": 1030
+          },
+          "wind_mph": 16.1,
+          "wind_kph": 25.9,
+          "wind_degree": 90,
+          "wind_dir": "E",
+          "pressure_mb": 993.0,
+          "pressure_in": 29.8,
+          "precip_mm": 0.1,
+          "precip_in": 0.0,
+          "humidity": 93,
+          "cloud": 100,
+          "feelslike_c": -3.4,
+          "feelslike_f": 25.8,
+          "vis_km": 2.0,
+          "vis_miles": 1.0
+        },
+        "forecast": {
+          "forecastday": [
+            {
+              "date": "2018-03-03",
+              "date_epoch": 1520035200,
+              "day": {
+                "maxtemp_c": 4.1,
+                "maxtemp_f": 39.4,
+                "mintemp_c": 2.5,
+                "mintemp_f": 36.5,
+                "avgtemp_c": 2.5,
+                "avgtemp_f": 36.4,
+                "maxwind_mph": 8.5,
+                "maxwind_kph": 13.7,
+                "totalprecip_mm": 1.2,
+                "totalprecip_in": 0.05,
+                "avgvis_km": 13.2,
+                "avgvis_miles": 8.0,
+                "avghumidity": 95.0,
+                "condition": {
+                  "text": "Fog",
+                  "icon": "//cdn.apixu.com/weather/64x64/day/248.png",
+                  "code": 1135
+                },
+                "uv": 1.2
+              },
+              "astro": {
+                "sunrise": "06:41 AM",
+                "sunset": "05:44 PM",
+                "moonrise": "07:40 PM",
+                "moonset": "07:38 AM"
+              },
+              "hour": [
+                {
+                  "time_epoch": 1520035200,
+                  "time": "2018-03-03 00:00",
+                  "temp_c": 1.2,
+                  "temp_f": 34.2,
+                  "is_day": 0,
+                  "condition": {
+                    "text": "Light drizzle",
+                    "icon": "//cdn.apixu.com/weather/64x64/night/266.png",
+                    "code": 1153
+                  },
+                  "wind_mph": 8.3,
+                  "wind_kph": 13.3,
+                  "wind_degree": 86,
+                  "wind_dir": "E",
+                  "pressure_mb": 993.0,
+                  "pressure_in": 29.8,
+                  "precip_mm": 0.6,
+                  "precip_in": 0.02,
+                  "humidity": 98,
+                  "cloud": 100,
+                  "feelslike_c": -2.6,
+                  "feelslike_f": 27.3,
+                  "windchill_c": -2.6,
+                  "windchill_f": 27.3,
+                  "heatindex_c": 1.2,
+                  "heatindex_f": 34.2,
+                  "dewpoint_c": 1.0,
+                  "dewpoint_f": 33.8,
+                  "will_it_rain": 1,
+                  "chance_of_rain": "94",
+                  "will_it_snow": 0,
+                  "chance_of_snow": "3",
+                  "vis_km": 10.2,
+                  "vis_miles": 6.0
+                },
+                {
+                  "time_epoch": 1520038800,
+                  "time": "2018-03-03 01:00",
+                  "temp_c": 1.3,
+                  "temp_f": 34.3,
+                  "is_day": 0,
+                  "condition": {
+                    "text": "Fog",
+                    "icon": "//cdn.apixu.com/weather/64x64/night/248.png",
+                    "code": 1135
+                  },
+                  "wind_mph": 7.6,
+                  "wind_kph": 12.2,
+                  "wind_degree": 88,
+                  "wind_dir": "E",
+                  "pressure_mb": 993.0,
+                  "pressure_in": 29.8,
+                  "precip_mm": 0.4,
+                  "precip_in": 0.02,
+                  "humidity": 99,
+                  "cloud": 100,
+                  "feelslike_c": -2.3,
+                  "feelslike_f": 27.9,
+                  "windchill_c": -2.3,
+                  "windchill_f": 27.9,
+                  "heatindex_c": 1.3,
+                  "heatindex_f": 34.3,
+                  "dewpoint_c": 1.1,
+                  "dewpoint_f": 34.0,
+                  "will_it_rain": 1,
+                  "chance_of_rain": "86",
+                  "will_it_snow": 0,
+                  "chance_of_snow": "2",
+                  "vis_km": 11.1,
+                  "vis_miles": 6.0
+                },
+                {
+                  "time_epoch": 1520042400,
+                  "time": "2018-03-03 02:00",
+                  "temp_c": 1.3,
+                  "temp_f": 34.3,
+                  "is_day": 0,
+                  "condition": {
+                    "text": "Light drizzle",
+                    "icon": "//cdn.apixu.com/weather/64x64/night/266.png",
+                    "code": 1153
+                  },
+                  "wind_mph": 6.9,
+                  "wind_kph": 11.2,
+                  "wind_degree": 89,
+                  "wind_dir": "E",
+                  "pressure_mb": 993.0,
+                  "pressure_in": 29.8,
+                  "precip_mm": 0.3,
+                  "precip_in": 0.01,
+                  "humidity": 99,
+                  "cloud": 100,
+                  "feelslike_c": -2.0,
+                  "feelslike_f": 28.4,
+                  "windchill_c": -2.0,
+                  "windchill_f": 28.4,
+                  "heatindex_c": 1.3,
+                  "heatindex_f": 34.3,
+                  "dewpoint_c": 1.1,
+                  "dewpoint_f": 34.0,
+                  "will_it_rain": 1,
+                  "chance_of_rain": "79",
+                  "will_it_snow": 0,
+                  "chance_of_snow": "1",
+                  "vis_km": 12.1,
+                  "vis_miles": 7.0
+                },
+                {
+                  "time_epoch": 1520046000,
+                  "time": "2018-03-03 03:00",
+                  "temp_c": 1.4,
+                  "temp_f": 34.5,
+                  "is_day": 0,
+                  "condition": {
+                    "text": "Fog",
+                    "icon": "//cdn.apixu.com/weather/64x64/night/248.png",
+                    "code": 1135
+                  },
+                  "wind_mph": 6.3,
+                  "wind_kph": 10.1,
+                  "wind_degree": 91,
+                  "wind_dir": "E",
+                  "pressure_mb": 993.0,
+                  "pressure_in": 29.8,
+                  "precip_mm": 0.1,
+                  "precip_in": 0.0,
+                  "humidity": 99,
+                  "cloud": 95,
+                  "feelslike_c": -1.7,
+                  "feelslike_f": 28.9,
+                  "windchill_c": -1.7,
+                  "windchill_f": 28.9,
+                  "heatindex_c": 1.4,
+                  "heatindex_f": 34.5,
+                  "dewpoint_c": 1.2,
+                  "dewpoint_f": 34.2,
+                  "will_it_rain": 1,
+                  "chance_of_rain": "71",
+                  "will_it_snow": 0,
+                  "chance_of_snow": "0",
+                  "vis_km": 13.0,
+                  "vis_miles": 8.0
+                }
+              ]
+            }
+          ]
+        }
+      }
+      )json";
+      REQUIRE( SimdJsonApixu::parseForecast(json, forecast) );
+
+      REQUIRE( forecast.data().size() == 4 );
+
+      REQUIRE( forecast.data()[0].temperatureCelsius() == 1.2f );
+      REQUIRE( forecast.data()[0].temperatureFahrenheit() == 34.2f );
+      REQUIRE( forecast.data()[0].windSpeed() >= 3.694444f );
+      REQUIRE( forecast.data()[0].windSpeed() <= 3.694445f );
+      REQUIRE( forecast.data()[0].windDegrees() == 86 );
+      REQUIRE( forecast.data()[0].pressure() == 993 );
+      REQUIRE( forecast.data()[0].rain() == 0.6f );
+      REQUIRE( forecast.data()[0].snow() == 0.0f );
+      REQUIRE( forecast.data()[0].humidity() == 98 );
+      REQUIRE( forecast.data()[0].cloudiness() == 100 );
+
+      REQUIRE( forecast.data()[1].temperatureCelsius() == 1.3f );
+      REQUIRE( forecast.data()[1].temperatureFahrenheit() == 34.3f );
+      REQUIRE( forecast.data()[1].windSpeed() >= 3.388888f );
+      REQUIRE( forecast.data()[1].windSpeed() <= 3.388889f );
+      REQUIRE( forecast.data()[1].windDegrees() == 88 );
+      REQUIRE( forecast.data()[1].pressure() == 993 );
+      REQUIRE( forecast.data()[1].rain() == 0.4f );
+      REQUIRE( forecast.data()[1].snow() == 0.0f );
+      REQUIRE( forecast.data()[1].humidity() == 99 );
+      REQUIRE( forecast.data()[1].cloudiness() == 100 );
+
+      REQUIRE( forecast.data()[2].temperatureCelsius() == 1.3f );
+      REQUIRE( forecast.data()[2].temperatureFahrenheit() == 34.3f );
+      REQUIRE( forecast.data()[2].windSpeed() >= 3.111111f );
+      REQUIRE( forecast.data()[2].windSpeed() <= 3.111112f );
+      REQUIRE( forecast.data()[2].windDegrees() == 89 );
+      REQUIRE( forecast.data()[2].pressure() == 993 );
+      REQUIRE( forecast.data()[2].rain() == 0.3f );
+      REQUIRE( forecast.data()[2].snow() == 0.0f );
+      REQUIRE( forecast.data()[2].humidity() == 99 );
+      REQUIRE( forecast.data()[2].cloudiness() == 100 );
+
+      REQUIRE( forecast.data()[3].temperatureCelsius() == 1.4f );
+      REQUIRE( forecast.data()[3].temperatureFahrenheit() == 34.5f );
+      REQUIRE( forecast.data()[3].windSpeed() >= 2.805555f );
+      REQUIRE( forecast.data()[3].windSpeed() <= 2.805556f );
+      REQUIRE( forecast.data()[3].windDegrees() == 91 );
+      REQUIRE( forecast.data()[3].pressure() == 993 );
+      REQUIRE( forecast.data()[3].rain() == 0.1f );
+      REQUIRE( forecast.data()[3].snow() == 0.0f );
+      REQUIRE( forecast.data()[3].humidity() == 99 );
+      REQUIRE( forecast.data()[3].cloudiness() == 95 );
     }
   }
 }
