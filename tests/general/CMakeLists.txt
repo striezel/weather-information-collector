@@ -1,4 +1,3 @@
-# We might support earlier versions, too, but try to use a more recent one.
 cmake_minimum_required (VERSION 3.8)
 
 project(weather_information_collector_tests)
@@ -20,6 +19,10 @@ set(weather_information_collector_tests_sources
     ../../src/data/Weather.cpp
     ../../src/db/ConnectionInformation.cpp
     ../../src/db/Exceptions.cpp
+    ../../src/json/ApixuFunctions.cpp
+    ../../src/json/WeatherstackFunctions.cpp
+    ../../src/net/Curly.cpp
+    ../../src/net/Request.cpp
     ../../src/tasks/Task.cpp
     ../../src/tasks/TaskManager.cpp
     ../../src/util/Directories.cpp
@@ -48,9 +51,32 @@ set(weather_information_collector_tests_sources
     util/Strings.cpp
     main.cpp)
 
+try_compile(CAN_HAVE_SIMDJSON
+            ${CMAKE_CURRENT_SOURCE_DIR}/simd-test
+            ${CMAKE_CURRENT_SOURCE_DIR}/../../src/simdjson-compile-test
+            tests-general-simd-test
+)
+if (CAN_HAVE_SIMDJSON)
+  list(APPEND weather_information_collector_tests_sources
+    ../../third-party/simdjson/simdjson.cpp
+    ../../src/json/SimdJsonApixu.cpp
+    ../../src/json/SimdJsonDarkSky.cpp
+    ../../src/json/SimdJsonOwm.cpp
+    ../../src/json/SimdJsonWeatherbit.cpp
+    ../../src/json/SimdJsonWeatherstack.cpp)
+  message(STATUS "tests (general) can use simdjson.")
+else()
+  list(APPEND weather_information_collector_tests_sources
+    ../../src/json/NLohmannJsonApixu.cpp
+    ../../src/json/NLohmannJsonDarkSky.cpp
+    ../../src/json/NLohmannJsonOwm.cpp
+    ../../src/json/NLohmannJsonWeatherbit.cpp
+    ../../src/json/NLohmannJsonWeatherstack.cpp)
+  message(STATUS "Compiler is not fit for simdjson, won't use it in tests.")
+endif(CAN_HAVE_SIMDJSON)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_definitions(-Dwic_no_json_parsing -Dwic_no_network_requests)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     add_definitions(-Wall -fexceptions)
     if (CODE_COVERAGE)
@@ -58,11 +84,20 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clan
     else ()
         add_definitions (-O3)
     endif ()
+
+    set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 endif ()
 
-set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
-
 add_executable(weather_information_collector_tests ${weather_information_collector_tests_sources})
+
+# find cURL library
+find_package (CURL)
+if (CURL_FOUND)
+  include_directories(${CURL_INCLUDE_DIRS})
+  target_link_libraries (weather_information_collector_tests ${CURL_LIBRARIES})
+else ()
+  message ( FATAL_ERROR "cURL was not found!" )
+endif (CURL_FOUND)
 
 # GNU GCC before 9.1.0 needs to link to libstdc++fs explicitly.
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.1.0")

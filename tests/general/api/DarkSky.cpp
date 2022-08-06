@@ -73,4 +73,66 @@ TEST_CASE("DarkSky - non-network tests")
     // is no real way to check it.
     api.setApiKey("foo1bar2baz3");
   }
+
+  SECTION("toRequestString")
+  {
+    Location location;
+
+    SECTION("no data set")
+    {
+      REQUIRE( DarkSky::toRequestString(location).empty() );
+    }
+
+    SECTION("insufficient data set")
+    {
+      location.setCountryCode("DK");
+      REQUIRE( DarkSky::toRequestString(location).empty() );
+    }
+
+    SECTION("latitude + longitude")
+    {
+      location.setCoordinates(12.34f, 56.78f);
+      REQUIRE( DarkSky::toRequestString(location) == "12.34,56.78" );
+    }
+  }
+
+  SECTION("currentWeather")
+  {
+    Location location;
+    location.setCoordinates(12.34f, 56.78f);
+
+    SECTION("request with empty API key fails")
+    {
+      api.setApiKey("");
+      Weather w;
+      REQUIRE_FALSE( api.currentWeather(location, w) );
+    }
+  }
+
+  SECTION("forecastWeather")
+  {
+    Location location;
+    location.setCoordinates(12.34f, 56.78f);
+
+    SECTION("request with empty API key fails")
+    {
+      api.setApiKey("");
+      Forecast fc;
+      REQUIRE_FALSE( api.forecastWeather(location, fc) );
+    }
+  }
+
+  SECTION("currentAndForecastWeather")
+  {
+    Location location;
+    location.setCoordinates(12.34f, 56.78f);
+
+    SECTION("request with empty API key fails")
+    {
+      api.setApiKey("");
+      Weather w;
+      Forecast fc;
+      REQUIRE_FALSE( api.currentAndForecastWeather(location, w, fc) );
+    }
+  }
 }

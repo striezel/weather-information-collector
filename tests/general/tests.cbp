@@ -24,11 +24,10 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++17" />
 			<Add option="-fexceptions" />
-			<Add option="-Dwic_no_json_parsing" />
-			<Add option="-Dwic_no_network_requests" />
 		</Compiler>
 		<Linker>
 			<Add library="stdc++fs" />
+			<Add library="curl" />
 		</Linker>
 		<Unit filename="../../src/api/Apixu.cpp" />
 		<Unit filename="../../src/api/Apixu.hpp" />
@@ -62,6 +61,24 @@
 		<Unit filename="../../src/db/ConnectionInformation.hpp" />
 		<Unit filename="../../src/db/Exceptions.cpp" />
 		<Unit filename="../../src/db/Exceptions.hpp" />
+		<Unit filename="../../src/json/ApixuFunctions.cpp" />
+		<Unit filename="../../src/json/ApixuFunctions.hpp" />
+		<Unit filename="../../src/json/SimdJsonApixu.cpp" />
+		<Unit filename="../../src/json/SimdJsonApixu.hpp" />
+		<Unit filename="../../src/json/SimdJsonDarkSky.cpp" />
+		<Unit filename="../../src/json/SimdJsonDarkSky.hpp" />
+		<Unit filename="../../src/json/SimdJsonOwm.cpp" />
+		<Unit filename="../../src/json/SimdJsonOwm.hpp" />
+		<Unit filename="../../src/json/SimdJsonWeatherbit.cpp" />
+		<Unit filename="../../src/json/SimdJsonWeatherbit.hpp" />
+		<Unit filename="../../src/json/SimdJsonWeatherstack.cpp" />
+		<Unit filename="../../src/json/SimdJsonWeatherstack.hpp" />
+		<Unit filename="../../src/json/WeatherstackFunctions.cpp" />
+		<Unit filename="../../src/json/WeatherstackFunctions.hpp" />
+		<Unit filename="../../src/net/Curly.cpp" />
+		<Unit filename="../../src/net/Curly.hpp" />
+		<Unit filename="../../src/net/Request.cpp" />
+		<Unit filename="../../src/net/Request.hpp" />
 		<Unit filename="../../src/store/Store.hpp" />
 		<Unit filename="../../src/tasks/Task.cpp" />
 		<Unit filename="../../src/tasks/Task.hpp" />
@@ -74,6 +91,8 @@
 		<Unit filename="../../src/util/SemVer.hpp" />
 		<Unit filename="../../src/util/Strings.cpp" />
 		<Unit filename="../../src/util/Strings.hpp" />
+		<Unit filename="../../third-party/simdjson/simdjson.cpp" />
+		<Unit filename="../../third-party/simdjson/simdjson.h" />
 		<Unit filename="../find_catch.hpp" />
 		<Unit filename="api/Apixu.cpp" />
 		<Unit filename="api/DarkSky.cpp" />

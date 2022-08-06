@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 */
 
 #include "DarkSky.hpp"
-#include <cmath>
 #include <iostream>
 #ifndef wic_no_json_parsing
 #ifdef __SIZEOF_INT128__
@@ -80,11 +79,11 @@ bool DarkSky::parseForecast(const std::string& json, Forecast& forecast) const
 #endif // wic_no_json_parsing
 
 #ifndef wic_no_network_requests
-std::string DarkSky::toRequestString(const Location& location) const
+std::string DarkSky::toRequestString(const Location& location)
 {
   if (location.hasCoordinates())
-    return std::to_string(location.latitude())+ std::string(",")
-         + std::to_string(location.longitude());
+    return floatToString(location.latitude()) + std::string(",")
+         + floatToString(location.longitude());
   // no required data set
   return std::string();
 }

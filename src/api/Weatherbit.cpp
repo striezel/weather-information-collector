@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 */
 
 #include "Weatherbit.hpp"
-#include <cmath>
 #include <iostream>
 #ifndef wic_no_json_parsing
 #ifdef __SIZEOF_INT128__
@@ -100,11 +99,11 @@ bool Weatherbit::parseForecast(const std::string& json, Forecast& forecast) cons
 #endif // wic_no_json_parsing
 
 #ifndef wic_no_network_requests
-std::string Weatherbit::toRequestString(const Location& location) const
+std::string Weatherbit::toRequestString(const Location& location)
 {
   if (location.hasCoordinates())
-    return "lat=" + std::to_string(location.latitude()) + std::string("&lon=")
-         + std::to_string(location.longitude());
+    return "lat=" + floatToString(location.latitude()) + std::string("&lon=")
+         + floatToString(location.longitude());
   if (location.hasName() && location.hasCountryCode())
     return std::string("city=") + location.name() + std::string("&country=")
          + location.countryCode();

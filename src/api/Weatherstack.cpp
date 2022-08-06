@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ bool Weatherstack::parseForecast(const std::string& json, Forecast& forecast) co
 #endif // wic_no_json_parsing
 
 #ifndef wic_no_network_requests
-std::string Weatherstack::toRequestString(const Location& location) const
+std::string Weatherstack::toRequestString(const Location& location)
 {
   if (location.hasCoordinates())
     return std::string("query=") + floatToString(location.latitude())

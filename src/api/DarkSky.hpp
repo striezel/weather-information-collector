@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2021  Dirk Stolle
+    Copyright (C) 2018, 2019, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,6 +65,15 @@ class DarkSky: public API
 
 
     #ifndef wic_no_network_requests
+    /** \brief Turns info of a location to a request string.
+     *
+     * \param location  the location information
+     * \return Returns part of URL that can be used for a request.
+     *         Returns empty string, if an error occurred.
+     */
+    static std::string toRequestString(const Location& location);
+
+
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -119,16 +128,6 @@ class DarkSky: public API
     #endif // wic_no_json_parsing
   private:
     std::string m_apiKey; /**< the API key for requests */
-
-    #ifndef wic_no_network_requests
-    /** \brief Turns info of a location to a request string.
-     *
-     * \param location  the location information
-     * \return Returns part of URL that can be used for a request.
-     *         Returns empty string, if an error occurred.
-     */
-    std::string toRequestString(const Location& location) const;
-    #endif // wic_no_network_requests
 }; // class
 
 } // namespace
