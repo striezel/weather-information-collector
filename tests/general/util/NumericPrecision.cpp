@@ -27,25 +27,33 @@ TEST_CASE("NumericPrecision")
 {
   using namespace wic;
 
-  std::vector<std::pair<float, float> > numbers = {
-    { -1.54999, -1.55 },
-    { -0.440009f, -0.44f },
-    { 3.36001, 3.36 },
-    { 9.47865f, 9.479f },
-    { 38.3f, 38.3f },
-    { 42.602f, 42.602f },
-    { 43.952f, 43.952f },
-    { 275.123f, 275.123f },
-    // old v0.8.1 rounding
-    { 3.999f, 4.0f },
-    { 4.001f, 4.0f }
-  };
-
   SECTION("enforce")
   {
+    const std::vector<std::pair<float, float> > numbers = {
+      { -1.54999, -1.55 },
+      { -0.440009f, -0.44f },
+      { 3.36001, 3.36 },
+      { 9.47865f, 9.479f },
+      { 38.3f, 38.3f },
+      { 42.602f, 42.602f },
+      { 43.952f, 43.952f },
+      { 275.123f, 275.123f },
+      // old v0.8.1 rounding
+      { 3.999f, 4.0f },
+      { 4.001f, 4.0f }
+    };
     for (const auto& pair: numbers)
     {
       REQUIRE( NumericPrecision<float>::enforce(pair.first) == pair.second );
     }
+  }
+
+  SECTION("enforce with values that would overflow")
+  {
+    const float high = 3.40282e+36;
+    REQUIRE( NumericPrecision<float>::enforce(high) == high );
+
+    const float low = -3.40282e+36;
+    REQUIRE( NumericPrecision<float>::enforce(low) == low );
   }
 }

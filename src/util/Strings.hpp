@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017  Dirk Stolle
+    Copyright (C) 2017, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 namespace wic
 {
 
-/** \brief returns the lower case version of the given string
+/** \brief Returns the lower case version of the given string.
  *
  * \param str  the string
  * \return Returns the string where all upper case characters are turned into
@@ -35,23 +35,15 @@ namespace wic
 std::string toLowerString(std::string str);
 
 
-/** \brief removes all leading and trailing spaces and (horizontal) tabulators
- *  from the given string
+/** \brief Removes all leading and trailing spaces and (horizontal) tabulators
+ *  from the given string.
  *
  * \param str1  the string that shall be trimmed
  */
 void trim(std::string& str1);
 
 
-/** \brief gets the string representation of an integer value
- *
- * \param value   integer value
- * \return Returns a string containing the given integer.
- */
-std::string intToString(const int value);
-
-
-/** \brief tries to convert the string representation of an integer number into an int
+/** \brief Tries to convert the string representation of an integer number into an int.
  *
  * \param str   the string that contains the number
  * \param value the int that will be used to store the result
@@ -61,7 +53,7 @@ std::string intToString(const int value);
 bool stringToInt(const std::string& str, int& value);
 
 
-/** \brief converts a floating point value into its string representation
+/** \brief Converts a floating point value into its string representation.
  *
  * \param f  the floating point value
  * \return Returns string representation of the floating point value.
@@ -69,7 +61,7 @@ bool stringToInt(const std::string& str, int& value);
 std::string floatToString(const float f);
 
 
-/** \brief tries to convert the string representation of a floating point value into a float
+/** \brief Tries to convert the string representation of a floating point value into a float.
  *
  * \param str    the string that contains the number
  * \param value  the float that will be used to store the result

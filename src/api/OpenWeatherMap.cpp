@@ -98,7 +98,7 @@ bool OpenWeatherMap::parseForecast(const std::string& json, Forecast& forecast) 
 std::string OpenWeatherMap::toRequestString(const Location& location)
 {
   if (location.hasOwmId())
-    return std::string("id=") + intToString(location.owmId());
+    return std::string("id=") + std::to_string(location.owmId());
   if (location.hasCoordinates())
     return std::string("lat=") + floatToString(location.latitude())
          + std::string("&lon=") + floatToString(location.longitude());

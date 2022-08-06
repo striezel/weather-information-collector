@@ -71,12 +71,12 @@ void trimLeft(std::string& str1)
   {
     str1.erase(0, pos);
   }
-  return;
 }
 
 void trimRight(std::string& str1)
 {
-  if (str1.empty()) return;
+  if (str1.empty())
+    return;
   // trim stuff at end
   const auto len = str1.length();
   std::make_signed_t<std::string::size_type> pos = len - 1;
@@ -109,14 +109,6 @@ void trim(std::string& str1)
 {
   trimLeft(str1);
   trimRight(str1);
-  return;
-}
-
-std::string intToString(const int value)
-{
-  std::ostringstream s;
-  s << value;
-  return s.str();
 }
 
 bool stringToInt(const std::string& str, int& value)
