@@ -19,11 +19,7 @@
 */
 
 #include "../../find_catch.hpp"
-#if defined(_WIN32)
-#include <windows.h>
-#else
 #include <cstdlib>
-#endif
 #include "../../../src/util/Environment.hpp"
 
 TEST_CASE("environment-related functions")
@@ -37,25 +33,19 @@ TEST_CASE("environment-related functions")
       REQUIRE_FALSE( hasEnvVar("THIS_IS_VERY_UNLIKELY_TO_BE_SET") );
     }
 
+    #if !defined(_WIN32)
     SECTION("existing environment variable")
     {
       // set a new variable
-      #if defined(_WIN32)
-      REQUIRE( SetEnvironmentVariable("THIS_IS_JUST_FOR_TESTS", "yes") != 0 );
-      #else
       REQUIRE( setenv("THIS_IS_JUST_FOR_TESTS", "yes", 0) == 0 );
-      #endif
 
       // check variable
       REQUIRE( hasEnvVar("THIS_IS_JUST_FOR_TESTS") );
 
       // delete variable from environment
-      #if defined(_WIN32)
-      REQUIRE( SetEnvironmentVariable("THIS_IS_JUST_FOR_TESTS", nullptr) != 0 );
-      #else
       REQUIRE( unsetenv("THIS_IS_JUST_FOR_TESTS") == 0 );
-      #endif
     }
+    #endif
   }
 
   SECTION("isMinGW")
