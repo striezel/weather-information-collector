@@ -26,6 +26,7 @@ set(weather_information_collector_tests_sources
     ../../src/tasks/Task.cpp
     ../../src/tasks/TaskManager.cpp
     ../../src/util/Directories.cpp
+    ../../src/util/Environment.cpp
     ../../src/util/SemVer.cpp
     ../../src/util/Strings.cpp
     api/Apixu.cpp
@@ -46,6 +47,7 @@ set(weather_information_collector_tests_sources
     tasks/Task.cpp
     tasks/TaskManager.cpp
     util/Directories.cpp
+    util/Environment.cpp
     util/NumericPrecision.cpp
     util/SemVer.cpp
     util/Strings.cpp
