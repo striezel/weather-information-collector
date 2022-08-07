@@ -40,6 +40,11 @@ TEST_CASE("Class SimdJsonDarkSky")
       REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("", weather) );
     }
 
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("{ }", weather) );
+    }
+
     SECTION("whitespace strings")
     {
       REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather("    ", weather) );
@@ -335,7 +340,7 @@ TEST_CASE("Class SimdJsonDarkSky")
         REQUIRE( weather.snow() == 0.0f );
       }
 
-      SECTION("invalid type")
+      SECTION("invalid/unknown type")
       {
         const std::string json = R"json(
         {
@@ -349,6 +354,95 @@ TEST_CASE("Class SimdJsonDarkSky")
             "precipIntensity": 0.5,
             "precipProbability": 0.02,
             "precipType": "malus maximus",
+            "temperature": 30.49,
+            "apparentTemperature": 30.49,
+            "dewPoint": 15.21,
+            "humidity": 0.4,
+            "pressure": 1015.35,
+            "windSpeed": 2.8,
+            "windGust": 4.63,
+            "windBearing": 329,
+            "cloudCover": 0.33,
+            "uvIndex": 0,
+            "visibility": 14.48,
+            "ozone": 290.79
+          },
+          "flags": {
+            "sources": [
+              "dwdpa",
+              "cmc",
+              "gfs",
+              "icon",
+              "isd",
+              "madis"
+            ],
+            "nearest-station": 5.095,
+            "units": "si"
+          },
+          "offset": 2
+        }
+        )json";
+        REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+      }
+
+      SECTION("precipType is not a string")
+      {
+        const std::string json = R"json(
+        {
+          "latitude": 52.516,
+          "longitude": 13.378,
+          "timezone": "Europe/Berlin",
+          "currently": {
+            "time": 1533403488,
+            "summary": "Partly Cloudy",
+            "icon": "partly-cloudy-day",
+            "precipIntensity": 0.5,
+            "precipProbability": 0.02,
+            "precipType": 42,
+            "temperature": 30.49,
+            "apparentTemperature": 30.49,
+            "dewPoint": 15.21,
+            "humidity": 0.4,
+            "pressure": 1015.35,
+            "windSpeed": 2.8,
+            "windGust": 4.63,
+            "windBearing": 329,
+            "cloudCover": 0.33,
+            "uvIndex": 0,
+            "visibility": 14.48,
+            "ozone": 290.79
+          },
+          "flags": {
+            "sources": [
+              "dwdpa",
+              "cmc",
+              "gfs",
+              "icon",
+              "isd",
+              "madis"
+            ],
+            "nearest-station": 5.095,
+            "units": "si"
+          },
+          "offset": 2
+        }
+        )json";
+        REQUIRE_FALSE( SimdJsonDarkSky::parseCurrentWeather(json, weather) );
+      }
+
+      SECTION("precipType is missing for non-zero precipIntensity")
+      {
+        const std::string json = R"json(
+        {
+          "latitude": 52.516,
+          "longitude": 13.378,
+          "timezone": "Europe/Berlin",
+          "currently": {
+            "time": 1533403488,
+            "summary": "Partly Cloudy",
+            "icon": "partly-cloudy-day",
+            "precipIntensity": 0.5,
+            "precipProbability": 0.02,
             "temperature": 30.49,
             "apparentTemperature": 30.49,
             "dewPoint": 15.21,
@@ -395,6 +489,11 @@ TEST_CASE("Class SimdJsonDarkSky")
     SECTION("empty string")
     {
       REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("", forecast) );
+    }
+
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonDarkSky::parseForecast("{ }", forecast) );
     }
 
     SECTION("whitespace strings")
