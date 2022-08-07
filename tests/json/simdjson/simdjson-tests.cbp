@@ -26,9 +26,12 @@
 			<Add option="-Wall" />
 			<Add option="-std=c++17" />
 			<Add option="-fexceptions" />
+			<Add option="-Dwic_owm_find_location" />
 		</Compiler>
 		<Unit filename="../../../src/data/Forecast.cpp" />
 		<Unit filename="../../../src/data/Forecast.hpp" />
+		<Unit filename="../../../src/data/Location.cpp" />
+		<Unit filename="../../../src/data/Location.hpp" />
 		<Unit filename="../../../src/data/Weather.cpp" />
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.cpp" />

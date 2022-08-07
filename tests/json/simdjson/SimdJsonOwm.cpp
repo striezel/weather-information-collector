@@ -534,4 +534,496 @@ TEST_CASE("Class SimdJsonOwm")
       REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
     }
   }
+
+  SECTION("parseLocations")
+  {
+    std::vector<std::pair<Location, Weather> > locations;
+
+    SECTION("not valid JSON")
+    {
+      const std::string json = "{ \"this\": 'is not valid, JSON: true";
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations(json, locations) );
+    }
+
+    SECTION("empty string")
+    {
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations("", locations) );
+    }
+
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations("{ }", locations) );
+    }
+
+    SECTION("whitespace strings")
+    {
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations("    ", locations) );
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations("\n", locations) );
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations("\r", locations) );
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations("\r\n\r\n", locations) );
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations("\t\t\t\t", locations) );
+    }
+
+    SECTION("count is missing")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "list": [
+          {
+            "id": 2878037,
+            "name": "Lichtenstein",
+            "coord": {
+              "lat": 50.75,
+              "lon": 12.65
+            },
+            "main": {
+              "temp": 288.87,
+              "feels_like": 287.78,
+              "temp_min": 286.79,
+              "temp_max": 290.71,
+              "pressure": 1022,
+              "humidity": 49,
+              "sea_level": 1022,
+              "grnd_level": 975
+            },
+            "dt": 1659902950,
+            "wind": {
+              "speed": 2.8,
+              "deg": 97
+            },
+            "sys": {
+              "country": "DE"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          },
+          {
+            "id": 3042058,
+            "name": "Principality of Liechtenstein",
+            "coord": {
+              "lat": 47.1667,
+              "lon": 9.5333
+            },
+            "main": {
+              "temp": 291.25,
+              "feels_like": 291.18,
+              "temp_min": 289.2,
+              "temp_max": 292.16,
+              "pressure": 1021,
+              "humidity": 79
+            },
+            "dt": 1659902816,
+            "wind": {
+              "speed": 0.45,
+              "deg": 232
+            },
+            "sys": {
+              "country": "LI"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          }
+        ]
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations(json, locations) );
+    }
+
+    SECTION("count is not an integer")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "count": "foo",
+        "list": [
+          {
+            "id": 2878037,
+            "name": "Lichtenstein",
+            "coord": {
+              "lat": 50.75,
+              "lon": 12.65
+            },
+            "main": {
+              "temp": 288.87,
+              "feels_like": 287.78,
+              "temp_min": 286.79,
+              "temp_max": 290.71,
+              "pressure": 1022,
+              "humidity": 49,
+              "sea_level": 1022,
+              "grnd_level": 975
+            },
+            "dt": 1659902950,
+            "wind": {
+              "speed": 2.8,
+              "deg": 97
+            },
+            "sys": {
+              "country": "DE"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          },
+          {
+            "id": 3042058,
+            "name": "Principality of Liechtenstein",
+            "coord": {
+              "lat": 47.1667,
+              "lon": 9.5333
+            },
+            "main": {
+              "temp": 291.25,
+              "feels_like": 291.18,
+              "temp_min": 289.2,
+              "temp_max": 292.16,
+              "pressure": 1021,
+              "humidity": 79
+            },
+            "dt": 1659902816,
+            "wind": {
+              "speed": 0.45,
+              "deg": 232
+            },
+            "sys": {
+              "country": "LI"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          }
+        ]
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations(json, locations) );
+    }
+
+    SECTION("list element is missing")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "count": 2
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations(json, locations) );
+    }
+
+    SECTION("list element is not an array")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "count": 2,
+        "list": 123
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations(json, locations) );
+    }
+
+    SECTION("location data is empty")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "count": 1,
+        "list": [
+          {
+            "main": {
+              "temp": 288.87,
+              "feels_like": 287.78,
+              "temp_min": 286.79,
+              "temp_max": 290.71,
+              "pressure": 1022,
+              "humidity": 49,
+              "sea_level": 1022,
+              "grnd_level": 975
+            },
+            "dt": 1659902950,
+            "wind": {
+              "speed": 2.8,
+              "deg": 97
+            },
+            "sys": {
+              "country": "DE"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          }
+        ]
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations(json, locations) );
+    }
+
+    SECTION("weather data is missing for one element")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "count": 2,
+        "list": [
+          {
+            "id": 2878037,
+            "name": "Lichtenstein",
+            "coord": {
+              "lat": 50.75,
+              "lon": 12.65
+            },
+            "sys": {
+              "country": "DE"
+            }
+          },
+          {
+            "id": 3042058,
+            "name": "Principality of Liechtenstein",
+            "coord": {
+              "lat": 47.1667,
+              "lon": 9.5333
+            },
+            "main": {
+              "temp": 291.25,
+              "feels_like": 291.18,
+              "temp_min": 289.2,
+              "temp_max": 292.16,
+              "pressure": 1021,
+              "humidity": 79
+            },
+            "dt": 1659902816,
+            "wind": {
+              "speed": 0.45,
+              "deg": 232
+            },
+            "sys": {
+              "country": "LI"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          }
+        ]
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOwm::parseLocations(json, locations) );
+    }
+
+    SECTION("successful parsing with zero elements")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "count": 0,
+        "list": []
+      }
+      )json";
+
+      REQUIRE( SimdJsonOwm::parseLocations(json, locations) );
+      REQUIRE( locations.size() == 0 );
+    }
+
+    SECTION("successful parsing with some matching elements")
+    {
+      const std::string json = R"json(
+      {
+        "message": "accurate",
+        "cod": "200",
+        "count": 2,
+        "list": [
+          {
+            "id": 2878037,
+            "name": "Lichtenstein",
+            "coord": {
+              "lat": 50.75,
+              "lon": 12.65
+            },
+            "main": {
+              "temp": 288.87,
+              "feels_like": 287.78,
+              "temp_min": 286.79,
+              "temp_max": 290.71,
+              "pressure": 1022,
+              "humidity": 49,
+              "sea_level": 1022,
+              "grnd_level": 975
+            },
+            "dt": 1659902950,
+            "wind": {
+              "speed": 2.8,
+              "deg": 97
+            },
+            "sys": {
+              "country": "DE"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          },
+          {
+            "id": 3042058,
+            "name": "Principality of Liechtenstein",
+            "coord": {
+              "lat": 47.1667,
+              "lon": 9.5333
+            },
+            "main": {
+              "temp": 291.25,
+              "feels_like": 291.18,
+              "temp_min": 289.2,
+              "temp_max": 292.16,
+              "pressure": 1021,
+              "humidity": 79
+            },
+            "dt": 1659902816,
+            "wind": {
+              "speed": 0.45,
+              "deg": 232
+            },
+            "sys": {
+              "country": "LI"
+            },
+            "rain": null,
+            "snow": null,
+            "clouds": {
+              "all": 100
+            },
+            "weather": [
+              {
+                "id": 804,
+                "main": "Clouds",
+                "description": "overcast clouds",
+                "icon": "04n"
+              }
+            ]
+          }
+        ]
+      }
+      )json";
+
+      REQUIRE( SimdJsonOwm::parseLocations(json, locations) );
+      REQUIRE( locations.size() == 2 );
+
+      REQUIRE( locations[0].first.owmId() == 2878037 );
+      REQUIRE( locations[0].first.latitude() == 50.75f );
+      REQUIRE( locations[0].first.longitude() == 12.65f );
+      REQUIRE( locations[0].first.name() == "Lichtenstein" );
+      REQUIRE( locations[0].first.countryCode() == "DE" );
+      REQUIRE( locations[0].first.postcode().empty() );
+
+      REQUIRE( locations[0].second.temperatureKelvin() == 288.87f );
+      REQUIRE( locations[0].second.temperatureCelsius() == 15.72f );
+      REQUIRE( locations[0].second.temperatureFahrenheit() == 60.296f );
+      REQUIRE( locations[0].second.humidity() == 49 );
+      REQUIRE_FALSE( locations[0].second.hasRain() );
+      REQUIRE_FALSE( locations[0].second.hasSnow() );
+      REQUIRE( locations[0].second.pressure() == 1022 );
+      REQUIRE( locations[0].second.windSpeed() == 2.8f );
+      REQUIRE( locations[0].second.windDegrees() == 97 );
+      REQUIRE( locations[0].second.cloudiness() == 100 );
+
+      REQUIRE( locations[1].first.owmId() == 3042058 );
+      REQUIRE( locations[1].first.latitude() == 47.1667f );
+      REQUIRE( locations[1].first.longitude() == 9.5333f );
+      REQUIRE( locations[1].first.name() == "Principality of Liechtenstein" );
+      REQUIRE( locations[1].first.countryCode() == "LI" );
+      REQUIRE( locations[1].first.postcode().empty() );
+
+      REQUIRE( locations[1].second.temperatureKelvin() == 291.25f );
+      REQUIRE( locations[1].second.temperatureCelsius() == 18.1f );
+      REQUIRE( locations[1].second.temperatureFahrenheit() == 64.58f );
+      REQUIRE( locations[1].second.humidity() == 79 );
+      REQUIRE_FALSE( locations[1].second.hasRain() );
+      REQUIRE_FALSE( locations[1].second.hasSnow() );
+      REQUIRE( locations[1].second.pressure() == 1021 );
+      REQUIRE( locations[1].second.windSpeed() == 0.45f );
+      REQUIRE( locations[1].second.windDegrees() == 232 );
+      REQUIRE( locations[1].second.cloudiness() == 100 );
+    }
+  }
 }

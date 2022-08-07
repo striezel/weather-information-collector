@@ -4,6 +4,7 @@ project(nlohmannjson_parsing_tests)
 
 set(nlohmannjson_parsing_tests_sources
     ../../../src/data/Forecast.cpp
+    ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/json/ApixuFunctions.cpp
     ../../../src/json/NLohmannJsonApixu.cpp
@@ -32,6 +33,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clan
 
     set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 endif ()
+
+add_definitions(-Dwic_owm_find_location)
 
 add_executable(nlohmannjson_parsing_tests ${nlohmannjson_parsing_tests_sources})
 
