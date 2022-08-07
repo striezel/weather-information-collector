@@ -19,9 +19,9 @@
 */
 
 #include "../../find_catch.hpp"
-#include "../../../src/json/SimdJsonOwm.hpp"
+#include "../../../src/json/NLohmannJsonOwm.hpp"
 
-TEST_CASE("Class SimdJsonOwm")
+TEST_CASE("NLohmannJsonOwm")
 {
   using namespace wic;
 
@@ -32,26 +32,26 @@ TEST_CASE("Class SimdJsonOwm")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather(json, weather) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather("", weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather("", weather) );
     }
 
     SECTION("empty JSON object")
     {
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather("{ }", weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather("{ }", weather) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather("    ", weather) );
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather("\n", weather) );
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather("\r", weather) );
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather("\r\n\r\n", weather) );
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather("\t\t\t\t", weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather("    ", weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather("\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather("\r", weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather("\r\n\r\n", weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather("\t\t\t\t", weather) );
     }
 
     SECTION("missing main object")
@@ -96,7 +96,7 @@ TEST_CASE("Class SimdJsonOwm")
         "cod":200
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather(json, weather) );
     }
 
     SECTION("main is not an object")
@@ -142,7 +142,7 @@ TEST_CASE("Class SimdJsonOwm")
         "cod":200
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseCurrentWeather(json, weather) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseCurrentWeather(json, weather) );
     }
   }
 
@@ -153,26 +153,26 @@ TEST_CASE("Class SimdJsonOwm")
     SECTION("not valid JSON")
     {
       const std::string json = "{ \"this\": 'is not valid, JSON: true";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
     }
 
     SECTION("empty string")
     {
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast("", forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast("", forecast) );
     }
 
     SECTION("empty JSON object")
     {
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast("{ }", forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast("{ }", forecast) );
     }
 
     SECTION("whitespace strings")
     {
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast("    ", forecast) );
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast("\n", forecast) );
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast("\r", forecast) );
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast("\r\n\r\n", forecast) );
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast("\t\t\t\t", forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast("    ", forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast("\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast("\r", forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast("\r\n\r\n", forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast("\t\t\t\t", forecast) );
     }
 
     SECTION("missing main object in one element")
@@ -237,7 +237,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
     }
 
     SECTION("main is not an object in one element")
@@ -293,7 +293,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
     }
 
     SECTION("list is missing")
@@ -317,7 +317,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
     }
 
     SECTION("list is not an array")
@@ -342,7 +342,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
 
       const std::string json2 = R"json(
       {
@@ -364,7 +364,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json2, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json2, forecast) );
     }
 
     SECTION("cnt is missing")
@@ -419,7 +419,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
     }
 
     SECTION("cnt is not an integer")
@@ -475,7 +475,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
     }
 
     SECTION("cnt does not match the number of actual elements")
@@ -531,7 +531,7 @@ TEST_CASE("Class SimdJsonOwm")
           }
       }
       )json";
-      REQUIRE_FALSE( SimdJsonOwm::parseForecast(json, forecast) );
+      REQUIRE_FALSE( NLohmannJsonOwm::parseForecast(json, forecast) );
     }
   }
 }

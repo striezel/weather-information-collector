@@ -36,6 +36,8 @@
 		<Unit filename="../../../src/json/NLohmannJsonApixu.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonDarkSky.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonDarkSky.hpp" />
+		<Unit filename="../../../src/json/NLohmannJsonOwm.cpp" />
+		<Unit filename="../../../src/json/NLohmannJsonOwm.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.cpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherbit.hpp" />
 		<Unit filename="../../../src/json/NLohmannJsonWeatherstack.cpp" />
@@ -46,6 +48,7 @@
 		<Unit filename="../../find_catch.hpp" />
 		<Unit filename="NLohmannJsonApixu.cpp" />
 		<Unit filename="NLohmannJsonDarkSky.cpp" />
+		<Unit filename="NLohmannJsonOwm.cpp" />
 		<Unit filename="NLohmannJsonWeatherbit.cpp" />
 		<Unit filename="NLohmannJsonWeatherstack.cpp" />
 		<Unit filename="main.cpp" />
