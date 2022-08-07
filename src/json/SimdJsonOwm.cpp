@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -272,11 +272,6 @@ bool SimdJsonOwm::parseLocations(const std::string& json, std::vector<std::pair<
     if (!SimdJsonOwm::parseSingleWeatherItem(elem, w))
     {
       std::cerr << "Error in SimdJsonOwm::parseLocations(): Weather data for location is missing!" << std::endl;
-      return false;
-    }
-    if (loc.empty())
-    {
-      std::cerr << "Error in SimdJsonOwm::parseLocations(): Location data is empty!" << std::endl;
       return false;
     }
     // add element to result
