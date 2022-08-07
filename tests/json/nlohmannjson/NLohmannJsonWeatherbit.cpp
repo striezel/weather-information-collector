@@ -40,6 +40,11 @@ TEST_CASE("NLohmannJsonWeatherbit")
       REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("", weather) );
     }
 
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("{ }", weather) );
+    }
+
     SECTION("whitespace strings")
     {
       REQUIRE_FALSE( NLohmannJsonWeatherbit::parseCurrentWeather("    ", weather) );
@@ -383,6 +388,11 @@ TEST_CASE("NLohmannJsonWeatherbit")
     SECTION("empty string")
     {
       REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("", forecast) );
+    }
+
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( NLohmannJsonWeatherbit::parseForecast("{ }", forecast) );
     }
 
     SECTION("whitespace strings")

@@ -40,6 +40,11 @@ TEST_CASE("Class SimdJsonWeatherstack")
       REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("", weather) );
     }
 
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("{ }", weather) );
+    }
+
     SECTION("whitespace strings")
     {
       REQUIRE_FALSE( SimdJsonWeatherstack::parseCurrentWeather("    ", weather) );

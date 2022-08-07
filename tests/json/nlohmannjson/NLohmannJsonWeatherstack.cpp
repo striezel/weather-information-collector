@@ -40,6 +40,11 @@ TEST_CASE("NLohmannJsonWeatherstack")
       REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("", weather) );
     }
 
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("{ }", weather) );
+    }
+
     SECTION("whitespace strings")
     {
       REQUIRE_FALSE( NLohmannJsonWeatherstack::parseCurrentWeather("    ", weather) );

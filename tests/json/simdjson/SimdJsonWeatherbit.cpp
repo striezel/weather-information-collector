@@ -40,6 +40,11 @@ TEST_CASE("SimdJsonWeatherbit")
       REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("", weather) );
     }
 
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("{ }", weather) );
+    }
+
     SECTION("whitespace strings")
     {
       REQUIRE_FALSE( SimdJsonWeatherbit::parseCurrentWeather("    ", weather) );
@@ -383,6 +388,11 @@ TEST_CASE("SimdJsonWeatherbit")
     SECTION("empty string")
     {
       REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("", forecast) );
+    }
+
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonWeatherbit::parseForecast("{ }", forecast) );
     }
 
     SECTION("whitespace strings")
