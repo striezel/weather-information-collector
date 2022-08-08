@@ -300,6 +300,89 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Standard );
     }
 
+    SECTION("configuration with empty task extension (i. e. match all extensions)")
+    {
+      const std::filesystem::path path{"empty-task-extension.conf"};
+      const std::string content = R"conf(
+      # database settings
+      db.host=localhost
+      db.name=my_database
+      db.user=user
+      db.password=secret(!) password
+      db.port=3310
+      tasks.directory=/home/user/.wic/task.d
+      tasks.extension=
+      # API keys
+      key.owm=1234567890abcdef
+      # no plans specified
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      Configuration conf;
+      REQUIRE( conf.load(path.string(), true) );
+
+      REQUIRE( conf.connectionInfo().hostname() == "localhost" );
+      REQUIRE( conf.connectionInfo().db() == "my_database" );
+      REQUIRE( conf.connectionInfo().user() == "user" );
+      REQUIRE( conf.connectionInfo().password() == "secret(!) password" );
+      REQUIRE( conf.connectionInfo().port() == 3310 );
+      REQUIRE( conf.taskDirectory() == "/home/user/.wic/task.d" );
+      REQUIRE( conf.taskExtension().empty() );
+      REQUIRE( conf.key(ApiType::OpenWeatherMap) == "1234567890abcdef" );
+      REQUIRE( conf.key(ApiType::Apixu).empty() );
+      REQUIRE( conf.key(ApiType::DarkSky).empty() );
+      REQUIRE( conf.key(ApiType::Weatherbit).empty() );
+      REQUIRE( conf.key(ApiType::Weatherstack).empty() );
+      REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Free );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Free );
+      REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Free );
+    }
+
+    SECTION("invalid setting: empty value")
+    {
+      const std::filesystem::path path{"empty-setting-value.conf"};
+      const std::string content = R"conf(
+      # database settings
+      db.host=localhost
+      db.name=my_database
+      db.user=user
+      db.password=
+      db.port=3310
+      tasks.directory=/home/user/.wic/task.d
+      tasks.extension=.task
+      # API keys
+      key.owm=1234567890abcdef
+      # no plans specified
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), true) );
+    }
+
+    SECTION("invalid: incomplete database information")
+    {
+      const std::filesystem::path path{"incomplete-database-settings.conf"};
+      const std::string content = R"conf(
+      # database settings
+      db.host=localhost
+      db.name=my_database
+      db.port=3310
+      tasks.directory=/home/user/.wic/task.d
+      tasks.extension=.task
+      # API keys
+      key.owm=1234567890abcdef
+      # no plans specified
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), true) );
+    }
+
     SECTION("port invalid: not an integer")
     {
       const std::filesystem::path path{"invalid-port-no-integer.conf"};
