@@ -83,7 +83,7 @@ For information how to build weather-information-collector on Windows, see the
 weather-information-collector consists of several tools that can perform
 different tasks. See the corresponding readme files for usage information:
 
-* [`weather-information-collector`](./src/collector/readme.me) - main tool, does
+* [`weather-information-collector`](./src/collector/readme.md) - main tool, does
   the actual weather data collection
 * [`weather-information-collector-configtest`](./src/configtest/readme.md) -
   checks configuration files of `weather-information-collector` for errors
