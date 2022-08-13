@@ -1,8 +1,8 @@
 # weather-information-collector-configtest
 
-weather-information-collector-configtest is a tool that checks the configuration
-files of weather-information-collector for potential errors. This includes the
-core configuration file as well as the task files.
+`weather-information-collector-configtest` is a tool that checks the
+configuration files of `weather-information-collector` for potential errors.
+This includes the core configuration file as well as the task files.
 
 ## Building from source
 
@@ -15,14 +15,16 @@ source code.
 ```
 weather-information-collector-configtest [OPTIONS]
 
+Checks configuration files for potential errors.
+
 options:
-  -? | --help            - shows this help message
-  -v | --version         - shows version information
-  -c FILE | --conf FILE  - sets the file name of the configuration file to use
+  -? | --help            - Shows this help message.
+  -v | --version         - Shows version information.
+  -c FILE | --conf FILE  - Sets the file name of the configuration file to use
                            during the program run. If this option is omitted,
                            then the program will search for the configuration
                            in some predefined locations.
-  -l | --ignore-limits   - ignore check for API limits during startup
+  -l | --ignore-limits   - Ignore check for API limits during startup.
 ```
 
 ## Copyright and Licensing

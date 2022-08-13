@@ -80,16 +80,19 @@ For information how to build weather-information-collector on Windows, see the
 
 ## Usage
 
-    weather-information-collector [OPTIONS]
+weather-information-collector consists of several tools that can perform
+different tasks. See the corresponding readme files for usage information:
 
-    options:
-      -? | --help            - shows this help message
-      -v | --version         - shows version information
-      -c FILE | --conf FILE  - sets the file name of the configuration file to use
-                               during the program run. If this option is omitted,
-                               then the program will search for the configuration
-                               in some predefined locations.
-      -l | --ignore-limits   - ignore check for API limits during startup
+* [`weather-information-collector`](./src/collector/readme.me) - main tool, does
+  the actual weather data collection
+* [`weather-information-collector-configtest`](./src/configtest/readme.md) -
+  checks configuration files of `weather-information-collector` for errors
+* [`weather-information-collector-task-creator`](./src/creator/readme.md) -
+  creates configuration files for weathe data collection tasks.
+* [`weather-information-collector-update`](./src/update/readme.md) - updates the
+  database of `weather-information-collector` to the newest version
+* [`weather-information-collector-synchronizer`](./src/synchronizer/readme.md) -
+  synchronizes data from one `weather-information-collector` database to another
 
 ## Copyright and Licensing
 

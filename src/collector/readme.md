@@ -23,15 +23,17 @@ the source code.
 ```
 weather-information-collector [OPTIONS]
 
+Collects weather data according to configured collection tasks.
+
 options:
-  -? | --help            - shows this help message
-  -v | --version         - shows version information
-  -c FILE | --conf FILE  - sets the file name of the configuration file to use
+  -? | --help            - Shows this help message.
+  -v | --version         - Shows version information.
+  -c FILE | --conf FILE  - Sets the file name of the configuration file to use
                            during the program run. If this option is omitted,
                            then the program will search for the configuration
                            in some predefined locations.
-  -l | --ignore-limits   - ignore check for API limits during startup
-  --skip-update-check    - skips the check to determine whether the database
+  -l | --ignore-limits   - Ignore check for API limits during startup.
+  --skip-update-check    - Skips the check to determine whether the database
                            is up to date during program startup.
 ```
 

@@ -37,15 +37,17 @@ void showHelp()
 {
   std::cout << "weather-information-collector [OPTIONS]\n"
             << "\n"
+            << "Collects weather data according to configured collection tasks.\n"
+            << "\n"
             << "options:\n"
-            << "  -? | --help            - shows this help message\n"
-            << "  -v | --version         - shows version information\n"
-            << "  -c FILE | --conf FILE  - sets the file name of the configuration file to use\n"
+            << "  -? | --help            - Shows this help message.\n"
+            << "  -v | --version         - Shows version information.\n"
+            << "  -c FILE | --conf FILE  - Sets the file name of the configuration file to use\n"
             << "                           during the program run. If this option is omitted,\n"
             << "                           then the program will search for the configuration\n"
             << "                           in some predefined locations.\n"
-            << "  -l | --ignore-limits   - ignore check for API limits during startup\n"
-            << "  --skip-update-check    - skips the check to determine whether the database\n"
+            << "  -l | --ignore-limits   - Ignore check for API limits during startup.\n"
+            << "  --skip-update-check    - Skips the check to determine whether the database\n"
             << "                           is up to date during program startup.\n";
 }
 

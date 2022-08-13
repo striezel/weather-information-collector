@@ -20,10 +20,13 @@ source code.
 ```
 weather-information-collector-task-creator [OPTIONS]
 
+Creates a task file for weather-information-collector, based on the given user
+input and choices.
+
 options:
-  -? | --help            - shows this help message
-  -v | --version         - shows version information
-  -c FILE | --conf FILE  - sets the file name of the configuration file to use
+  -? | --help            - Shows this help message.
+  -v | --version         - Shows version information.
+  -c FILE | --conf FILE  - Sets the file name of the configuration file to use
                            during the program run. If this option is omitted,
                            then the program will search for the configuration
                            in some predefined locations.

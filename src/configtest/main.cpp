@@ -30,14 +30,16 @@ void showHelp()
 {
   std::cout << "weather-information-collector-configtest [OPTIONS]\n"
             << "\n"
+            << "Checks configuration files for potential errors.\n"
+            << "\n"
             << "options:\n"
-            << "  -? | --help            - shows this help message\n"
-            << "  -v | --version         - shows version information\n"
-            << "  -c FILE | --conf FILE  - sets the file name of the configuration file to use\n"
+            << "  -? | --help            - Shows this help message.\n"
+            << "  -v | --version         - Shows version information.\n"
+            << "  -c FILE | --conf FILE  - Sets the file name of the configuration file to use\n"
             << "                           during the program run. If this option is omitted,\n"
             << "                           then the program will search for the configuration\n"
             << "                           in some predefined locations.\n"
-            << "  -l | --ignore-limits   - ignore check for API limits during startup\n";
+            << "  -l | --ignore-limits   - Ignore check for API limits during startup.\n";
 }
 
 std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile, bool& checkApiLimits)

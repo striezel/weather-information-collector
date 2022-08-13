@@ -16,14 +16,17 @@ source code.
 ```
 weather-information-collector-update [OPTIONS]
 
+Performs database updates for a database that was created for an earlier
+version of weather-information-collector.
+
 options:
-  -? | --help            - shows this help message
-  -v | --version         - shows version information
-  -c FILE | --conf FILE  - sets the file name of the configuration file to use
+  -? | --help            - Shows this help message.
+  -v | --version         - Shows version information.
+  -c FILE | --conf FILE  - Sets the file name of the configuration file to use
                            during the program run. If this option is omitted,
                            then the program will search for the configuration
                            in some predefined locations.
-  -f | --full            - perform all update steps, even those for older
+  -f | --full            - Perform all update steps, even those for older
                            versions that may not be required. This option is
                            off by default, so that only required updates are
                            performed by the update program. Which updates are

@@ -22,25 +22,25 @@ source code.
 ```
 weather-information-collector-synchronizer [OPTIONS]
 
-Synchronizes data between two collector databases.
+Synchronizes data from one collector database to another.
 
 options:
-  -? | --help            - shows this help message
-  -v | --version         - shows version information
+  -? | --help            - Shows this help message.
+  -v | --version         - Shows version information.
   -c1 FILE | --src-conf FILE
-                         - sets the file name of the configuration file that
+                         - Sets the file name of the configuration file that
                            contains the database connection settings for the
                            source database.
   -c2 FILE | --dest-conf FILE
-                         - sets the file name of the configuration file that
+                         - Sets the file name of the configuration file that
                            contains the database connection settings for the
                            destination database.
-  -b N | --batch-size N  - sets the number of records per batch insert to N.
+  -b N | --batch-size N  - Sets the number of records per batch insert to N.
                            Higher numbers mean increased performance, but it
                            could also result in hitting MySQL's limit for the
                            maximum packet size, called max_allowed_packet.
                            Defaults to 40, if no value is given.
-  --skip-update-check    - skips the check to determine whether the databases
+  --skip-update-check    - Skips the check to determine whether the databases
                            are up to date during program startup.
 ```
 
