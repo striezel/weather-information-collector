@@ -153,6 +153,17 @@ mariadb_10_8:
   services:
   - mariadb:10.8
 
+mysql_5_7:
+  <<: *mariadb_configuration
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
+    MYSQL_HOST: "mysql"
+  services:
+  - mysql:5.7-debian
+
 percona_5_7:
   <<: *mariadb_configuration
   variables:
