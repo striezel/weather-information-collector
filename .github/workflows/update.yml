@@ -4,14 +4,14 @@ on: push
 
 jobs:
   update_structure_v0_5_3:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
       - name: Install Debian packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y catch cmake g++-8 git libcurl4-gnutls-dev libmariadb-dev pkg-config
+          sudo apt-get install -y catch cmake g++-11 git libcurl4-gnutls-dev libmariadb-dev pkg-config
       - name: Start MySQL database
         run: sudo systemctl start mysql.service
       - name: Show MySQL version information
@@ -22,10 +22,14 @@ jobs:
           mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
           mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
           mysql -uroot --password=root -e "SHOW DATABASES;"
+      - name: Adjust MySQL 8.0 authentication
+        run: |
+          mysql -uroot -proot -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY ''; ALTER USER root@localhost IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
       - name: Build weather-information-collector-update
         run: |
-          export CXX=g++-8
-          export CC=gcc-8
+          export CXX=g++-11
+          export CC=gcc-11
           cd "$GITHUB_WORKSPACE"
           mkdir build
           cd build
