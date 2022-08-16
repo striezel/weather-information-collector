@@ -1,0 +1,21 @@
+name: ARM 64
+
+on: push
+
+jobs:
+  package:
+    runs-on: ubuntu-22.04
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Inspect builder
+        run: |
+          echo "Name:      ${{ steps.buildx.outputs.name }}"
+          echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+          echo "Status:    ${{ steps.buildx.outputs.status }}"
+          echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+          echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
