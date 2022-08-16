@@ -54,6 +54,25 @@ class FileGuard
     }
 };
 
+// guard to ensure directory deletion when it goes out of scope
+class DirectoryGuard
+{
+  private:
+    std::filesystem::path path;
+  public:
+    DirectoryGuard(const std::filesystem::path& filePath)
+    : path(filePath)
+    { }
+
+    DirectoryGuard(const DirectoryGuard& op) = delete;
+    DirectoryGuard(DirectoryGuard&& op) = delete;
+
+    ~DirectoryGuard()
+    {
+      std::filesystem::remove_all(path);
+    }
+};
+
 TEST_CASE("Class Configuration")
 {
   using namespace wic;
@@ -923,6 +942,393 @@ TEST_CASE("Class Configuration")
 
       Configuration conf;
       REQUIRE_FALSE( conf.load(path.string(), true) );
+    }
+
+    SECTION("load example configuration file, including tasks")
+    {
+      const std::filesystem::path path{"example-loading-tasks.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=example-loading-tasks-dir
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      const std::filesystem::path tasks{"example-loading-tasks-dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      ## This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # use OpenWeatherMap API
+      api=OpenWeatherMap
+      # collect data of weather forecast
+      data=forecast
+      # city of London, United Kingdom
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      # location's ID for OpenWeatherMap
+      location.id=2643743
+      # one request every hour, e.g. every 3600 seconds
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "owm.task", task_content) );
+      const std::string task2_content = R"conf(
+      # use Weatherstack API
+      api=Weatherstack
+      # collect data about current weather
+      data=current
+      # location somewhere in England, near the town of Newbury
+      location.coordinates=51.5,-1.2
+      # one request two hours minutes, e.g. every 7200 seconds
+      interval=7200
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "wstack.task", task2_content) );
+      const std::string task3_content = R"conf(
+      # use DarkSky API
+      api=DarkSky
+      # collect current and forecast data
+      data=current+forecast
+      # location: Alcatraz Island
+      location.coordinates=37.8267,-122.4233
+      # one request every 20 minutes, e.g. every 1200 seconds
+      interval=1200
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "dsky.task", task3_content) );
+
+      Configuration conf;
+      REQUIRE( conf.load(path.string(), false) );
+
+      REQUIRE( conf.connectionInfo().hostname() == "db.domain.local" );
+      REQUIRE( conf.connectionInfo().db() == "weather_db" );
+      REQUIRE( conf.connectionInfo().user() == "user" );
+      REQUIRE( conf.connectionInfo().password() == "secret(!) password" );
+      REQUIRE( conf.connectionInfo().port() == 3366 );
+      REQUIRE( conf.taskDirectory() == "example-loading-tasks-dir" );
+      REQUIRE( conf.taskExtension() == ".task" );
+      REQUIRE( conf.key(ApiType::OpenWeatherMap) == "0123456789abcdefdeadbeef1c0ffee1" );
+      REQUIRE( conf.key(ApiType::Apixu) == "abcdef9876543210affe1affe2affe" );
+      REQUIRE( conf.key(ApiType::DarkSky) == "f00ba12735743210fedcba9876543210" );
+      REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
+      REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
+      REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Enterprise );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Advanced );
+      REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Business );
+
+      REQUIRE( conf.tasks().size() == 3 );
+
+      REQUIRE( conf.tasks()[0].location().owmId() == 2643743 );
+      REQUIRE( conf.tasks()[0].location().name() == "London" );
+      REQUIRE( conf.tasks()[0].location().countryCode() == "GB" );
+      REQUIRE( conf.tasks()[0].location().latitude() == 51.507301f );
+      REQUIRE( conf.tasks()[0].location().longitude() == -0.1277f );
+      REQUIRE( conf.tasks()[0].location().postcode().empty() );
+      REQUIRE( conf.tasks()[0].api() == ApiType::OpenWeatherMap );
+      REQUIRE( conf.tasks()[0].data() == DataType::Forecast );
+      REQUIRE( conf.tasks()[0].interval() == std::chrono::seconds{3600} );
+
+      REQUIRE_FALSE( conf.tasks()[1].location().hasOwmId() );
+      REQUIRE( conf.tasks()[1].location().name().empty() );
+      REQUIRE( conf.tasks()[1].location().countryCode().empty() );
+      REQUIRE( conf.tasks()[1].location().latitude() == 51.5f );
+      REQUIRE( conf.tasks()[1].location().longitude() == -1.2f );
+      REQUIRE( conf.tasks()[1].location().postcode().empty() );
+      REQUIRE( conf.tasks()[1].api() == ApiType::Weatherstack );
+      REQUIRE( conf.tasks()[1].data() == DataType::Current );
+      REQUIRE( conf.tasks()[1].interval() == std::chrono::seconds{7200} );
+
+      REQUIRE_FALSE( conf.tasks()[2].location().hasOwmId() );
+      REQUIRE( conf.tasks()[2].location().name().empty() );
+      REQUIRE( conf.tasks()[2].location().countryCode().empty() );
+      REQUIRE( conf.tasks()[2].location().latitude() == 37.8267f );
+      REQUIRE( conf.tasks()[2].location().longitude() == -122.4233f );
+      REQUIRE( conf.tasks()[2].location().postcode().empty() );
+      REQUIRE( conf.tasks()[2].api() == ApiType::DarkSky );
+      REQUIRE( conf.tasks()[2].data() == DataType::CurrentAndForecast );
+      REQUIRE( conf.tasks()[2].interval() == std::chrono::seconds{1200} );
+    }
+
+    SECTION("load example configuration file, but task directory does not exist")
+    {
+      const std::filesystem::path path{"example-loading-tasks-without-directory.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=/this/directory/does-not/exist
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), false) );
+    }
+
+    SECTION("load example configuration file, but task 'directory' is a file")
+    {
+      const std::filesystem::path path{"example-loading-tasks-without-directory.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=task-directory.file
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+      const std::filesystem::path task_path{"task-directory.file"};
+      REQUIRE( writeConfiguration(task_path, "") );
+      FileGuard guard2{task_path};
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), false) );
+    }
+
+    SECTION("load example configuration file, but loading tasks fails")
+    {
+      const std::filesystem::path path{"example-failing-tasks.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=example-failing-tasks-dir
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      const std::filesystem::path tasks{"example-failing-tasks-dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      fail=true
+      hardfail
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "hardfail.task", task_content) );
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), false) );
+    }
+
+    SECTION("load example configuration file, but there are duplicate tasks")
+    {
+      const std::filesystem::path path{"duplicate-tasks.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=the-duplicate-tasks-dir
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      const std::filesystem::path tasks{"the-duplicate-tasks-dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      api=OpenWeatherMap
+      data=forecast
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      location.id=2643743
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "first.task", task_content) );
+      REQUIRE( writeConfiguration(tasks / "second.task", task_content) );
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), false) );
+    }
+
+    SECTION("load example configuration file, but tasks contain one Apixu task")
+    {
+      const std::filesystem::path path{"deprecated-apixu-task.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=deprecated-apixu-task-dir
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      const std::filesystem::path tasks{"deprecated-apixu-task-dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      api=Apixu
+      data=current
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      location.id=2643743
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "apixu.task", task_content) );
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), false) );
+    }
+
+    SECTION("load example configuration file, but tasks contain several Apixu tasks")
+    {
+      const std::filesystem::path path{"deprecated-apixu-tasks.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=deprecated-apixu-tasks-dir
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      const std::filesystem::path tasks{"deprecated-apixu-tasks-dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      api=Apixu
+      data=current
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      location.id=2643743
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "apixu1.task", task_content) );
+      const std::string task2_content = R"conf(
+      api=Apixu
+      data=current
+      location.name=Paris
+      location.countrycode=FR
+      location.coordinates=48.853,2.349
+      interval=7200
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "apixu2.task", task2_content) );
+
+      Configuration conf;
+      REQUIRE_FALSE( conf.load(path.string(), false) );
     }
   }
 }

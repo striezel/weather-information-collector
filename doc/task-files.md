@@ -108,8 +108,8 @@ weather-information-collector program (as of version 0.9.0):
 
     # use OpenWeatherMap API
     api=OpenWeatherMap
-    # collect data about current weather
-    data=current
+    # collect data of weather forecast
+    data=forecast
     # city of London, United Kingdom
     location.name=London
     location.countrycode=GB
@@ -123,8 +123,8 @@ Another example would be:
 
     # use Weatherstack API
     api=Weatherstack
-    # collect data of weather forecast
-    data=forecast
+    # collect data about current weather
+    data=current
     # location somewhere in England, near the town of Newbury
     location.coordinates=51.5,-1.2
     # one request two hours minutes, e.g. every 7200 seconds
