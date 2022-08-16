@@ -1038,35 +1038,41 @@ TEST_CASE("Class Configuration")
 
       REQUIRE( conf.tasks().size() == 3 );
 
-      REQUIRE( conf.tasks()[0].location().owmId() == 2643743 );
-      REQUIRE( conf.tasks()[0].location().name() == "London" );
-      REQUIRE( conf.tasks()[0].location().countryCode() == "GB" );
-      REQUIRE( conf.tasks()[0].location().latitude() == 51.507301f );
-      REQUIRE( conf.tasks()[0].location().longitude() == -0.1277f );
-      REQUIRE( conf.tasks()[0].location().postcode().empty() );
-      REQUIRE( conf.tasks()[0].api() == ApiType::OpenWeatherMap );
-      REQUIRE( conf.tasks()[0].data() == DataType::Forecast );
-      REQUIRE( conf.tasks()[0].interval() == std::chrono::seconds{3600} );
+      const Task& own_task = *std::find_if(conf.tasks().begin(), conf.tasks().end(),
+          [](const Task& t) { return t.api() == ApiType::OpenWeatherMap; });
+      REQUIRE( own_task.location().owmId() == 2643743 );
+      REQUIRE( own_task.location().name() == "London" );
+      REQUIRE( own_task.location().countryCode() == "GB" );
+      REQUIRE( own_task.location().latitude() == 51.507301f );
+      REQUIRE( own_task.location().longitude() == -0.1277f );
+      REQUIRE( own_task.location().postcode().empty() );
+      REQUIRE( own_task.api() == ApiType::OpenWeatherMap );
+      REQUIRE( own_task.data() == DataType::Forecast );
+      REQUIRE( own_task.interval() == std::chrono::seconds{3600} );
 
-      REQUIRE_FALSE( conf.tasks()[1].location().hasOwmId() );
-      REQUIRE( conf.tasks()[1].location().name().empty() );
-      REQUIRE( conf.tasks()[1].location().countryCode().empty() );
-      REQUIRE( conf.tasks()[1].location().latitude() == 51.5f );
-      REQUIRE( conf.tasks()[1].location().longitude() == -1.2f );
-      REQUIRE( conf.tasks()[1].location().postcode().empty() );
-      REQUIRE( conf.tasks()[1].api() == ApiType::Weatherstack );
-      REQUIRE( conf.tasks()[1].data() == DataType::Current );
-      REQUIRE( conf.tasks()[1].interval() == std::chrono::seconds{7200} );
+      const Task& ws_task = *std::find_if(conf.tasks().begin(), conf.tasks().end(),
+          [](const Task& t) { return t.api() == ApiType::Weatherstack; });
+      REQUIRE_FALSE( ws_task.location().hasOwmId() );
+      REQUIRE( ws_task.location().name().empty() );
+      REQUIRE( ws_task.location().countryCode().empty() );
+      REQUIRE( ws_task.location().latitude() == 51.5f );
+      REQUIRE( ws_task.location().longitude() == -1.2f );
+      REQUIRE( ws_task.location().postcode().empty() );
+      REQUIRE( ws_task.api() == ApiType::Weatherstack );
+      REQUIRE( ws_task.data() == DataType::Current );
+      REQUIRE( ws_task.interval() == std::chrono::seconds{7200} );
 
-      REQUIRE_FALSE( conf.tasks()[2].location().hasOwmId() );
-      REQUIRE( conf.tasks()[2].location().name().empty() );
-      REQUIRE( conf.tasks()[2].location().countryCode().empty() );
-      REQUIRE( conf.tasks()[2].location().latitude() == 37.8267f );
-      REQUIRE( conf.tasks()[2].location().longitude() == -122.4233f );
-      REQUIRE( conf.tasks()[2].location().postcode().empty() );
-      REQUIRE( conf.tasks()[2].api() == ApiType::DarkSky );
-      REQUIRE( conf.tasks()[2].data() == DataType::CurrentAndForecast );
-      REQUIRE( conf.tasks()[2].interval() == std::chrono::seconds{1200} );
+      const Task& third_task = *std::find_if(conf.tasks().begin(), conf.tasks().end(),
+          [](const Task& t) { return t.api() == ApiType::DarkSky; });
+      REQUIRE_FALSE( third_task.location().hasOwmId() );
+      REQUIRE( third_task.location().name().empty() );
+      REQUIRE( third_task.location().countryCode().empty() );
+      REQUIRE( third_task.location().latitude() == 37.8267f );
+      REQUIRE( third_task.location().longitude() == -122.4233f );
+      REQUIRE( third_task.location().postcode().empty() );
+      REQUIRE( third_task.api() == ApiType::DarkSky );
+      REQUIRE( third_task.data() == DataType::CurrentAndForecast );
+      REQUIRE( third_task.interval() == std::chrono::seconds{1200} );
     }
 
     SECTION("load example configuration file, but task directory does not exist")
