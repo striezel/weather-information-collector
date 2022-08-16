@@ -19,6 +19,7 @@
 */
 
 #include "../../find_catch.hpp"
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include "../../../src/conf/Configuration.hpp"
