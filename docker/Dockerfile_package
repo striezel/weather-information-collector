@@ -1,0 +1,18 @@
+# This version of the Dockerfile builds the *.deb package from the latest tagged
+# version.
+FROM debian:11-slim
+MAINTAINER Dirk Stolle <striezel-dev@web.de>
+
+RUN mkdir -p /opt
+WORKDIR /opt
+
+# Update packages, install dependencies + root certificates.
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends catch cmake g++ git \
+    libcurl4-gnutls-dev libmariadb-dev \
+    make pkg-config ca-certificates && \
+    git clone https://gitlab.com/striezel/weather-information-collector.git
+WORKDIR /opt/weather-information-collector
+RUN ./ci/gitlab-01-install-dependencies.sh && \
+    ./ci/gitlab-02-create-package.sh
+RUN pwd && ls -lah
