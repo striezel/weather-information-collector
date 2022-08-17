@@ -25,3 +25,13 @@ endif ()
 # parameter to show version number
 add_test(NAME weather-information-collector-task-creator_version
          COMMAND $<TARGET_FILE:weather-information-collector-task-creator> --version)
+
+# tests for parameter misuse
+if (NOT WIN32)
+  set(EXT "sh")
+else ()
+  set(EXT "cmd")
+endif()
+
+add_test(NAME weather-information-collector-task-creator_parameter_misuse
+         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/parameter-misuse.${EXT} $<TARGET_FILE:weather-information-collector-task-creator>)
