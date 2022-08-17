@@ -62,7 +62,7 @@ package_debian10:
 coverage:
   stage: build
   services:
-  - mariadb:10.5
+  - mariadb:10.7
   variables:
     MYSQL_DATABASE: "weather_information_collector"
     MYSQL_USER: "ci_user"
@@ -132,7 +132,8 @@ docker_in_docker:
     - ctest -V
 
 # Run tests with various MariaDB versions.
-# (Versions 10.5 and 10.6 are already tested in the GCC and Clang builds.)
+# (Versions 10.5 and 10.6 are already tested in the GCC and Clang builds, and
+#  MariaDB 10.7 is tested in the coverage build job.)
 mariadb_10_3:
   <<: *mariadb_configuration
   services:
@@ -142,11 +143,6 @@ mariadb_10_4:
   <<: *mariadb_configuration
   services:
   - mariadb:10.4
-
-mariadb_10_7:
-  <<: *mariadb_configuration
-  services:
-  - mariadb:10.7
 
 mariadb_10_8:
   <<: *mariadb_configuration
