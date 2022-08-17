@@ -8,6 +8,10 @@ to version 2.2.2.
 nlohmann/json, the library used for JSON parsing when simdjson is not supported,
 has been updated from version 3.10.2 to version 3.11.1.
 
+weather-information-collector can now be
+[built on Windows](./doc/msys2-build.md) with the help of
+[MSYS2](https://www.msys2.org/).
+
 ## Version 0.9.21 (2021-10-05)
 
 A possible null-pointer dereference in the update program has been fixed.
