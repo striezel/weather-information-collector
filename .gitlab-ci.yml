@@ -187,7 +187,7 @@ percona_8_0:
 updater_v0.5.3_structure:
   <<: *mariadb_configuration
   services:
-  - mariadb:10.2
+  - mariadb:10.6
   script:
     - apt-get -y --no-install-suggests --no-install-recommends install mariadb-client
     - mysql -pci_password -u ci_user -hmariadb < ci/structure_v0.5.3.sql
