@@ -40,3 +40,19 @@ jobs:
           export MSYSTEM=MINGW64
           cd "$GITHUB_WORKSPACE"/build
           ctest -V
+      - name: Gather build artifacts
+        run: |
+          export MSYSTEM=MINGW64
+          cd "$GITHUB_WORKSPACE"
+          mkdir artifacts
+          ./ci/copy-dll-dependencies.sh build/src/collector/weather-information-collector.exe artifacts/
+          ./ci/copy-dll-dependencies.sh build/src/configtest/weather-information-collector-configtest.exe artifacts/
+          ./ci/copy-dll-dependencies.sh build/src/creator/weather-information-collector-task-creator.exe artifacts/
+          ./ci/copy-dll-dependencies.sh build/src/synchronizer/weather-information-collector-synchronizer.exe artifacts/
+          ./ci/copy-dll-dependencies.sh build/src/update/weather-information-collector-update.exe artifacts/
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: weather-information-collector-windows-msys2
+          path: |
+            artifacts/*
