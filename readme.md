@@ -88,7 +88,7 @@ different tasks. See the corresponding readme files for usage information:
 * [`weather-information-collector-configtest`](./src/configtest/readme.md) -
   checks configuration files of `weather-information-collector` for errors
 * [`weather-information-collector-task-creator`](./src/creator/readme.md) -
-  creates configuration files for weathe data collection tasks.
+  creates configuration files for weather data collection tasks.
 * [`weather-information-collector-update`](./src/update/readme.md) - updates the
   database of `weather-information-collector` to the newest version
 * [`weather-information-collector-synchronizer`](./src/synchronizer/readme.md) -
