@@ -24,5 +24,11 @@ endif ()
 # Recurse into subdirectory for the main executable.
 add_subdirectory (src)
 
-# Recurse into subdirectory for tests.
-add_subdirectory (tests)
+if (CMAKE_CROSSCOMPILING)
+  # Tests contain binaries, but those cannot be run when cross compiling,
+  # because the architecture will be different from the host architecture.
+  message(STATUS "Detected cross compiling build. Tests will not be run.")
+else ()
+  # Recurse into subdirectory for tests.
+  add_subdirectory (tests)
+endif ()
