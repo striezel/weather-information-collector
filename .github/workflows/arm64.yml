@@ -9,34 +9,40 @@ jobs:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Inspect builder
+      - name: Install Debian packages
         run: |
-          echo "Name:      ${{ steps.buildx.outputs.name }}"
-          echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
-          echo "Status:    ${{ steps.buildx.outputs.status }}"
-          echo "Flags:     ${{ steps.buildx.outputs.flags }}"
-          echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-      - name: Build
+          sudo apt-get update
+          sudo apt-get -y install --no-install-recommends build-essential bzip2 ca-certificates cmake debhelper devscripts fakeroot g++ git lsb-release tar wget
+          sudo apt-get -y install crossbuild-essential-arm64 dpkg-cross
+      - name: Add ARM 64 package sources
         run: |
-          mkdir pkg
-          cd pkg
-          cp "$GITHUB_WORKSPACE"/docker/Dockerfile_package ./Dockerfile
-          docker buildx build --platform=linux/arm64 . --tag package:arm64
-      - name: Extract package from Docker image
+          sudo dpkg --add-architecture arm64
+          sudo touch /etc/apt/sources.list.d/arm64.list
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ focal main restricted universe multiverse" | sudo tee /etc/apt/sources.list.d/arm64.list
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ focal-updates main restricted universe multiverse" | sudo tee --append /etc/apt/sources.list.d/arm64.list
+          echo "deb [arch=arm64] http://ports.ubuntu.com/ focal-security main restricted universe multiverse" | sudo tee --append /etc/apt/sources.list.d/arm64.list
+          sudo apt-get update || echo "Ignoring possible failures ..."
+      - name: Install ARM 64 packages
         run: |
-          cd "$GITHUB_WORKSPACE"
-          mkdir -p "$GITHUB_WORKSPACE"/artifacts
+          sudo apt-get -y install --no-install-recommends catch:arm64 libcurl4-gnutls-dev:arm64 libmariadb-dev:arm64 pkg-config:arm64
+      - name: Build package
+        run: |
           TAG="${CI_COMMIT_TAG:-$(git describe | cut -d '-' -f 1)}"
           VERSION=$(echo $TAG | cut -c '2-')
-          RELEASE=bullseye
-          docker buildx create --platform=linux/arm64 --name=pkg_container package:arm64
-          docker cp pkg_container:/opt/weather-information-collector_${VERSION}-${RELEASE}_arm64.deb "$GITHUB_WORKSPACE"/artifacts/
-          docker buildx rm pkg_container
+          ARCH=$(dpkg --print-foreign-architectures)
+          mkdir -p /opt/pkg && cd /opt/pkg
+          wget -O weather-information-collector_${VERSION}.orig.tar.bz2 https https://gitlab.com/striezel/weather-information-collector/-/archive/${TAG}/weather-information-collector-${TAG}.tar.bz2
+          tar -x --bzip2 -f weather-information-collector_${VERSION}.orig.tar.bz2
+          mv weather-information-collector-${TAG} weather-information-collector-${VERSION}
+          cd weather-information-collector-${VERSION}
+          export CC=/usr/bin/aarch64-linux-gnu-gcc
+          export CXX=/usr/bin/aarch64-linux-gnu-g++
+          debuild -uc -us --host-arch arm64
+      - name: Copy package to workspace
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir artifacts
+          cp /opt/pkg/*.deb "$GITHUB_WORKSPACE"/artifacts/
       - name: Archive build artifacts
         uses: actions/upload-artifact@v3
         with:
