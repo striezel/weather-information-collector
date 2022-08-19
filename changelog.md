@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.?.? (2022-08-??)
+
+nlohmann/json, the library used for JSON parsing when simdjson is not supported,
+has been updated from version 3.11.1 to version 3.11.2.
+
 ## Version 0.9.22 (2022-08-18)
 
 simdjson, the library used for JSON parsing, has been updated from version 1.0.0
