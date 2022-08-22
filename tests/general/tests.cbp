@@ -111,6 +111,8 @@
 		<Unit filename="db/ConnectionInformation.cpp" />
 		<Unit filename="db/Exceptions.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="net/Curly.cpp" />
+		<Unit filename="net/Request.cpp" />
 		<Unit filename="tasks/Plans.cpp" />
 		<Unit filename="tasks/Task.cpp" />
 		<Unit filename="tasks/TaskManager.cpp" />

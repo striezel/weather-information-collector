@@ -43,6 +43,8 @@ set(weather_information_collector_tests_sources
     data/Weather.cpp
     db/ConnectionInformation.cpp
     db/Exceptions.cpp
+    net/Curly.cpp
+    net/Request.cpp
     tasks/Plans.cpp
     tasks/Task.cpp
     tasks/TaskManager.cpp
