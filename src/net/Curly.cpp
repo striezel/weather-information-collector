@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of scan-tool.
-    Copyright (C) 2015, 2016, 2017, 2020, 2021  Dirk Stolle
+    Copyright (C) 2015, 2016, 2017, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -92,7 +92,6 @@ Curly::Curly()
   m_headers(std::vector<std::string>()),
   m_PostBody(""),
   m_UsePostBody(false),
-  m_certFile(""),
   m_LastResponseCode(0),
   m_LastContentType(""),
   m_followRedirects(false),
@@ -204,17 +203,6 @@ bool Curly::setPostBody(const std::string& body)
     return false;
 }
 
-bool Curly::setCertificateFile(const std::string& certFile)
-{
-  //path should not be empty and should not contain NUL bytes
-  if (!certFile.empty() && (certFile.find('\0') == std::string::npos))
-  {
-    m_certFile = certFile;
-    return true;
-  }
-  return false;
-}
-
 bool Curly::limitUpstreamSpeed(const unsigned int maxBytesPerSecond)
 {
   if (maxBytesPerSecond > std::numeric_limits<curl_off_t>::max())
@@ -312,34 +300,6 @@ bool Curly::perform(std::string& response)
     return false;
   }
   #endif
-
-  //set certificate file
-  if (!m_certFile.empty())
-  {
-    #ifdef DEBUG_MODE
-    std::clog << "curl_easy_setopt(..., CURLOPT_CAINFO, ...)..." << std::endl;
-    #endif
-    retCode = curl_easy_setopt(handle, CURLOPT_CAINFO, m_certFile.c_str());
-    if (retCode != CURLE_OK)
-    {
-      std::cerr << "cURL error: setting custom certificate file failed!" << std::endl;
-      switch (retCode)
-      {
-        case CURLE_UNKNOWN_OPTION:
-             std::cerr << "Option is not supported!" << std::endl;
-             break;
-        case CURLE_OUT_OF_MEMORY:
-             std::cerr << "Insufficient heap memory!" << std::endl;
-             break;
-        default:
-             //should not happen, according to libcurl documentation
-             break;
-      } //swi
-      std::cerr << curl_easy_strerror(retCode) << std::endl;
-      curl_easy_cleanup(handle);
-      return false;
-    }
-  } //if cert file was set
 
   //set max. upload speed
   if (m_MaxUpstreamSpeed >= 512)
