@@ -20,6 +20,7 @@
 
 #include "../../find_catch.hpp"
 #include "../../../src/net/Curly.hpp"
+#include "../../../src/util/Environment.hpp"
 
 TEST_CASE("Curly")
 {
@@ -125,43 +126,46 @@ TEST_CASE("Curly")
     REQUIRE( curly.maximumRedirects() == -1 );
   }
 
-  SECTION("perform")
+  if (!wic::hasEnvVar("SKIP_NETWORK_TESTS"))
   {
-    SECTION("URL too short")
+    SECTION("perform")
     {
-      Curly curly;
+      SECTION("URL too short")
+      {
+        Curly curly;
 
-      curly.setURL("http://a");
-      std::string response;
-      REQUIRE_FALSE( curly.perform(response) );
-    }
+        curly.setURL("http://a");
+        std::string response;
+        REQUIRE_FALSE( curly.perform(response) );
+      }
 
-    SECTION("request with custom header")
-    {
-      Curly curly;
+      SECTION("request with custom header")
+      {
+        Curly curly;
 
-      curly.setURL("https://httpbin.org/get");
-      REQUIRE( curly.addHeader("foo: barbarbar") );
-      std::string response;
-      REQUIRE( curly.perform(response) );
-      REQUIRE( response.find("barbarbar") != std::string::npos );
-    }
+        curly.setURL("https://httpbin.org/get");
+        REQUIRE( curly.addHeader("foo: barbarbar") );
+        std::string response;
+        REQUIRE( curly.perform(response) );
+        REQUIRE( response.find("barbarbar") != std::string::npos );
+      }
 
-    SECTION("request with redirects")
-    {
-      Curly curly;
+      SECTION("request with redirects")
+      {
+        Curly curly;
 
-      curly.setURL("https://httpbin.org/redirect/2");
-      curly.followRedirects(true);
-      curly.setMaximumRedirects(5);
-      std::string response;
-      REQUIRE( curly.perform(response) );
-      REQUIRE( curly.getResponseCode() == 200 );
+        curly.setURL("https://httpbin.org/redirect/2");
+        curly.followRedirects(true);
+        curly.setMaximumRedirects(5);
+        std::string response;
+        REQUIRE( curly.perform(response) );
+        REQUIRE( curly.getResponseCode() == 200 );
 
-      curly.followRedirects(false);
-      curly.setMaximumRedirects(0);
-      REQUIRE( curly.perform(response) );
-      REQUIRE( curly.getResponseCode() == 302 );
+        curly.followRedirects(false);
+        curly.setMaximumRedirects(0);
+        REQUIRE( curly.perform(response) );
+        REQUIRE( curly.getResponseCode() == 302 );
+      }
     }
   }
 }
