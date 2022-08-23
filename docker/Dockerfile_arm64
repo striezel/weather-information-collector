@@ -1,0 +1,29 @@
+FROM debian:11-slim
+MAINTAINER Dirk Stolle <striezel-dev@web.de>
+
+RUN mkdir -p /opt
+WORKDIR /opt
+
+# Update packages, install dependencies + root certificates.
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get -y install --no-install-recommends build-essential bzip2 ca-certificates cmake debhelper devscripts fakeroot g++ git lsb-release tar wget && \
+    apt-get -y install crossbuild-essential-arm64 dpkg-cross
+RUN dpkg --add-architecture arm64 && \
+    apt-get update || echo "Ignoring possible failures ..."
+# install ARM 64 packages
+RUN apt-get -y install --no-install-recommends catch:arm64 libcurl4-gnutls-dev:arm64 libmariadb-dev:arm64 pkg-config:arm64
+# Git checkout
+RUN git clone https://gitlab.com/striezel/weather-information-collector.git ./repo
+WORKDIR /opt/repo
+RUN export TAG="$(git describe | cut -d '-' -f 1)" && \
+    export VERSION=$(echo $TAG | cut -c '2-') && \
+    export ARCH=$(dpkg --print-foreign-architectures) && \
+    wget -O weather-information-collector_${VERSION}.orig.tar.bz2 https https://gitlab.com/striezel/weather-information-collector/-/archive/${TAG}/weather-information-collector-${TAG}.tar.bz2 || \
+    echo "Ignoring possible wget errors ..." && \
+    tar -x --bzip2 -f weather-information-collector_${VERSION}.orig.tar.bz2 && \
+    mv weather-information-collector-${TAG} weather-information-collector-${VERSION} && \
+    cd weather-information-collector-${VERSION} && \
+    export CC=/usr/bin/aarch64-linux-gnu-gcc && \
+    export CXX=/usr/bin/aarch64-linux-gnu-g++ && \
+    debuild -uc -us --host-arch arm64
+CMD sleep 900

@@ -1,0 +1,15 @@
+name: ARM 64
+
+on: push
+
+jobs:
+  build_from_download:
+    runs-on: ubuntu-20.04
+    steps:
+      # Checks out the repository under $GITHUB_WORKSPACE.
+      - name: Git checkout
+        uses: actions/checkout@v3
+      - name: Build Dockerfile_arm64
+        run: |
+          cd docker
+          docker build . -f Dockerfile_arm64 -t wic-arm64
