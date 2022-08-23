@@ -10,6 +10,7 @@ Vcs-Git: https://gitlab.com/striezel/weather-information-collector.git
 Package: weather-information-collector
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: mariadb-server | default-mysql-server
 Description: Collects information from various weather APIs
  weather-information-collector is a tool that collects weather information from
  various available ReST API services (currently OpenWeatherMap, DarkSky,
