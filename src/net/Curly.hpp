@@ -138,16 +138,6 @@ class Curly
     bool setPostBody(const std::string& body);
 
 
-    /** \brief limits the speed of an upload operation
-     *
-     * \param maxBytesPerSecond  limit in bytes per second
-     * \remarks A value of zero means no limit. (That is the default.)
-     * \return Returns true, if the limit could be set.
-     *         Returns false otherwise.
-     */
-    bool limitUpstreamSpeed(const unsigned int maxBytesPerSecond);
-
-
     /** \brief checks whether Curly will follow redirects
      *
      * \return Returns true, if Curly's perform() method will follow redirects.
@@ -286,7 +276,6 @@ class Curly
     bool m_followRedirects; /**< whether to follow redirects */
     long int m_maxRedirects; /**< maximum number of redirects that Curly will follow */
     std::vector<std::string> m_ResponseHeaders; /**< response headers returned by the last request */
-    unsigned int m_MaxUpstreamSpeed; /**< limit for upstream / upload in bytes per second */
 }; //class Curly
 
 #endif // SCANTOOL_CURLY_HPP

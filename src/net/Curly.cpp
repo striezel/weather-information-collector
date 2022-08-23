@@ -96,8 +96,7 @@ Curly::Curly()
   m_LastContentType(""),
   m_followRedirects(false),
   m_maxRedirects(-1),
-  m_ResponseHeaders(std::vector<std::string>()),
-  m_MaxUpstreamSpeed(0)
+  m_ResponseHeaders(std::vector<std::string>())
 {
 }
 
@@ -203,14 +202,6 @@ bool Curly::setPostBody(const std::string& body)
     return false;
 }
 
-bool Curly::limitUpstreamSpeed(const unsigned int maxBytesPerSecond)
-{
-  if (maxBytesPerSecond > std::numeric_limits<curl_off_t>::max())
-    return false;
-  m_MaxUpstreamSpeed = maxBytesPerSecond;
-  return true;
-}
-
 bool Curly::followsRedirects() const
 {
   return m_followRedirects;
@@ -300,22 +291,6 @@ bool Curly::perform(std::string& response)
     return false;
   }
   #endif
-
-  //set max. upload speed
-  if (m_MaxUpstreamSpeed >= 512)
-  {
-    #ifdef DEBUG_MODE
-    std::clog << "curl_easy_setopt(..., CURLOPT_MAX_SEND_SPEED_LARGE, ...)..." << std::endl;
-    #endif
-    retCode = curl_easy_setopt(handle, CURLOPT_MAX_SEND_SPEED_LARGE, static_cast<curl_off_t>(m_MaxUpstreamSpeed));
-    if (retCode != CURLE_OK)
-    {
-      std::cerr << "cURL error: limiting the upload speed failed!" << std::endl;
-      std::cerr << curl_easy_strerror(retCode) << std::endl;
-      curl_easy_cleanup(handle);
-      return false;
-    }
-  } //if upload speed limit is above 511 bytes per second
 
   //set redirection parameters
   if (followsRedirects())
