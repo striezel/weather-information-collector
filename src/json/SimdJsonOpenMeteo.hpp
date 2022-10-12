@@ -34,6 +34,15 @@ namespace wic
 class SimdJsonOpenMeteo
 {
   public:
+    /** \brief Parses the current weather information from JSON into the Weather object.
+     *
+     * \param json     string containing the JSON
+     * \param weather  variable where result of the parsing process will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    static bool parseCurrentWeather(const std::string& json, Weather& weather);
+
     /** \brief Parses the weather forecast information from JSON into Weather objects.
      *
      * \param json     string containing the JSON

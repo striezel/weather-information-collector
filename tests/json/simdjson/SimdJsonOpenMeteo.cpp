@@ -44,6 +44,306 @@ TEST_CASE("Class SimdJsonOpenMeteo")
 {
   using namespace wic;
 
+  SECTION("parseCurrentWeather")
+  {
+    Weather weather;
+
+    SECTION("not valid JSON")
+    {
+      const std::string json = "{ \"this\": 'is not valid, JSON: true";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("empty string")
+    {
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather("", weather) );
+    }
+
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather("{ }", weather) );
+    }
+
+    SECTION("whitespace strings")
+    {
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather("    ", weather) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather("\n", weather) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather("\r", weather) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather("\r\n\r\n", weather) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather("\t\t\t\t", weather) );
+    }
+
+    SECTION("successful parsing")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "windspeed": 8.2,
+          "winddirection": 105,
+          "weathercode": 61,
+          "time": "2022-09-08T13:00"
+        }
+      }
+      )json";
+      REQUIRE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+      // Check data.
+      REQUIRE( weather.dataTime() == toOpenMeteoTime(2022, 9, 8, 13, 0) );
+      REQUIRE( weather.temperatureCelsius() == 16.8f );
+      REQUIRE( weather.windSpeed() == 8.2f );
+      REQUIRE( weather.windDegrees() == 105 );
+      REQUIRE( weather.json() == json );
+      REQUIRE_FALSE( weather.hasHumidity() );
+      REQUIRE_FALSE( weather.hasRain() );
+      REQUIRE_FALSE( weather.hasSnow() );
+      REQUIRE_FALSE( weather.hasPressure() );
+      REQUIRE_FALSE( weather.hasCloudiness() );
+    }
+
+    SECTION("failure: current_weather is missing")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: current_weather is not an object")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": "this fails here"
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: temperature is missing")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "windspeed": 8.2,
+          "winddirection": 105,
+          "weathercode": 61,
+          "time": "2022-09-08T13:00"
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: temperature is not a number")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": "I am a string.",
+          "windspeed": 8.2,
+          "winddirection": 105,
+          "weathercode": 61,
+          "time": "2022-09-08T13:00"
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: windspeed is missing")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "winddirection": 105,
+          "weathercode": 61,
+          "time": "2022-09-08T13:00"
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: windspeed is not a number")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "windspeed": [ "fails", 1, 2, 3 ],
+          "winddirection": 105,
+          "weathercode": 61,
+          "time": "2022-09-08T13:00"
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: winddirection is missing")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "windspeed": 8.2,
+          "weathercode": 61,
+          "time": "2022-09-08T13:00"
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: winddirection is not a number")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "windspeed": 8.2,
+          "winddirection": { "foo": "bar" },
+          "weathercode": 61,
+          "time": "2022-09-08T13:00"
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: time is missing")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "windspeed": 8.2,
+          "winddirection": 105,
+          "weathercode": 61
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: time is not a string")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "windspeed": 8.2,
+          "winddirection": 105,
+          "weathercode": 61,
+          "time": 1234
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+
+    SECTION("failure: time is not a valid ISO 8601 date")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 0.3770589828491211,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "current_weather": {
+          "temperature": 16.8,
+          "windspeed": 8.2,
+          "winddirection": 105,
+          "weathercode": 61,
+          "time": "2022-FA-ILTHE:RE"
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+    }
+  }
+
   SECTION("parseForecast")
   {
     Forecast forecast;
@@ -182,6 +482,7 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       REQUIRE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
       // Check data.
       REQUIRE( forecast.data().size() == 5 );
+      REQUIRE( forecast.json() == json );
       // Check first element.
       REQUIRE( forecast.data()[0].dataTime() == toOpenMeteoTime(2022, 9, 8, 0, 0) );
       REQUIRE( forecast.data()[0].temperatureCelsius() == 17.7f );

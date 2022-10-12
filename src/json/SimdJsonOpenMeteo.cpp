@@ -99,6 +99,81 @@ std::optional<std::chrono::time_point<std::chrono::system_clock> > isoStringToTi
   }
 }
 
+bool SimdJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather& weather)
+{
+  simdjson::dom::parser parser;
+  simdjson::dom::element doc;
+  auto error = parser.parse(json).get(doc);
+  if (error)
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): Unable to parse JSON data!"
+              << std::endl << "Parser error: " << simdjson::error_message(error)
+              << std::endl;
+    return false;
+  }
+
+  simdjson::dom::element current_weather;
+  error = doc["current_weather"].get(current_weather);
+  if (error || !current_weather.is_object())
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): JSON "
+              << "element 'current_weather' is either missing or not an object!"
+              << std::endl;
+    return false;
+  }
+
+  simdjson::dom::element elem;
+  error = current_weather["temperature"].get(elem);
+  if (error || !elem.is_double())
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): JSON "
+              << "element 'temperature' is either missing or not a floating "
+              << "point value!" << std::endl;
+    return false;
+  }
+  weather = Weather();
+  weather.setTemperatureCelsius(elem.get<double>().value());
+
+  error = current_weather["windspeed"].get(elem);
+  if (error || !elem.is_double())
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): JSON "
+              << "element 'windspeed' is either missing or not a floating "
+              << "point value!" << std::endl;
+    return false;
+  }
+  weather.setWindSpeed(elem.get<double>().value());
+
+  error = current_weather["winddirection"].get(elem);
+  if (error || !elem.is_int64())
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): JSON "
+              << "element 'winddirection' is either missing or not an integer!"
+              << std::endl;
+    return false;
+  }
+  weather.setWindDegrees(elem.get<int64_t>().value());
+
+  error = current_weather["time"].get(elem);
+  if (error || !elem.is_string())
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): JSON "
+              << "element 'time' is either missing or not a string!"
+              << std::endl;
+    return false;
+  }
+  const auto dt = isoStringToTime(std::string(elem.get_string().value()));
+  if (!dt.has_value())
+  {
+    return false;
+  }
+  weather.setDataTime(dt.value());
+
+  // There is no more data in current weather in Open-Meteo.
+  weather.setJson(json);
+  return true;
+}
+
 std::optional<std::string> SimdJsonOpenMeteo::hourlyUnitCheck(const simdjson::dom::element& doc)
 {
   simdjson::dom::element hourly_units;
