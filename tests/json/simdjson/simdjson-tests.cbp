@@ -36,6 +36,8 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.cpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.hpp" />
+		<Unit filename="../../../src/json/OpenMeteoFunctions.cpp" />
+		<Unit filename="../../../src/json/OpenMeteoFunctions.hpp" />
 		<Unit filename="../../../src/json/SimdJsonApixu.cpp" />
 		<Unit filename="../../../src/json/SimdJsonApixu.hpp" />
 		<Unit filename="../../../src/json/SimdJsonDarkSky.cpp" />

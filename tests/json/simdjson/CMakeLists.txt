@@ -8,6 +8,7 @@ set(simdjson_parsing_tests_sources
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/json/ApixuFunctions.cpp
+    ../../../src/json/OpenMeteoFunctions.cpp
     ../../../src/json/SimdJsonApixu.cpp
     ../../../src/json/SimdJsonDarkSky.cpp
     ../../../src/json/SimdJsonOpenMeteo.cpp
