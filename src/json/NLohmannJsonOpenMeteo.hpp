@@ -21,6 +21,7 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_NLOHMANNOPENMETEO_HPP
 #define WEATHER_INFORMATION_COLLECTOR_NLOHMANNOPENMETEO_HPP
 
+#include <optional>
 #include "../../third-party/nlohmann/json.hpp"
 #include "../data/Forecast.hpp"
 #include "../data/Weather.hpp"
