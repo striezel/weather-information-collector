@@ -88,7 +88,7 @@ Furthermore, all remaining uses of the JsonCpp library have been removed.
 ## Version 0.9.12 (2020-04-28)
 
 The C++ standard used during compilation has been raised from C++14 to C++17.
-Furthermore, the Boost filesystem library has been replaced by std::filesystem
+Furthermore, the Boost filesystem library has been replaced by `std::filesystem`
 which is part of the standard library of C++17.
 Recent compilers should support that by now.
 
@@ -168,7 +168,7 @@ avoided when someone accidentally runs one of these programs with an older
 database.
 
 To disable that check and return to the behaviour as of version 0.9.0 and
-earlier versions, pass the parameter --skip-update-check to the programs.
+earlier versions, pass the parameter `--skip-update-check` to the programs.
 
 ## Version 0.9.0 (2019-04-15)
 
@@ -184,7 +184,7 @@ The updater will now only perform the most recent update steps that seem to be
 required to get from the previous to the current version. Which updates are
 required is determined by looking at the current database structure. To avoid
 the version detection mechanism and perform all update steps as in previous
-program version, use the parameter --full.
+program version, use the parameter `--full`.
 
 Furthermore, the C++ standard used during compilation has been raised from
 C++11 to C++14. Most compilers should support that by now.
@@ -279,7 +279,7 @@ It would have been there earlier, but since OpenWeatherMap initially did not
 support HTTPS for all plans (an example can be seen at e.g.
 <https://web.archive.org/web/20150312223316/https://openweathermap.org/price>)
 where it still says "No SSL" for the free plan) it first was not implemented to
-use HTTPS for weather-information-collectors requests to OpenWeatherMap.
+use HTTPS for weather-information-collector's requests to OpenWeatherMap.
 Fortunately that has changed and all plans now support HTTPS for API requests,
 so weather-information-collector can now safely use HTTPS for OpenWeatherMap.
 With that being said: Thank you, OpenWeatherMap, for providing that additional
@@ -308,7 +308,7 @@ Add utilitly program to synchronize data between two databases.
 
 ## Version 0.6.2 (2018-07-12)
 
-Fix wrong return value of API::getId() when an error occurred.
+Fix wrong return value of `API::getId()` when an error occurred.
 
 ## Version 0.6.1 (2018-06-30)
 
