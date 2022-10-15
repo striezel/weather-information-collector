@@ -51,6 +51,23 @@ class NLohmannJsonOpenMeteo
      *         Returns false, if an error occurred.
      */
     static bool parseForecast(const std::string& json, Forecast& forecast);
+  private:
+    /** \brief Checks whether the units match the expected values.
+     *
+     * \param doc   root element of the JSON document
+     * \return Returns an empty optional, if units are correct.
+     *         Returns an error message otherwise.
+     */
+    static std::optional<std::string> hourlyUnitCheck(const nlohmann::json& doc);
+
+    static bool parseTemperature(const nlohmann::json& hourly, std::vector<Weather>& data);
+    static bool parseHumidity(const nlohmann::json& hourly, std::vector<Weather>& data);
+    static bool parseRain(const nlohmann::json& hourly, std::vector<Weather>& data);
+    static bool parseSnowfall(const nlohmann::json& hourly, std::vector<Weather>& data);
+    static bool parsePressure(const nlohmann::json& hourly, std::vector<Weather>& data);
+    static bool parseCloudCover(const nlohmann::json& hourly, std::vector<Weather>& data);
+    static bool parseWindSpeed(const nlohmann::json& hourly, std::vector<Weather>& data);
+    static bool parseWindDirection(const nlohmann::json& hourly, std::vector<Weather>& data);
 }; // class
 
 } // namespace
