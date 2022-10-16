@@ -55,6 +55,7 @@ The following settings are recognized in a task file:
   * **DarkSky** - data is fetched from DarkSky
   * **Weatherbit** - data is fetched from Weatherbit
   * **Weatherstack** - data is fetched from Weatherstack
+  * **OpenMeteo** - data is fetched from Open-Meteo
   * **Apixu** - data is fetched from Apixu (Supported before v0.9.8; now
     deprecated, because Apixu shut down. Do not use anymore.)
 * **data** - the type of data that will be collected via the API. If this is not

@@ -63,6 +63,14 @@ TEST_CASE("API types")
     REQUIRE( wic::toApiType("\t  WeAtHeRsTaCk  ") == wic::ApiType::Weatherstack );
   }
 
+  SECTION("to API type: OpenMeteo")
+  {
+    REQUIRE( wic::toApiType("openmeteo") == wic::ApiType::OpenMeteo );
+    REQUIRE( wic::toApiType("OpenMeteo") == wic::ApiType::OpenMeteo );
+    REQUIRE( wic::toApiType("OPENMETEO") == wic::ApiType::OpenMeteo );
+    REQUIRE( wic::toApiType("\t  OpEnMeTeO  ") == wic::ApiType::OpenMeteo );
+  }
+
   SECTION("to API type: none")
   {
     REQUIRE( wic::toApiType("none") == wic::ApiType::none );
@@ -86,6 +94,7 @@ TEST_CASE("API types")
     REQUIRE( wic::toString(wic::ApiType::DarkSky) == "DarkSky" );
     REQUIRE( wic::toString(wic::ApiType::Weatherbit) == "Weatherbit" );
     REQUIRE( wic::toString(wic::ApiType::Weatherstack) == "Weatherstack" );
+    REQUIRE( wic::toString(wic::ApiType::OpenMeteo) == "OpenMeteo" );
     REQUIRE( wic::toString(wic::ApiType::none) == "none" );
   }
 
@@ -96,6 +105,7 @@ TEST_CASE("API types")
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::DarkSky)) == wic::ApiType::DarkSky );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::Weatherbit)) == wic::ApiType::Weatherbit );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::Weatherstack)) == wic::ApiType::Weatherstack );
+    REQUIRE( wic::toApiType(wic::toString(wic::ApiType::OpenMeteo)) == wic::ApiType::OpenMeteo );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::none)) == wic::ApiType::none );
   }
 }

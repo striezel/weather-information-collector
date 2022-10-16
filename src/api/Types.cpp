@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -42,6 +42,9 @@ ApiType toApiType(const std::string& apiName)
     return ApiType::Weatherbit;
   if (name == "weatherstack")
     return ApiType::Weatherstack;
+  // Open-Meteo
+  if (name == "openmeteo")
+    return ApiType::OpenMeteo;
   // unknown / none
   return ApiType::none;
 }
@@ -60,6 +63,8 @@ std::string toString(const ApiType type)
          return "Weatherbit";
     case ApiType::Weatherstack:
          return "Weatherstack";
+    case ApiType::OpenMeteo:
+         return "OpenMeteo";
     default: // i. e. ApiType::none
          return "none";
   } // switch
