@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -165,6 +165,7 @@ ApiType selectApi()
 {
   const std::vector<ApiType> availableApis = {
       ApiType::DarkSky,
+      ApiType::OpenMeteo,
       ApiType::OpenWeatherMap,
       ApiType::Weatherbit,
       ApiType::Weatherstack

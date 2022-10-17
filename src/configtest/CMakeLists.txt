@@ -9,6 +9,7 @@ set(weather-information-collector-configtest_sources
     ../api/Factory.cpp
     ../api/Limit.cpp
     ../api/Limits.cpp
+    ../api/OpenMeteo.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Plans.cpp
     ../api/Types.cpp

@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector benchmark tool.
-    Copyright (C) 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,12 +26,14 @@
 #include "../db/mariadb/SourceMariaDB.hpp"
 #include "../json/NLohmannJsonApixu.hpp"
 #include "../json/NLohmannJsonDarkSky.hpp"
+#include "../json/NLohmannJsonOpenMeteo.hpp"
 #include "../json/NLohmannJsonOwm.hpp"
 #include "../json/NLohmannJsonWeatherbit.hpp"
 #include "../json/NLohmannJsonWeatherstack.hpp"
 #ifdef __SIZEOF_INT128__
 #include "../json/SimdJsonApixu.hpp"
 #include "../json/SimdJsonDarkSky.hpp"
+#include "../json/SimdJsonOpenMeteo.hpp"
 #include "../json/SimdJsonOwm.hpp"
 #include "../json/SimdJsonWeatherbit.hpp"
 #include "../json/SimdJsonWeatherstack.hpp"
@@ -154,6 +156,12 @@ int main(int argc, char** argv)
     if (ret != 0)
       return ret;
   }
+  // Open-Meteo
+  {
+    int ret = weatherDataBench<SimdJsonOpenMeteo, NLohmannJsonOpenMeteo>(ApiType::OpenMeteo, source);
+    if (ret != 0)
+      return ret;
+  }
 
   /* ********* Forecast data ********* */
   // OpenWeatherMap
@@ -177,6 +185,12 @@ int main(int argc, char** argv)
   // Weatherbit
   {
     int ret = forecastBench<SimdJsonWeatherbit, NLohmannJsonWeatherbit>(ApiType::Weatherbit, source);
+    if (ret != 0)
+      return ret;
+  }
+  // Open-Meteo
+  {
+    int ret = forecastBench<SimdJsonOpenMeteo, NLohmannJsonOpenMeteo>(ApiType::OpenMeteo, source);
     if (ret != 0)
       return ret;
   }

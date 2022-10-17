@@ -9,6 +9,7 @@ set(task_manager_tests_sources
     ../../src/api/Factory.cpp
     ../../src/api/Limit.cpp
     ../../src/api/Limits.cpp
+    ../../src/api/OpenMeteo.cpp
     ../../src/api/OpenWeatherMap.cpp
     ../../src/api/Types.cpp
     ../../src/api/Weatherbit.cpp

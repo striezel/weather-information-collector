@@ -9,6 +9,7 @@ set(weather-information-collector_sources
     ../api/Factory.cpp
     ../api/Limit.cpp
     ../api/Limits.cpp
+    ../api/OpenMeteo.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Plans.cpp
     ../api/Types.cpp
@@ -30,6 +31,7 @@ set(weather-information-collector_sources
     ../db/mariadb/Utilities.cpp
     ../db/mariadb/guess.cpp
     ../json/ApixuFunctions.cpp
+    ../json/OpenMeteoFunctions.cpp
     ../json/WeatherstackFunctions.cpp
     ../net/Curly.cpp
     ../net/Request.cpp
@@ -55,6 +57,7 @@ if (CAN_HAVE_SIMDJSON)
     ../../third-party/simdjson/simdjson.cpp
     ../json/SimdJsonApixu.cpp
     ../json/SimdJsonDarkSky.cpp
+    ../json/SimdJsonOpenMeteo.cpp
     ../json/SimdJsonOwm.cpp
     ../json/SimdJsonWeatherbit.cpp
     ../json/SimdJsonWeatherstack.cpp)
@@ -63,6 +66,7 @@ else()
   list(APPEND weather-information-collector_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
+    ../json/NLohmannJsonOpenMeteo.cpp
     ../json/NLohmannJsonOwm.cpp
     ../json/NLohmannJsonWeatherbit.cpp
     ../json/NLohmannJsonWeatherstack.cpp)

@@ -56,6 +56,8 @@
 		<Unit filename="../api/Limit.hpp" />
 		<Unit filename="../api/Limits.cpp" />
 		<Unit filename="../api/Limits.hpp" />
+		<Unit filename="../api/OpenMeteo.cpp" />
+		<Unit filename="../api/OpenMeteo.hpp" />
 		<Unit filename="../api/OpenWeatherMap.cpp" />
 		<Unit filename="../api/OpenWeatherMap.hpp" />
 		<Unit filename="../api/Plans.cpp" />

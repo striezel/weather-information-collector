@@ -39,6 +39,12 @@ TEST_CASE("Factory gonna factor, right? ;P")
     REQUIRE( dark );
   }
 
+  SECTION("Open-Meteo")
+  {
+    const auto open = Factory::create(ApiType::OpenMeteo, PlanWeatherbit::none, PlanWeatherstack::Standard, "No key.");
+    REQUIRE( open );
+  }
+
   SECTION("OpenWeatherMap")
   {
     const auto open = Factory::create(ApiType::OpenWeatherMap, PlanWeatherbit::none, PlanWeatherstack::none, "No key.");

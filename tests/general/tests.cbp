@@ -39,6 +39,8 @@
 		<Unit filename="../../src/api/Limit.hpp" />
 		<Unit filename="../../src/api/Limits.cpp" />
 		<Unit filename="../../src/api/Limits.hpp" />
+		<Unit filename="../../src/api/OpenMeteo.cpp" />
+		<Unit filename="../../src/api/OpenMeteo.hpp" />
 		<Unit filename="../../src/api/OpenWeatherMap.cpp" />
 		<Unit filename="../../src/api/OpenWeatherMap.hpp" />
 		<Unit filename="../../src/api/Plans.cpp" />
@@ -63,10 +65,14 @@
 		<Unit filename="../../src/db/Exceptions.hpp" />
 		<Unit filename="../../src/json/ApixuFunctions.cpp" />
 		<Unit filename="../../src/json/ApixuFunctions.hpp" />
+		<Unit filename="../../src/json/OpenMeteoFunctions.cpp" />
+		<Unit filename="../../src/json/OpenMeteoFunctions.hpp" />
 		<Unit filename="../../src/json/SimdJsonApixu.cpp" />
 		<Unit filename="../../src/json/SimdJsonApixu.hpp" />
 		<Unit filename="../../src/json/SimdJsonDarkSky.cpp" />
 		<Unit filename="../../src/json/SimdJsonDarkSky.hpp" />
+		<Unit filename="../../src/json/SimdJsonOpenMeteo.cpp" />
+		<Unit filename="../../src/json/SimdJsonOpenMeteo.hpp" />
 		<Unit filename="../../src/json/SimdJsonOwm.cpp" />
 		<Unit filename="../../src/json/SimdJsonOwm.hpp" />
 		<Unit filename="../../src/json/SimdJsonWeatherbit.cpp" />
@@ -99,6 +105,7 @@
 		<Unit filename="api/Apixu.cpp" />
 		<Unit filename="api/DarkSky.cpp" />
 		<Unit filename="api/Factory.cpp" />
+		<Unit filename="api/OpenMeteo.cpp" />
 		<Unit filename="api/OpenWeatherMap.cpp" />
 		<Unit filename="api/Plans.cpp" />
 		<Unit filename="api/SupportedDataTypes.cpp" />

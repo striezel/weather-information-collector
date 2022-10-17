@@ -22,9 +22,11 @@ set(weather-information-collector-benchmark_sources
     ../json/ApixuFunctions.cpp
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
+    ../json/NLohmannJsonOpenMeteo.cpp
     ../json/NLohmannJsonOwm.cpp
     ../json/NLohmannJsonWeatherbit.cpp
     ../json/NLohmannJsonWeatherstack.cpp
+    ../json/OpenMeteoFunctions.cpp
     ../json/WeatherstackFunctions.cpp
     ../util/Directories.cpp
     ../util/GitInfos.cpp
@@ -44,6 +46,7 @@ if (CAN_HAVE_SIMDJSON)
     ../../third-party/simdjson/simdjson.cpp
     ../json/SimdJsonApixu.cpp
     ../json/SimdJsonDarkSky.cpp
+    ../json/SimdJsonOpenMeteo.cpp
     ../json/SimdJsonOwm.cpp
     ../json/SimdJsonWeatherbit.cpp
     ../json/SimdJsonWeatherstack.cpp)

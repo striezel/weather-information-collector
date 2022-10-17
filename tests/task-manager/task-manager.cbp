@@ -41,6 +41,8 @@
 		<Unit filename="../../src/api/Limit.hpp" />
 		<Unit filename="../../src/api/Limits.cpp" />
 		<Unit filename="../../src/api/Limits.hpp" />
+		<Unit filename="../../src/api/OpenMeteo.cpp" />
+		<Unit filename="../../src/api/OpenMeteo.hpp" />
 		<Unit filename="../../src/api/OpenWeatherMap.cpp" />
 		<Unit filename="../../src/api/OpenWeatherMap.hpp" />
 		<Unit filename="../../src/api/Types.cpp" />
@@ -63,9 +65,6 @@
 		<Unit filename="../../src/util/Strings.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
