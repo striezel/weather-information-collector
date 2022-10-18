@@ -13,6 +13,7 @@ Server.
 | MariaDB 10.6  | yes         | yes                      |
 | MariaDB 10.7  | yes         | yes                      |
 | MariaDB 10.8  | yes         | yes                      |
+| MariaDB 10.9  | yes         | yes                      |
 | MySQL 5.7     | yes         | yes                      |
 | MySQL 8.0     | yes _(*)_   | yes                      |
 | Percona 5.7   | yes         | yes                      |
