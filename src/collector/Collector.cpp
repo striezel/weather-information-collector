@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,26 +55,21 @@ bool Collector::fromConfiguration(const Configuration& conf)
   apiKeys[ApiType::DarkSky] = conf.key(ApiType::DarkSky);
   apiKeys[ApiType::Weatherbit] = conf.key(ApiType::Weatherbit);
   apiKeys[ApiType::Weatherstack] = conf.key(ApiType::Weatherstack);
+  // Open-Meteo has no key, but let's keep it consistent and simplify key access
+  // by using the empty value from the configuration.
+  apiKeys[ApiType::OpenMeteo] = conf.key(ApiType::OpenMeteo);
 
-  if (apiKeys[ApiType::Apixu].empty()
-      && apiKeys[ApiType::OpenWeatherMap].empty()
-      && apiKeys[ApiType::DarkSky].empty()
-      && apiKeys[ApiType::Weatherbit].empty()
-      && apiKeys[ApiType::Weatherstack].empty())
-  {
-    std::cerr << "Error: No API keys are set!\n";
-    return false;
-  }
   // copy tasks
   const auto now = std::chrono::steady_clock::now();
   tasksContainer.clear();
   for (const auto& t : conf.tasks())
   {
     tasksContainer.emplace_back(t, now);
-    if (apiKeys[t.api()].empty())
+    const auto api = Factory::create(t.api(), planWb, planWs, "");
+    if (api->needsApiKey() && apiKeys[t.api()].empty())
     {
       std::cerr << "Error: API key for " << toString(t.api()) << " is not set, "
-                << "but there is a task for that API!\n";
+                << "but there is a task for that API and it requires a key!\n";
       return false;
     } // if
   } // for

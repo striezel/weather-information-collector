@@ -41,6 +41,11 @@ void OpenMeteo::setApiKey([[maybe_unused]] const std::string& key)
   // class / interface API.
 }
 
+bool OpenMeteo::needsApiKey()
+{
+  return false;
+}
+
 bool OpenMeteo::validLocation(const Location& location) const
 {
   // Only latitude and longitude are required for a request.

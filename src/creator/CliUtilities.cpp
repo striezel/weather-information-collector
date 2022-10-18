@@ -207,6 +207,16 @@ ApiType selectApi()
   return ApiType::none;
 }
 
+void checkApiKeyRequirement(const ApiType selectedApi, const Configuration& config)
+{
+  const auto api = wic::Factory::create(selectedApi, config.planWeatherbit(), config.planWeatherstack(), "");
+  if (api->needsApiKey() && config.key(selectedApi).empty())
+  {
+    std::cout << "WARNING: You do not currently have an API key for the "
+              << "selected API in the configuration file." << std::endl;
+  }
+}
+
 DataType selectDataType(const ApiType selectedApi, const PlanWeatherbit planWb, const PlanWeatherstack planWs)
 {
   if (selectedApi == ApiType::none)

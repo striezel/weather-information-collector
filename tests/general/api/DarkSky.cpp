@@ -74,6 +74,12 @@ TEST_CASE("DarkSky - non-network tests")
     api.setApiKey("foo1bar2baz3");
   }
 
+  SECTION("needsApiKey")
+  {
+    REQUIRE( api.needsApiKey() );
+    REQUIRE( wic::needsApiKey(wic::ApiType::DarkSky) == api.needsApiKey() );
+  }
+
   SECTION("toRequestString")
   {
     Location location;

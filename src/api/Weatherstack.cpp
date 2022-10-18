@@ -46,6 +46,11 @@ void Weatherstack::setApiKey(const std::string& key)
   m_apiKey = key;
 }
 
+bool Weatherstack::needsApiKey()
+{
+  return true;
+}
+
 bool Weatherstack::validLocation(const Location& location) const
 {
   return (location.hasCoordinates() || location.hasName()

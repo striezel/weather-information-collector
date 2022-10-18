@@ -265,7 +265,7 @@ TEST_CASE("Class Configuration")
       db.name=weather_data
       db.user=the_user
       db.password=p4ssw0rd!
-      tasks.directory=/home/user/.wic/task.d
+      tasks.directory=missing_keys_dir
       tasks.extension=.task
       # no API keys
       # plans
@@ -276,8 +276,22 @@ TEST_CASE("Class Configuration")
       REQUIRE( writeConfiguration(path, content) );
       FileGuard guard{path};
 
+      const std::filesystem::path tasks{"missing_keys_dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      api=OpenWeatherMap
+      data=current
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      location.id=2643743
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "london.task", task_content) );
+
       Configuration conf;
-      REQUIRE_FALSE( conf.load(path.string(), true) );
+      REQUIRE_FALSE( conf.load(path.string(), false) );
     }
 
     SECTION("missing keys when missing keys are allowed")
@@ -289,7 +303,7 @@ TEST_CASE("Class Configuration")
       db.name=weather_db
       db.user=one_user
       db.password=p4ssw0rd!
-      tasks.directory=/home/user/.wic/task.d
+      tasks.directory=missing-keys-allowed
       tasks.extension=.task
       # no API keys
       # plans
@@ -300,6 +314,20 @@ TEST_CASE("Class Configuration")
       REQUIRE( writeConfiguration(path, content) );
       FileGuard guard{path};
 
+      const std::filesystem::path tasks{"missing-keys-allowed"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      api=OpenWeatherMap
+      data=current
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      location.id=2643743
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "london.task", task_content) );
+
       Configuration conf;
       REQUIRE( conf.load(path.string(), true, true) );
 
@@ -308,7 +336,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.connectionInfo().user() == "one_user" );
       REQUIRE( conf.connectionInfo().password() == "p4ssw0rd!" );
       REQUIRE( conf.connectionInfo().port() == 3306 );
-      REQUIRE( conf.taskDirectory() == "/home/user/.wic/task.d" );
+      REQUIRE( conf.taskDirectory() == "missing-keys-allowed" );
       REQUIRE( conf.taskExtension() == ".task" );
       REQUIRE( conf.key(ApiType::OpenWeatherMap).empty() );
       REQUIRE( conf.key(ApiType::Apixu).empty() );

@@ -108,6 +108,17 @@ TEST_CASE("API types")
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::OpenMeteo)) == wic::ApiType::OpenMeteo );
     REQUIRE( wic::toApiType(wic::toString(wic::ApiType::none)) == wic::ApiType::none );
   }
+
+  SECTION("needsApiKey")
+  {
+    REQUIRE( wic::needsApiKey(wic::ApiType::Apixu) );
+    REQUIRE( wic::needsApiKey(wic::ApiType::OpenWeatherMap) );
+    REQUIRE( wic::needsApiKey(wic::ApiType::DarkSky) );
+    REQUIRE( wic::needsApiKey(wic::ApiType::Weatherbit) );
+    REQUIRE( wic::needsApiKey(wic::ApiType::Weatherstack) );
+    REQUIRE_FALSE( wic::needsApiKey(wic::ApiType::OpenMeteo) );
+    REQUIRE( wic::needsApiKey(wic::ApiType::none) );
+  }
 }
 
 

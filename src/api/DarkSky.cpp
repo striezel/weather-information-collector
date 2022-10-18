@@ -45,6 +45,11 @@ void DarkSky::setApiKey(const std::string& key)
   m_apiKey = key;
 }
 
+bool DarkSky::needsApiKey()
+{
+  return true;
+}
+
 bool DarkSky::validLocation(const Location& location) const
 {
   // Only latitude and longitude are required for a request.

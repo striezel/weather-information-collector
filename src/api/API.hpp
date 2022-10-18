@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,6 +40,13 @@ class API
      * \param key  the API key
      */
     virtual void setApiKey(const std::string& key) = 0;
+
+
+    /** \brief Indicates whether requests to the API need an API key.
+     *
+     * \return Returns true, if a key is required. Returns false otherwise.
+     */
+    virtual bool needsApiKey() = 0;
 
 
     /** \brief Checks whether the given location can be used for a request.

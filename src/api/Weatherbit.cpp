@@ -46,6 +46,11 @@ void Weatherbit::setApiKey(const std::string& key)
   m_apiKey = key;
 }
 
+bool Weatherbit::needsApiKey()
+{
+  return true;
+}
+
 bool Weatherbit::validLocation(const Location& location) const
 {
   // Only latitude and longitude are required for a request.

@@ -70,6 +70,12 @@ std::string toString(const ApiType type)
   } // switch
 }
 
+bool needsApiKey(const ApiType type)
+{
+  // All APIs except Open-Meteo need a key.
+  return type != ApiType::OpenMeteo;
+}
+
 DataType toDataType(const std::string& dataName)
 {
   auto name = toLowerString(dataName);

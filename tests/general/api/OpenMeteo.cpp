@@ -73,6 +73,12 @@ TEST_CASE("OpenMeteo - non-network tests")
     api.setApiKey("foo1bar2baz3");
   }
 
+  SECTION("needsApiKey")
+  {
+    REQUIRE_FALSE( api.needsApiKey() );
+    REQUIRE( wic::needsApiKey(wic::ApiType::OpenMeteo) == api.needsApiKey() );
+  }
+
   SECTION("toRequestString")
   {
     Location location;

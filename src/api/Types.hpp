@@ -49,6 +49,14 @@ enum class ApiType
 ApiType toApiType(const std::string& apiName);
 
 
+/** \brief Determines whether a certain API type usually needs an API key.
+ *
+ * \param type  the API type
+ * \return Returns true, if a key is required.
+ */
+bool needsApiKey(const ApiType type);
+
+
 /** \brief Gets the name of the API.
  *
  * \param type  the API type

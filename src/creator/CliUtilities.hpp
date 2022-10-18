@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -54,6 +54,16 @@ Location selectLocation(const std::vector<std::pair<Location, Weather> >& locati
  *         Returns ApiType::none, if the selection was invalid.
  */
 ApiType selectApi();
+
+
+/** \brief Checks whether the selected API needs an API key and such a key is available.
+ *
+ * \param selectedApi  type of the selected API
+ * \param config       the current configuration data
+ * \remarks This method does not return anything. It just prints a warning, if
+ *          a key is required but is currently missing.
+ */
+void checkApiKeyRequirement(const ApiType selectedApi, const Configuration& config);
 
 
 /** \brief Lets the user select a data type for the selected API.
