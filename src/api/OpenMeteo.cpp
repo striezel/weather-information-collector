@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,13 +18,13 @@
  -------------------------------------------------------------------------------
 */
 
-#include "DarkSky.hpp"
+#include "OpenMeteo.hpp"
 #include <iostream>
 #ifndef wic_no_json_parsing
 #ifdef __SIZEOF_INT128__
-#include "../json/SimdJsonDarkSky.hpp"
+#include "../json/SimdJsonOpenMeteo.hpp"
 #else
-#include "../json/NLohmannJsonDarkSky.hpp"
+#include "../json/NLohmannJsonOpenMeteo.hpp"
 #endif // __SIZEOF_INT128__
 #endif // wic_no_json_parsing
 #ifndef wic_no_network_requests
@@ -35,28 +35,24 @@
 namespace wic
 {
 
-DarkSky::DarkSky(const std::string& key)
-: m_apiKey(key)
+void OpenMeteo::setApiKey([[maybe_unused]] const std::string& key)
 {
+  // Open-Meteo uses no API keys, but an implementation is required by the base
+  // class / interface API.
 }
 
-void DarkSky::setApiKey(const std::string& key)
+bool OpenMeteo::needsApiKey()
 {
-  m_apiKey = key;
+  return false;
 }
 
-bool DarkSky::needsApiKey()
-{
-  return true;
-}
-
-bool DarkSky::validLocation(const Location& location) const
+bool OpenMeteo::validLocation(const Location& location) const
 {
   // Only latitude and longitude are required for a request.
   return location.hasCoordinates();
 }
 
-bool DarkSky::supportsDataType(const DataType data) const
+bool OpenMeteo::supportsDataType(const DataType data) const
 {
   // All three data types (DataType::Current, DataType::Forecast, and
   // DataType::CurrentAndForecast) are supported.
@@ -64,45 +60,42 @@ bool DarkSky::supportsDataType(const DataType data) const
 }
 
 #ifndef wic_no_json_parsing
-bool DarkSky::parseCurrentWeather(const std::string& json, Weather& weather) const
+bool OpenMeteo::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
 #ifdef __SIZEOF_INT128__
-  return SimdJsonDarkSky::parseCurrentWeather(json, weather);
+  return SimdJsonOpenMeteo::parseCurrentWeather(json, weather);
 #else
-  return NLohmannJsonDarkSky::parseCurrentWeather(json, weather);
+  return NLohmannJsonOpenMeteo::parseCurrentWeather(json, weather);
 #endif // __SIZEOF_INT128__
 }
 
-bool DarkSky::parseForecast(const std::string& json, Forecast& forecast) const
+bool OpenMeteo::parseForecast(const std::string& json, Forecast& forecast) const
 {
 #ifdef __SIZEOF_INT128__
-  return SimdJsonDarkSky::parseForecast(json, forecast);
+  return SimdJsonOpenMeteo::parseForecast(json, forecast);
 #else
-  return NLohmannJsonDarkSky::parseForecast(json, forecast);
+  return NLohmannJsonOpenMeteo::parseForecast(json, forecast);
 #endif // __SIZEOF_INT128__
 }
 #endif // wic_no_json_parsing
 
 #ifndef wic_no_network_requests
-std::string DarkSky::toRequestString(const Location& location)
+std::string OpenMeteo::toRequestString(const Location& location)
 {
   if (location.hasCoordinates())
-    return floatToString(location.latitude()) + std::string(",")
+    return "latitude=" + floatToString(location.latitude()) + "&longitude="
          + floatToString(location.longitude());
   // no required data set
   return std::string();
 }
 
-bool DarkSky::currentWeather(const Location& location, Weather& weather)
+bool OpenMeteo::currentWeather(const Location& location, Weather& weather)
 {
   weather = Weather();
-  if (m_apiKey.empty())
-    return false;
-  const std::string url = "https://api.darksky.net/forecast/" + m_apiKey
-                        + "/" + toRequestString(location) + "?units=si"
-                        + "&exclude=minutely";
+  const std::string url = "https://api.open-meteo.com/v1/forecast?"
+                        + toRequestString(location) + "&current_weather=true&windspeed_unit=ms&timezone=auto";
   weather.setRequestTime(std::chrono::system_clock::now());
-  const auto response = Request::get(url, "DarkSky::currentWeather");
+  const auto response = Request::get(url, "OpenMeteo::currentWeather");
   if (!response.has_value())
     return false;
 
@@ -110,16 +103,14 @@ bool DarkSky::currentWeather(const Location& location, Weather& weather)
   return parseCurrentWeather(response.value(), weather);
 }
 
-bool DarkSky::forecastWeather(const Location& location, Forecast& forecast)
+bool OpenMeteo::forecastWeather(const Location& location, Forecast& forecast)
 {
   forecast = Forecast();
-  if (m_apiKey.empty())
-    return false;
-  const std::string url = "https://api.darksky.net/forecast/" + m_apiKey
-                        + "/" + toRequestString(location) + "?units=si"
-                        + "&exclude=minutely";
+  const std::string url = "https://api.open-meteo.com/v1/forecast?"
+                        + toRequestString(location)
+                        + "&hourly=temperature_2m,relativehumidity_2m,precipitation,rain,showers,snowfall,pressure_msl,surface_pressure,cloudcover,windspeed_10m,winddirection_10m&windspeed_unit=ms&timezone=auto";
   forecast.setRequestTime(std::chrono::system_clock::now());
-  const auto response = Request::get(url, "DarkSky::forecastWeather");
+  const auto response = Request::get(url, "OpenMeteo::forecastWeather");
   if (!response.has_value())
     return false;
 
@@ -127,18 +118,16 @@ bool DarkSky::forecastWeather(const Location& location, Forecast& forecast)
   return parseForecast(response.value(), forecast);
 }
 
-bool DarkSky::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
+bool OpenMeteo::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
 {
   weather = Weather();
   forecast = Forecast();
-  if (m_apiKey.empty())
-    return false;
-  const std::string url = "https://api.darksky.net/forecast/" + m_apiKey
-                        + "/" + toRequestString(location) + "?units=si"
-                        + "&exclude=minutely";
+  const std::string url = "https://api.open-meteo.com/v1/forecast?"
+                        + toRequestString(location)
+                        + "&current_weather=true&hourly=temperature_2m,relativehumidity_2m,precipitation,rain,showers,snowfall,pressure_msl,surface_pressure,cloudcover,windspeed_10m,winddirection_10m&windspeed_unit=ms&timezone=auto";
   forecast.setRequestTime(std::chrono::system_clock::now());
   weather.setRequestTime(forecast.requestTime());
-  const auto response = Request::get(url, "DarkSky::currentAndForecastWeather");
+  const auto response = Request::get(url, "OpenMeteo::currentAndForecastWeather");
   if (!response.has_value())
     return false;
 

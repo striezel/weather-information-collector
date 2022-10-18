@@ -8,8 +8,10 @@ set(simdjson_parsing_tests_sources
     ../../../src/data/Location.cpp
     ../../../src/data/Weather.cpp
     ../../../src/json/ApixuFunctions.cpp
+    ../../../src/json/OpenMeteoFunctions.cpp
     ../../../src/json/SimdJsonApixu.cpp
     ../../../src/json/SimdJsonDarkSky.cpp
+    ../../../src/json/SimdJsonOpenMeteo.cpp
     ../../../src/json/SimdJsonOwm.cpp
     ../../../src/json/SimdJsonWeatherbit.cpp
     ../../../src/json/SimdJsonWeatherstack.cpp
@@ -17,6 +19,7 @@ set(simdjson_parsing_tests_sources
     ../../../third-party/simdjson/simdjson.cpp
     SimdJsonApixu.cpp
     SimdJsonDarkSky.cpp
+    SimdJsonOpenMeteo.cpp
     SimdJsonOwm.cpp
     SimdJsonWeatherbit.cpp
     SimdJsonWeatherstack.cpp

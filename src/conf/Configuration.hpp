@@ -145,10 +145,9 @@ class Configuration
     /** \brief Loads the configuration file with "core" settings.
      *
      * \param fileName  file name of the configuration file
-     * \param  missingKeysAllowed  whether configuration file without API keys is allowed
      * \return Returns true, if file was loaded successfully.
      */
-    bool loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed = false);
+    bool loadCoreConfiguration(const std::string& fileName);
 
 
     /** \brief Loads a single value from the core configuration.

@@ -55,6 +55,11 @@ void OpenWeatherMap::setApiKey(const std::string& key)
   m_apiKey = key;
 }
 
+bool OpenWeatherMap::needsApiKey()
+{
+  return true;
+}
+
 bool OpenWeatherMap::validLocation(const Location& location) const
 {
   return (location.hasOwmId() || location.hasCoordinates()

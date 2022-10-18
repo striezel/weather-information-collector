@@ -9,6 +9,7 @@ set(weather-information-collector-update_sources
     ../api/Factory.cpp
     ../api/Limit.cpp
     ../api/Limits.cpp
+    ../api/OpenMeteo.cpp
     ../api/OpenWeatherMap.cpp
     ../api/Plans.cpp
     ../api/Types.cpp
@@ -29,6 +30,7 @@ set(weather-information-collector-update_sources
     ../db/mariadb/Structure.cpp
     ../db/mariadb/guess.cpp
     ../json/ApixuFunctions.cpp
+    ../json/OpenMeteoFunctions.cpp
     ../json/WeatherstackFunctions.cpp
     ../tasks/Task.cpp
     ../tasks/TaskManager.cpp
@@ -50,6 +52,7 @@ set(weather-information-collector-update_sources
     UpdateTo_0.9.0.cpp
     UpdateTo_0.9.7.cpp
     UpdateTo_0.9.17.cpp
+    UpdateTo_0.10.0.cpp
     WeatherDataUpdate_0.8.3.cpp
     main.cpp)
 
@@ -64,6 +67,7 @@ if (CAN_HAVE_SIMDJSON)
     ../../third-party/simdjson/simdjson.cpp
     ../json/SimdJsonApixu.cpp
     ../json/SimdJsonDarkSky.cpp
+    ../json/SimdJsonOpenMeteo.cpp
     ../json/SimdJsonOwm.cpp
     ../json/SimdJsonWeatherbit.cpp
     ../json/SimdJsonWeatherstack.cpp)
@@ -72,6 +76,7 @@ else()
   list(APPEND weather-information-collector-update_sources
     ../json/NLohmannJsonApixu.cpp
     ../json/NLohmannJsonDarkSky.cpp
+    ../json/NLohmannJsonOpenMeteo.cpp
     ../json/NLohmannJsonOwm.cpp
     ../json/NLohmannJsonWeatherbit.cpp
     ../json/NLohmannJsonWeatherstack.cpp)

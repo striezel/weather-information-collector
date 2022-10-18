@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -113,6 +113,10 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
              default: // i. e. PlanWeatherstack::none
                   return Limits::none;
          }
+    case ApiType::OpenMeteo:
+         /* Open-Meteo does not seem to have a hard limit, but the documentation
+            asks to not use more than 10000 calls per day, so we use that. */
+         return Limit(10000, std::chrono::hours(24));
     default: // i. e. ApiType::none
          // no limit
          return Limits::none;

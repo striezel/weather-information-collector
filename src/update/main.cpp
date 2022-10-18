@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
 #include "UpdateTo_0.9.0.hpp"
 #include "UpdateTo_0.9.7.hpp"
 #include "UpdateTo_0.9.17.hpp"
+#include "UpdateTo_0.10.0.hpp"
 
 void showHelp()
 {
@@ -270,6 +271,15 @@ int main(int argc, char** argv)
   {
     std::cout << "Update for database of version 0.9.16 (and earlier) to version 0.9.17..." << std::endl;
     if (!wic::UpdateTo0917::perform(config.connectionInfo()))
+    {
+      std::cerr << "Error: Database update failed!" << std::endl;
+      return wic::rcUpdateFailure;
+    }
+  }
+  if (currentVersion < wic::SemVer(0, 10, 0))
+  {
+    std::cout << "Update for database of version 0.9.22 (and earlier) to version 0.10.0..." << std::endl;
+    if (!wic::UpdateTo_0_10_0::perform(config.connectionInfo()))
     {
       std::cerr << "Error: Database update failed!" << std::endl;
       return wic::rcUpdateFailure;

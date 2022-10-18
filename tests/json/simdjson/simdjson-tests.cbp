@@ -36,10 +36,14 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.cpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.hpp" />
+		<Unit filename="../../../src/json/OpenMeteoFunctions.cpp" />
+		<Unit filename="../../../src/json/OpenMeteoFunctions.hpp" />
 		<Unit filename="../../../src/json/SimdJsonApixu.cpp" />
 		<Unit filename="../../../src/json/SimdJsonApixu.hpp" />
 		<Unit filename="../../../src/json/SimdJsonDarkSky.cpp" />
 		<Unit filename="../../../src/json/SimdJsonDarkSky.hpp" />
+		<Unit filename="../../../src/json/SimdJsonOpenMeteo.cpp" />
+		<Unit filename="../../../src/json/SimdJsonOpenMeteo.hpp" />
 		<Unit filename="../../../src/json/SimdJsonOwm.cpp" />
 		<Unit filename="../../../src/json/SimdJsonOwm.hpp" />
 		<Unit filename="../../../src/json/SimdJsonWeatherbit.cpp" />
@@ -53,6 +57,7 @@
 		<Unit filename="../../find_catch.hpp" />
 		<Unit filename="SimdJsonApixu.cpp" />
 		<Unit filename="SimdJsonDarkSky.cpp" />
+		<Unit filename="SimdJsonOpenMeteo.cpp" />
 		<Unit filename="SimdJsonOwm.cpp" />
 		<Unit filename="SimdJsonWeatherbit.cpp" />
 		<Unit filename="SimdJsonWeatherstack.cpp" />

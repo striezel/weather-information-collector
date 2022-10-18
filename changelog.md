@@ -2,6 +2,8 @@
 
 ## Version 0.?.? (2022-08-??)
 
+The program is now able to collect data from the Open-Meteo API, too.
+
 simdjson, the library used for JSON parsing, has been updated from version 2.2.2
 to version 3.0.0.
 

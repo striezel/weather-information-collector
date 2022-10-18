@@ -21,6 +21,7 @@
 #include "../../find_catch.hpp"
 #include "../../../src/api/Apixu.hpp"
 #include "../../../src/api/DarkSky.hpp"
+#include "../../../src/api/OpenMeteo.hpp"
 #include "../../../src/api/OpenWeatherMap.hpp"
 #include "../../../src/api/Weatherbit.hpp"
 #include "../../../src/api/Weatherstack.hpp"
@@ -49,6 +50,17 @@ TEST_CASE("Check supported data types of API implementations")
     REQUIRE( ds.supportsDataType(DataType::CurrentAndForecast) );
     // None is never supported.
     REQUIRE_FALSE( ds.supportsDataType(DataType::none) );
+  }
+
+  SECTION("Open-Meteo")
+  {
+    OpenMeteo om;
+    // Open-Meteo supports all valid types.
+    REQUIRE( om.supportsDataType(DataType::Current) );
+    REQUIRE( om.supportsDataType(DataType::Forecast) );
+    REQUIRE( om.supportsDataType(DataType::CurrentAndForecast) );
+    // None is never supported.
+    REQUIRE_FALSE( om.supportsDataType(DataType::none) );
   }
 
   SECTION("OpenWeatherMap")

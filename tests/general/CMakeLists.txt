@@ -8,6 +8,7 @@ set(weather_information_collector_tests_sources
     ../../src/api/Factory.cpp
     ../../src/api/Limit.cpp
     ../../src/api/Limits.cpp
+    ../../src/api/OpenMeteo.cpp
     ../../src/api/OpenWeatherMap.cpp
     ../../src/api/Plans.cpp
     ../../src/api/Types.cpp
@@ -20,6 +21,7 @@ set(weather_information_collector_tests_sources
     ../../src/db/ConnectionInformation.cpp
     ../../src/db/Exceptions.cpp
     ../../src/json/ApixuFunctions.cpp
+    ../../src/json/OpenMeteoFunctions.cpp
     ../../src/json/WeatherstackFunctions.cpp
     ../../src/net/Curly.cpp
     ../../src/net/Request.cpp
@@ -32,6 +34,7 @@ set(weather_information_collector_tests_sources
     api/Apixu.cpp
     api/DarkSky.cpp
     api/Factory.cpp
+    api/OpenMeteo.cpp
     api/OpenWeatherMap.cpp
     api/Plans.cpp
     api/SupportedDataTypes.cpp
@@ -65,6 +68,7 @@ if (CAN_HAVE_SIMDJSON)
     ../../third-party/simdjson/simdjson.cpp
     ../../src/json/SimdJsonApixu.cpp
     ../../src/json/SimdJsonDarkSky.cpp
+    ../../src/json/SimdJsonOpenMeteo.cpp
     ../../src/json/SimdJsonOwm.cpp
     ../../src/json/SimdJsonWeatherbit.cpp
     ../../src/json/SimdJsonWeatherstack.cpp)
@@ -73,6 +77,7 @@ else()
   list(APPEND weather_information_collector_tests_sources
     ../../src/json/NLohmannJsonApixu.cpp
     ../../src/json/NLohmannJsonDarkSky.cpp
+    ../../src/json/NLohmannJsonOpenMeteo.cpp
     ../../src/json/NLohmannJsonOwm.cpp
     ../../src/json/NLohmannJsonWeatherbit.cpp
     ../../src/json/NLohmannJsonWeatherstack.cpp)

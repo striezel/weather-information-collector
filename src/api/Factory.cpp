@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include <iostream>
 #include "Apixu.hpp"
 #include "DarkSky.hpp"
+#include "OpenMeteo.hpp"
 #include "OpenWeatherMap.hpp"
 #include "Weatherbit.hpp"
 #include "Weatherstack.hpp"
@@ -43,6 +44,8 @@ std::unique_ptr<API> Factory::create(const ApiType api, const PlanWeatherbit pla
          return std::make_unique<Weatherbit>(planWb, key);
     case ApiType::Weatherstack:
          return std::make_unique<Weatherstack>(planWs, key);
+    case ApiType::OpenMeteo:
+         return std::make_unique<OpenMeteo>();
     default: // ApiType::none
          std::cerr << "Error: API type " << toString(api) << " is not supported by API factory!" << std::endl;
          return nullptr;

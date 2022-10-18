@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020, 2021  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -165,11 +165,7 @@ int main(int argc, char** argv)
   {
     selectedApi = wic::creator::selectApi();
   }
-  if (config.key(selectedApi).empty())
-  {
-    std::cout << "WARNING: You do not currently have an API key for the "
-              << "selected API in the configuration file." << std::endl;
-  }
+  wic::creator::checkApiKeyRequirement(selectedApi, config);
   // Select the kind of data to collect.
   wic::DataType selectedData = wic::DataType::none;
   while (selectedData == wic::DataType::none)

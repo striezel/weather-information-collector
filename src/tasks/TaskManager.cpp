@@ -95,6 +95,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
         std::cerr << "Hint: Recognized API types are:" << std::endl
                   << "\t" << toString(ApiType::Apixu) << " (deprecated, do not use anymore)" << std::endl
                   << "\t" << toString(ApiType::DarkSky) << std::endl
+                  << "\t" << toString(ApiType::OpenMeteo) << std::endl
                   << "\t" << toString(ApiType::OpenWeatherMap) << std::endl
                   << "\t" << toString(ApiType::Weatherbit) << std::endl
                   << "\t" << toString(ApiType::Weatherstack) << std::endl;

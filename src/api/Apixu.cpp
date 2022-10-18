@@ -45,6 +45,11 @@ void Apixu::setApiKey(const std::string& key)
   m_apiKey = key;
 }
 
+bool Apixu::needsApiKey()
+{
+  return true;
+}
+
 bool Apixu::validLocation(const Location& location) const
 {
   return (location.hasCoordinates() || location.hasName()

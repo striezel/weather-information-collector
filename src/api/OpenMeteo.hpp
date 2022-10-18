@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2021, 2022  Dirk Stolle
+    Copyright (C) 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,44 +18,44 @@
  -------------------------------------------------------------------------------
 */
 
-#ifndef WEATHER_INFORMATION_COLLECTOR_API_HPP
-#define WEATHER_INFORMATION_COLLECTOR_API_HPP
+#ifndef WEATHER_INFORMATION_COLLECTOR_OPENMETEO_HPP
+#define WEATHER_INFORMATION_COLLECTOR_OPENMETEO_HPP
 
 #include <string>
-#include "Types.hpp"
-#include "../data/Forecast.hpp"
-#include "../data/Location.hpp"
-#include "../data/Weather.hpp"
+#include "API.hpp"
 
 namespace wic
 {
 
-/** \brief Basic interface for all weather API classes.
+/** \brief Handles API requests for Open-Meteo.
  */
-class API
+class OpenMeteo: public API
 {
   public:
+    OpenMeteo() = default;
+
+
     /** \brief Sets the API key for API requests.
      *
      * \param key  the API key
      */
-    virtual void setApiKey(const std::string& key) = 0;
+    void setApiKey(const std::string& key) override;
 
 
     /** \brief Indicates whether requests to the API need an API key.
      *
-     * \return Returns true, if a key is required. Returns false otherwise.
+     * \return Returns false, because Open-Meteo needs no API key.
      */
-    virtual bool needsApiKey() = 0;
+    bool needsApiKey() final;
 
 
     /** \brief Checks whether the given location can be used for a request.
      *
      * \param location  the location information
-     * \return Returns true, if the location can be uses for a request.
+     * \return Returns true, if the location can be used for a request.
      *         Returns false otherwise.
      */
-    virtual bool validLocation(const Location& location) const = 0;
+    bool validLocation(const Location& location) const override;
 
 
     /** \brief Checks whether the given data type is supported by the API.
@@ -64,10 +64,19 @@ class API
      * \return Returns true, if the data type is supported.
      *         Returns false otherwise.
      */
-    virtual bool supportsDataType(const DataType data) const = 0;
+    bool supportsDataType(const DataType data) const override;
 
 
     #ifndef wic_no_network_requests
+    /** \brief Turns info of a location to a request string.
+     *
+     * \param location  the location information
+     * \return Returns part of URL that can be used for a request.
+     *         Returns empty string, if an error occurred.
+     */
+    static std::string toRequestString(const Location& location);
+
+
     /** \brief Retrieves the current weather for a given location.
      *
      * \param location  the location for which the weather is requested
@@ -75,7 +84,7 @@ class API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool currentWeather(const Location& location, Weather& weather) = 0;
+    bool currentWeather(const Location& location, Weather& weather) override;
 
 
     /** \brief Retrieves the weather forecast for a given location.
@@ -85,7 +94,7 @@ class API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool forecastWeather(const Location& location, Forecast& forecast) = 0;
+    bool forecastWeather(const Location& location, Forecast& forecast) override;
 
 
     /** \brief Retrieves the current weather and the forecast for a given location.
@@ -96,7 +105,7 @@ class API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast) = 0;
+    bool currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast) override;
     #endif // wic_no_network_requests
 
 
@@ -108,7 +117,7 @@ class API
      * \return Returns true, if the parsing was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool parseCurrentWeather(const std::string& json, Weather& weather) const = 0;
+    bool parseCurrentWeather(const std::string& json, Weather& weather) const override;
 
 
     /** \brief Parses the weather forecast information from JSON into Weather objects.
@@ -118,15 +127,10 @@ class API
      * \return Returns true, if the parsing was successful.
      *         Returns false, if an error occurred.
      */
-    virtual bool parseForecast(const std::string& json, Forecast& forecast) const = 0;
+    bool parseForecast(const std::string& json, Forecast& forecast) const override;
     #endif // wic_no_json_parsing
-
-
-    /** \brief Destructor.
-     */
-    virtual ~API() = default;
 }; // class
 
 } // namespace
 
-#endif // WEATHER_INFORMATION_COLLECTOR_API_HPP
+#endif // WEATHER_INFORMATION_COLLECTOR_OPENMETEO_HPP

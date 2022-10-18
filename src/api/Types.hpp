@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,8 @@ enum class ApiType
     OpenWeatherMap,
     DarkSky,
     Weatherbit,
-    Weatherstack
+    Weatherstack,
+    OpenMeteo
 };
 
 
@@ -46,6 +47,14 @@ enum class ApiType
  *         Returns ApiType::none, if no match could be found.
  */
 ApiType toApiType(const std::string& apiName);
+
+
+/** \brief Determines whether a certain API type usually needs an API key.
+ *
+ * \param type  the API type
+ * \return Returns true, if a key is required.
+ */
+bool needsApiKey(const ApiType type);
 
 
 /** \brief Gets the name of the API.

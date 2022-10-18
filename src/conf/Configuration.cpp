@@ -414,7 +414,7 @@ bool Configuration::loadCoreConfigurationValue(const std::string& name, const st
   return true;
 }
 
-bool Configuration::loadCoreConfiguration(const std::string& fileName, const bool missingKeysAllowed)
+bool Configuration::loadCoreConfiguration(const std::string& fileName)
 {
   std::ifstream stream(fileName, std::ios_base::in | std::ios_base::binary);
   if (!stream.good())
@@ -468,18 +468,6 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName, const boo
     return false;
   }
 
-  // Only check key presence, if missing keys are not allowed.
-  if (!missingKeysAllowed
-    // If there are no API keys, then the collector won't be able to collect
-    // information later on.
-    && apiKeys.empty())
-  {
-    std::cerr << "Error: There are no API keys in configuration file "
-              << fileName << ", and thus the weather-information-collector "
-              << "will not be able to work properly." << std::endl;
-    return false;
-  } // if keys must be present, but keys are missing
-
   // For backwards compatibility with configuration files from version 0.9.8 and
   // earlier the unset plans are assumed to be free plans.
   if (planOpenWeatherMap() == PlanOwm::none)
@@ -528,7 +516,7 @@ bool Configuration::load(const std::string& fileName, [[maybe_unused]] const boo
   clear();
 
   // load core configuration file
-  if (!loadCoreConfiguration(realName, missingKeysAllowed))
+  if (!loadCoreConfiguration(realName))
     return false;
 
   #ifndef wic_no_tasks_in_config
@@ -585,6 +573,22 @@ bool Configuration::load(const std::string& fileName, [[maybe_unused]] const boo
               << "Please remove the Apixu task file(s) or consider switching "
               << "to another API, e.g. DarkSky, OpenWeatherMap, Weatherbit or Weatherstack." << std::endl;
     return false;
+  }
+  // Check whether there are tasks that need an API key but where the key for
+  // that API is missing.
+  if (!missingKeysAllowed)
+  {
+    for (const auto& t: tasksContainer)
+    {
+      if (needsApiKey(t.api()) && key(t.api()).empty())
+      {
+        std::cerr << "Error: There is at least one task using the "
+                  << toString(t.api()) << " API, but the configuration file "
+                  << fileName << " does not contain an API key for that API."
+                  << std::endl;
+        return false;
+      }
+    }
   }
   #endif // wic_no_tasks_in_config
 

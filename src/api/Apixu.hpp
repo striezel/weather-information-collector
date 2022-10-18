@@ -44,6 +44,13 @@ class Apixu: public API
     void setApiKey(const std::string& key) override;
 
 
+    /** \brief Indicates whether requests to the API need an API key.
+     *
+     * \return Returns true.
+     */
+    bool needsApiKey() final;
+
+
     /** \brief Checks whether the given location can be used for a request.
      *
      * \param location  the location information

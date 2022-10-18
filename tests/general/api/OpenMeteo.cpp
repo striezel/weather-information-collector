@@ -19,13 +19,13 @@
 */
 
 #include "../../find_catch.hpp"
-#include "../../../src/api/DarkSky.hpp"
+#include "../../../src/api/OpenMeteo.hpp"
 
-TEST_CASE("DarkSky - non-network tests")
+TEST_CASE("OpenMeteo - non-network tests")
 {
   using namespace wic;
 
-  DarkSky api("not a valid key");
+  OpenMeteo api;
 
   SECTION("validLocation")
   {
@@ -69,15 +69,14 @@ TEST_CASE("DarkSky - non-network tests")
 
   SECTION("setApiKey")
   {
-    // This is just a bogus test. Key is encapsulated, without getter, so there
-    // is no real way to check it.
+    // This is just a bogus test. Open-Meteo uses no key.
     api.setApiKey("foo1bar2baz3");
   }
 
   SECTION("needsApiKey")
   {
-    REQUIRE( api.needsApiKey() );
-    REQUIRE( wic::needsApiKey(wic::ApiType::DarkSky) == api.needsApiKey() );
+    REQUIRE_FALSE( api.needsApiKey() );
+    REQUIRE( wic::needsApiKey(wic::ApiType::OpenMeteo) == api.needsApiKey() );
   }
 
   SECTION("toRequestString")
@@ -86,59 +85,19 @@ TEST_CASE("DarkSky - non-network tests")
 
     SECTION("no data set")
     {
-      REQUIRE( DarkSky::toRequestString(location).empty() );
+      REQUIRE( OpenMeteo::toRequestString(location).empty() );
     }
 
     SECTION("insufficient data set")
     {
       location.setCountryCode("DK");
-      REQUIRE( DarkSky::toRequestString(location).empty() );
+      REQUIRE( OpenMeteo::toRequestString(location).empty() );
     }
 
     SECTION("latitude + longitude")
     {
       location.setCoordinates(12.34f, 56.78f);
-      REQUIRE( DarkSky::toRequestString(location) == "12.34,56.78" );
-    }
-  }
-
-  SECTION("currentWeather")
-  {
-    Location location;
-    location.setCoordinates(12.34f, 56.78f);
-
-    SECTION("request with empty API key fails")
-    {
-      api.setApiKey("");
-      Weather w;
-      REQUIRE_FALSE( api.currentWeather(location, w) );
-    }
-  }
-
-  SECTION("forecastWeather")
-  {
-    Location location;
-    location.setCoordinates(12.34f, 56.78f);
-
-    SECTION("request with empty API key fails")
-    {
-      api.setApiKey("");
-      Forecast fc;
-      REQUIRE_FALSE( api.forecastWeather(location, fc) );
-    }
-  }
-
-  SECTION("currentAndForecastWeather")
-  {
-    Location location;
-    location.setCoordinates(12.34f, 56.78f);
-
-    SECTION("request with empty API key fails")
-    {
-      api.setApiKey("");
-      Weather w;
-      Forecast fc;
-      REQUIRE_FALSE( api.currentAndForecastWeather(location, w, fc) );
+      REQUIRE( OpenMeteo::toRequestString(location) == "latitude=12.34&longitude=56.78" );
     }
   }
 }
