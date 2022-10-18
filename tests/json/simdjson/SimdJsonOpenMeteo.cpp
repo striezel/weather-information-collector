@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2021, 2022  Dirk Stolle
+    Copyright (C) 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1353,6 +1353,114 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
     }
 
+    SECTION("failure: number of elements in temperature_2m does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            1.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1011.5,
+            1011.3,
+            1010.2,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            95,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.9,
+            2.4,
+            2.55,
+            2.72
+          ],
+          "winddirection_10m": [
+            108,
+            90,
+            88,
+            79,
+            84
+          ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
     SECTION("failure: relativehumidity_2m element is missing")
     {
       const std::string json = R"json(
@@ -1481,6 +1589,116 @@ TEST_CASE("Class SimdJsonOpenMeteo")
           "cloudcover": [ 100, 99, 93, 95, 1 ],
           "windspeed_10m": [ 2.62, 2.9, 2.4, 2.55, 2.72 ],
           "winddirection_10m": [ 108, 90, 88, 79, 84 ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
+    SECTION("failure: number of elements in relativehumidity_2m does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.6,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60,
+            64
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            1.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1011.5,
+            1011.3,
+            1010.2,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            95,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.9,
+            2.4,
+            2.55,
+            2.72
+          ],
+          "winddirection_10m": [
+            108,
+            90,
+            88,
+            79,
+            84
+          ]
         }
       }
       )json";
@@ -1621,6 +1839,114 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
     }
 
+    SECTION("failure: number of elements in rain does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.6,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1011.5,
+            1011.3,
+            1010.2,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            95,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.9,
+            2.4,
+            2.55,
+            2.72
+          ],
+          "winddirection_10m": [
+            108,
+            90,
+            88,
+            79,
+            84
+          ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
     SECTION("failure: snowfall element is missing")
     {
       const std::string json = R"json(
@@ -1749,6 +2075,113 @@ TEST_CASE("Class SimdJsonOpenMeteo")
           "cloudcover": [ 100, 99, 93, 95, 1 ],
           "windspeed_10m": [ 2.62, 2.9, 2.4, 2.55, 2.72 ],
           "winddirection_10m": [ 108, 90, 88, 79, 84 ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
+    SECTION("failure: number of elements in snowfall does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.6,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            1.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1011.5,
+            1011.3,
+            1010.2,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            95,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.9,
+            2.4,
+            2.55,
+            2.72
+          ],
+          "winddirection_10m": [
+            108,
+            90,
+            88,
+            79,
+            84
+          ]
         }
       }
       )json";
@@ -1889,6 +2322,112 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
     }
 
+    SECTION("failure: number of elements in pressure_msl does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.6,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            1.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            95,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.9,
+            2.4,
+            2.55,
+            2.72
+          ],
+          "winddirection_10m": [
+            108,
+            90,
+            88,
+            79,
+            84
+          ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
     SECTION("failure: cloudcover element is missing")
     {
       const std::string json = R"json(
@@ -2017,6 +2556,114 @@ TEST_CASE("Class SimdJsonOpenMeteo")
           "cloudcover": [ 100, "foo!", 93, 95, 1 ],
           "windspeed_10m": [ 2.62, 2.9, 2.4, 2.55, 2.72 ],
           "winddirection_10m": [ 108, 90, 88, 79, 84 ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
+    SECTION("failure: number of elements in cloudcover does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.6,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            1.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1011.5,
+            1011.3,
+            1010.2,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.9,
+            2.4,
+            2.55,
+            2.72
+          ],
+          "winddirection_10m": [
+            108,
+            90,
+            88,
+            79,
+            84
+          ]
         }
       }
       )json";
@@ -2157,6 +2804,112 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
     }
 
+    SECTION("failure: number of elements in windspeed_10m does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.6,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            1.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1011.5,
+            1011.3,
+            1010.2,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            95,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.72
+          ],
+          "winddirection_10m": [
+            108,
+            90,
+            88,
+            79,
+            84
+          ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
     SECTION("failure: winddirection_10m element is missing")
     {
       const std::string json = R"json(
@@ -2285,6 +3038,111 @@ TEST_CASE("Class SimdJsonOpenMeteo")
           "cloudcover": [ 100, 99, 93, 95, 1 ],
           "windspeed_10m": [ 2.62, 2.9, 2.4, 2.55, 2.72 ],
           "winddirection_10m": [ 108, "fail", 88, 79, 84 ]
+        }
+      }
+      )json";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+
+    SECTION("failure: number of elements in winddirection_10m does not match time elements")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 52.52,
+        "longitude": 13.419998,
+        "generationtime_ms": 1.1960268020629883,
+        "utc_offset_seconds": 0,
+        "timezone": "GMT",
+        "timezone_abbreviation": "GMT",
+        "elevation": 38,
+        "hourly_units": {
+          "time": "iso8601",
+          "temperature_2m": "°C",
+          "relativehumidity_2m": "%",
+          "precipitation": "mm",
+          "rain": "mm",
+          "showers": "mm",
+          "snowfall": "cm",
+          "pressure_msl": "hPa",
+          "surface_pressure": "hPa",
+          "cloudcover": "%",
+          "windspeed_10m": "m/s",
+          "winddirection_10m": "°"
+        },
+        "hourly": {
+          "time": [
+            "2022-09-08T00:00",
+            "2022-09-08T01:00",
+            "2022-09-08T02:00",
+            "2022-09-08T03:00",
+            "2022-09-08T04:00"
+          ],
+          "temperature_2m": [
+            17.7,
+            17.1,
+            16.6,
+            16.2,
+            15.8
+          ],
+          "relativehumidity_2m": [
+            61,
+            61,
+            62,
+            61,
+            60
+          ],
+          "precipitation": [
+            0,
+            0.3,
+            0.1,
+            1.1,
+            2.6
+          ],
+          "rain": [
+            0,
+            0.1,
+            1.1,
+            0.5,
+            1.3
+          ],
+          "snowfall": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "pressure_msl": [
+            1012.1,
+            1011.5,
+            1011.3,
+            1010.2,
+            1010.7
+          ],
+          "surface_pressure": [
+            1007.6,
+            1007,
+            1006.8,
+            1005.7,
+            1006.2
+          ],
+          "cloudcover": [
+            100,
+            99,
+            93,
+            95,
+            1
+          ],
+          "windspeed_10m": [
+            2.62,
+            2.9,
+            2.4,
+            2.55,
+            2.72
+          ],
+          "winddirection_10m": [
+            84
+          ]
         }
       }
       )json";
