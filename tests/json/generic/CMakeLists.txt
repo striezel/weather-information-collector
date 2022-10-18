@@ -5,8 +5,10 @@ project(generic_json_tests)
 set(generic_json_tests_sources
     ../../../src/data/Weather.cpp
     ../../../src/json/ApixuFunctions.cpp
+    ../../../src/json/OpenMeteoFunctions.cpp
     ../../../src/json/WeatherstackFunctions.cpp
     ApixuFunctions.cpp
+    OpenMeteoFunctions.cpp
     WeatherstackFunctions.cpp
     main.cpp)
 

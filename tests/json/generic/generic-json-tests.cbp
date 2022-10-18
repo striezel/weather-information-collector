@@ -31,10 +31,13 @@
 		<Unit filename="../../../src/data/Weather.hpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.cpp" />
 		<Unit filename="../../../src/json/ApixuFunctions.hpp" />
+		<Unit filename="../../../src/json/OpenMeteoFunctions.cpp" />
+		<Unit filename="../../../src/json/OpenMeteoFunctions.hpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.cpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.hpp" />
 		<Unit filename="../../find_catch.hpp" />
 		<Unit filename="ApixuFunctions.cpp" />
+		<Unit filename="OpenMeteoFunctions.cpp" />
 		<Unit filename="WeatherstackFunctions.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
