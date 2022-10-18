@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `api` (
   `name` varchar(255) NOT NULL COMMENT 'name of the API',
   `baseURL` varchar(255) NOT NULL COMMENT 'base URL for API calls',
   PRIMARY KEY (`apiID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
@@ -31,7 +31,8 @@ INSERT INTO `api` (`apiID`, `name`, `baseURL`) VALUES
 (2, 'OpenWeatherMap', 'https://api.openweathermap.org/data/2.5/'),
 (3, 'DarkSky', 'https://api.darksky.net/'),
 (4, 'Weatherbit', 'https://api.weatherbit.io/v2.0/'),
-(5, 'Weatherstack', 'http://api.weatherstack.com/');
+(5, 'Weatherstack', 'http://api.weatherstack.com/'),
+(6, 'OpenMeteo', 'https://api.open-meteo.com/v1/');
 
 --
 -- Table structure for table `forecast`

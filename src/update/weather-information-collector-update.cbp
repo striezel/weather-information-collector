@@ -140,6 +140,8 @@
 		<Unit filename="../util/Strings.hpp" />
 		<Unit filename="ForecastDataUpdate_0.8.3.cpp" />
 		<Unit filename="ForecastDataUpdate_0.8.3.hpp" />
+		<Unit filename="UpdateTo_0.10.0.cpp" />
+		<Unit filename="UpdateTo_0.10.0.hpp" />
 		<Unit filename="UpdateTo_0.5.5.cpp" />
 		<Unit filename="UpdateTo_0.5.5.hpp" />
 		<Unit filename="UpdateTo_0.6.0.cpp" />
