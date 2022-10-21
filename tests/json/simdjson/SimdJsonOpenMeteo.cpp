@@ -97,6 +97,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check data.
       REQUIRE( weather.dataTime() == toOpenMeteoTime(2022, 9, 8, 13, 0) );
       REQUIRE( weather.temperatureCelsius() == 16.8f );
+      REQUIRE( weather.temperatureFahrenheit() == 62.24f );
+      REQUIRE( weather.temperatureKelvin() == 289.95f );
       REQUIRE( weather.windSpeed() == 8.2f );
       REQUIRE( weather.windDegrees() == 105 );
       REQUIRE( weather.json() == json );
@@ -486,6 +488,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check first element.
       REQUIRE( forecast.data()[0].dataTime() == toOpenMeteoTime(2022, 9, 8, 0, 0) );
       REQUIRE( forecast.data()[0].temperatureCelsius() == 17.7f );
+      REQUIRE( forecast.data()[0].temperatureFahrenheit() == 63.86f );
+      REQUIRE( forecast.data()[0].temperatureKelvin() == 290.85f );
       REQUIRE( forecast.data()[0].humidity() == 61 );
       REQUIRE( forecast.data()[0].rain() == 0.0f );
       REQUIRE( forecast.data()[0].snow() == 0.0f );
@@ -496,6 +500,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check second element.
       REQUIRE( forecast.data()[1].dataTime() == toOpenMeteoTime(2022, 9, 8, 1, 0) );
       REQUIRE( forecast.data()[1].temperatureCelsius() == 17.1f );
+      REQUIRE( forecast.data()[1].temperatureFahrenheit() == 62.78f );
+      REQUIRE( forecast.data()[1].temperatureKelvin() == 290.25f );
       REQUIRE( forecast.data()[1].humidity() == 61 );
       REQUIRE( forecast.data()[1].rain() == 0.1f );
       REQUIRE( forecast.data()[1].snow() == 0.0f );
@@ -506,6 +512,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check third element.
       REQUIRE( forecast.data()[2].dataTime() == toOpenMeteoTime(2022, 9, 8, 2, 0) );
       REQUIRE( forecast.data()[2].temperatureCelsius() == 16.6f );
+      REQUIRE( forecast.data()[2].temperatureFahrenheit() == 61.88f );
+      REQUIRE( forecast.data()[2].temperatureKelvin() == 289.75f );
       REQUIRE( forecast.data()[2].humidity() == 62 );
       REQUIRE( forecast.data()[2].rain() == 1.1f );
       REQUIRE( forecast.data()[2].snow() == 0.0f );
@@ -516,6 +524,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check fourth element.
       REQUIRE( forecast.data()[3].dataTime() == toOpenMeteoTime(2022, 9, 8, 3, 0) );
       REQUIRE( forecast.data()[3].temperatureCelsius() == 16.2f );
+      REQUIRE( forecast.data()[3].temperatureFahrenheit() == 61.16f );
+      REQUIRE( forecast.data()[3].temperatureKelvin() == 289.35f );
       REQUIRE( forecast.data()[3].humidity() == 61 );
       REQUIRE( forecast.data()[3].rain() == 0.5f );
       REQUIRE( forecast.data()[3].snow() == 0.0f );
@@ -526,6 +536,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check fifth element.
       REQUIRE( forecast.data()[4].dataTime() == toOpenMeteoTime(2022, 9, 8, 4, 0) );
       REQUIRE( forecast.data()[4].temperatureCelsius() == 15.8f );
+      REQUIRE( forecast.data()[4].temperatureFahrenheit() == 60.44f );
+      REQUIRE( forecast.data()[4].temperatureKelvin() == 288.95f );
       REQUIRE( forecast.data()[4].humidity() == 60 );
       REQUIRE( forecast.data()[4].rain() == 1.3f );
       REQUIRE( forecast.data()[4].snow() == 0.0f );

@@ -51,6 +51,7 @@
 		<Unit filename="../../../src/json/OpenMeteoFunctions.hpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.cpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.hpp" />
+		<Unit filename="../../../src/util/NumericPrecision.hpp" />
 		<Unit filename="../../../third-party/nlohmann/json.hpp" />
 		<Unit filename="../../find_catch.hpp" />
 		<Unit filename="NLohmannJsonApixu.cpp" />

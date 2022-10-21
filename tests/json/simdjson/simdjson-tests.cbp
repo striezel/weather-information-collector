@@ -52,6 +52,7 @@
 		<Unit filename="../../../src/json/SimdJsonWeatherstack.hpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.cpp" />
 		<Unit filename="../../../src/json/WeatherstackFunctions.hpp" />
+		<Unit filename="../../../src/util/NumericPrecision.hpp" />
 		<Unit filename="../../../third-party/simdjson/simdjson.cpp" />
 		<Unit filename="../../../third-party/simdjson/simdjson.h" />
 		<Unit filename="../../find_catch.hpp" />

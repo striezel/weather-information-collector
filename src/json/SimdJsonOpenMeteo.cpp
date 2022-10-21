@@ -21,6 +21,7 @@
 #include "SimdJsonOpenMeteo.hpp"
 #include <iostream>
 #include "OpenMeteoFunctions.hpp"
+#include "../util/NumericPrecision.hpp"
 
 namespace wic
 {
@@ -58,7 +59,10 @@ bool SimdJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather& we
     return false;
   }
   weather = Weather();
-  weather.setTemperatureCelsius(elem.get<double>().value());
+  const double celsius = elem.get<double>().value();
+  weather.setTemperatureCelsius(celsius);
+  weather.setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+  weather.setTemperatureKelvin(celsius + 273.15);
 
   error = current_weather["windspeed"].get(elem);
   if (error || !elem.is_double())
@@ -186,7 +190,22 @@ bool SimdJsonOpenMeteo::parseTemperature(const simdjson::dom::element& hourly, s
       std::cerr << "Error: Temperature element is not a floating point value!" << std::endl;
       return false;
     }
-    data[idx].setTemperatureCelsius(elem.get_double().value());
+    const double celsius = elem.get_double().value();
+    data[idx].setTemperatureCelsius(celsius);
+    data[idx].setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+    // Avoid values like 6.9999... ° F by rounding, if appropriate.
+    const float fahrenheitRounded = NumericPrecision<float>::enforce(data[idx].temperatureFahrenheit());
+    if (fahrenheitRounded != data[idx].temperatureFahrenheit())
+    {
+      data[idx].setTemperatureFahrenheit(fahrenheitRounded);
+    }
+    data[idx].setTemperatureKelvin(celsius + 273.15);
+    // Avoid values like 296.9999... K by rounding, if appropriate.
+    const float kelvinRounded = NumericPrecision<float>::enforce(data[idx].temperatureKelvin());
+    if (kelvinRounded != data[idx].temperatureKelvin())
+    {
+      data[idx].setTemperatureKelvin(kelvinRounded);
+    }
     ++idx;
   }
 

@@ -21,6 +21,7 @@
 #include "NLohmannJsonOpenMeteo.hpp"
 #include <iostream>
 #include "OpenMeteoFunctions.hpp"
+#include "../util/NumericPrecision.hpp"
 
 namespace wic
 {
@@ -63,7 +64,10 @@ bool NLohmannJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather
     return false;
   }
   weather = Weather();
-  weather.setTemperatureCelsius(find->get<float>());
+  const double celsius = find->get<double>();
+  weather.setTemperatureCelsius(celsius);
+  weather.setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+  weather.setTemperatureKelvin(celsius + 273.15);
 
   find = current_weather.find("windspeed");
   if (find == current_weather.end() || !find->is_number())
@@ -189,7 +193,22 @@ bool NLohmannJsonOpenMeteo::parseTemperature(const nlohmann::json& hourly, std::
       std::cerr << "Error: Temperature element is not a floating point value!" << std::endl;
       return false;
     }
-    data[idx].setTemperatureCelsius(elem.get<double>());
+    const double celsius = elem.get<double>();
+    data[idx].setTemperatureCelsius(celsius);
+    data[idx].setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+    // Avoid values like 6.9999... ° F by rounding, if appropriate.
+    const float fahrenheitRounded = NumericPrecision<float>::enforce(data[idx].temperatureFahrenheit());
+    if (fahrenheitRounded != data[idx].temperatureFahrenheit())
+    {
+      data[idx].setTemperatureFahrenheit(fahrenheitRounded);
+    }
+    data[idx].setTemperatureKelvin(celsius + 273.15);
+    // Avoid values like 296.9999... K by rounding, if appropriate.
+    const float kelvinRounded = NumericPrecision<float>::enforce(data[idx].temperatureKelvin());
+    if (kelvinRounded != data[idx].temperatureKelvin())
+    {
+      data[idx].setTemperatureKelvin(kelvinRounded);
+    }
     ++idx;
   }
 
