@@ -22,6 +22,11 @@
 #define WEATHER_INFORMATION_COLLECTOR_OPENMETEO_HPP
 
 #include <string>
+#ifdef wic_openmeteo_find_location
+#include <utility>
+#include <vector>
+#include "../data/Location.hpp"
+#endif // wic_openmeteo_find_location
 #include "API.hpp"
 
 namespace wic
@@ -67,7 +72,7 @@ class OpenMeteo: public API
     bool supportsDataType(const DataType data) const override;
 
 
-    #ifndef wic_no_network_requests
+    #if !defined(wic_no_network_requests) || defined(wic_openmeteo_find_location)
     /** \brief Turns info of a location to a request string.
      *
      * \param location  the location information
@@ -84,9 +89,15 @@ class OpenMeteo: public API
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
+    #if !defined(wic_openmeteo_find_location)
     bool currentWeather(const Location& location, Weather& weather) override;
+    #else
+    bool currentWeather(const Location& location, Weather& weather);
+    #endif
+    #endif
 
 
+    #ifndef wic_no_network_requests
     /** \brief Retrieves the weather forecast for a given location.
      *
      * \param location  the location for which the forecast is requested
@@ -109,7 +120,7 @@ class OpenMeteo: public API
     #endif // wic_no_network_requests
 
 
-    #ifndef wic_no_json_parsing
+    #if !defined(wic_no_json_parsing) || defined(wic_openmeteo_find_location)
     /** \brief Parses the current weather information from JSON into the Weather object.
      *
      * \param json     string containing the JSON
@@ -117,9 +128,15 @@ class OpenMeteo: public API
      * \return Returns true, if the parsing was successful.
      *         Returns false, if an error occurred.
      */
+    #if !defined(wic_openmeteo_find_location)
     bool parseCurrentWeather(const std::string& json, Weather& weather) const override;
+    #else
+    bool parseCurrentWeather(const std::string& json, Weather& weather) const;
+    #endif
+    #endif
 
 
+    #if !defined(wic_no_json_parsing)
     /** \brief Parses the weather forecast information from JSON into Weather objects.
      *
      * \param json     string containing the JSON
@@ -129,6 +146,17 @@ class OpenMeteo: public API
      */
     bool parseForecast(const std::string& json, Forecast& forecast) const override;
     #endif // wic_no_json_parsing
+
+    #ifdef wic_openmeteo_find_location
+    /** \brief Finds matching locations by name.
+     *
+     * \param name  the name of the location to find
+     * \param locations  variable where matching locations will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    bool findLocation(const std::string& name, std::vector<std::pair<Location, Weather> >& locations);
+    #endif // wic_openmeteo_find_location
 }; // class
 
 } // namespace

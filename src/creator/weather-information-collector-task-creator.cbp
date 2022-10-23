@@ -33,6 +33,7 @@
 			<Add option="-std=c++17" />
 			<Add option="-fexceptions" />
 			<Add option="-Dwic_owm_find_location" />
+			<Add option="-Dwic_openmeteo_find_location" />
 			<Add option="-Dwic_no_network_requests" />
 			<Add option="-Dwic_no_json_parsing" />
 		</Compiler>
@@ -78,8 +79,14 @@
 		<Unit filename="../data/Weather.hpp" />
 		<Unit filename="../db/ConnectionInformation.cpp" />
 		<Unit filename="../db/ConnectionInformation.hpp" />
+		<Unit filename="../json/NLohmannJsonOpenMeteo.cpp" />
+		<Unit filename="../json/NLohmannJsonOpenMeteo.hpp" />
 		<Unit filename="../json/NLohmannJsonOwm.cpp" />
 		<Unit filename="../json/NLohmannJsonOwm.hpp" />
+		<Unit filename="../json/OpenMeteoFunctions.cpp" />
+		<Unit filename="../json/OpenMeteoFunctions.hpp" />
+		<Unit filename="../json/SimdJsonOpenMeteo.cpp" />
+		<Unit filename="../json/SimdJsonOpenMeteo.hpp" />
 		<Unit filename="../json/SimdJsonOwm.cpp" />
 		<Unit filename="../json/SimdJsonOwm.hpp" />
 		<Unit filename="../net/Curly.cpp" />
@@ -98,6 +105,8 @@
 		<Unit filename="../util/GitInfos.hpp" />
 		<Unit filename="../util/Strings.cpp" />
 		<Unit filename="../util/Strings.hpp" />
+		<Unit filename="../util/encode.cpp" />
+		<Unit filename="../util/encode.hpp" />
 		<Unit filename="CliUtilities.cpp" />
 		<Unit filename="CliUtilities.hpp" />
 		<Unit filename="main.cpp" />

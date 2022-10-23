@@ -21,6 +21,7 @@
 #include "NLohmannJsonOpenMeteo.hpp"
 #include <iostream>
 #include "OpenMeteoFunctions.hpp"
+#include "../util/NumericPrecision.hpp"
 
 namespace wic
 {
@@ -63,7 +64,10 @@ bool NLohmannJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather
     return false;
   }
   weather = Weather();
-  weather.setTemperatureCelsius(find->get<float>());
+  const double celsius = find->get<double>();
+  weather.setTemperatureCelsius(celsius);
+  weather.setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+  weather.setTemperatureKelvin(celsius + 273.15);
 
   find = current_weather.find("windspeed");
   if (find == current_weather.end() || !find->is_number())
@@ -76,14 +80,14 @@ bool NLohmannJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather
   weather.setWindSpeed(find->get<float>());
 
   find = current_weather.find("winddirection");
-  if (find == current_weather.end() || !find->is_number_unsigned())
+  if (find == current_weather.end() || !find->is_number())
   {
     std::cerr << "Error in NLohmannJsonOpenMeteo::parseCurrentWeather(): JSON "
-              << "element 'winddirection' is either missing or not an integer!"
+              << "element 'winddirection' is either missing or not a number!"
               << std::endl;
     return false;
   }
-  weather.setWindDegrees(find->get<int>());
+  weather.setWindDegrees(find->get<float>());
 
   find = current_weather.find("time");
   if (find == current_weather.end() || !find->is_string())
@@ -189,7 +193,22 @@ bool NLohmannJsonOpenMeteo::parseTemperature(const nlohmann::json& hourly, std::
       std::cerr << "Error: Temperature element is not a floating point value!" << std::endl;
       return false;
     }
-    data[idx].setTemperatureCelsius(elem.get<double>());
+    const double celsius = elem.get<double>();
+    data[idx].setTemperatureCelsius(celsius);
+    data[idx].setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+    // Avoid values like 6.9999... ° F by rounding, if appropriate.
+    const float fahrenheitRounded = NumericPrecision<float>::enforce(data[idx].temperatureFahrenheit());
+    if (fahrenheitRounded != data[idx].temperatureFahrenheit())
+    {
+      data[idx].setTemperatureFahrenheit(fahrenheitRounded);
+    }
+    data[idx].setTemperatureKelvin(celsius + 273.15);
+    // Avoid values like 296.9999... K by rounding, if appropriate.
+    const float kelvinRounded = NumericPrecision<float>::enforce(data[idx].temperatureKelvin());
+    if (kelvinRounded != data[idx].temperatureKelvin())
+    {
+      data[idx].setTemperatureKelvin(kelvinRounded);
+    }
     ++idx;
   }
 
@@ -517,5 +536,96 @@ bool NLohmannJsonOpenMeteo::parseForecast(const std::string& json, Forecast& for
   forecast.setData(data);
   return true;
 }
+
+#ifdef wic_openmeteo_find_location
+bool NLohmannJsonOpenMeteo::parseLocations(const std::string& json, std::vector<Location>& locations)
+{
+  nlohmann::json doc;
+  try
+  {
+    doc = nlohmann::json::parse(json);
+  }
+  catch(const nlohmann::json::parse_error& ex)
+  {
+    std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): Unable to parse JSON data!"
+              << std::endl << "Parser error: " << ex.what() << std::endl;
+    return false;
+  }
+
+  locations.clear();
+
+  auto find = doc.find("results");
+  if (find == doc.end())
+  {
+    find = doc.find("generationtime_ms");
+    if (find == doc.end() || !find->is_number())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): JSON data "
+                << "is not a geocoding API result." << std::endl;
+      return false;
+    }
+
+    // No results array means no match was found.
+    // This is a valid outcome.
+    return true;
+  }
+  const auto results = *find;
+  if (!results.is_array())
+  {
+    std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): JSON element"
+              << " 'results' is not an array!" << std::endl;
+    return false;
+  }
+  for (const auto& elem: results)
+  {
+    if (!elem.is_object())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): Array element"
+              << " of 'results' is not an object!" << std::endl;
+      return false;
+    }
+    Location loc;
+    const auto name = elem.find("name");
+    if (name == elem.end() || !name->is_string())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'name' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setName(name->get<std::string>());
+
+    const auto cc = elem.find("country_code");
+    if (cc == elem.end() || !cc->is_string())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'country_code' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setCountryCode(cc->get<std::string>());
+
+    const auto lat = elem.find("latitude");
+    if (lat == elem.end() || !lat->is_number())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'latitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(lat->get<double>(), 0.0f);
+
+    const auto lon = elem.find("longitude");
+    if (lon == elem.end() || !lon->is_number())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'longitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(loc.latitude(), lon->get<double>());
+
+    locations.emplace_back(loc);
+  }
+
+  return true;
+}
+#endif // wic_openmeteo_find_location
 
 } // namespace

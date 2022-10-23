@@ -20,13 +20,13 @@
 
 #include "Version.hpp"
 #include <iostream>
-#if !defined(wic_no_json_parsing) || defined(wic_owm_find_location)
+#if !defined(wic_no_json_parsing) || defined(wic_owm_find_location) || defined(wic_openmeteo_find_location)
 #ifdef __SIZEOF_INT128__
 #include "../third-party/simdjson/simdjson.h"
 #else
 #include "../third-party/nlohmann/json.hpp"
 #endif // __SIZEOF_INT128__
-#endif // !defined(wic_no_json_parsing) || defined(wic_owm_find_location)
+#endif // !defined(wic_no_json_parsing) || defined(wic_owm_find_location) || defined(wic_openmeteo_find_location)
 #include "util/GitInfos.hpp"
 
 namespace wic
@@ -39,7 +39,7 @@ void showVersion(const std::string_view name)
             << "\n"
             << "Version control commit: " << info.commit() << "\n"
             << "Version control date:   " << info.date() << std::endl;
-#if !defined(wic_no_json_parsing) || defined(wic_owm_find_location)
+#if !defined(wic_no_json_parsing) || defined(wic_owm_find_location) || defined(wic_openmeteo_find_location)
 #ifdef __SIZEOF_INT128__
   std::cout << "JSON library:           simdjson " << SIMDJSON_STRINGIFY(SIMDJSON_VERSION) << "\n"
             << "                        using implementation "

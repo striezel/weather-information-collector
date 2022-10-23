@@ -21,6 +21,7 @@
 #include "SimdJsonOpenMeteo.hpp"
 #include <iostream>
 #include "OpenMeteoFunctions.hpp"
+#include "../util/NumericPrecision.hpp"
 
 namespace wic
 {
@@ -58,7 +59,10 @@ bool SimdJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather& we
     return false;
   }
   weather = Weather();
-  weather.setTemperatureCelsius(elem.get<double>().value());
+  const double celsius = elem.get<double>().value();
+  weather.setTemperatureCelsius(celsius);
+  weather.setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+  weather.setTemperatureKelvin(celsius + 273.15);
 
   error = current_weather["windspeed"].get(elem);
   if (error || !elem.is_double())
@@ -71,14 +75,14 @@ bool SimdJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather& we
   weather.setWindSpeed(elem.get<double>().value());
 
   error = current_weather["winddirection"].get(elem);
-  if (error || !elem.is_int64())
+  if (error || !elem.is_number())
   {
     std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): JSON "
-              << "element 'winddirection' is either missing or not an integer!"
+              << "element 'winddirection' is either missing or not a number!"
               << std::endl;
     return false;
   }
-  weather.setWindDegrees(elem.get<int64_t>().value());
+  weather.setWindDegrees(elem.get<double>().value());
 
   error = current_weather["time"].get(elem);
   if (error || !elem.is_string())
@@ -186,7 +190,22 @@ bool SimdJsonOpenMeteo::parseTemperature(const simdjson::dom::element& hourly, s
       std::cerr << "Error: Temperature element is not a floating point value!" << std::endl;
       return false;
     }
-    data[idx].setTemperatureCelsius(elem.get_double().value());
+    const double celsius = elem.get_double().value();
+    data[idx].setTemperatureCelsius(celsius);
+    data[idx].setTemperatureFahrenheit(celsius * 1.8 + 32.0);
+    // Avoid values like 6.9999... ° F by rounding, if appropriate.
+    const float fahrenheitRounded = NumericPrecision<float>::enforce(data[idx].temperatureFahrenheit());
+    if (fahrenheitRounded != data[idx].temperatureFahrenheit())
+    {
+      data[idx].setTemperatureFahrenheit(fahrenheitRounded);
+    }
+    data[idx].setTemperatureKelvin(celsius + 273.15);
+    // Avoid values like 296.9999... K by rounding, if appropriate.
+    const float kelvinRounded = NumericPrecision<float>::enforce(data[idx].temperatureKelvin());
+    if (kelvinRounded != data[idx].temperatureKelvin())
+    {
+      data[idx].setTemperatureKelvin(kelvinRounded);
+    }
     ++idx;
   }
 
@@ -518,5 +537,95 @@ bool SimdJsonOpenMeteo::parseForecast(const std::string& json, Forecast& forecas
   forecast.setData(data);
   return true;
 }
+
+#ifdef wic_openmeteo_find_location
+bool SimdJsonOpenMeteo::parseLocations(const std::string& json, std::vector<Location>& locations)
+{
+  simdjson::dom::parser parser;
+  simdjson::dom::element doc;
+  auto error = parser.parse(json).get(doc);
+  if (error)
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(error) << std::endl;
+    return false;
+  }
+
+  locations.clear();
+
+  simdjson::dom::element results;
+  error = doc["results"].get(results);
+  if (error)
+  {
+    error = doc["generationtime_ms"].get(results);
+    if (error || !results.is_number())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): JSON data "
+                << "is not a geocoding API result." << std::endl;
+      return false;
+    }
+
+    // No results array means no match was found.
+    // This is a valid outcome.
+    return true;
+  }
+  if (!results.is_array())
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): JSON element"
+              << " 'results' is not an array!" << std::endl;
+    return false;
+  }
+  for (const auto& elem: results)
+  {
+    if (!elem.is_object())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): Array element"
+              << " of 'results' is not an object!" << std::endl;
+      return false;
+    }
+    Location loc;
+    simdjson::dom::element value;
+    error = elem["name"].get(value);
+    if (error || !value.is_string())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'name' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setName(value.get_string().value());
+
+    error = elem["country_code"].get(value);
+    if (error || !value.is_string())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'country_code' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setCountryCode(value.get_string().value());
+
+    error = elem["latitude"].get(value);
+    if (error || !value.is_number())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'latitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(value.get_double().value(), 0.0);
+
+    error = elem["longitude"].get(value);
+    if (error || !value.is_number())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'longitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(loc.latitude(), value.get_double().value());
+
+    locations.emplace_back(loc);
+  }
+
+  return true;
+}
+#endif // wic_openmeteo_find_location
 
 } // namespace

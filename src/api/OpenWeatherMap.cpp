@@ -22,7 +22,7 @@
 #include <cmath>
 #include <iostream>
 #ifdef wic_owm_find_location
-#include <array>
+#include "../util/encode.hpp"
 #ifdef __SIZEOF_INT128__
 #include "../json/SimdJsonOwm.hpp"
 #else
@@ -156,32 +156,6 @@ bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather
 #endif // wic_no_network_requests
 
 #ifdef wic_owm_find_location
-std::string urlEncode(const std::string& str)
-{
-  static const std::array<char, 16> hexDigits = {
-      '0', '1', '2', '3', '4', '5', '6', '7',
-      '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-  };
-  std::string encoded;
-  for (const char c: str)
-  {
-    if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')
-      || (c >= 'A' && c <= 'Z') || (c == '-') || (c == '_')
-      || (c == '.') || (c == '~'))
-    {
-      encoded.push_back(c);
-    }
-    else
-    {
-      // d
-      encoded.push_back('%');
-      encoded.push_back(hexDigits[c / 16]);
-      encoded.push_back(hexDigits[c % 16]);
-    }
-  } // for
-  return encoded;
-}
-
 bool OpenWeatherMap::findLocation(const std::string& name, std::vector<std::pair<Location, Weather> >& locations) const
 {
   if (m_apiKey.empty() || name.empty())

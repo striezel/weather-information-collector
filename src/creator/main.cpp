@@ -21,6 +21,7 @@
 #include <iostream>
 #include <utility>
 #include "CliUtilities.hpp"
+#include "../api/OpenMeteo.hpp"
 #include "../api/OpenWeatherMap.hpp"
 #include "../conf/Configuration.hpp"
 #include "../data/Location.hpp"
@@ -43,10 +44,13 @@ void showHelp()
             << "  -c FILE | --conf FILE  - Sets the file name of the configuration file to use\n"
             << "                           during the program run. If this option is omitted,\n"
             << "                           then the program will search for the configuration\n"
-            << "                           in some predefined locations.\n";
+            << "                           in some predefined locations.\n"
+            << "  --open-meteo           - Use Open-Meteo geocoding API instead of the usual\n"
+            << "                           OpenWeatherMap API, even if a key is available for\n"
+            << "                           the later.\n";
 }
 
-std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile)
+std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile, bool& openMeteo)
 {
   if ((argc <= 1) || (argv == nullptr))
     return std::make_pair(0, false);
@@ -92,6 +96,16 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
         return std::make_pair(wic::rcInvalidParameter, true);
       }
     } // if configuration file
+    else if (param == "--open-meteo")
+    {
+      if (openMeteo)
+      {
+        std::cerr << "Error: Option " << param
+                  << " was specified more than once!" << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      openMeteo = true;
+    }
     else
     {
       std::cerr << "Error: Unknown parameter " << param << "!\n"
@@ -106,8 +120,9 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
 int main(int argc, char** argv)
 {
   std::string configurationFile; /**< path of configuration file */
+  bool forceOpenMeteo = false;
 
-  const auto [exitCode, exitNow] = parseArguments(argc, argv, configurationFile);
+  const auto [exitCode, exitNow] = parseArguments(argc, argv, configurationFile, forceOpenMeteo);
   if (exitNow || (exitCode != 0))
     return exitCode;
 
@@ -120,12 +135,8 @@ int main(int argc, char** argv)
   }
 
   // Task creator needs an OpenWeatherMap API key to find locations.
+  // If the key is missing, Open-Meteo is used instead.
   const std::string owmKey = config.key(wic::ApiType::OpenWeatherMap);
-  if (owmKey.empty())
-  {
-    std::cerr << "Error: The configuration file contains no API key for OpenWeatherMap!" << std::endl;
-    return wic::rcConfigurationError;
-  }
 
   std::cout << "This program will create a new task for the weather-information-collector.\n"
             << "It will prompt the necessary information and create a task file from that.\n"
@@ -134,10 +145,20 @@ int main(int argc, char** argv)
   std::string userInput;
   std::getline(std::cin, userInput);
 
-  wic::OpenWeatherMap owm;
-  owm.setApiKey(owmKey);
   std::vector<std::pair<wic::Location, wic::Weather> > locations;
-  if (!owm.findLocation(userInput, locations) || locations.empty())
+  bool api_success = false;
+  if (!owmKey.empty() && !forceOpenMeteo)
+  {
+    wic::OpenWeatherMap owm;
+    owm.setApiKey(owmKey);
+    api_success = owm.findLocation(userInput, locations);
+  }
+  else
+  {
+    wic::OpenMeteo om;
+    api_success = om.findLocation(userInput, locations);
+  }
+  if (!api_success || locations.empty())
   {
     std::cerr << "Could not find a location with the name \"" << userInput
               << "\". You should usually enter the name of a city." << std::endl;

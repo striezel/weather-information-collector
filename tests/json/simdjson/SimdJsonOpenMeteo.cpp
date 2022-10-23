@@ -97,8 +97,46 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check data.
       REQUIRE( weather.dataTime() == toOpenMeteoTime(2022, 9, 8, 13, 0) );
       REQUIRE( weather.temperatureCelsius() == 16.8f );
+      REQUIRE( weather.temperatureFahrenheit() == 62.24f );
+      REQUIRE( weather.temperatureKelvin() == 289.95f );
       REQUIRE( weather.windSpeed() == 8.2f );
       REQUIRE( weather.windDegrees() == 105 );
+      REQUIRE( weather.json() == json );
+      REQUIRE_FALSE( weather.hasHumidity() );
+      REQUIRE_FALSE( weather.hasRain() );
+      REQUIRE_FALSE( weather.hasSnow() );
+      REQUIRE_FALSE( weather.hasPressure() );
+      REQUIRE_FALSE( weather.hasCloudiness() );
+    }
+
+    SECTION("successful parsing with float as winddirection")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 39.875,
+        "longitude": -79.0,
+        "generationtime_ms": 0.6660223007202148,
+        "utc_offset_seconds": -14400,
+        "timezone": "America/New_York",
+        "timezone_abbreviation": "EDT",
+        "elevation": 709.0,
+        "current_weather": {
+          "temperature": 13.0,
+          "windspeed": 1.97,
+          "winddirection": 114.0,
+          "weathercode": 3,
+          "time": "2022-10-23T18:00"
+        }
+      }
+      )json";
+      REQUIRE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+      // Check data.
+      REQUIRE( weather.dataTime() == toOpenMeteoTime(2022, 10, 23, 18, 0) );
+      REQUIRE( weather.temperatureCelsius() == 13.0f );
+      REQUIRE( weather.temperatureFahrenheit() == 55.4f );
+      REQUIRE( weather.temperatureKelvin() == 286.15f );
+      REQUIRE( weather.windSpeed() == 1.97f );
+      REQUIRE( weather.windDegrees() == 114 );
       REQUIRE( weather.json() == json );
       REQUIRE_FALSE( weather.hasHumidity() );
       REQUIRE_FALSE( weather.hasRain() );
@@ -486,6 +524,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check first element.
       REQUIRE( forecast.data()[0].dataTime() == toOpenMeteoTime(2022, 9, 8, 0, 0) );
       REQUIRE( forecast.data()[0].temperatureCelsius() == 17.7f );
+      REQUIRE( forecast.data()[0].temperatureFahrenheit() == 63.86f );
+      REQUIRE( forecast.data()[0].temperatureKelvin() == 290.85f );
       REQUIRE( forecast.data()[0].humidity() == 61 );
       REQUIRE( forecast.data()[0].rain() == 0.0f );
       REQUIRE( forecast.data()[0].snow() == 0.0f );
@@ -496,6 +536,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check second element.
       REQUIRE( forecast.data()[1].dataTime() == toOpenMeteoTime(2022, 9, 8, 1, 0) );
       REQUIRE( forecast.data()[1].temperatureCelsius() == 17.1f );
+      REQUIRE( forecast.data()[1].temperatureFahrenheit() == 62.78f );
+      REQUIRE( forecast.data()[1].temperatureKelvin() == 290.25f );
       REQUIRE( forecast.data()[1].humidity() == 61 );
       REQUIRE( forecast.data()[1].rain() == 0.1f );
       REQUIRE( forecast.data()[1].snow() == 0.0f );
@@ -506,6 +548,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check third element.
       REQUIRE( forecast.data()[2].dataTime() == toOpenMeteoTime(2022, 9, 8, 2, 0) );
       REQUIRE( forecast.data()[2].temperatureCelsius() == 16.6f );
+      REQUIRE( forecast.data()[2].temperatureFahrenheit() == 61.88f );
+      REQUIRE( forecast.data()[2].temperatureKelvin() == 289.75f );
       REQUIRE( forecast.data()[2].humidity() == 62 );
       REQUIRE( forecast.data()[2].rain() == 1.1f );
       REQUIRE( forecast.data()[2].snow() == 0.0f );
@@ -516,6 +560,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check fourth element.
       REQUIRE( forecast.data()[3].dataTime() == toOpenMeteoTime(2022, 9, 8, 3, 0) );
       REQUIRE( forecast.data()[3].temperatureCelsius() == 16.2f );
+      REQUIRE( forecast.data()[3].temperatureFahrenheit() == 61.16f );
+      REQUIRE( forecast.data()[3].temperatureKelvin() == 289.35f );
       REQUIRE( forecast.data()[3].humidity() == 61 );
       REQUIRE( forecast.data()[3].rain() == 0.5f );
       REQUIRE( forecast.data()[3].snow() == 0.0f );
@@ -526,6 +572,8 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       // Check fifth element.
       REQUIRE( forecast.data()[4].dataTime() == toOpenMeteoTime(2022, 9, 8, 4, 0) );
       REQUIRE( forecast.data()[4].temperatureCelsius() == 15.8f );
+      REQUIRE( forecast.data()[4].temperatureFahrenheit() == 60.44f );
+      REQUIRE( forecast.data()[4].temperatureKelvin() == 288.95f );
       REQUIRE( forecast.data()[4].humidity() == 60 );
       REQUIRE( forecast.data()[4].rain() == 1.3f );
       REQUIRE( forecast.data()[4].snow() == 0.0f );
@@ -3147,6 +3195,486 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       }
       )json";
       REQUIRE_FALSE( SimdJsonOpenMeteo::parseForecast(json, forecast) );
+    }
+  }
+
+  SECTION("parseLocations")
+  {
+    std::vector<Location> locations;
+
+    SECTION("not valid JSON")
+    {
+      const std::string json = "{ \"this\": 'is not valid, JSON: true";
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("empty string")
+    {
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations("", locations) );
+    }
+
+    SECTION("empty JSON object")
+    {
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations("{ }", locations) );
+    }
+
+    SECTION("whitespace strings")
+    {
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations("    ", locations) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations("\n", locations) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations("\r", locations) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations("\r\n\r\n", locations) );
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations("\t\t\t\t", locations) );
+    }
+
+    SECTION("successful parsing with zero elements")
+    {
+      const std::string json = R"json(
+      {
+        "generationtime_ms": 0.6788969
+      }
+      )json";
+
+      REQUIRE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+      REQUIRE( locations.size() == 0 );
+    }
+
+    SECTION("successful parsing with some matching elements")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": "Wanstead",
+            "latitude": 51.5768,
+            "longitude": 0.02463,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          },
+          {
+            "id": 2179661,
+            "name": "Wanstead",
+            "latitude": -40.13333,
+            "longitude": 176.53333,
+            "elevation": 113,
+            "feature_code": "PPL",
+            "country_code": "NZ",
+            "admin1_id": 2190146,
+            "admin2_id": 7910034,
+            "timezone": "Pacific/Auckland",
+            "country_id": 2186224,
+            "country": "New Zealand",
+            "admin1": "Hawke's Bay",
+            "admin2": "Central Hawke's Bay District"
+          },
+          {
+            "id": 3373438,
+            "name": "Wanstead",
+            "latitude": 13.13979,
+            "longitude": -59.62782,
+            "elevation": 103,
+            "feature_code": "PPL",
+            "country_code": "BB",
+            "admin1_id": 3373557,
+            "timezone": "America/Barbados",
+            "country_id": 3374084,
+            "country": "Barbados",
+            "admin1": "Saint Michael"
+          },
+          {
+            "id": 12048316,
+            "name": "Wanstead",
+            "latitude": 51.56721,
+            "longitude": 0.03282,
+            "elevation": 19,
+            "feature_code": "PPLX",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+      REQUIRE( locations.size() == 4 );
+
+      REQUIRE_FALSE( locations[0].hasOwmId() );
+      REQUIRE( locations[0].latitude() == 51.5768f );
+      REQUIRE( locations[0].longitude() == 0.02463f );
+      REQUIRE( locations[0].name() == "Wanstead" );
+      REQUIRE( locations[0].countryCode() == "GB" );
+      REQUIRE( locations[0].postcode().empty() );
+
+      REQUIRE_FALSE( locations[1].hasOwmId() );
+      REQUIRE( locations[1].latitude() == -40.13333f );
+      REQUIRE( locations[1].longitude() == 176.53333f );
+      REQUIRE( locations[1].name() == "Wanstead" );
+      REQUIRE( locations[1].countryCode() == "NZ" );
+      REQUIRE( locations[1].postcode().empty() );
+
+      REQUIRE_FALSE( locations[2].hasOwmId() );
+      REQUIRE( locations[2].latitude() == 13.13979f );
+      REQUIRE( locations[2].longitude() == -59.62782f );
+      REQUIRE( locations[2].name() == "Wanstead" );
+      REQUIRE( locations[2].countryCode() == "BB" );
+      REQUIRE( locations[2].postcode().empty() );
+
+      REQUIRE_FALSE( locations[3].hasOwmId() );
+      REQUIRE( locations[3].latitude() == 51.56721f );
+      REQUIRE( locations[3].longitude() == 0.03282f );
+      REQUIRE( locations[3].name() == "Wanstead" );
+      REQUIRE( locations[3].countryCode() == "GB" );
+      REQUIRE( locations[3].postcode().empty() );
+    }
+
+    SECTION("failure: results is not an array")
+    {
+      const std::string json = R"json(
+      {
+        "results": "Not an array",
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: name is missing")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+
+            "latitude": 51.5768,
+            "longitude": 0.02463,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          },
+          {
+            "id": 2179661,
+            "name": "Wanstead",
+            "latitude": -40.13333,
+            "longitude": 176.53333,
+            "elevation": 113,
+            "feature_code": "PPL",
+            "country_code": "NZ",
+            "admin1_id": 2190146,
+            "admin2_id": 7910034,
+            "timezone": "Pacific/Auckland",
+            "country_id": 2186224,
+            "country": "New Zealand",
+            "admin1": "Hawke's Bay",
+            "admin2": "Central Hawke's Bay District"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: name is not a string")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": { "fail": true },
+            "latitude": 51.5768,
+            "longitude": 0.02463,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          },
+          {
+            "id": 2179661,
+            "name": "Wanstead",
+            "latitude": -40.13333,
+            "longitude": 176.53333,
+            "elevation": 113,
+            "feature_code": "PPL",
+            "country_code": "NZ",
+            "admin1_id": 2190146,
+            "admin2_id": 7910034,
+            "timezone": "Pacific/Auckland",
+            "country_id": 2186224,
+            "country": "New Zealand",
+            "admin1": "Hawke's Bay",
+            "admin2": "Central Hawke's Bay District"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: latitude is missing")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": "Wanstead",
+            "longitude": 0.02463,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: latitude is not a number")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": "Wanstead",
+            "latitude": "fails here",
+            "longitude": 0.02463,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: longitude is missing")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": "Wanstead",
+            "latitude": 51.5768,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: longitude is not a number")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": "Wanstead",
+            "latitude": 51.5768,
+            "longitude": "fails here",
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: country_code is missing")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": "Wanstead",
+            "latitude": 51.5768,
+            "longitude": 0.02463,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          },
+          {
+            "id": 2179661,
+            "name": "Wanstead",
+            "latitude": -40.13333,
+            "longitude": 176.53333,
+            "elevation": 113,
+            "feature_code": "PPL",
+            "admin1_id": 2190146,
+            "admin2_id": 7910034,
+            "timezone": "Pacific/Auckland",
+            "country_id": 2186224,
+            "country": "New Zealand",
+            "admin1": "Hawke's Bay",
+            "admin2": "Central Hawke's Bay District"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
+    }
+
+    SECTION("failure: country_code is not a string")
+    {
+      const std::string json = R"json(
+      {
+        "results": [
+          {
+            "id": 2634803,
+            "name": "Wanstead",
+            "latitude": 51.5768,
+            "longitude": 0.02463,
+            "elevation": 33,
+            "feature_code": "PPL",
+            "country_code": "GB",
+            "admin1_id": 6269131,
+            "admin2_id": 2648110,
+            "admin3_id": 3333185,
+            "timezone": "Europe/London",
+            "population": 11543,
+            "country_id": 2635167,
+            "country": "United Kingdom",
+            "admin1": "England",
+            "admin2": "Greater London",
+            "admin3": "Redbridge"
+          },
+          {
+            "id": 2179661,
+            "name": "Wanstead",
+            "latitude": -40.13333,
+            "longitude": 176.53333,
+            "elevation": 113,
+            "feature_code": "PPL",
+            "country_code": 123456,
+            "admin1_id": 2190146,
+            "admin2_id": 7910034,
+            "timezone": "Pacific/Auckland",
+            "country_id": 2186224,
+            "country": "New Zealand",
+            "admin1": "Hawke's Bay",
+            "admin2": "Central Hawke's Bay District"
+          }
+        ],
+        "generationtime_ms": 0.41508675
+      }
+      )json";
+
+      REQUIRE_FALSE( SimdJsonOpenMeteo::parseLocations(json, locations) );
     }
   }
 }

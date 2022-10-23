@@ -76,9 +76,10 @@ The following settings are recognized in a task file:
 * **location.postcode** - _(optional)_ postcode of the location / city; make
   sure that this is a format supported by the corresponding API, or otherwise
   you might get unexpected results / data
-* **location.coordinates** - _(optional for all APIs except DarkSky)_
+* **location.coordinates** - _(optional for all APIs except DarkSky and
+  Open-Meteo)_
   geographical coordinates (latitude and  longitude) of the location, e.g.
-  `51.5,-1.2` - **required for DarkSky tasks**
+  `51.5,-1.2` - **required for DarkSky and Open-Meteo tasks**
 * **interval** - the interval in seconds after which the next request for the
   same location and the same API will be performed, e.g. `3600`
   (Request intervals below 15 seconds are rejected.)
@@ -153,6 +154,20 @@ A possible task file for Weatherbit API could be:
     location.countrycode=GB
     # one request every two hours, e.g. every 7200 seconds
     interval=7200
+
+A task file that uses the Open-Meteo API could be:
+
+    # use Open-Meteo API
+    api=OpenMeteo
+    # collect weather forecast data
+    data=forecast
+    # city of Riga in Latvia
+    location.name=Riga
+    location.countrycode=LV
+    # coordinates are required for Open-Meteo
+    location.coordinates=56.945999,24.105890
+    # one request every three hours, e.g. every 10800 seconds
+    interval=10800
 
 Remember that you can create multiple task files to define multiple collection
 tasks.

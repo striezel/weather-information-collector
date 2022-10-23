@@ -20,6 +20,7 @@ set(weather-information-collector-task-creator_sources
     ../data/Location.cpp
     ../data/Weather.cpp
     ../db/ConnectionInformation.cpp
+    ../json/OpenMeteoFunctions.cpp
     ../net/Curly.cpp
     ../net/Request.cpp
     ../net/curl_version.cpp
@@ -28,6 +29,7 @@ set(weather-information-collector-task-creator_sources
     ../util/Directories.cpp
     ../util/GitInfos.cpp
     ../util/Strings.cpp
+    ../util/encode.cpp
     ../Version.cpp
     CliUtilities.cpp
     main.cpp)
@@ -41,10 +43,12 @@ try_compile(CAN_HAVE_SIMDJSON
 if (CAN_HAVE_SIMDJSON)
   list(APPEND weather-information-collector-task-creator_sources
     ../../third-party/simdjson/simdjson.cpp
+    ../json/SimdJsonOpenMeteo.cpp
     ../json/SimdJsonOwm.cpp)
   message(STATUS "creator can use simdjson.")
 else()
   list(APPEND weather-information-collector-task-creator_sources
+    ../json/NLohmannJsonOpenMeteo.cpp
     ../json/NLohmannJsonOwm.cpp)
   message(STATUS "Compiler is not fit for simdjson, won't use it in creator.")
 endif(CAN_HAVE_SIMDJSON)
@@ -62,7 +66,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # We can safely add the -Dwic_no_network_requests to remove unnecessary methods
 # from the API classes, because -Dwic_owm_find_location takes care of all the
 # cURL-related stuff, so we can still do web requests for everything we need.
-add_definitions(-Dwic_owm_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
+add_definitions(-Dwic_owm_find_location -Dwic_openmeteo_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
 
 set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 

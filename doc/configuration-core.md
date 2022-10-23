@@ -122,8 +122,8 @@ The following configuration settings for weather API plans are recognized:
 ## API key settings
 
 Finally, one has to specify API key settings. An API key has to be specified for
-every distinct API that will be used by the collection tasks. Failure to give a
-key is an error.
+every distinct API that will be used by the collection tasks, except for the
+Open-Meteo API. Failure to give a key for the other used APIs is an error.
 
 The following configurations settings for keys are recognized:
 

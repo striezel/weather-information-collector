@@ -144,7 +144,7 @@ class OpenWeatherMap: public API
     /** \brief Finds matching locations by name.
      *
      * \param name  the name of the location to find
-     * \param location  variable where matching locations will be stored
+     * \param locations  variable where matching locations will be stored
      * \return Returns true, if the request was successful.
      *         Returns false, if an error occurred.
      */
