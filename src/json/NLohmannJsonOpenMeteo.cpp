@@ -80,14 +80,14 @@ bool NLohmannJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather
   weather.setWindSpeed(find->get<float>());
 
   find = current_weather.find("winddirection");
-  if (find == current_weather.end() || !find->is_number_unsigned())
+  if (find == current_weather.end() || !find->is_number())
   {
     std::cerr << "Error in NLohmannJsonOpenMeteo::parseCurrentWeather(): JSON "
-              << "element 'winddirection' is either missing or not an integer!"
+              << "element 'winddirection' is either missing or not a number!"
               << std::endl;
     return false;
   }
-  weather.setWindDegrees(find->get<int>());
+  weather.setWindDegrees(find->get<float>());
 
   find = current_weather.find("time");
   if (find == current_weather.end() || !find->is_string())

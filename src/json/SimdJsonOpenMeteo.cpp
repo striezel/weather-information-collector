@@ -75,14 +75,14 @@ bool SimdJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather& we
   weather.setWindSpeed(elem.get<double>().value());
 
   error = current_weather["winddirection"].get(elem);
-  if (error || !elem.is_int64())
+  if (error || !elem.is_number())
   {
     std::cerr << "Error in SimdJsonOpenMeteo::parseCurrentWeather(): JSON "
-              << "element 'winddirection' is either missing or not an integer!"
+              << "element 'winddirection' is either missing or not a number!"
               << std::endl;
     return false;
   }
-  weather.setWindDegrees(elem.get<int64_t>().value());
+  weather.setWindDegrees(elem.get<double>().value());
 
   error = current_weather["time"].get(elem);
   if (error || !elem.is_string())

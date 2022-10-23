@@ -109,6 +109,42 @@ TEST_CASE("Class SimdJsonOpenMeteo")
       REQUIRE_FALSE( weather.hasCloudiness() );
     }
 
+    SECTION("successful parsing with float as winddirection")
+    {
+      const std::string json = R"json(
+      {
+        "latitude": 39.875,
+        "longitude": -79.0,
+        "generationtime_ms": 0.6660223007202148,
+        "utc_offset_seconds": -14400,
+        "timezone": "America/New_York",
+        "timezone_abbreviation": "EDT",
+        "elevation": 709.0,
+        "current_weather": {
+          "temperature": 13.0,
+          "windspeed": 1.97,
+          "winddirection": 114.0,
+          "weathercode": 3,
+          "time": "2022-10-23T18:00"
+        }
+      }
+      )json";
+      REQUIRE( SimdJsonOpenMeteo::parseCurrentWeather(json, weather) );
+      // Check data.
+      REQUIRE( weather.dataTime() == toOpenMeteoTime(2022, 10, 23, 18, 0) );
+      REQUIRE( weather.temperatureCelsius() == 13.0f );
+      REQUIRE( weather.temperatureFahrenheit() == 55.4f );
+      REQUIRE( weather.temperatureKelvin() == 286.15f );
+      REQUIRE( weather.windSpeed() == 1.97f );
+      REQUIRE( weather.windDegrees() == 114 );
+      REQUIRE( weather.json() == json );
+      REQUIRE_FALSE( weather.hasHumidity() );
+      REQUIRE_FALSE( weather.hasRain() );
+      REQUIRE_FALSE( weather.hasSnow() );
+      REQUIRE_FALSE( weather.hasPressure() );
+      REQUIRE_FALSE( weather.hasCloudiness() );
+    }
+
     SECTION("failure: current_weather is missing")
     {
       const std::string json = R"json(
