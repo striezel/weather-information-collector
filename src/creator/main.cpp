@@ -44,10 +44,13 @@ void showHelp()
             << "  -c FILE | --conf FILE  - Sets the file name of the configuration file to use\n"
             << "                           during the program run. If this option is omitted,\n"
             << "                           then the program will search for the configuration\n"
-            << "                           in some predefined locations.\n";
+            << "                           in some predefined locations.\n"
+            << "  --open-meteo           - Use Open-Meteo geocoding API instead of the usual\n"
+            << "                           OpenWeatherMap API, even if a key is available for\n"
+            << "                           the later.\n";
 }
 
-std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile)
+std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& configurationFile, bool& openMeteo)
 {
   if ((argc <= 1) || (argv == nullptr))
     return std::make_pair(0, false);
@@ -93,6 +96,16 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
         return std::make_pair(wic::rcInvalidParameter, true);
       }
     } // if configuration file
+    else if (param == "--open-meteo")
+    {
+      if (openMeteo)
+      {
+        std::cerr << "Error: Option " << param
+                  << " was specified more than once!" << std::endl;
+        return std::make_pair(wic::rcInvalidParameter, true);
+      }
+      openMeteo = true;
+    }
     else
     {
       std::cerr << "Error: Unknown parameter " << param << "!\n"
@@ -107,8 +120,9 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
 int main(int argc, char** argv)
 {
   std::string configurationFile; /**< path of configuration file */
+  bool forceOpenMeteo = false;
 
-  const auto [exitCode, exitNow] = parseArguments(argc, argv, configurationFile);
+  const auto [exitCode, exitNow] = parseArguments(argc, argv, configurationFile, forceOpenMeteo);
   if (exitNow || (exitCode != 0))
     return exitCode;
 
@@ -134,7 +148,7 @@ int main(int argc, char** argv)
 
   std::vector<std::pair<wic::Location, wic::Weather> > locations;
   bool api_success = false;
-  if (!owmKey.empty())
+  if (!owmKey.empty() && !forceOpenMeteo)
   {
     wic::OpenWeatherMap owm;
     owm.setApiKey(owmKey);
