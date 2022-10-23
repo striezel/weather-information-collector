@@ -22,6 +22,11 @@
 #define WEATHER_INFORMATION_COLLECTOR_OPENMETEO_HPP
 
 #include <string>
+#ifdef wic_openmeteo_find_location
+#include <utility>
+#include <vector>
+#include "../data/Location.hpp"
+#endif // wic_openmeteo_find_location
 #include "API.hpp"
 
 namespace wic
@@ -129,6 +134,17 @@ class OpenMeteo: public API
      */
     bool parseForecast(const std::string& json, Forecast& forecast) const override;
     #endif // wic_no_json_parsing
+
+    #ifdef wic_openmeteo_find_location
+    /** \brief Finds matching locations by name.
+     *
+     * \param name  the name of the location to find
+     * \param locations  variable where matching locations will be stored
+     * \return Returns true, if the request was successful.
+     *         Returns false, if an error occurred.
+     */
+    bool findLocation(const std::string& name, std::vector<std::pair<Location, Weather> >& locations);
+    #endif // wic_openmeteo_find_location
 }; // class
 
 } // namespace

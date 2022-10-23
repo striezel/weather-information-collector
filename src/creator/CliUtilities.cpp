@@ -104,6 +104,11 @@ void writeWeatherLine(const Weather& weather)
     if (hasPrevOutput)
       std::cout << ", ";
     std::cout << weather.pressure() << " hPa";
+    hasPrevOutput = true;
+  }
+  if (!hasPrevOutput)
+  {
+    std::cout << "no data available";
   }
   std::cout << std::endl;
 }

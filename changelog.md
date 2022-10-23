@@ -4,6 +4,10 @@
 
 The program is now able to collect data from the Open-Meteo API, too.
 
+weather-information-collector-task-creator can now work even if there is no
+API key for OpenWeatherMap available in the configuration file. It will fall
+back to Open-Meteo in that case.
+
 simdjson, the library used for JSON parsing, has been updated from version 2.2.2
 to version 3.0.0.
 

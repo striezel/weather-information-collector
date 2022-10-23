@@ -20,6 +20,15 @@
 
 #include "OpenMeteo.hpp"
 #include <iostream>
+#ifdef wic_openmeteo_find_location
+#include "../util/encode.hpp"
+#ifdef __SIZEOF_INT128__
+#include "../json/SimdJsonOpenMeteo.hpp"
+#else
+#include "../json/NLohmannJsonOpenMeteo.hpp"
+#endif // __SIZEOF_INT128__
+#include "../net/Request.hpp"
+#endif // wic_openmeteo_find_location
 #ifndef wic_no_json_parsing
 #ifdef __SIZEOF_INT128__
 #include "../json/SimdJsonOpenMeteo.hpp"
@@ -137,5 +146,37 @@ bool OpenMeteo::currentAndForecastWeather(const Location& location, Weather& wea
   return parseForecast(response.value(), forecast);
 }
 #endif // wic_no_network_requests
+
+#ifdef wic_openmeteo_find_location
+bool OpenMeteo::findLocation(const std::string& name, std::vector<std::pair<Location, Weather> >& locations)
+{
+  if (name.empty())
+    return false;
+
+  const std::string url = "https://geocoding-api.open-meteo.com/v1/search?name=" + urlEncode(name);
+  const auto response = Request::get(url, "OpenMeteo::findLocation");
+  if (!response.has_value())
+    return false;
+
+  std::vector<Location> bare_locations;
+#ifdef __SIZEOF_INT128__
+  const bool success = SimdJsonOpenMeteo::parseLocations(response.value(), bare_locations);
+#else
+  const bool success = NLohmannJsonOpenMeteo::parseLocations(response.value(), locations);
+#endif
+  if (!success)
+    return false;
+
+  locations.clear();
+  for (const auto& loc: bare_locations)
+  {
+    Weather current;
+    // TODO: Get current weather.
+    locations.push_back(std::make_pair(loc, current));
+  }
+
+  return true;
+}
+#endif // wic_openmeteo_find_location
 
 } // namespace

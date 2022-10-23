@@ -538,4 +538,94 @@ bool SimdJsonOpenMeteo::parseForecast(const std::string& json, Forecast& forecas
   return true;
 }
 
+#ifdef wic_openmeteo_find_location
+bool SimdJsonOpenMeteo::parseLocations(const std::string& json, std::vector<Location>& locations)
+{
+  simdjson::dom::parser parser;
+  simdjson::dom::element doc;
+  auto error = parser.parse(json).get(doc);
+  if (error)
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): Unable to parse JSON data!" << std::endl
+              << "Parser error: " << simdjson::error_message(error) << std::endl;
+    return false;
+  }
+
+  locations.clear();
+
+  simdjson::dom::element results;
+  error = doc["results"].get(results);
+  if (error)
+  {
+    error = doc["generationtime_ms"].get(results);
+    if (error || !results.is_number())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): JSON data "
+                << "is not a geocoding API result." << std::endl;
+      return false;
+    }
+
+    // No results array means no match was found.
+    // This is a valid outcome.
+    return true;
+  }
+  if (!results.is_array())
+  {
+    std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): JSON element"
+              << " 'results' is not an array!" << std::endl;
+    return false;
+  }
+  for (const auto& elem: results)
+  {
+    if (!elem.is_object())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseLocations(): Array element"
+              << " of 'results' is not an object!" << std::endl;
+      return false;
+    }
+    Location loc;
+    simdjson::dom::element value;
+    error = elem["name"].get(value);
+    if (error || !value.is_string())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'name' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setName(value.get_string().value());
+
+    error = elem["country_code"].get(value);
+    if (error || !value.is_string())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'country_code' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setCountryCode(value.get_string().value());
+
+    error = elem["latitude"].get(value);
+    if (error || !value.is_number())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'latitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(value.get_double().value(), 0.0);
+
+    error = elem["longitude"].get(value);
+    if (error || !value.is_number())
+    {
+      std::cerr << "Error in SimdJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'longitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(loc.latitude(), value.get_double().value());
+
+    locations.emplace_back(loc);
+  }
+
+  return true;
+}
+#endif // wic_openmeteo_find_location
+
 } // namespace

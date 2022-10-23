@@ -537,4 +537,95 @@ bool NLohmannJsonOpenMeteo::parseForecast(const std::string& json, Forecast& for
   return true;
 }
 
+#ifdef wic_openmeteo_find_location
+bool NLohmannJsonOpenMeteo::parseLocations(const std::string& json, std::vector<Location>& locations)
+{
+  nlohmann::json doc;
+  try
+  {
+    doc = nlohmann::json::parse(json);
+  }
+  catch(const nlohmann::json::parse_error& ex)
+  {
+    std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): Unable to parse JSON data!"
+              << std::endl << "Parser error: " << ex.what() << std::endl;
+    return false;
+  }
+
+  locations.clear();
+
+  auto find = doc.find("results");
+  if (find == doc.end())
+  {
+    find = doc.find("generationtime_ms");
+    if (find == doc.end() || !find->is_number())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): JSON data "
+                << "is not a geocoding API result." << std::endl;
+      return false;
+    }
+
+    // No results array means no match was found.
+    // This is a valid outcome.
+    return true;
+  }
+  const auto results = *find;
+  if (!results.is_array())
+  {
+    std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): JSON element"
+              << " 'results' is not an array!" << std::endl;
+    return false;
+  }
+  for (const auto& elem: results)
+  {
+    if (!elem.is_object())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseLocations(): Array element"
+              << " of 'results' is not an object!" << std::endl;
+      return false;
+    }
+    Location loc;
+    const auto name = elem.find("name");
+    if (name == elem.end() || !name->is_string())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'name' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setName(name->get<std::string>());
+
+    const auto cc = elem.find("country_code");
+    if (cc == elem.end() || !cc->is_string())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'country_code' is either missing or not a string!" << std::endl;
+      return false;
+    }
+    loc.setCountryCode(cc->get<std::string>());
+
+    const auto lat = elem.find("latitude");
+    if (lat == elem.end() || !lat->is_number())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'latitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(lat->get<double>(), 0.0f);
+
+    const auto lon = elem.find("longitude");
+    if (lon == elem.end() || !lon->is_number())
+    {
+      std::cerr << "Error in NLohmannJsonOpenMeteo::parseForecast(): JSON element"
+              << " 'longitude' is either missing or not a number!" << std::endl;
+      return false;
+    }
+    loc.setCoordinates(loc.latitude(), lon->get<double>());
+
+    locations.emplace_back(loc);
+  }
+
+  return true;
+}
+#endif // wic_openmeteo_find_location
+
 } // namespace

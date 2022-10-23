@@ -25,6 +25,9 @@
 #include "../../third-party/simdjson/simdjson.h"
 #include "../data/Forecast.hpp"
 #include "../data/Weather.hpp"
+#ifdef wic_openmeteo_find_location
+#include "../data/Location.hpp"
+#endif // wic_openmeteo_find_location
 
 namespace wic
 {
@@ -51,6 +54,17 @@ class SimdJsonOpenMeteo
      *         Returns false, if an error occurred.
      */
     static bool parseForecast(const std::string& json, Forecast& forecast);
+
+    #ifdef wic_openmeteo_find_location
+    /** \brief Parses found locations.
+     *
+     * \param json     string containing the JSON
+     * \param locations  variable where parsed locations will be stored
+     * \return Returns true, if the parsing was successful.
+     *         Returns false, if an error occurred.
+     */
+    static bool parseLocations(const std::string& json, std::vector<Location>& locations);
+    #endif // wic_openmeteo_find_location
   private:
     /** \brief Checks whether the units match the expected values.
      *

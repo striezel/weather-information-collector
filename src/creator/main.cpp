@@ -21,6 +21,7 @@
 #include <iostream>
 #include <utility>
 #include "CliUtilities.hpp"
+#include "../api/OpenMeteo.hpp"
 #include "../api/OpenWeatherMap.hpp"
 #include "../conf/Configuration.hpp"
 #include "../data/Location.hpp"
@@ -119,13 +120,10 @@ int main(int argc, char** argv)
     return wic::rcConfigurationError;
   }
 
-  // Task creator needs an OpenWeatherMap API key to find locations.
+  // Task creator needs an OpenWeatherMap API key to find locations that also
+  // include current weather data. If the key is missing, Open-Meteo is used
+  // instead. This works, but gives no weather data (yet).
   const std::string owmKey = config.key(wic::ApiType::OpenWeatherMap);
-  if (owmKey.empty())
-  {
-    std::cerr << "Error: The configuration file contains no API key for OpenWeatherMap!" << std::endl;
-    return wic::rcConfigurationError;
-  }
 
   std::cout << "This program will create a new task for the weather-information-collector.\n"
             << "It will prompt the necessary information and create a task file from that.\n"
@@ -134,10 +132,20 @@ int main(int argc, char** argv)
   std::string userInput;
   std::getline(std::cin, userInput);
 
-  wic::OpenWeatherMap owm;
-  owm.setApiKey(owmKey);
   std::vector<std::pair<wic::Location, wic::Weather> > locations;
-  if (!owm.findLocation(userInput, locations) || locations.empty())
+  bool api_success = false;
+  if (!owmKey.empty())
+  {
+    wic::OpenWeatherMap owm;
+    owm.setApiKey(owmKey);
+    api_success = owm.findLocation(userInput, locations);
+  }
+  else
+  {
+    wic::OpenMeteo om;
+    api_success = om.findLocation(userInput, locations);
+  }
+  if (!api_success || locations.empty())
   {
     std::cerr << "Could not find a location with the name \"" << userInput
               << "\". You should usually enter the name of a city." << std::endl;
