@@ -134,9 +134,8 @@ int main(int argc, char** argv)
     return wic::rcConfigurationError;
   }
 
-  // Task creator needs an OpenWeatherMap API key to find locations that also
-  // include current weather data. If the key is missing, Open-Meteo is used
-  // instead. This works, but gives no weather data (yet).
+  // Task creator needs an OpenWeatherMap API key to find locations.
+  // If the key is missing, Open-Meteo is used instead.
   const std::string owmKey = config.key(wic::ApiType::OpenWeatherMap);
 
   std::cout << "This program will create a new task for the weather-information-collector.\n"

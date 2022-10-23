@@ -68,7 +68,7 @@ bool OpenMeteo::supportsDataType(const DataType data) const
   return (data != DataType::none);
 }
 
-#ifndef wic_no_json_parsing
+#if !defined(wic_no_json_parsing) || defined(wic_openmeteo_find_location)
 bool OpenMeteo::parseCurrentWeather(const std::string& json, Weather& weather) const
 {
 #ifdef __SIZEOF_INT128__
@@ -77,7 +77,9 @@ bool OpenMeteo::parseCurrentWeather(const std::string& json, Weather& weather) c
   return NLohmannJsonOpenMeteo::parseCurrentWeather(json, weather);
 #endif // __SIZEOF_INT128__
 }
+#endif
 
+#ifndef wic_no_json_parsing
 bool OpenMeteo::parseForecast(const std::string& json, Forecast& forecast) const
 {
 #ifdef __SIZEOF_INT128__
@@ -88,7 +90,7 @@ bool OpenMeteo::parseForecast(const std::string& json, Forecast& forecast) const
 }
 #endif // wic_no_json_parsing
 
-#ifndef wic_no_network_requests
+#if !defined(wic_no_network_requests) || defined(wic_openmeteo_find_location)
 std::string OpenMeteo::toRequestString(const Location& location)
 {
   if (location.hasCoordinates())
@@ -111,7 +113,9 @@ bool OpenMeteo::currentWeather(const Location& location, Weather& weather)
   // Parsing is done here.
   return parseCurrentWeather(response.value(), weather);
 }
+#endif
 
+#ifndef wic_no_network_requests
 bool OpenMeteo::forecastWeather(const Location& location, Forecast& forecast)
 {
   forecast = Forecast();
@@ -171,7 +175,8 @@ bool OpenMeteo::findLocation(const std::string& name, std::vector<std::pair<Loca
   for (const auto& loc: bare_locations)
   {
     Weather current;
-    // TODO: Get current weather.
+    if (!currentWeather(loc, current))
+      current = Weather();
     locations.push_back(std::make_pair(loc, current));
   }
 
