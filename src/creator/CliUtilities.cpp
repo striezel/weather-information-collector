@@ -69,7 +69,7 @@ void writeLocationLine(const int idx, const Location& location)
 
 void writeWeatherLine(const Weather& weather)
 {
-  std::cout << "     Weather: ";
+  std::cout << "     Current weather: ";
   // -- temperature
   bool hasPrevOutput = false;
   if (weather.hasTemperatureCelsius())
