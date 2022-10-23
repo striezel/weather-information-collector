@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.?.? (2022-08-??)
+## Version 0.?.? (2022-10-??)
 
 The program is now able to collect data from the Open-Meteo API, too.
 
