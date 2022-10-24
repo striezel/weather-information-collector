@@ -2,7 +2,7 @@
 
 weather-information-collector is a tool that collects weather information from
 various available ReST API services (currently OpenWeatherMap, DarkSky,
-Weatherbit, Weatherstack and Open-meteo) and stores the information in a
+Weatherbit, Weatherstack and Open-Meteo) and stores the information in a
 database. Currently only MySQL and compatible DBMS like MariaDB are supported.
 
 Data collection tasks can be configured individually.
