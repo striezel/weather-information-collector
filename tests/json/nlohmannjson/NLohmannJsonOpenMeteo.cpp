@@ -474,8 +474,8 @@ TEST_CASE("Class NLohmannJsonOpenMeteo")
           ],
           "snowfall": [
             0,
-            0,
-            0,
+            7.7,
+            7.0,
             0,
             0
           ],
@@ -540,7 +540,7 @@ TEST_CASE("Class NLohmannJsonOpenMeteo")
       REQUIRE( forecast.data()[1].temperatureKelvin() == 290.25f );
       REQUIRE( forecast.data()[1].humidity() == 61 );
       REQUIRE( forecast.data()[1].rain() == 0.1f );
-      REQUIRE( forecast.data()[1].snow() == 0.0f );
+      REQUIRE( forecast.data()[1].snow() == 11.0f );
       REQUIRE( forecast.data()[1].pressure() == 1011 );
       REQUIRE( forecast.data()[1].windSpeed() == 2.9f );
       REQUIRE( forecast.data()[1].windDegrees() == 90 );
@@ -552,7 +552,7 @@ TEST_CASE("Class NLohmannJsonOpenMeteo")
       REQUIRE( forecast.data()[2].temperatureKelvin() == 289.75f );
       REQUIRE( forecast.data()[2].humidity() == 62 );
       REQUIRE( forecast.data()[2].rain() == 1.1f );
-      REQUIRE( forecast.data()[2].snow() == 0.0f );
+      REQUIRE( forecast.data()[2].snow() == 10.0f );
       REQUIRE( forecast.data()[2].pressure() == 1011 );
       REQUIRE( forecast.data()[2].windSpeed() == 2.4f );
       REQUIRE( forecast.data()[2].windDegrees() == 88 );
