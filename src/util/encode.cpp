@@ -43,8 +43,9 @@ std::string urlEncode(const std::string& str)
     {
       // d
       encoded.push_back('%');
-      encoded.push_back(hexDigits[c / 16]);
-      encoded.push_back(hexDigits[c % 16]);
+      const unsigned char code = static_cast<unsigned char>(c);
+      encoded.push_back(hexDigits[code / 16]);
+      encoded.push_back(hexDigits[code % 16]);
     }
   } // for
   return encoded;

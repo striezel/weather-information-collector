@@ -31,6 +31,7 @@ set(weather_information_collector_tests_sources
     ../../src/util/Environment.cpp
     ../../src/util/SemVer.cpp
     ../../src/util/Strings.cpp
+    ../../src/util/encode.cpp
     api/Apixu.cpp
     api/DarkSky.cpp
     api/Factory.cpp
@@ -56,6 +57,7 @@ set(weather_information_collector_tests_sources
     util/NumericPrecision.cpp
     util/SemVer.cpp
     util/Strings.cpp
+    util/encode.cpp
     main.cpp)
 
 try_compile(CAN_HAVE_SIMDJSON
