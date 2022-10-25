@@ -1035,8 +1035,8 @@ TEST_CASE("Class Configuration")
       )conf";
       REQUIRE( writeConfiguration(tasks / "wstack.task", task2_content) );
       const std::string task3_content = R"conf(
-      # use DarkSky API
-      api=DarkSky
+      # use Open-Meteo API
+      api=OpenMeteo
       # collect current and forecast data
       data=current+forecast
       # location: Alcatraz Island
@@ -1044,7 +1044,7 @@ TEST_CASE("Class Configuration")
       # one request every 20 minutes, e.g. every 1200 seconds
       interval=1200
       )conf";
-      REQUIRE( writeConfiguration(tasks / "dsky.task", task3_content) );
+      REQUIRE( writeConfiguration(tasks / "meteo.task", task3_content) );
 
       Configuration conf;
       REQUIRE( conf.load(path.string(), false) );
@@ -1092,14 +1092,14 @@ TEST_CASE("Class Configuration")
       REQUIRE( ws_task.interval() == std::chrono::seconds{7200} );
 
       const Task& third_task = *std::find_if(conf.tasks().begin(), conf.tasks().end(),
-          [](const Task& t) { return t.api() == ApiType::DarkSky; });
+          [](const Task& t) { return t.api() == ApiType::OpenMeteo; });
       REQUIRE_FALSE( third_task.location().hasOwmId() );
       REQUIRE( third_task.location().name().empty() );
       REQUIRE( third_task.location().countryCode().empty() );
       REQUIRE( third_task.location().latitude() == 37.8267f );
       REQUIRE( third_task.location().longitude() == -122.4233f );
       REQUIRE( third_task.location().postcode().empty() );
-      REQUIRE( third_task.api() == ApiType::DarkSky );
+      REQUIRE( third_task.api() == ApiType::OpenMeteo );
       REQUIRE( third_task.data() == DataType::CurrentAndForecast );
       REQUIRE( third_task.interval() == std::chrono::seconds{1200} );
     }
@@ -1364,6 +1364,180 @@ TEST_CASE("Class Configuration")
 
       Configuration conf;
       REQUIRE_FALSE( conf.load(path.string(), false) );
+    }
+
+    SECTION("load configuration file, but tasks contain one DarkSky task")
+    {
+      const std::filesystem::path path{"deprecated-darksky-task.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=deprecated-darksky-task-dir
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      const std::filesystem::path tasks{"deprecated-darksky-task-dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      api=DarkSky
+      data=current
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      location.id=2643743
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "darksky.task", task_content) );
+
+      Configuration conf;
+      REQUIRE( conf.load(path.string(), false) );
+
+      REQUIRE( conf.connectionInfo().hostname() == "db.domain.local" );
+      REQUIRE( conf.connectionInfo().db() == "weather_db" );
+      REQUIRE( conf.connectionInfo().user() == "user" );
+      REQUIRE( conf.connectionInfo().password() == "secret(!) password" );
+      REQUIRE( conf.connectionInfo().port() == 3366 );
+      REQUIRE( conf.taskDirectory() == "deprecated-darksky-task-dir" );
+      REQUIRE( conf.taskExtension() == ".task" );
+      REQUIRE( conf.key(ApiType::OpenWeatherMap) == "0123456789abcdefdeadbeef1c0ffee1" );
+      REQUIRE( conf.key(ApiType::Apixu) == "abcdef9876543210affe1affe2affe" );
+      REQUIRE( conf.key(ApiType::DarkSky) == "f00ba12735743210fedcba9876543210" );
+      REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
+      REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
+      REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Enterprise );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Advanced );
+      REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Business );
+
+      REQUIRE( conf.tasks().size() == 1 );
+
+      const Task& darksky_task = conf.tasks().at(0);
+      REQUIRE( darksky_task.location().owmId() == 2643743 );
+      REQUIRE( darksky_task.location().name() == "London" );
+      REQUIRE( darksky_task.location().countryCode() == "GB" );
+      REQUIRE( darksky_task.location().latitude() == 51.507301f );
+      REQUIRE( darksky_task.location().longitude() == -0.1277f );
+      REQUIRE( darksky_task.location().postcode().empty() );
+      REQUIRE( darksky_task.api() == ApiType::DarkSky );
+      REQUIRE( darksky_task.data() == DataType::Current );
+      REQUIRE( darksky_task.interval() == std::chrono::seconds{3600} );
+    }
+
+    SECTION("load configuration file, but tasks contain several DarkSky tasks")
+    {
+      const std::filesystem::path path{"deprecated-darksky-tasks.conf"};
+      const std::string content = R"conf(
+      # This line is a comment and will be ignored by the program.
+      #And so is this line.
+
+      # database settings
+      db.host=db.domain.local
+      db.name=weather_db
+      db.user=user
+      db.password=secret(!) password
+      db.port=3366
+      tasks.directory=deprecated-darksky-tasks-dir
+      tasks.extension=.task
+      # API keys
+      key.owm=0123456789abcdefdeadbeef1c0ffee1
+      key.apixu=abcdef9876543210affe1affe2affe
+      key.darksky=f00ba12735743210fedcba9876543210
+      key.weatherbit=fedcba98765432100123456789abcdef
+      key.weatherstack=f00ba12abcdef1234567890abcdef123
+      # plans
+      plan.owm=enterprise
+      plan.weatherbit=advanced
+      plan.weatherstack=business
+      )conf";
+      REQUIRE( writeConfiguration(path, content) );
+      FileGuard guard{path};
+
+      const std::filesystem::path tasks{"deprecated-darksky-tasks-dir"};
+      REQUIRE( std::filesystem::create_directory(tasks) );
+      DirectoryGuard dirGuard{tasks};
+      const std::string task_content = R"conf(
+      api=DarkSky
+      data=current
+      location.name=London
+      location.countrycode=GB
+      location.coordinates=51.507301,-0.1277
+      location.id=2643743
+      interval=3600
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "darksky1.task", task_content) );
+      const std::string task2_content = R"conf(
+      api=DarkSky
+      data=current+forecast
+      location.name=Paris
+      location.countrycode=FR
+      location.coordinates=48.853,2.349
+      interval=7200
+      )conf";
+      REQUIRE( writeConfiguration(tasks / "darksky2.task", task2_content) );
+
+      Configuration conf;
+      REQUIRE( conf.load(path.string(), false) );
+
+      REQUIRE( conf.connectionInfo().hostname() == "db.domain.local" );
+      REQUIRE( conf.connectionInfo().db() == "weather_db" );
+      REQUIRE( conf.connectionInfo().user() == "user" );
+      REQUIRE( conf.connectionInfo().password() == "secret(!) password" );
+      REQUIRE( conf.connectionInfo().port() == 3366 );
+      REQUIRE( conf.taskDirectory() == "deprecated-darksky-tasks-dir" );
+      REQUIRE( conf.taskExtension() == ".task" );
+      REQUIRE( conf.key(ApiType::OpenWeatherMap) == "0123456789abcdefdeadbeef1c0ffee1" );
+      REQUIRE( conf.key(ApiType::Apixu) == "abcdef9876543210affe1affe2affe" );
+      REQUIRE( conf.key(ApiType::DarkSky) == "f00ba12735743210fedcba9876543210" );
+      REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
+      REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
+      REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Enterprise );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Advanced );
+      REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Business );
+
+      REQUIRE( conf.tasks().size() == 2 );
+
+      const Task& first_task = *std::find_if(conf.tasks().begin(), conf.tasks().end(),
+          [](const Task& t) { return t.data() == DataType::Current; });
+      REQUIRE( first_task.location().owmId() == 2643743 );
+      REQUIRE( first_task.location().name() == "London" );
+      REQUIRE( first_task.location().countryCode() == "GB" );
+      REQUIRE( first_task.location().latitude() == 51.507301f );
+      REQUIRE( first_task.location().longitude() == -0.1277f );
+      REQUIRE( first_task.location().postcode().empty() );
+      REQUIRE( first_task.api() == ApiType::DarkSky );
+      REQUIRE( first_task.data() == DataType::Current );
+      REQUIRE( first_task.interval() == std::chrono::seconds{3600} );
+
+      const Task& second_task = *std::find_if(conf.tasks().begin(), conf.tasks().end(),
+          [](const Task& t) { return t.data() == DataType::CurrentAndForecast; });
+      REQUIRE_FALSE( second_task.location().hasOwmId() );
+      REQUIRE( second_task.location().name() == "Paris" );
+      REQUIRE( second_task.location().countryCode() == "FR" );
+      REQUIRE( second_task.location().latitude() == 48.853f );
+      REQUIRE( second_task.location().longitude() == 2.349f );
+      REQUIRE( second_task.location().postcode().empty() );
+      REQUIRE( second_task.api() == ApiType::DarkSky );
+      REQUIRE( second_task.data() == DataType::CurrentAndForecast );
+      REQUIRE( second_task.interval() == std::chrono::seconds{7200} );
     }
   }
 }

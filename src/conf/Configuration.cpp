@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -566,13 +566,27 @@ bool Configuration::load(const std::string& fileName, [[maybe_unused]] const boo
   if (apixuTaskCount > 0)
   {
     if (apixuTaskCount > 1)
-      std::cerr << "Error: There are " << apixuTaskCount << " tasks configured that use Apixu API.";
+      std::cerr << "Error: There are " << apixuTaskCount << " tasks configured that use the Apixu API.";
     else
-      std::cerr << "Error: There is one task configured that uses Apixu API.";
+      std::cerr << "Error: There is one task configured that uses the Apixu API.";
     std::cerr << std::endl << "However, the Apixu API has been deprecated and shut down." << std::endl
               << "Please remove the Apixu task file(s) or consider switching "
-              << "to another API, e.g. DarkSky, OpenWeatherMap, Weatherbit or Weatherstack." << std::endl;
+              << "to another API, e.g. Open-Meteo, OpenWeatherMap, Weatherbit or Weatherstack." << std::endl;
     return false;
+  }
+  // Show a notice, if there are DarkSky tasks, because Dark Sky API will shut
+  // down on 31st March 2023.
+  const auto darkSkyTaskCount = std::count_if(tasksContainer.begin(), tasksContainer.end(),
+                                  [](const Task& t) { return t.api() == ApiType::DarkSky; });
+  if (darkSkyTaskCount > 0)
+  {
+    if (darkSkyTaskCount > 1)
+      std::clog << "Info: There are " << darkSkyTaskCount << " tasks configured that use the DarkSky API.";
+    else
+      std::clog << "Info: There is one task configured that uses the DarkSky API.";
+    std::clog << std::endl << "However, the DarkSky API will shut down on 31st March 2023." << std::endl
+              << "Consider removing the DarkSky task file(s) or consider switching "
+              << "to another API, e.g. Open-Meteo, OpenWeatherMap, Weatherbit or Weatherstack." << std::endl;
   }
   // Check whether there are tasks that need an API key but where the key for
   // that API is missing.

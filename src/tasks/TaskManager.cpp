@@ -109,6 +109,13 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
                   << " uses the Apixu API which has been deprecated and shut down!"
                   << std::endl;
       }
+      // add informational notice for upcoming DarkSky shutdown
+      if (api == ApiType::DarkSky)
+      {
+        std::clog << "Warning: The task in file " << fileName
+                  << " uses the DarkSky API which will be shut down on "
+                  << "31st March 2023." << std::endl;
+      }
     } // if api
     else if (name == "data")
     {
