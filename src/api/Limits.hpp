@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,31 +33,6 @@ struct Limits
 {
   // delete constructor
   Limits() = delete;
-
-
-  /** \brief contains the limit for Apixu API calls
-   */
-  static const Limit apixu;
-
-
-  /** \brief contains the limit for OpenWeatherMap API calls
-   */
-  static const Limit owm;
-
-
-  /** \brief contains the limit for DarkSky API calls
-   */
-  static const Limit darksky;
-
-
-  /** \brief contains the limit for Weatherbit API calls
-   */
-  static const Limit weatherbit;
-
-
-  /** \brief contains the limit for Weatherstack API calls
-   */
-  static const Limit weatherstack;
 
 
   /** \brief contains the limit for unknown API - always zero

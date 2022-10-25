@@ -23,25 +23,6 @@
 namespace wic
 {
 
-/* Limit for Apixu is 10000 calls per month on the free plan,
-   which is ca. 13.4 requests per hour. */
-const Limit Limits::apixu = Limit(10000, std::chrono::hours(24 * 31));
-
-/* Limit for OpenWeatherMap is 60 calls per minute on the free plan. */
-const Limit Limits::owm = Limit(60, std::chrono::minutes(1));
-
-/* Limit for DarkSky is 1000 calls per day on the free plan,
-   which is ca. 41.667 requests per hour. */
-const Limit Limits::darksky = Limit(1000, std::chrono::hours(24));
-
-/* Limit for Weatherbit is 500 calls per day on the free plan,
-   which is ca. 20.833 requests per hour. */
-const Limit Limits::weatherbit = Limit(500, std::chrono::hours(24));
-
-/* Limit for Weatherstack is 1000 calls per month on the free plan,
-   which is ca. 1.34 requests per hour. */
-const Limit Limits::weatherstack = Limit(1000, std::chrono::hours(24 * 31));
-
 /* There's no limit here for "none" API, but set it to zero. */
 const Limit Limits::none = Limit(0, std::chrono::hours(1));
 
@@ -50,12 +31,15 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
   switch(api)
   {
     case ApiType::Apixu:
-         return Limits::apixu;
+         /* Limit for Apixu was 10000 calls per month on the free plan,
+            which is ca. 13.4 requests per hour. */
+         return Limit(10000, std::chrono::hours(24 * 31));
     case ApiType::OpenWeatherMap:
          switch (planOwm)
          {
              case PlanOwm::Free:
-                  return Limits::owm;
+                  /* Limit for OpenWeatherMap is 60 calls per minute on the free plan. */
+                  return Limit(60, std::chrono::minutes(1));
              case PlanOwm::Startup:
                   /* Limit for OpenWeatherMap is 600 calls per minute on the Startup plan. */
                   return Limit(600, std::chrono::minutes(1));
@@ -72,12 +56,16 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
                  return Limits::none;
          }
     case ApiType::DarkSky:
-         return Limits::darksky;
+         /* Limit for DarkSky is 1000 calls per day on the free plan,
+            which is ca. 41.667 requests per hour. */
+         return Limit(1000, std::chrono::hours(24));
     case ApiType::Weatherbit:
          switch (planWb)
          {
              case PlanWeatherbit::Free:
-                  return Limits::weatherbit;
+                  /* Limit for Weatherbit is 500 calls per day on the free plan,
+                     which is ca. 20.833 requests per hour. */
+                  return Limit(500, std::chrono::hours(24));
              case PlanWeatherbit::Starter:
                   /* Limit for Weatherbit is 50000 calls per day on the Starter plan,
                      which is ca. 2083.33 requests per hour. */
@@ -97,7 +85,9 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
          switch (planWs)
          {
              case PlanWeatherstack::Free:
-                  return Limits::weatherstack;
+                  /* Limit for Weatherstack is 1000 calls per month on the free plan,
+                     which is ca. 1.34 requests per hour. */
+                  return Limit(1000, std::chrono::hours(24 * 31));
              case PlanWeatherstack::Standard:
                   /* Limit for Weatherstack is 50000 calls per month on the Standard plan,
                      which is ca. 67.2 requests per hour. */
