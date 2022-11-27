@@ -6,6 +6,9 @@ An informational notice will be shown when there is at least one task uses the
 DarkSky API to get data. DarkSky will shut down on 31st March 2023, so users
 get a notice to prepare for migration to other APIs.
 
+simdjson, the library used for JSON parsing, has been updated from version 3.0.0
+to version 3.0.1.
+
 ## Version 0.10.0 (2022-10-24)
 
 The program is now able to collect data from the Open-Meteo API, too.
