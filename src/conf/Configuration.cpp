@@ -484,7 +484,7 @@ bool Configuration::loadCoreConfiguration(const std::string& fileName)
 #ifndef wic_no_tasks_in_config
 bool Configuration::load(const std::string& fileName, const bool skipTasks, const bool missingKeysAllowed)
 #else
-bool Configuration::load(const std::string& fileName, [[maybe_unused]] const bool skipTasks, const bool missingKeysAllowed)
+bool Configuration::load(const std::string& fileName, [[maybe_unused]] const bool skipTasks, [[maybe_unused]] const bool missingKeysAllowed)
 #endif
 {
   namespace fs = std::filesystem;

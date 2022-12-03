@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector benchmark tool.
-    Copyright (C) 2019, 2020, 2021  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -166,33 +166,33 @@ int weatherDataBench(const ApiType api, SourceMariaDB& source)
 
     // Parse with simdjson.
     const auto simdJsonStart = std::chrono::high_resolution_clock::now();
-    for (const Weather& elem: data)
+    for (const Weather& weather: data)
     {
-      if (!elem.hasJson())
+      if (!weather.hasJson())
         continue;
 
       Weather dummy;
-      if (!simdJsonT::parseCurrentWeather(elem.json(), dummy))
+      if (!simdJsonT::parseCurrentWeather(weather.json(), dummy))
       {
         std::cerr << "Error: Could not parse JSON with simdjson!" << std::endl
-                  << "JSON is: '" << elem.json() << "'." << std::endl;
+                  << "JSON is: '" << weather.json() << "'." << std::endl;
         return 1;
       }
 
       // compare with value from database
       // -- First set request time, because that one cannot be determined from
       //    the raw JSON alone.
-      dummy.setRequestTime(elem.requestTime());
-      if (dummy != elem)
+      dummy.setRequestTime(weather.requestTime());
+      if (dummy != weather)
       {
         std::cerr << "Error: simdjson-parsed element does not match the element from the database!" << std::endl;
-        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+        std::cerr << "json() matches: " << (weather.json() == dummy.json() ? "yes" : "no") << std::endl;
         std::cerr << "Element from database:\n";
-        printWeather(elem);
+        printWeather(weather);
         std::cerr << "Element from parser:\n";
         printWeather(dummy);
         std::cerr << "Status:\n";
-        printComponentMatchStatus(elem, dummy);
+        printComponentMatchStatus(weather, dummy);
         return 42;
       }
     } // for
@@ -200,33 +200,33 @@ int weatherDataBench(const ApiType api, SourceMariaDB& source)
 
     // Parse with nlohmann/json.
     const auto nlohmannJsonStart = std::chrono::high_resolution_clock::now();
-    for (const Weather& elem: data)
+    for (const Weather& weather: data)
     {
-      if (!elem.hasJson())
+      if (!weather.hasJson())
         continue;
 
       Weather dummy;
-      if (!nlohmannJsonT::parseCurrentWeather(elem.json(), dummy))
+      if (!nlohmannJsonT::parseCurrentWeather(weather.json(), dummy))
       {
         std::cerr << "Error: Could not parse JSON with nlohmann/json!" << std::endl
-                  << "JSON is: '" << elem.json() << "'." << std::endl;
+                  << "JSON is: '" << weather.json() << "'." << std::endl;
         return 1;
       }
 
       // compare with value from database
       // -- First set request time, because that one cannot be determined from
       //    the raw JSON alone.
-      dummy.setRequestTime(elem.requestTime());
-      if (dummy != elem)
+      dummy.setRequestTime(weather.requestTime());
+      if (dummy != weather)
       {
         std::cerr << "Error: nlohmann/json-parsed element does not match the element from the database!" << std::endl;
-        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+        std::cerr << "json() matches: " << (weather.json() == dummy.json() ? "yes" : "no") << std::endl;
         std::cerr << "Element from database:\n";
-        printWeather(elem);
+        printWeather(weather);
         std::cerr << "Element from parser:\n";
         printWeather(dummy);
         std::cerr << "Status:\n";
-        printComponentMatchStatus(elem, dummy);
+        printComponentMatchStatus(weather, dummy);
         return 42;
       }
     } // for
@@ -297,30 +297,30 @@ int forecastBench(const ApiType api, SourceMariaDB& source)
 
     // Parse with simdjson.
     const auto simdJsonStart = std::chrono::high_resolution_clock::now();
-    for (const Forecast& elem: data)
+    for (const Forecast& forecast: data)
     {
-      if (!elem.hasJson())
+      if (!forecast.hasJson())
         continue;
 
       Forecast dummy;
-      if (!simdJsonT::parseForecast(elem.json(), dummy))
+      if (!simdJsonT::parseForecast(forecast.json(), dummy))
       {
         std::cerr << "Error: Could not parse JSON with simdjson!" << std::endl
-                  << "JSON is: '" << elem.json() << "'." << std::endl;
+                  << "JSON is: '" << forecast.json() << "'." << std::endl;
         return 1;
       }
 
       // compare with value from database
       // -- First set request time, because that one cannot be determined from
       //    the raw JSON alone.
-      dummy.setRequestTime(elem.requestTime());
-      if (dummy != elem)
+      dummy.setRequestTime(forecast.requestTime());
+      if (dummy != forecast)
       {
         std::cerr << "Error: simdjson-parsed element does not match the element from the database!" << std::endl;
-        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
-        std::cerr << "JSON is '" << elem.json() << "'." << std::endl;
+        std::cerr << "json() matches: " << (forecast.json() == dummy.json() ? "yes" : "no") << std::endl;
+        std::cerr << "JSON is '" << forecast.json() << "'." << std::endl;
         std::cerr << "Element from database:\n";
-        printForecast(elem);
+        printForecast(forecast);
         std::cerr << "Element from parser:\n";
         printForecast(dummy);
         return 42;
@@ -330,29 +330,29 @@ int forecastBench(const ApiType api, SourceMariaDB& source)
 
     // Parse with nlohmann/json.
     const auto nlohmannJsonStart = std::chrono::high_resolution_clock::now();
-    for (const Forecast& elem: data)
+    for (const Forecast& forecast: data)
     {
-      if (!elem.hasJson())
+      if (!forecast.hasJson())
         continue;
 
       Forecast dummy;
-      if (!nlohmannJsonT::parseForecast(elem.json(), dummy))
+      if (!nlohmannJsonT::parseForecast(forecast.json(), dummy))
       {
         std::cerr << "Error: Could not parse JSON with nlohmann/json!" << std::endl
-                  << "JSON is: '" << elem.json() << "'." << std::endl;
+                  << "JSON is: '" << forecast.json() << "'." << std::endl;
         return 1;
       }
 
       // compare with value from database
       // -- First set request time, because that one cannot be determined from
       //    the raw JSON alone.
-      dummy.setRequestTime(elem.requestTime());
-      if (dummy != elem)
+      dummy.setRequestTime(forecast.requestTime());
+      if (dummy != forecast)
       {
         std::cerr << "Error: nlohmann/json-parsed element does not match the element from the database!" << std::endl;
-        std::cerr << "json() matches: " << (elem.json() == dummy.json() ? "yes" : "no") << std::endl;
+        std::cerr << "json() matches: " << (forecast.json() == dummy.json() ? "yes" : "no") << std::endl;
         std::cerr << "Element from database:\n";
-        printForecast(elem);
+        printForecast(forecast);
         std::cerr << "Element from parser:\n";
         printForecast(dummy);
         return 42;

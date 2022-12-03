@@ -75,7 +75,7 @@ bool Weatherstack::parseCurrentWeather(const std::string& json, Weather& weather
 #endif // __SIZEOF_INT128__
 }
 
-bool Weatherstack::parseForecast(const std::string& json, Forecast& forecast) const
+bool Weatherstack::parseForecast([[maybe_unused]] const std::string& json, [[maybe_unused]] Forecast& forecast) const
 {
   // Not implemented.
   return false;
@@ -114,14 +114,14 @@ bool Weatherstack::currentWeather(const Location& location, Weather& weather)
   return parseCurrentWeather(response.value(), weather);
 }
 
-bool Weatherstack::forecastWeather(const Location& location, Forecast& forecast)
+bool Weatherstack::forecastWeather([[maybe_unused]] const Location& location, Forecast& forecast)
 {
   // Not implemented.
   forecast = Forecast();
   return false;
 }
 
-bool Weatherstack::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
+bool Weatherstack::currentAndForecastWeather([[maybe_unused]] const Location& location, Weather& weather, Forecast& forecast)
 {
   // Not implemented.
   weather = Weather();

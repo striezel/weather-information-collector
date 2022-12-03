@@ -33,18 +33,18 @@ set(weather-information-collector-synchronizer_sources
     main.cpp)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_definitions (-Wall -fexceptions)
+    add_definitions (-Wall -Wextra -Wpedantic -pedantic-errors -Wshadow -fexceptions)
     if (CODE_COVERAGE)
         add_definitions (-O0)
     else ()
         add_definitions (-O3)
     endif ()
+
+    set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 endif ()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Dwic_no_tasks_in_config -Dwic_no_json_parsing)
-
-set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather-information-collector-synchronizer ${weather-information-collector-synchronizer_sources})
 

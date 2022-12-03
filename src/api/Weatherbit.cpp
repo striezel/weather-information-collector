@@ -184,7 +184,9 @@ bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
   return parseForecast(response.value(), forecast);
 }
 
-bool Weatherbit::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
+bool Weatherbit::currentAndForecastWeather([[maybe_unused]] const Location& location,
+                                           [[maybe_unused]] Weather& weather,
+                                           [[maybe_unused]] Forecast& forecast)
 {
   std::cerr << "Error: Getting both current weather and forecast data in a "
             << "single request is not supported by Weatherbit!" << std::endl;

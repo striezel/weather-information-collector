@@ -29,6 +29,10 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wshadow" />
+			<Add option="-pedantic-errors" />
+			<Add option="-pedantic" />
+			<Add option="-Wextra" />
 			<Add option="-Wall" />
 			<Add option="-std=c++17" />
 			<Add option="-fexceptions" />
@@ -55,9 +59,6 @@
 		<Unit filename="../../../third-party/simdjson/simdjson.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
-			<envvars />
-			<code_completion />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

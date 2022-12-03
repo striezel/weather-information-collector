@@ -54,12 +54,14 @@ else()
 endif(CAN_HAVE_SIMDJSON)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_definitions (-Wall -fexceptions)
+    add_definitions (-Wall -Wextra -Wpedantic -pedantic-errors -Wshadow -fexceptions)
     if (CODE_COVERAGE)
         add_definitions (-O0)
     else ()
         add_definitions (-O3)
     endif ()
+
+    set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 endif ()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -67,8 +69,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # from the API classes, because -Dwic_owm_find_location takes care of all the
 # cURL-related stuff, so we can still do web requests for everything we need.
 add_definitions(-Dwic_owm_find_location -Dwic_openmeteo_find_location -Dwic_no_network_requests -Dwic_no_json_parsing)
-
-set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
 
 add_executable(weather-information-collector-task-creator ${weather-information-collector-task-creator_sources})
 

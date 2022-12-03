@@ -224,97 +224,97 @@ TEST_CASE("LocationClass")
 
   SECTION("coordinatesToString")
   {
-    Location loc;
+    Location location;
 
     SECTION("no coordinates")
     {
-      REQUIRE( loc.coordinatesToString() == "<no coordinates present>" );
+      REQUIRE( location.coordinatesToString() == "<no coordinates present>" );
     }
 
     SECTION("northern latitude, eastern longitude")
     {
-      loc.setCoordinates(12.25f, 25.0f);
-      REQUIRE( loc.coordinatesToString() == "12.250000°N, 25.000000°E" );
+      location.setCoordinates(12.25f, 25.0f);
+      REQUIRE( location.coordinatesToString() == "12.250000°N, 25.000000°E" );
     }
 
     SECTION("northern latitude, western longitude")
     {
-      loc.setCoordinates(12.345678f, -25.987654f);
-      REQUIRE( loc.coordinatesToString() == "12.345678°N, 25.987654°W" );
+      location.setCoordinates(12.345678f, -25.987654f);
+      REQUIRE( location.coordinatesToString() == "12.345678°N, 25.987654°W" );
     }
 
     SECTION("southern latitude, eastern longitude")
     {
-      loc.setCoordinates(-12.345678f, 25.987654f);
-      REQUIRE( loc.coordinatesToString() == "12.345678°S, 25.987654°E" );
+      location.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( location.coordinatesToString() == "12.345678°S, 25.987654°E" );
     }
 
     SECTION("southern latitude, western longitude")
     {
-      loc.setCoordinates(-12.25f, -25.0f);
-      REQUIRE( loc.coordinatesToString() == "12.250000°S, 25.000000°W" );
+      location.setCoordinates(-12.25f, -25.0f);
+      REQUIRE( location.coordinatesToString() == "12.250000°S, 25.000000°W" );
     }
   }
 
   SECTION("toString")
   {
-    Location loc;
+    Location location;
 
     SECTION("empty")
     {
-      REQUIRE( loc.toString() == "<empty location>" );
+      REQUIRE( location.toString() == "<empty location>" );
     }
 
     SECTION("name only")
     {
-      loc.setName("Berlin");
-      REQUIRE( loc.toString() == "Berlin" );
+      location.setName("Berlin");
+      REQUIRE( location.toString() == "Berlin" );
     }
 
     SECTION("name and coordinates")
     {
-      loc.setName("Wargarbl");
-      loc.setCoordinates(-12.345678f, 25.987654f);
-      REQUIRE( loc.toString() == "Wargarbl (12.345678°S, 25.987654°E)" );
+      location.setName("Wargarbl");
+      location.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( location.toString() == "Wargarbl (12.345678°S, 25.987654°E)" );
     }
 
     SECTION("name and country code")
     {
-      loc.setName("Wargarbl");
-      loc.setCountryCode("FI");
-      REQUIRE( loc.toString() == "Wargarbl, FI" );
+      location.setName("Wargarbl");
+      location.setCountryCode("FI");
+      REQUIRE( location.toString() == "Wargarbl, FI" );
     }
 
     SECTION("name and country code and coordinates")
     {
-      loc.setName("Wargarbl");
-      loc.setCountryCode("FI");
-      loc.setCoordinates(-12.345678f, 25.987654f);
-      REQUIRE( loc.toString() == "Wargarbl, FI (12.345678°S, 25.987654°E)" );
+      location.setName("Wargarbl");
+      location.setCountryCode("FI");
+      location.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( location.toString() == "Wargarbl, FI (12.345678°S, 25.987654°E)" );
     }
 
     SECTION("coordinates only")
     {
-      loc.setCoordinates(-12.345678f, 25.987654f);
-      REQUIRE( loc.toString() == "12.345678°S, 25.987654°E" );
+      location.setCoordinates(-12.345678f, 25.987654f);
+      REQUIRE( location.toString() == "12.345678°S, 25.987654°E" );
     }
 
     SECTION("country code only")
     {
-      loc.setCountryCode("FI");
-      REQUIRE( loc.toString() == "<empty location>" );
+      location.setCountryCode("FI");
+      REQUIRE( location.toString() == "<empty location>" );
     }
 
     SECTION("OpenWeatherMap ID only")
     {
-      loc.setOwmId(123);
-      REQUIRE( loc.toString() == "OWM ID 123" );
+      location.setOwmId(123);
+      REQUIRE( location.toString() == "OWM ID 123" );
     }
 
     SECTION("postcode only")
     {
-      loc.setPostcode("123ABC");
-      REQUIRE( loc.toString() == "Postcode 123ABC" );
+      location.setPostcode("123ABC");
+      REQUIRE( location.toString() == "Postcode 123ABC" );
     }
   }
 }

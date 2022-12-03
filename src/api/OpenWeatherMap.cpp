@@ -147,7 +147,9 @@ bool OpenWeatherMap::forecastWeather(const Location& location, Forecast& forecas
   return parseForecast(response.value(), forecast);
 }
 
-bool OpenWeatherMap::currentAndForecastWeather(const Location& location, Weather& weather, Forecast& forecast)
+bool OpenWeatherMap::currentAndForecastWeather([[maybe_unused]] const Location& location,
+                                               [[maybe_unused]] Weather& weather,
+                                               [[maybe_unused]] Forecast& forecast)
 {
   std::cerr << "Error: Getting both current weather and forecast data in a "
             << "single request is not supported by OpenWeatherMap!" << std::endl;

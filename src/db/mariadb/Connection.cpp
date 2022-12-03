@@ -20,9 +20,9 @@
 
 #include "Connection.hpp"
 #include <climits>
-#include <cstring>
 #include <ctime>
 #include <iostream>
+#include <vector>
 #include "../Exceptions.hpp"
 #include "Result.hpp"
 
@@ -73,11 +73,10 @@ std::string Connection::escape(const std::string& str) const
 {
   const auto len = str.size();
   const std::string::size_type bufferSize = 2 * len + 1;
-  char buffer[bufferSize];
-  std::memset(buffer, 0, bufferSize);
+  std::vector<char> buffer(bufferSize, '\0');
   // Connection `conn` cannot be nullptr, because constructor enforces it.
-  const auto escapedLen = mysql_real_escape_string(conn, buffer, str.c_str(), len);
-  return std::string(buffer, escapedLen);
+  const auto escapedLen = mysql_real_escape_string(conn, buffer.data(), str.c_str(), len);
+  return std::string(buffer.data(), escapedLen);
 }
 
 std::string Connection::quote(const std::string& str) const

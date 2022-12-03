@@ -25,19 +25,16 @@ set(task_manager_tests_sources
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Dwic_no_json_parsing -Dwic_no_network_requests)
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    add_definitions(-Wall -Weffc++ -fexceptions)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_definitions(-Wall -Wextra -Wpedantic -pedantic-errors -Wshadow -fexceptions)
     if (CODE_COVERAGE)
         add_definitions (-O0)
     else ()
         add_definitions (-O3)
     endif ()
-endif ()
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_definitions(-Wall -O3 -fexceptions)
-endif ()
 
-set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+    set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+endif ()
 
 add_executable(task_manager_tests ${task_manager_tests_sources})
 

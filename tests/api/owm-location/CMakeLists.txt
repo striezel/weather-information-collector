@@ -29,15 +29,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_definitions(-Dwic_no_json_parsing -Dwic_owm_find_location -Dwic_weather_comparison)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_definitions(-Wall -fexceptions)
+    add_definitions(-Wall -Wextra -Wpedantic -pedantic-errors -Wshadow -fexceptions)
     if (CODE_COVERAGE)
         add_definitions (-O0)
     else ()
         add_definitions (-O3)
     endif ()
-endif ()
 
-set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+    set( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -s" )
+endif ()
 
 add_executable(owm_location_parsing_tests ${owm_location_parsing_tests_sources})
 
