@@ -37,7 +37,7 @@ jobs:
           mkdir build
           cd build
           cmake ../ -DJSON_BENCHMARK=ON
-          make -j4
+          make -j2
       - name: Tests
         run: |
           cd "$GITHUB_WORKSPACE"/build

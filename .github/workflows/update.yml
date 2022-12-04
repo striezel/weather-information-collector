@@ -34,7 +34,7 @@ jobs:
           mkdir build
           cd build
           cmake ../ -DJSON_BENCHMARK=OFF
-          make -j4 weather-information-collector-update
+          make -j2 weather-information-collector-update
       - name: Prepare table structure and connection information
         run: |
           sudo apt-get install -y mysql-client
