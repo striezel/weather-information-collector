@@ -3,15 +3,22 @@ name: Clang
 on: push
 
 jobs:
-  ubuntu_20_04_clang10:
+  clang:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        version: [ 8, 9, 10 ]
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
       - name: Install Debian packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y catch clang-10 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
+          sudo apt-get install -y catch clang-${{ matrix.version }} cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
+      - name: Install libc++-${{ matrix.version }}-dev
+        run: |
+          sudo apt-get install libc++-8-dev
+        if: matrix.version == 8
       - name: Start MySQL database
         run: sudo systemctl start mysql.service
       - name: Show MySQL version information
@@ -28,80 +35,8 @@ jobs:
           mysql -uroot --password=root -e "SHOW DATABASES;"
       - name: Build
         run: |
-          export CXX=clang++-10
-          export CC=clang-10
-          cd "$GITHUB_WORKSPACE"
-          mkdir build
-          cd build
-          cmake ../ -DJSON_BENCHMARK=ON
-          make -j4
-      - name: Tests
-        run: |
-          cd "$GITHUB_WORKSPACE"/build
-          ctest -V
-  ubuntu_20_04_clang9:
-    runs-on: ubuntu-20.04
-    steps:
-      # Checks-out the repository under $GITHUB_WORKSPACE.
-      - uses: actions/checkout@v3
-      - name: Install Debian packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y catch clang-9 cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
-      - name: Start MySQL database
-        run: sudo systemctl start mysql.service
-      - name: Show MySQL version information
-        run: |
-          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
-      - name: Prepare MySQL database
-        run: |
-          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
-          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
-          mysql -uroot --password=root -e "SHOW DATABASES;"
-      - name: Adjust MySQL 8.0 authentication
-        run: |
-          mysql -uroot -proot -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY ''; ALTER USER root@localhost IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
-          mysql -uroot --password=root -e "SHOW DATABASES;"
-      - name: Build
-        run: |
-          export CXX=clang++-9
-          export CC=clang-9
-          cd "$GITHUB_WORKSPACE"
-          mkdir build
-          cd build
-          cmake ../ -DJSON_BENCHMARK=ON
-          make -j4
-      - name: Tests
-        run: |
-          cd "$GITHUB_WORKSPACE"/build
-          ctest -V
-  ubuntu_20_04_clang8:
-    runs-on: ubuntu-20.04
-    steps:
-      # Checks-out the repository under $GITHUB_WORKSPACE.
-      - uses: actions/checkout@v3
-      - name: Install Debian packages
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y catch clang-8 cmake git libc++-8-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
-      - name: Start MySQL database
-        run: sudo systemctl start mysql.service
-      - name: Show MySQL version information
-        run: |
-          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
-      - name: Prepare MySQL database
-        run: |
-          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
-          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
-          mysql -uroot --password=root -e "SHOW DATABASES;"
-      - name: Adjust MySQL 8.0 authentication
-        run: |
-          mysql -uroot -proot -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY ''; ALTER USER root@localhost IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
-          mysql -uroot --password=root -e "SHOW DATABASES;"
-      - name: Build
-        run: |
-          export CXX=clang++-8
-          export CC=clang-8
+          export CXX=clang++-${{ matrix.version }}
+          export CC=clang-${{ matrix.version }}
           cd "$GITHUB_WORKSPACE"
           mkdir build
           cd build
