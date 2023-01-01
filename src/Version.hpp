@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ namespace wic
 {
 
 /** \brief version information */
-const std::string version = "version 0.10.0, 2022-10-24";
+const std::string version = "version 0.10.1, 2023-01-01";
 
 
 /** \brief Prints version information to the standard output.
