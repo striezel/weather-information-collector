@@ -287,16 +287,16 @@ TEST_CASE("Class TaskManager")
 
     SECTION("Weatherbit only: two tasks within limits of free plan")
     {
-      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(1800)));
-      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(1800)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(18000)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(18000)));
 
       REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::Free, PlanWeatherbit::Free, PlanWeatherstack::Free) );
     }
 
     SECTION("Weatherbit only: two tasks with too much requests for free plan")
     {
-      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(240)));
-      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(240)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(2400)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(2400)));
 
       REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::Free, PlanWeatherbit::Free, PlanWeatherstack::Free) );
     }
@@ -305,14 +305,14 @@ TEST_CASE("Class TaskManager")
     {
       for (int i = 1; i <= 6; ++i)
       {
-        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
+        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(36000)));
       }
       REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::Free, PlanWeatherbit::Free, PlanWeatherstack::Free) );
 
       tasks.clear();
       for (int i = 1; i <= 2; ++i)
       {
-        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(360)));
+        tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
       }
       REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::Free, PlanWeatherbit::Free, PlanWeatherstack::Free) );
     }
@@ -416,7 +416,7 @@ TEST_CASE("Class TaskManager")
       tasks.push_back(Task(loc, ApiType::Apixu, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(900)));
       tasks.push_back(Task(loc, ApiType::DarkSky, DataType::Current, std::chrono::seconds(900)));
-      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(900)));
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(9000)));
       tasks.push_back(Task(loc, ApiType::Weatherstack, DataType::Current, std::chrono::seconds(9000)));
       tasks.push_back(Task(loc, ApiType::OpenMeteo, DataType::Current, std::chrono::seconds(900)));
 
@@ -487,7 +487,7 @@ TEST_CASE("Class TaskManager")
 
       // too much Weatherbit requests, but OWM + Apixu + DarkSky + Weatherstack + OpenMeteo requests within limit
       tasks.clear();
-      for (int i = 1; i <= 50; ++i)
+      for (int i = 1; i <= 5; ++i)
       {
         tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(3600)));
       }

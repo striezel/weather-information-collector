@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -63,9 +63,9 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
          switch (planWb)
          {
              case PlanWeatherbit::Free:
-                  /* Limit for Weatherbit is 500 calls per day on the free plan,
-                     which is ca. 20.833 requests per hour. */
-                  return Limit(500, std::chrono::hours(24));
+                  /* Limit for Weatherbit is 50 calls per day on the free plan,
+                     which is ca. 2.0833 requests per hour. */
+                  return Limit(50, std::chrono::hours(24));
              case PlanWeatherbit::Starter:
                   /* Limit for Weatherbit is 50000 calls per day on the Starter plan,
                      which is ca. 2083.33 requests per hour. */

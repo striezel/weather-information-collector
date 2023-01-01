@@ -6,6 +6,9 @@ An informational notice will be shown when there is at least one task uses the
 DarkSky API to get data. DarkSky will shut down on 31st March 2023, so users
 get a notice to prepare for migration to other APIs.
 
+Adjust request limit for Weatherbit's free plan to 50 requests per day, since
+they changed the limit from 500 to 50 requests.
+
 simdjson, the library used for JSON parsing, has been updated from version 3.0.0
 to version 3.0.1.
 
