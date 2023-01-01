@@ -4,7 +4,7 @@ on: push
 
 jobs:
   build_from_download:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
@@ -13,7 +13,7 @@ jobs:
           cd docker
           docker build . -f Dockerfile_download
 #  build_single_stage:
-#    runs-on: ubuntu-20.04
+#    runs-on: ubuntu-22.04
 #    steps:
 #      # Checks-out the repository under $GITHUB_WORKSPACE.
 #      - uses: actions/checkout@v3
@@ -22,7 +22,7 @@ jobs:
 #          cd docker
 #          docker build . -f Dockerfile_build
 #  build_multiple_stages:
-#    runs-on: ubuntu-20.04
+#    runs-on: ubuntu-22.04
 #    steps:
 #      # Checks-out the repository under $GITHUB_WORKSPACE.
 #      - uses: actions/checkout@v3

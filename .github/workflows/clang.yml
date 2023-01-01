@@ -4,10 +4,10 @@ on: push
 
 jobs:
   clang:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        version: [ 8, 9, 10 ]
+        version: [ 12, 13, 14 ]
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
@@ -15,10 +15,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y catch clang-${{ matrix.version }} cmake git libcurl4-gnutls-dev libmariadb-dev pkg-config
-      - name: Install libc++-${{ matrix.version }}-dev
-        run: |
-          sudo apt-get install libc++-8-dev
-        if: matrix.version == 8
       - name: Start MySQL database
         run: sudo systemctl start mysql.service
       - name: Show MySQL version information

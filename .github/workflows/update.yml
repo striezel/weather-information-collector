@@ -11,7 +11,7 @@ jobs:
       - name: Install Debian packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y catch cmake g++-11 git libcurl4-gnutls-dev libmariadb-dev pkg-config
+          sudo apt-get install -y catch cmake g++-12 git libcurl4-gnutls-dev libmariadb-dev pkg-config
       - name: Start MySQL database
         run: sudo systemctl start mysql.service
       - name: Show MySQL version information
@@ -28,8 +28,8 @@ jobs:
           mysql -uroot --password=root -e "SHOW DATABASES;"
       - name: Build weather-information-collector-update
         run: |
-          export CXX=g++-11
-          export CC=gcc-11
+          export CXX=g++-12
+          export CC=gcc-12
           cd "$GITHUB_WORKSPACE"
           mkdir build
           cd build
