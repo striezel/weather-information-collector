@@ -148,12 +148,12 @@ mariadb_10_4:
 mariadb_10_8:
   <<: *mariadb_configuration
   services:
-  - registry.gitlab.com/striezel/weather-information-collector/mariadb:10.8-focal
+  - mariadb:10.8
 
 mariadb_10_9:
   <<: *mariadb_configuration
   services:
-  - registry.gitlab.com/striezel/weather-information-collector/mariadb:10.9-focal
+  - mariadb:10.9
 
 mysql_5_7:
   <<: *mariadb_configuration
