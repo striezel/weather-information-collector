@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020, 2021  Dirk Stolle
+    Copyright (C) 2020, 2021, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -67,6 +67,8 @@ std::string toString(const PlanWeatherbit type)
   {
     case PlanWeatherbit::Free:
          return "free";
+    case PlanWeatherbit::Hobbyist:
+         return "hobbyist";
     case PlanWeatherbit::Starter:
          return "starter";
     case PlanWeatherbit::Developer:
@@ -84,6 +86,8 @@ PlanWeatherbit toPlanWeatherbit(const std::string& planName)
   trim(name);
   if (name == "free")
     return PlanWeatherbit::Free;
+  if (name == "hobbyist")
+    return PlanWeatherbit::Hobbyist;
   if (name == "starter")
     return PlanWeatherbit::Starter;
   if (name == "developer")

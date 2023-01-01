@@ -56,12 +56,16 @@ TEST_CASE("Different API plans")
   SECTION("Weatherbit plans have different limits")
   {
     const auto free = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Free, PlanWeatherstack::none);
+    const auto hobbyist = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Hobbyist, PlanWeatherstack::none);
     const auto starter = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Starter, PlanWeatherstack::none);
     const auto dev = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Developer, PlanWeatherstack::none);
     const auto advanced = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Advanced, PlanWeatherstack::none);
 
-    REQUIRE( free.requests < starter.requests );
-    REQUIRE( free.timespan == starter.timespan );
+    REQUIRE( free.requests < hobbyist.requests );
+    REQUIRE( free.timespan == hobbyist.timespan );
+
+    REQUIRE( hobbyist.requests < starter.requests );
+    REQUIRE( hobbyist.timespan == starter.timespan );
 
     REQUIRE( starter.requests < dev.requests );
     REQUIRE( starter.timespan == dev.timespan );
@@ -187,6 +191,20 @@ TEST_CASE("witinLimit for various plans")
 
   SECTION("withinLimit: Weatherbit")
   {
+    SECTION("tasks within limits of hobbyist plan")
+    {
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(300)));
+
+      REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Hobbyist, PlanWeatherstack::none) );
+    }
+
+    SECTION("tasks with too much requests for hobbyist plan")
+    {
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(240)));
+
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Hobbyist, PlanWeatherstack::none) );
+    }
+
     SECTION("tasks within limits of starter plan")
     {
       tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(2)));

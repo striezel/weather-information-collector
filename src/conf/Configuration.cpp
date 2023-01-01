@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -374,6 +374,7 @@ bool Configuration::loadCoreConfigurationValue(const std::string& name, const st
                 << " is not a recognized plan for Weatherbit!" << std::endl;
       std::cerr << "Hint: Recognized Weatherbit plans are:" << std::endl
                 << "\t" << toString(PlanWeatherbit::Free) << std::endl
+                << "\t" << toString(PlanWeatherbit::Hobbyist) << std::endl
                 << "\t" << toString(PlanWeatherbit::Starter) << std::endl
                 << "\t" << toString(PlanWeatherbit::Developer) << std::endl
                 << "\t" << toString(PlanWeatherbit::Advanced) << std::endl;

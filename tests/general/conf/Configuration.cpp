@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2017, 2022  Dirk Stolle
+    Copyright (C) 2017, 2022, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1465,7 +1465,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=hobbyist
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1510,7 +1510,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
       REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
       REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Enterprise );
-      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Advanced );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Hobbyist );
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Business );
 
       REQUIRE( conf.tasks().size() == 2 );

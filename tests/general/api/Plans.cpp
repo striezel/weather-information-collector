@@ -110,6 +110,14 @@ TEST_CASE("Weatherbit plan types")
     REQUIRE( wic::toPlanWeatherbit("\t  FrEe  \t") == wic::PlanWeatherbit::Free );
   }
 
+  SECTION("to type: hobbyist")
+  {
+    REQUIRE( wic::toPlanWeatherbit("hobbyist") == wic::PlanWeatherbit::Hobbyist );
+    REQUIRE( wic::toPlanWeatherbit("Hobbyist") == wic::PlanWeatherbit::Hobbyist );
+    REQUIRE( wic::toPlanWeatherbit("HOBBYIST") == wic::PlanWeatherbit::Hobbyist );
+    REQUIRE( wic::toPlanWeatherbit("\t  HoBbYiSt  \t") == wic::PlanWeatherbit::Hobbyist );
+  }
+
   SECTION("to type: starter")
   {
     REQUIRE( wic::toPlanWeatherbit("starter") == wic::PlanWeatherbit::Starter );
@@ -154,6 +162,7 @@ TEST_CASE("Weatherbit plan types")
   {
     REQUIRE( wic::toString(wic::PlanWeatherbit::none) == "none" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Free) == "free" );
+    REQUIRE( wic::toString(wic::PlanWeatherbit::Hobbyist) == "hobbyist" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Starter) == "starter" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Developer) == "developer" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Advanced) == "advanced" );
@@ -163,6 +172,7 @@ TEST_CASE("Weatherbit plan types")
   {
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::none)) == wic::PlanWeatherbit::none );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Free)) == wic::PlanWeatherbit::Free );
+    REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Hobbyist)) == wic::PlanWeatherbit::Hobbyist );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Starter)) == wic::PlanWeatherbit::Starter );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Developer)) == wic::PlanWeatherbit::Developer );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Advanced)) == wic::PlanWeatherbit::Advanced );
