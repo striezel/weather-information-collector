@@ -7,7 +7,7 @@ Server.
 | DBMS          | Supported   | Tested                   |
 | ------------- | ----------- | ------------------------ |
 | MariaDB 10.2  | yes         | no (reached end of life) |
-| MariaDB 10.3  | yes         | yes                      |
+| MariaDB 10.3  | yes         | no (reached end of life) |
 | MariaDB 10.4  | yes         | yes                      |
 | MariaDB 10.5  | yes         | yes                      |
 | MariaDB 10.6  | yes         | yes                      |
