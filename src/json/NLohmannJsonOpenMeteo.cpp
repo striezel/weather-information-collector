@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2022  Dirk Stolle
+    Copyright (C) 2022, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -63,7 +63,6 @@ bool NLohmannJsonOpenMeteo::parseCurrentWeather(const std::string& json, Weather
               << "point value!" << std::endl;
     return false;
   }
-  weather = Weather();
   const double celsius = find->get<double>();
   weather.setTemperatureCelsius(celsius);
   weather.setTemperatureFahrenheit(celsius * 1.8 + 32.0);

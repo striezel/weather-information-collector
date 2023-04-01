@@ -1,5 +1,10 @@
 # Version history of weather-information-collector
 
+## Version 0.?.? (2023-04-??)
+
+This release fixes a problem where current weather data gathered from Open-Meteo
+API could not be saved to the database.
+
 ## Version 0.11.0 (2023-04-01)
 
 Tasks using the DarkSky API are not allowed anymore and will cause an error when
