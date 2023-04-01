@@ -7,7 +7,7 @@ trying to run the weather-information-collector. Since DarkSky has been shut
 down by Apple on 31st March 2023, this is just the right course of action.
 
 simdjson, the library used for JSON parsing, has been updated from version 3.0.1
-to version 3.1.5.
+to version 3.1.6.
 
 ## Version 0.10.1 (2023-01-01)
 
