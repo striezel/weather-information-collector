@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
                   << " is not a recognized API!" << std::endl;
         std::cerr << "Hint: Recognized API types are:" << std::endl
                   << "\t" << toString(ApiType::Apixu) << " (deprecated, do not use anymore)" << std::endl
-                  << "\t" << toString(ApiType::DarkSky) << std::endl
+                  << "\t" << toString(ApiType::DarkSky) << " (deprecated, do not use anymore)" << std::endl
                   << "\t" << toString(ApiType::OpenMeteo) << std::endl
                   << "\t" << toString(ApiType::OpenWeatherMap) << std::endl
                   << "\t" << toString(ApiType::Weatherbit) << std::endl
@@ -109,11 +109,11 @@ bool TaskManager::loadFromFile(const std::string& fileName, Task& task)
                   << " uses the Apixu API which has been deprecated and shut down!"
                   << std::endl;
       }
-      // add informational notice for upcoming DarkSky shutdown
+      // add informational notice for DarkSky shutdown
       if (api == ApiType::DarkSky)
       {
-        std::clog << "Warning: The task in file " << fileName
-                  << " uses the DarkSky API which will be shut down on "
+        std::cerr << "Warning: The task in file " << fileName
+                  << " uses the DarkSky API which has been shut down on "
                   << "31st March 2023." << std::endl;
       }
     } // if api

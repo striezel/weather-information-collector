@@ -1,5 +1,9 @@
 # darksky.net API
 
+__NOTE:__ The DarkSky API has been shut down on 31st March 2023.
+This document is only here for historical purposes. __You cannot use DarkSky
+anymore to retrieve weather information.__
+
 ## Authentication
 
 Authentication is achieved by passing an API key as part of the URL,

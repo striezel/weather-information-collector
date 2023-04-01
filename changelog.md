@@ -1,6 +1,10 @@
 # Version history of weather-information-collector
 
-## Version 0.?.? (2023-02-??)
+## Version 0.?.? (2023-04-??)
+
+Tasks using the DarkSky API are not allowed anymore and will cause an error when
+trying to run the weather-information-collector. Since DarkSky has been shut
+down by Apple on 31st March 2023, this is just the right course of action.
 
 simdjson, the library used for JSON parsing, has been updated from version 3.0.1
 to version 3.1.5.

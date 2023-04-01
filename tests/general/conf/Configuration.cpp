@@ -1410,8 +1410,11 @@ TEST_CASE("Class Configuration")
       REQUIRE( writeConfiguration(tasks / "darksky.task", task_content) );
 
       Configuration conf;
-      REQUIRE( conf.load(path.string(), false) );
+      REQUIRE_FALSE( conf.load(path.string(), false) );
 
+      // Technically, one cannot rely on the following information being there,
+      // because the configuration failed to load. But the current
+      // implementation is such that those values are set.
       REQUIRE( conf.connectionInfo().hostname() == "db.domain.local" );
       REQUIRE( conf.connectionInfo().db() == "weather_db" );
       REQUIRE( conf.connectionInfo().user() == "user" );
@@ -1495,8 +1498,11 @@ TEST_CASE("Class Configuration")
       REQUIRE( writeConfiguration(tasks / "darksky2.task", task2_content) );
 
       Configuration conf;
-      REQUIRE( conf.load(path.string(), false) );
+      REQUIRE_FALSE( conf.load(path.string(), false) );
 
+      // Technically, one cannot rely on the following information being there,
+      // because the configuration failed to load. But the current
+      // implementation is such that those values are set.
       REQUIRE( conf.connectionInfo().hostname() == "db.domain.local" );
       REQUIRE( conf.connectionInfo().db() == "weather_db" );
       REQUIRE( conf.connectionInfo().user() == "user" );

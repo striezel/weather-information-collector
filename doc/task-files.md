@@ -52,12 +52,13 @@ The following settings are recognized in a task file:
   values depend on the currently supported APIs. Currently the following values
   are recognized:
   * **OpenWeatherMap** - data is fetched from OpenWeatherMap
-  * **DarkSky** - data is fetched from DarkSky
   * **Weatherbit** - data is fetched from Weatherbit
   * **Weatherstack** - data is fetched from Weatherstack
   * **OpenMeteo** - data is fetched from Open-Meteo
   * **Apixu** - data is fetched from Apixu (Supported before v0.9.8; now
     deprecated, because Apixu shut down. Do not use anymore.)
+  * **DarkSky** - data is fetched from DarkSky (Supported before v0.11.0; now
+    deprecated, because DarkSky shut down. Do not use anymore.)
 * **data** - the type of data that will be collected via the API. If this is not
   set, it will default to `current` for backwards compatibility. Furthermore,
   not every API will support every data type. Currently the following values
@@ -67,7 +68,7 @@ The following settings are recognized in a task file:
   * **forecast** - collect weather forecast data (supported by all APIs except
     Weatherstack)
   * **current+forecast** - collect data about current weather and forecast data
-    (supported by DarkSky)
+    (supported by Open-Meteo)
 * **location.id** - _(optional)_ numeric ID of the location for which the
   weather shall be requested (only supported by OpenWeatherMap)
 * **location.name** - name of the location / city, e.g. `London`
@@ -134,14 +135,17 @@ Another example would be:
 
 An example for the third API would be:
 
-    # use DarkSky API
-    api=DarkSky
-    # collect current and forecast data
-    data=current+forecast
-    # location: Alcatraz Island
-    location.coordinates=37.8267,-122.4233
-    # one request every 20 minutes, e.g. every 1200 seconds
-    interval=1200
+    # use Open-Meteo API
+    api=OpenMeteo
+    # collect weather forecast data
+    data=forecast
+    # city of Riga in Latvia
+    location.name=Riga
+    location.countrycode=LV
+    # coordinates are required for Open-Meteo
+    location.coordinates=56.945999,24.105890
+    # one request every three hours, e.g. every 10800 seconds
+    interval=10800
 
 A possible task file for Weatherbit API could be:
 
@@ -154,20 +158,6 @@ A possible task file for Weatherbit API could be:
     location.countrycode=GB
     # one request every two hours, e.g. every 7200 seconds
     interval=7200
-
-A task file that uses the Open-Meteo API could be:
-
-    # use Open-Meteo API
-    api=OpenMeteo
-    # collect weather forecast data
-    data=forecast
-    # city of Riga in Latvia
-    location.name=Riga
-    location.countrycode=LV
-    # coordinates are required for Open-Meteo
-    location.coordinates=56.945999,24.105890
-    # one request every three hours, e.g. every 10800 seconds
-    interval=10800
 
 Remember that you can create multiple task files to define multiple collection
 tasks.

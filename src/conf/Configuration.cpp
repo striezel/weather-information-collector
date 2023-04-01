@@ -575,19 +575,20 @@ bool Configuration::load(const std::string& fileName, [[maybe_unused]] const boo
               << "to another API, e.g. Open-Meteo, OpenWeatherMap, Weatherbit or Weatherstack." << std::endl;
     return false;
   }
-  // Show a notice, if there are DarkSky tasks, because Dark Sky API will shut
-  // down on 31st March 2023.
+  // Quit, if there are DarkSky tasks, because Dark Sky API has been shut down
+  // on 31st March 2023.
   const auto darkSkyTaskCount = std::count_if(tasksContainer.begin(), tasksContainer.end(),
                                   [](const Task& t) { return t.api() == ApiType::DarkSky; });
   if (darkSkyTaskCount > 0)
   {
     if (darkSkyTaskCount > 1)
-      std::clog << "Info: There are " << darkSkyTaskCount << " tasks configured that use the DarkSky API.";
+      std::cerr << "Error: There are " << darkSkyTaskCount << " tasks configured that use the DarkSky API.";
     else
-      std::clog << "Info: There is one task configured that uses the DarkSky API.";
-    std::clog << std::endl << "However, the DarkSky API will shut down on 31st March 2023." << std::endl
-              << "Consider removing the DarkSky task file(s) or consider switching "
+      std::clog << "Error: There is one task configured that uses the DarkSky API.";
+    std::clog << std::endl << "However, the DarkSky API was shut down on 31st March 2023." << std::endl
+              << "Please remove the DarkSky task file(s) or consider switching "
               << "to another API, e.g. Open-Meteo, OpenWeatherMap, Weatherbit or Weatherstack." << std::endl;
+    return false;
   }
   // Check whether there are tasks that need an API key but where the key for
   // that API is missing.

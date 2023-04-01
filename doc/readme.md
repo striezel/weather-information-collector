@@ -52,13 +52,13 @@ For more details on GRANT and the complete syntax see the
 ## Get API keys for a weather data provider of choice
 
 Since weather-information-collector gets the data via REST-API from a weather
-data provider and these providers require their users to provide an API key
-with every request, the next step is to sign up for a weather data provider of
-your choice. Currently, weather-information-collector supports the following
+data provider and these providers usually require their users to provide an API
+key with every request, the next step is to sign up for a weather data provider
+of your choice. Currently, weather-information-collector supports the following
 four providers:
 
 * [OpenWeatherMap](https://openweathermap.org/)
-* [DarkSky](https://darksky.net/)
+* [OpenMeteo](https://open-meteo.com/) (no API key required)
 * [Weatherbit](https://www.weatherbit.io/)
 * [Weatherstack](https://weatherstack.com/)
 
