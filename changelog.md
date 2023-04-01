@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.?.? (2023-04-??)
+## Version 0.11.0 (2023-04-01)
 
 Tasks using the DarkSky API are not allowed anymore and will cause an error when
 trying to run the weather-information-collector. Since DarkSky has been shut
