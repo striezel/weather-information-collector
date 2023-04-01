@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -173,7 +173,8 @@ void Collector::collectCurrent(API& api, const ApiType type, const Location& loc
     StoreMariaDB sql(connInfo);
     if (!sql.saveCurrentWeather(type, loc, weather))
     {
-      std::cerr << "Error: Could not save weather data to database!" << std::endl;
+      std::cerr << "Error: Could not save weather data from API "
+                << toString(type) << " to database!" << std::endl;
     } // if
   } // if
   else
@@ -191,7 +192,8 @@ void Collector::collectForecast(API& api, const ApiType type, const Location& lo
     StoreMariaDB sql(connInfo);
     if (!sql.saveForecast(type, loc, forecast))
     {
-      std::cerr << "Error: Could not save forecast data to database!" << std::endl;
+      std::cerr << "Error: Could not save forecast data from API "
+                << toString(type) << " to database!" << std::endl;
     } // if
   } // if
   else
@@ -210,11 +212,13 @@ void Collector::collectCurrentAndForecast(API& api, const ApiType type, const Lo
     StoreMariaDB sql(connInfo);
     if (!sql.saveCurrentWeather(type, loc, weather))
     {
-      std::cerr << "Error: Could not save weather data to database!" << std::endl;
+      std::cerr << "Error: Could not save weather data from API "
+                << toString(type) << " to database!" << std::endl;
     } // if
     if (!sql.saveForecast(type, loc, forecast))
     {
-      std::cerr << "Error: Could not save forecast data to database!" << std::endl;
+      std::cerr << "Error: Could not save forecast data from API "
+                << toString(type) << " to database!" << std::endl;
     } // if
   } // if
   else
