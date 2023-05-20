@@ -3,7 +3,7 @@
 ## Version 0.?.? (2023-04-??)
 
 simdjson, the library used for JSON parsing, has been updated from version 3.1.6
-to version 3.1.7.
+to version 3.1.8.
 
 ## Version 0.11.1 (2023-04-01)
 
