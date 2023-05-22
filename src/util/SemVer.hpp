@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019  Dirk Stolle
+    Copyright (C) 2019, 2023  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_SEMVER_HPP
 #define WEATHER_INFORMATION_COLLECTOR_SEMVER_HPP
 
+#include <cstdint>
 #include <string>
 
 namespace wic
