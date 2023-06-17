@@ -2,7 +2,7 @@
 
 # docker-cleanup.sh - script to reduce size of created Docker image
 #
-# Copyright (C) 2019  Dirk Stolle
+# Copyright (C) 2019, 2023  Dirk Stolle
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ apt-get purge -y build-essential bzip2 debhelper devscripts fakeroot \
 apt-get purge -y gettext gettext-base libpython3-stdlib m4 patch python3 \
     xz-utils
 # remove Catch + CMake
-apt-get purge catch cmake cmake-data
+apt-get purge catch2 cmake cmake-data
 # autoremove what is left
 apt-get autoremove -y || true
 # clean APT cache

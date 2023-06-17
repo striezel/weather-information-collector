@@ -4,7 +4,7 @@
 # but it should be the most compatible approach for Docker 17.05 and later while
 # still keeping the image size as low as Dockerfile_download.
 #
-FROM debian:10-slim AS build_deb
+FROM debian:12-slim AS build_deb
 MAINTAINER Dirk Stolle <striezel-dev@web.de>
 
 RUN mkdir -p /opt
@@ -12,7 +12,7 @@ WORKDIR /opt
 
 # Update packages, install dependencies + root certificates.
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends catch cmake g++ git \
+    apt-get install -y --no-install-recommends catch2 cmake g++ git \
     libcurl4-gnutls-dev libmariadb-dev \
     make pkg-config ca-certificates && \
     git clone https://gitlab.com/striezel/weather-information-collector.git
@@ -22,7 +22,7 @@ RUN ./ci/gitlab-01-install-dependencies.sh && \
 
 
 # second image used as runtime environment
-FROM debian:10-slim AS runtime
+FROM debian:12-slim AS runtime
 MAINTAINER Dirk Stolle <striezel-dev@web.de>
 
 # Update packages, install dependencies + root certificates.
