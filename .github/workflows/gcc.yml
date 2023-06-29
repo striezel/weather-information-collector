@@ -21,10 +21,17 @@ jobs:
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
-      - name: Install Debian packages
+      - name: Install Debian packages (including Catch v1)
+        # Ubuntu 20.04 witch GCC 8 has no Catch v2, so we have to use v1 here.
+        if: matrix.version == 8
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y catch cmake g++-${{ matrix.version }} git libcurl4-gnutls-dev libmariadb-dev pkg-config
+      - name: Install Debian packages (including Catch v2)
         run: |
           sudo apt-get update
           sudo apt-get install -y catch2 cmake g++-${{ matrix.version }} git libcurl4-gnutls-dev libmariadb-dev pkg-config
+        if: matrix.version > 8
       - name: Start MySQL database
         run: sudo systemctl start mysql.service
       - name: Show MySQL version information
