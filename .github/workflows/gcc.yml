@@ -5,6 +5,7 @@ on: push
 jobs:
   gcc:
     strategy:
+      fail-fast: false
       matrix:
         include:
         # GCC 8 is only available on Ubuntu 20.04, not on Ubuntu 22.04.
