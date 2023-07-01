@@ -1,4 +1,4 @@
-image: debian:11-slim
+image: debian:12-slim
 
 # build with GCC
 build_gcc:
@@ -11,7 +11,7 @@ build_gcc:
     MYSQL_PASSWORD: "ci_password"
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
-    - apt-get update && apt-get -y install catch cmake g++ libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - apt-get update && apt-get -y install catch2 cmake g++ libcurl4-gnutls-dev libmariadb-dev pkg-config
     - export CC=gcc && export CXX=g++
   script:
     - ./ci/cpplint.sh
@@ -36,7 +36,7 @@ build_clang:
     MYSQL_PASSWORD: "ci_password"
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
-    - apt-get update && apt-get -y install catch clang cmake libc++-11-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - apt-get update && apt-get -y install catch2 clang cmake libc++-14-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
     - export CC=clang && export CXX=clang++
   script:
     - ./ci/cpplint.sh
@@ -90,7 +90,7 @@ coverage:
       - public
 
 pages:
-  image: debian:11-slim
+  image: debian:12-slim
   stage: deploy
   needs: ["coverage"]
   dependencies:
