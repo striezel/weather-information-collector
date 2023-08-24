@@ -6,20 +6,20 @@ Server.
 
 | DBMS          | Supported   | Tested                   |
 | ------------- | ----------- | ------------------------ |
-| MariaDB 10.2  | yes         | no (reached end of life) |
-| MariaDB 10.3  | yes         | no (reached end of life) |
-| MariaDB 10.4  | yes         | yes                      |
-| MariaDB 10.5  | yes         | yes                      |
-| MariaDB 10.6  | yes         | yes                      |
-| MariaDB 10.7  | yes         | no (reached end of life) |
-| MariaDB 10.8  | yes         | no (reached end of life) |
-| MariaDB 10.9  | yes         | yes                      |
-| MariaDB 10.11 | yes         | yes                      |
 | MariaDB 11.0  | yes         | yes                      |
-| MySQL 5.7     | yes         | yes                      |
+| MariaDB 10.11 | yes         | yes                      |
+| MariaDB 10.9  | yes         | yes                      |
+| MariaDB 10.8  | yes         | no (reached end of life) |
+| MariaDB 10.7  | yes         | no (reached end of life) |
+| MariaDB 10.6  | yes         | yes                      |
+| MariaDB 10.5  | yes         | yes                      |
+| MariaDB 10.4  | yes         | yes                      |
+| MariaDB 10.3  | yes         | no (reached end of life) |
+| MariaDB 10.2  | yes         | no (reached end of life) |
 | MySQL 8.0     | yes _(*)_   | yes                      |
-| Percona 5.7   | yes         | yes                      |
+| MySQL 5.7     | yes         | yes                      |
 | Percona 8.0   | yes _(*)_   | yes                      |
+| Percona 5.7   | yes         | yes                      |
 
 In theory, weather-information-collector should even be able to work with older
 DBMS versions down to MariaDB 5.5 / MySQL Server 5.5 / Percona Server 5.5.
