@@ -6,6 +6,7 @@ Server.
 
 | DBMS          | Supported   | Tested                   |
 | ------------- | ----------- | ------------------------ |
+| MariaDB 11.1  | yes         | yes                      |
 | MariaDB 11.0  | yes         | yes                      |
 | MariaDB 10.11 | yes         | yes                      |
 | MariaDB 10.10 | yes         | yes                      |
