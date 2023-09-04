@@ -20,7 +20,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Debian packages (including Catch v1)
         # Ubuntu 20.04 witch GCC 8 has no Catch v2, so we have to use v1 here.
         if: matrix.version == 8
