@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#  create-package.sh - script to create *.deb package from latest Git tag
+#  create-package.sh - script to create *.deb package from latest Git commit
 #
-#  Copyright (C) 2019  Dirk Stolle
+#  Copyright (C) 2019, 2023  Dirk Stolle
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -22,12 +22,14 @@ TAG="${CI_COMMIT_TAG:-$(git describe | cut -d '-' -f 1)}"
 # Version is the same as the tag, just without the leading 'v'.
 VERSION=$(echo $TAG | cut -c '2-')
 ARCH=$(dpkg --print-architecture)
+COMMIT_HASH=$(git rev-parse HEAD)
 
 echo "Info: Tag is $TAG."
 echo "Info: Version is $VERSION."
 echo "Info: Architecture is $ARCH."
+echo "Info: Commit hash is $COMMIT_HASH."
 
-wget -O weather-information-collector_${VERSION}.orig.tar.bz2 https https://gitlab.com/striezel/weather-information-collector/-/archive/${TAG}/weather-information-collector-${TAG}.tar.bz2
+wget -O weather-information-collector_${VERSION}.orig.tar.bz2 https https://gitlab.com/striezel/weather-information-collector/-/archive/${COMMIT_HASH}/weather-information-collector-${COMMIT_HASH}.tar.bz2
 tar -x --bzip2 -f weather-information-collector_${VERSION}.orig.tar.bz2
 if [[ $? -ne 0 ]]
 then
@@ -35,7 +37,7 @@ then
   exit 1
 fi
 
-mv weather-information-collector-${TAG} weather-information-collector-${VERSION}
+mv weather-information-collector-${COMMIT_HASH} weather-information-collector-${VERSION}
 if [[ $? -ne 0 ]]
 then
   echo "ERROR: Could not move extracted files!"
