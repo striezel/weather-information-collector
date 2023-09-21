@@ -2,7 +2,7 @@ Source: weather-information-collector
 Section: unknown
 Priority: optional
 Maintainer: Dirk Stolle <striezel-dev@web.de>
-Build-Depends: debhelper (>= 9), catch, cmake, libcurl4-gnutls-dev (>= 7.17.0) | libcurl4-nss-dev (>= 7.17.0) | libcurl4-openssl-dev (>= 7.17.0), libmariadb-dev
+Build-Depends: debhelper (>= 9), catch | catch2, cmake, libcurl4-gnutls-dev (>= 7.17.0) | libcurl4-nss-dev (>= 7.17.0) | libcurl4-openssl-dev (>= 7.17.0), libmariadb-dev
 Standards-Version: 4.1.2
 Homepage: https://gitlab.com/striezel/weather-information-collector
 Vcs-Git: https://gitlab.com/striezel/weather-information-collector.git
