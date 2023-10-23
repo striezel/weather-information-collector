@@ -150,7 +150,7 @@ Location selectLocation(const std::vector<std::pair<Location, Weather> >& locati
     }
     else
     {
-      if ((locationIndex > locations.size()) || (locationIndex < 1))
+      if ((locationIndex < 1) || (static_cast<unsigned int>(locationIndex) > locations.size()))
       {
         std::cout << "Error: The number must be in the range between 1 and "
                   << locations.size() << "." << std::endl;
@@ -196,7 +196,7 @@ ApiType selectApi()
   }
   else
   {
-    if ((apiIndex > availableApis.size()) || (apiIndex < 1))
+    if ((apiIndex < 1) || (static_cast<unsigned int>(apiIndex) > availableApis.size()))
     {
       std::cout << "Error: The number must be in the range between 1 and "
                 << availableApis.size() << "." << std::endl;
@@ -271,7 +271,7 @@ DataType selectDataType(const ApiType selectedApi, const PlanWeatherbit planWb, 
   }
   else
   {
-    if ((typeIndex > supportedDataTypes.size()) || (typeIndex < 1))
+    if ((typeIndex < 1) || (static_cast<unsigned int>(typeIndex) > supportedDataTypes.size()))
     {
       std::cout << "Error: The number must be in the range between 1 and "
                 << supportedDataTypes.size() << "." << std::endl;
