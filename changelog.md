@@ -5,6 +5,9 @@
 simdjson, the library used for JSON parsing, has been updated from version 3.1.6
 to version 3.6.0.
 
+nlohmann/json, the library used for JSON parsing when simdjson is not supported,
+has been updated from version 3.11.2 to version 3.11.3.
+
 ## Version 0.11.1 (2023-04-01)
 
 This release fixes a problem where current weather data gathered from Open-Meteo
