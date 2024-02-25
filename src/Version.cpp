@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ void showVersion(const std::string_view name)
             << "Version control date:   " << info.date() << std::endl;
 #if !defined(wic_no_json_parsing) || defined(wic_owm_find_location) || defined(wic_openmeteo_find_location)
 #ifdef __SIZEOF_INT128__
-  std::cout << "JSON library:           simdjson " << SIMDJSON_STRINGIFY(SIMDJSON_VERSION) << "\n"
+  std::cout << "JSON library:           simdjson " << SIMDJSON_VERSION << "\n"
             << "                        using implementation "
             << simdjson::get_active_implementation()->name() << " ("
             << simdjson::get_active_implementation()->description() << ")" << std::endl;
@@ -51,7 +51,6 @@ void showVersion(const std::string_view name)
             << "." << NLOHMANN_JSON_VERSION_PATCH << std::endl;
 #endif // __SIZEOF_INT128__
 #endif // !defined(wic_no_json_parsing) || defined(wic_owm_find_location)
-
 }
 
 } // namespace
