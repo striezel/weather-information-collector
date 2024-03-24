@@ -51,8 +51,9 @@ jobs:
           ./ci/copy-dll-dependencies.sh build/src/synchronizer/weather-information-collector-synchronizer.exe artifacts/
           ./ci/copy-dll-dependencies.sh build/src/update/weather-information-collector-update.exe artifacts/
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: weather-information-collector-windows-msys2
           path: |
             artifacts/*
+          if-no-files-found: error
