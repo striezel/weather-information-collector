@@ -2,6 +2,10 @@
 
 ## Version 0.?.? (2023-04-??)
 
+Fix a bug where some Linux distributions would not properly detect the user's
+home directory and thus would not search for an existing configuration file in
+the user's home directory.
+
 simdjson, the library used for JSON parsing, has been updated from version 3.1.6
 to version 3.8.0.
 
