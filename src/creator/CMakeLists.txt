@@ -1,4 +1,3 @@
-# We might support earlier versions, too, but try to use a more recent one.
 cmake_minimum_required (VERSION 3.8)
 
 project(weather-information-collector-task-creator)
@@ -73,7 +72,8 @@ add_definitions(-Dwic_owm_find_location -Dwic_openmeteo_find_location -Dwic_no_n
 add_executable(weather-information-collector-task-creator ${weather-information-collector-task-creator_sources})
 
 # find cURL library
-find_package (CURL)
+find_package(PkgConfig)
+pkg_search_module (CURL REQUIRED libcurl)
 if (CURL_FOUND)
   include_directories(${CURL_INCLUDE_DIRS})
   target_link_libraries (weather-information-collector-task-creator ${CURL_LIBRARIES})

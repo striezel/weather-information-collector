@@ -1,4 +1,3 @@
-# We might support earlier versions, too, but try to use a more recent one.
 cmake_minimum_required (VERSION 3.8)
 
 project(db_tests_mariadb)
@@ -59,8 +58,8 @@ add_definitions(-Dwic_weather_comparison)
 add_executable(db_tests_mariadb ${db_tests_mariadb_sources})
 
 # find libmariadb
-set(mariadb_DIR "../../../cmake/" )
-find_package(mariadb REQUIRED)
+find_package(PkgConfig)
+pkg_search_module (MARIADB REQUIRED libmariadb)
 if (MARIADB_FOUND)
   include_directories(${MARIADB_INCLUDE_DIR})
   target_link_libraries (db_tests_mariadb ${MARIADB_LIBRARIES})

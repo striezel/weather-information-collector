@@ -1,4 +1,3 @@
-# We might support earlier versions, too, but try to use a more recent one.
 cmake_minimum_required (VERSION 3.8)
 
 project(weather-information-collector)
@@ -89,7 +88,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(weather-information-collector ${weather-information-collector_sources})
 
 # find cURL library
-find_package (CURL)
+find_package (PkgConfig)
+pkg_search_module (CURL REQUIRED libcurl)
 if (CURL_FOUND)
   include_directories(${CURL_INCLUDE_DIRS})
   target_link_libraries (weather-information-collector ${CURL_LIBRARIES})
@@ -98,8 +98,7 @@ else ()
 endif (CURL_FOUND)
 
 # find libmariadb
-set(mariadb_DIR "../../cmake/" )
-find_package(mariadb REQUIRED)
+pkg_search_module (MARIADB REQUIRED libmariadb)
 if (MARIADB_FOUND)
   include_directories(${MARIADB_INCLUDE_DIR})
   target_link_libraries (weather-information-collector ${MARIADB_LIBRARIES})
