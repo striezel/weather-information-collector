@@ -1,0 +1,61 @@
+name: GCC
+
+on: push
+
+jobs:
+  gcc:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        # GCC 8 is only available on Ubuntu 20.04, not on Ubuntu 22.04.
+        - version: 8
+          os: ubuntu-20.04
+        - version: 10
+          os: ubuntu-22.04
+        - version: 11
+          os: ubuntu-22.04
+        - version: 12
+          os: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v4
+      - name: Install Debian packages (including Catch v1)
+        # Ubuntu 20.04 witch GCC 8 has no Catch v2, so we have to use v1 here.
+        if: matrix.version == 8
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y catch cmake g++-${{ matrix.version }} git libcurl4-gnutls-dev libmariadb-dev pkg-config
+      - name: Install Debian packages (including Catch v2)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y catch2 cmake g++-${{ matrix.version }} git libcurl4-gnutls-dev libmariadb-dev pkg-config
+        if: matrix.version > 8
+      - name: Start MySQL database
+        run: sudo systemctl start mysql.service
+      - name: Show MySQL version information
+        run: |
+          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
+      - name: Prepare MySQL database
+        run: |
+          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
+      - name: Adjust MySQL 8.0 authentication
+        run: |
+          mysql -uroot -proot -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY ''; ALTER USER root@localhost IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+          mysql -uroot --password=root -e "SHOW DATABASES;"
+      - name: Build
+        run: |
+          export CXX=g++-${{ matrix.version }}
+          export CC=gcc-${{ matrix.version }}
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          cmake ../ -DJSON_BENCHMARK=ON
+          make -j2
+      - name: Tests
+        run: |
+          cd "$GITHUB_WORKSPACE"/build
+          ctest -V
