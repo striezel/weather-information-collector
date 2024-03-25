@@ -80,6 +80,12 @@ jobs:
           export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
           cmake ../ -DENABLE_LTO=ON -DENABLE_STATIC_LINKING=ON
           cmake --build . -j2
+      - name: Reset MariaDB database
+        run: |
+          mariadb -uroot -proot -e "DROP DATABASE IF EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mariadb -uroot --password=root -e "SHOW DATABASES;"
       - name: Run tests for statically linked build
         run: |
           cd "$GITHUB_WORKSPACE/build-static"
