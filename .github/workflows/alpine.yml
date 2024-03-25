@@ -1,0 +1,88 @@
+name: Alpine
+
+on: push
+
+jobs:
+  alpine:
+    runs-on: ubuntu-22.04
+    container: alpine:latest
+
+    steps:
+      - name: Install and prepare Git
+        run: |
+          apk update && apk upgrade
+          apk add git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          apk update
+          apk add catch2 cmake curl-dev g++ git make mariadb-connector-c-dev pkgconf
+      - name: Build
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+          cmake ../
+          cmake --build . -j2
+      - name: Start MariaDB server
+        run: |
+          apk add mariadb mariadb-client openrc openrc-tools
+          test -d /run/openrc || mkdir -p /run/openrc
+          touch /run/openrc/softlevel
+          rc-service mariadb setup
+          rc-service mariadb start || echo "Start of MariaDB is probably still in progress."
+          rc-status
+      - name: Waiting for database to start
+        run: |
+          rc-service mariadb start || echo "Waiting ..."
+          ITERATIONS=0
+          while ! rc-status | grep mariadb | grep -q started
+          do
+            echo Waiting for database server to start ...
+            sleep 5
+            ITERATIONS="$((ITERATIONS+1))"
+            if [ $ITERATIONS -gt 5 ]
+            then
+              rc-status
+              echo "Database did not start."
+              exit 1
+            fi
+          done
+          rc-status
+      - name: Prepare MariaDB database
+        run: |
+          mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mariadb -uroot --password=root -e "SHOW DATABASES;"
+#      - name: Run tests
+#        run: |
+#          cd "$GITHUB_WORKSPACE/build"
+#          ctest -V
+      - name: Install statically linked libraries
+        run: |
+          apk add brotli-static c-ares-static curl-static libidn2-static
+          apk add libunistring-static nghttp2-static openssl-libs-static
+          apk add zlib-static mariadb-static
+      - name: Build statically linked executables
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir build-static
+          cd build-static
+          export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+          cmake ../ -DENABLE_LTO=ON -DENABLE_STATIC_LINKING=ON
+          cmake --build . -j2
+      - name: Reset MariaDB database
+        run: |
+          mariadb -uroot -proot -e "DROP DATABASE IF EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mariadb -uroot --password=root -e "SHOW DATABASES;"
+#      - name: Run tests for statically linked build
+#        run: |
+#          cd "$GITHUB_WORKSPACE/build-static"
+#          ctest -V
