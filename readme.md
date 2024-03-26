@@ -13,6 +13,22 @@ the request limits imposed by the APIs.
 
 See the [documentation](doc/readme.md) for more information.
 
+## Usage
+
+weather-information-collector consists of several tools that can perform
+different tasks. See the corresponding readme files for usage information:
+
+* [`weather-information-collector`](./src/collector/readme.md) - main tool, does
+  the actual weather data collection
+* [`weather-information-collector-configtest`](./src/configtest/readme.md) -
+  checks configuration files of `weather-information-collector` for errors
+* [`weather-information-collector-task-creator`](./src/creator/readme.md) -
+  creates configuration files for weather data collection tasks.
+* [`weather-information-collector-update`](./src/update/readme.md) - updates the
+  database of `weather-information-collector` to the newest version
+* [`weather-information-collector-synchronizer`](./src/synchronizer/readme.md) -
+  synchronizes data from one `weather-information-collector` database to another
+
 ## Build status
 
 * GitHub workflows:
@@ -77,22 +93,6 @@ directory and refer to the [readme there](./docker/readme.md).
 
 For information how to build weather-information-collector on Windows, see the
 [MSYS2 build instructions](./doc/msys2-build.md).
-
-## Usage
-
-weather-information-collector consists of several tools that can perform
-different tasks. See the corresponding readme files for usage information:
-
-* [`weather-information-collector`](./src/collector/readme.md) - main tool, does
-  the actual weather data collection
-* [`weather-information-collector-configtest`](./src/configtest/readme.md) -
-  checks configuration files of `weather-information-collector` for errors
-* [`weather-information-collector-task-creator`](./src/creator/readme.md) -
-  creates configuration files for weather data collection tasks.
-* [`weather-information-collector-update`](./src/update/readme.md) - updates the
-  database of `weather-information-collector` to the newest version
-* [`weather-information-collector-synchronizer`](./src/synchronizer/readme.md) -
-  synchronizes data from one `weather-information-collector` database to another
 
 ## Copyright and Licensing
 
