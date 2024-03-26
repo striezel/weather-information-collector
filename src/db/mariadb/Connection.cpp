@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2020, 2021, 2022, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -38,9 +38,7 @@ Connection::Connection(const ConnectionInformation& ci)
     std::cerr << "Error: Could not allocate database handle!" << std::endl;
     throw AllocationFailure();
   }
-  // Workaround to avoid unconfigured socket location: Use IP for localhost instead of hostname.
-  const std::string realHost = ci.hostname() != "localhost" ? ci.hostname() : "127.0.0.1";
-  if (mysql_real_connect(conn, realHost.c_str(), ci.user().c_str(),
+  if (mysql_real_connect(conn, ci.hostname().c_str(), ci.user().c_str(),
           ci.password().c_str(), ci.db().c_str(), ci.port(), nullptr, 0) == nullptr)
   {
     std::string message = "Error: Could not connect to database!";
