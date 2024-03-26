@@ -59,10 +59,10 @@ jobs:
           mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
           mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
           mariadb -uroot --password=root -e "SHOW DATABASES;"
-#      - name: Run tests
-#        run: |
-#          cd "$GITHUB_WORKSPACE/build"
-#          ctest -V
+      - name: Run tests
+        run: |
+          cd "$GITHUB_WORKSPACE/build"
+          ctest -V
       - name: Install statically linked libraries
         run: |
           apk add brotli-static c-ares-static curl-static libidn2-static
@@ -82,7 +82,7 @@ jobs:
           mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
           mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
           mariadb -uroot --password=root -e "SHOW DATABASES;"
-#      - name: Run tests for statically linked build
-#        run: |
-#          cd "$GITHUB_WORKSPACE/build-static"
-#          ctest -V
+      - name: Run tests for statically linked build
+        run: |
+          cd "$GITHUB_WORKSPACE/build-static"
+          ctest -V
