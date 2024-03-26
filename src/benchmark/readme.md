@@ -8,12 +8,6 @@ development purposes and is not meant to be used in production.
 `weather-information-collector` populated with some data and uses the data
 stored therein to run the benchmark.
 
-## Building from source
-
-See the [readme file in the repository's root directory](../../readme.md) for
-information on how to build this tool (as well as the other binaries) from the
-source code.
-
 ## Usage
 
 ```
@@ -32,7 +26,7 @@ options:
 
 ## Copyright and Licensing
 
-Copyright 2019-2023  Dirk Stolle
+Copyright 2019-2024  Dirk Stolle
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

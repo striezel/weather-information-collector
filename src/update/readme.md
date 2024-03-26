@@ -5,12 +5,6 @@
 usually be run on an existing database when updating to a newer version of the
 `weather-information-collector`.
 
-## Building from source
-
-See the [readme file in the repository's root directory](../../readme.md) for
-information on how to build this tool (as well as the other binaries) from the
-source code.
-
 ## Usage
 
 ```
@@ -36,7 +30,7 @@ options:
 
 ## Copyright and Licensing
 
-Copyright 2017-2023  Dirk Stolle
+Copyright 2017-2024  Dirk Stolle
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

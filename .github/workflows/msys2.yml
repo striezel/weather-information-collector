@@ -53,6 +53,12 @@ jobs:
           # license and third party notices
           cp LICENSE artifacts/
           cp doc/third-party.md artifacts/
+          # individual readme files for each binary
+          cp src/collector/readme.md artifacts/readme-weather-information-collector.md
+          cp src/configtest/readme.md artifacts/readme-weather-information-collector-configtest.md
+          cp src/creator/readme.md artifacts/readme-weather-information-collector-task-creator.md
+          cp src/synchronizer/readme.md artifacts/readme-weather-information-collector-synchronizer.md
+          cp src/update/readme.md artifacts/readme-weather-information-collector-update.md
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

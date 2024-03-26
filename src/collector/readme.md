@@ -12,12 +12,6 @@ This means it has to be stopped manually (e. g. via Ctrl+C or via the
 [`kill` command](https://linux.die.net/man/1/kill) on Linux or via the task
 manager on Windows).
 
-## Building from source
-
-See the [readme file in the repository's root directory](../../readme.md) for
-information on how to build this program (as well as the other binaries) from
-the source code.
-
 ## Usage
 
 ```
@@ -39,7 +33,7 @@ options:
 
 ## Copyright and Licensing
 
-Copyright 2017-2023  Dirk Stolle
+Copyright 2017-2024  Dirk Stolle
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
