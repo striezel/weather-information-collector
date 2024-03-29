@@ -86,3 +86,37 @@ jobs:
         run: |
           cd "$GITHUB_WORKSPACE/build-static"
           ctest -V
+      - name: Gather build artifacts
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir artifacts
+          # binary files
+          cp build-static/src/collector/weather-information-collector artifacts/
+          cp build-static/src/configtest/weather-information-collector-configtest artifacts/
+          cp build-static/src/creator/weather-information-collector-task-creator artifacts/
+          cp build-static/src/synchronizer/weather-information-collector-synchronizer artifacts/
+          cp build-static/src/update/weather-information-collector-update artifacts/
+          # license and third party notices
+          cp LICENSE artifacts/
+          cp doc/third-party.md artifacts/
+          # individual readme files for each binary
+          cp src/collector/readme.md artifacts/readme-weather-information-collector.md
+          cp src/configtest/readme.md artifacts/readme-weather-information-collector-configtest.md
+          cp src/creator/readme.md artifacts/readme-weather-information-collector-task-creator.md
+          cp src/synchronizer/readme.md artifacts/readme-weather-information-collector-synchronizer.md
+          cp src/update/readme.md artifacts/readme-weather-information-collector-update.md
+          # documentation folder
+          cp -R doc artifacts/documentation
+          # ... but remove MSYS2 build instructions
+          unlink artifacts/documentation/msys2-build.md
+          # determine version
+          VERSION=$(git describe --always)
+          echo Version is $VERSION.
+          mv artifacts weather-information-collector-$VERSION
+          tar czf weather-information-collector_${VERSION}_linux-amd64-generic.tar.gz weather-information-collector-$VERSION
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-information-collector_linux-amd64-generic
+          path: weather-information-collector_*_linux-amd64-generic.tar.gz
+          if-no-files-found: error
