@@ -11,6 +11,8 @@ jobs:
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: msys2/setup-msys2@v2
         with:
           msystem: mingw64
@@ -45,6 +47,7 @@ jobs:
           export MSYSTEM=MINGW64
           cd "$GITHUB_WORKSPACE"
           mkdir artifacts
+          # binary files and DLL dependencies
           ./ci/copy-dll-dependencies.sh build/src/collector/weather-information-collector.exe artifacts/
           ./ci/copy-dll-dependencies.sh build/src/configtest/weather-information-collector-configtest.exe artifacts/
           ./ci/copy-dll-dependencies.sh build/src/creator/weather-information-collector-task-creator.exe artifacts/
@@ -59,10 +62,19 @@ jobs:
           cp src/creator/readme.md artifacts/readme-weather-information-collector-task-creator.md
           cp src/synchronizer/readme.md artifacts/readme-weather-information-collector-synchronizer.md
           cp src/update/readme.md artifacts/readme-weather-information-collector-update.md
+          # documentation folder
+          cp -R doc artifacts/documentation
+          # ... but remove MSYS2 build instructions
+          unlink artifacts/documentation/msys2-build.md
+          # determine version
+          VERSION=$(git describe --always)
+          echo Version is $VERSION.
+          mv artifacts weather-information-collector-$VERSION
+          '/c/Program Files/7-Zip/7z.exe' a -r weather-information-collector_${VERSION}_win64.zip weather-information-collector-${VERSION}
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: weather-information-collector-windows-msys2
           path: |
-            artifacts/*
+            weather-information-collector_*.zip
           if-no-files-found: error
