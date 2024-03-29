@@ -29,7 +29,7 @@ Known compatible database servers are listed in the
 
 After that the database and table structure for weather-information-collector
 needs to be created. You can use the SQL dump file provided in
-[database/weather_information_collector.sql](../database/weather_information_collector.sql)
+[database/weather_information_collector.sql](./database/weather_information_collector.sql)
 to accomplish that.
 
 Additionally you should create a MySQL user that has full access to the created
