@@ -1580,7 +1580,7 @@ consistent with the licensing of the Independent Modules.
 The availability of this Exception does not imply any general
 presumption that third-party software is unaffected by the copyleft
 requirements of the license of GCC.
-``'
+```
 
 ## libunistring
 
