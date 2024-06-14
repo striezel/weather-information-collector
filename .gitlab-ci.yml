@@ -150,11 +150,6 @@ mariadb_11_2:
   services:
   - mariadb:11.2
 
-mariadb_11_3:
-  <<: *mariadb_configuration
-  services:
-  - mariadb:11.3
-
 mysql_5_7:
   <<: *mariadb_configuration
   variables:
