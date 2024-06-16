@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2021  Dirk Stolle
+    Copyright (C) 2021, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,8 +21,13 @@
 #ifndef WEATHER_INFORMATION_COLLECTOR_DB_MARIADB_CLIENT_VERSION_HPP
 #define WEATHER_INFORMATION_COLLECTOR_DB_MARIADB_CLIENT_VERSION_HPP
 
+namespace wic
+{
+
 /** \brief Prints version information about MariaDB client library to the standard output.
  */
 void showMariaDbClientVersion();
+
+} // namespace
 
 #endif // WEATHER_INFORMATION_COLLECTOR_DB_MARIADB_CLIENT_VERSION_HPP

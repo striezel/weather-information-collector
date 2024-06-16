@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector benchmark tool.
-    Copyright (C) 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
       if ((param == "-v") || (param == "--version"))
       {
         wic::showVersion("weather-information-collector-benchmark");
-        showMariaDbClientVersion();
+        wic::showMariaDbClientVersion();
         return 0;
       } // if version
       else if ((param == "-?") || (param == "/?") || (param == "--help"))

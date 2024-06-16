@@ -88,7 +88,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& sr
     if ((param == "-v") || (param == "--version"))
     {
       wic::showVersion("weather-information-collector-synchronizer");
-      showMariaDbClientVersion();
+      wic::showMariaDbClientVersion();
       wic::showLicenseInformation();
       return std::make_pair(0, true);
     } // if version

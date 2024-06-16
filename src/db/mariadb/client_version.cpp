@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2021, 2022  Dirk Stolle
+    Copyright (C) 2021, 2022, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,6 +31,9 @@
 #endif
 #include <iostream>
 
+namespace wic
+{
+
 void showMariaDbClientVersion()
 {
   const char * client_info = mysql_get_client_info();
@@ -43,3 +46,5 @@ void showMariaDbClientVersion()
     std::cout << "MariaDB client library: unknown version" << std::endl;
   }
 }
+
+} // namespace
