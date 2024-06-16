@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -78,6 +78,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     {
       wic::showVersion("weather-information-collector-update");
       showMariaDbClientVersion();
+      wic::showLicenseInformation();
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))

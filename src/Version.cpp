@@ -53,4 +53,13 @@ void showVersion(const std::string_view name)
 #endif // !defined(wic_no_json_parsing) || defined(wic_owm_find_location)
 }
 
+void showLicenseInformation()
+{
+  std::cout << "\nCopyright (C) 2017 - 2024  Dirk Stolle\n"
+            << "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
+            << "This is free software: you are free to change and redistribute it under the\n"
+            << "terms of the GNU General Public License version 3 or any later version.\n"
+            << "There is NO WARRANTY, to the extent permitted by law.\n";
+}
+
 } // namespace

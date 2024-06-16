@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2020, 2021, 2023  Dirk Stolle
+    Copyright (C) 2017, 2020, 2021, 2023, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,6 +58,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     if ((param == "-v") || (param == "--version"))
     {
       wic::showVersion("weather-information-collector-configtest");
+      wic::showLicenseInformation();
       return std::make_pair(0, true);
     } // if version
     else if ((param == "-?") || (param == "/?") || (param == "--help"))
