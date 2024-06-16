@@ -88,7 +88,7 @@ int main(int argc, char** argv)
         if (!configurationFile.empty())
         {
           std::cerr << "Error: Configuration was already set to "
-                    << configurationFile << "!" << std::endl;
+                    << configurationFile << "!\n";
           return rcInvalidParameter;
         }
         // enough parameters?
@@ -101,14 +101,14 @@ int main(int argc, char** argv)
         else
         {
           std::cerr << "Error: You have to enter a file path after \""
-                    << param <<"\"." << std::endl;
+                    << param << "\".\n";
           return rcInvalidParameter;
         }
       } // if configuration file
       else
       {
         std::cerr << "Error: Unknown parameter " << param << "!\n"
-                  << "Use --help to show available parameters." << std::endl;
+                  << "Use --help to show available parameters.\n";
         return rcInvalidParameter;
       }
     } // for i
@@ -118,7 +118,7 @@ int main(int argc, char** argv)
   Configuration config;
   if (!config.load(configurationFile, true, true))
   {
-    std::cerr << "Error: Could not load configuration!" << std::endl;
+    std::cerr << "Error: Could not load configuration!\n";
     return rcConfigurationError;
   }
 
@@ -195,7 +195,7 @@ int main(int argc, char** argv)
       return ret;
   }
 
-  std::cout << "Done." << std::endl;
+  std::cout << "Done.\n";
   return 0;
 #else
   std::cout << "Warning: Your processor architecture or compiler does not seem "

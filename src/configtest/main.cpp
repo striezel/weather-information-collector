@@ -71,7 +71,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
       if (!configurationFile.empty())
       {
         std::cerr << "Error: Configuration was already set to "
-                  << configurationFile << "!" << std::endl;
+                  << configurationFile << "!\n";
         return std::make_pair(wic::rcInvalidParameter, true);
       }
       // enough parameters?
@@ -84,7 +84,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
       else
       {
         std::cerr << "Error: You have to enter a file path after \""
-                  << param <<"\"." << std::endl;
+                  << param << "\".\n";
         return std::make_pair(wic::rcInvalidParameter, true);
       }
     } // if configuration file
@@ -92,8 +92,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     {
       if (!checkApiLimits)
       {
-        std::cerr << "Error: Parameter " << param << " was already specified!"
-                  << std::endl;
+        std::cerr << "Error: Parameter " << param << " was already specified!\n";
         return std::make_pair(wic::rcInvalidParameter, true);
       }
       checkApiLimits = false;
@@ -101,7 +100,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     else
     {
       std::cerr << "Error: Unknown parameter " << param << "!\n"
-                << "Use --help to show available parameters." << std::endl;
+                << "Use --help to show available parameters.\n";
       return std::make_pair(wic::rcInvalidParameter, true);
     }
   } // for i
@@ -122,14 +121,14 @@ int main(int argc, char** argv)
   wic::Configuration config;
   if (!config.load(configurationFile))
   {
-    std::cerr << "Error: Could not load configuration!" << std::endl;
+    std::cerr << "Error: Could not load configuration!\n";
     return wic::rcConfigurationError;
   }
 
   // If there are no tasks, we can quit here.
   if (config.tasks().empty())
   {
-    std::cerr << "Error: No collection tasks have been configured!" << std::endl;
+    std::cerr << "Error: No collection tasks have been configured!\n";
     return wic::rcConfigurationError;
   }
 
@@ -144,7 +143,7 @@ int main(int argc, char** argv)
               << "custom plan and are sure that the configured tasks "
               << "will not exceed the request limits imposed by the API, "
               << "then add the parameter --ignore-limits to the call of the "
-              << "application." << std::endl;
+              << "application.\n";
     return wic::rcTasksExceedApiRequestLimit;
   } // if check shall be performed and failed
 

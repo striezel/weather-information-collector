@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2018, 2020, 2021, 2022  Dirk Stolle
+    Copyright (C) 2018, 2020, 2021, 2022, 2024  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,7 +80,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
       if (!configurationFile.empty())
       {
         std::cerr << "Error: Configuration was already set to "
-                  << configurationFile << "!" << std::endl;
+                  << configurationFile << "!\n";
         return std::make_pair(wic::rcInvalidParameter, true);
       }
       // enough parameters?
@@ -93,7 +93,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
       else
       {
         std::cerr << "Error: You have to enter a file path after \""
-                  << param << "\"." << std::endl;
+                  << param << "\".\n";
         return std::make_pair(wic::rcInvalidParameter, true);
       }
     } // if configuration file
@@ -102,7 +102,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
       if (openMeteo)
       {
         std::cerr << "Error: Option " << param
-                  << " was specified more than once!" << std::endl;
+                  << " was specified more than once!\n";
         return std::make_pair(wic::rcInvalidParameter, true);
       }
       openMeteo = true;
@@ -110,7 +110,7 @@ std::pair<int, bool> parseArguments(const int argc, char** argv, std::string& co
     else
     {
       std::cerr << "Error: Unknown parameter " << param << "!\n"
-                << "Use --help to show available parameters." << std::endl;
+                << "Use --help to show available parameters.\n";
       return std::make_pair(wic::rcInvalidParameter, true);
     }
   } // for i
@@ -131,7 +131,7 @@ int main(int argc, char** argv)
   wic::Configuration config;
   if (!config.load(configurationFile))
   {
-    std::cerr << "Error: Could not load configuration!" << std::endl;
+    std::cerr << "Error: Could not load configuration!\n";
     return wic::rcConfigurationError;
   }
 
@@ -162,7 +162,7 @@ int main(int argc, char** argv)
   if (!api_success || locations.empty())
   {
     std::cerr << "Could not find a location with the name \"" << userInput
-              << "\". You should usually enter the name of a city." << std::endl;
+              << "\". You should usually enter the name of a city.\n";
     return wic::rcInvalidParameter;
   }
   // show matching locations
@@ -222,7 +222,7 @@ int main(int argc, char** argv)
     if (currentWithinLimits)
     {
       std::cerr << "Error: The API requests limits would be exceeded, if the "
-                << "new task was active." << std::endl;
+                << "new task was active.\n";
       return wic::rcTasksExceedApiRequestLimit;
     }
     else
@@ -240,28 +240,27 @@ int main(int argc, char** argv)
   }
   else
   {
-    std::cout << " not OK." << std::endl;
+    std::cout << " not OK.\n";
     std::cerr << "Error: There would be duplicate or overlapping tasks, if the new"
-              << " task were active. Therefore it will not be created." << std::endl;
+              << " task were active. Therefore it will not be created.\n";
     return wic::rcTaskOverlap;
   }
 
   const std::string targetFile = wic::creator::createFileName(newTask, config);
   if (targetFile.empty())
   {
-    std::cout << "Error: could not generate file name for new task file!" << std::endl;
+    std::cerr << "Error: Could not generate file name for new task file!\n";
     return wic::rcInputOutputError;
   }
   std::cout << "Saving new task file as " << targetFile << "." << std::endl;
   if (!wic::creator::writeTaskFile(targetFile, newTask))
   {
-    std::cout << "Error: The new task file could not be created." << std::endl;
+    std::cerr << "Error: The new task file could not be created.\n";
     return wic::rcInputOutputError;
   }
 
   // Success.
   std::cout << "Done. Any running instance of weather-information-collector "
-            << "needs to be restarted to use the new task file, too."
-            << std::endl;
+            << "needs to be restarted to use the new task file, too.\n";
   return 0;
 }
