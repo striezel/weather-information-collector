@@ -7,7 +7,7 @@ home directory and thus would not search for an existing configuration file in
 the user's home directory.
 
 simdjson, the library used for JSON parsing, has been updated from version 3.1.6
-to version 3.9.4.
+to version 3.9.5.
 
 nlohmann/json, the library used for JSON parsing when simdjson is not supported,
 has been updated from version 3.11.2 to version 3.11.3.
