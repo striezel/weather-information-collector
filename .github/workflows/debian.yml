@@ -42,7 +42,8 @@ jobs:
           pwd
           ls -lah
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: package-debian
           path: weather-information-collector*.deb
+          if-no-files-found: error
