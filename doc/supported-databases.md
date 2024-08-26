@@ -10,7 +10,7 @@ Server.
 | MariaDB 11.4  | yes         | yes                      |
 | MariaDB 11.3  | yes         | no (reached end of life) |
 | MariaDB 11.2  | yes         | yes                      |
-| MariaDB 11.1  | yes         | yes                      |
+| MariaDB 11.1  | yes         | no (reached end of life) |
 | MariaDB 11.0  | yes         | no (reached end of life) |
 | MariaDB 10.11 | yes         | yes                      |
 | MariaDB 10.10 | yes         | no (reached end of life) |
