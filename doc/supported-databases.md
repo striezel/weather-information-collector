@@ -25,7 +25,7 @@ Server.
 | MySQL 9.0     | yes _(*)_   | yes                      |
 | MySQL 8.4     | yes _(*)_   | yes                      |
 | MySQL 8.3     | yes _(*)_   | yes                      |
-| MySQL 8.2     | yes _(*)_   | yes                      |
+| MySQL 8.2     | yes _(*)_   | no (reached end of life) |
 | MySQL 8.0     | yes _(*)_   | yes                      |
 | MySQL 5.7     | yes         | yes                      |
 | Percona 8.0   | yes _(*)_   | yes                      |
