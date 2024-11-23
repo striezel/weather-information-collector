@@ -103,10 +103,10 @@ pages:
 
 # Build the Docker image using the downloaded *.deb.
 docker_in_docker:
-  image: docker:20
+  image: docker:27
   stage: build
   services:
-    - docker:20-dind
+    - docker:27-dind
   before_script:
     - docker info
   script:
