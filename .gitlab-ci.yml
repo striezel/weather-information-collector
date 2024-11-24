@@ -145,11 +145,6 @@ mariadb_11_4:
   services:
   - mariadb:11.4
 
-mariadb_11_5:
-  <<: *mariadb_configuration
-  services:
-  - mariadb:11.5
-
 mariadb_11_6:
   <<: *mariadb_configuration
   services:
