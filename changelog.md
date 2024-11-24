@@ -268,7 +268,7 @@ approximated (currently decided based on temperature).
 
 ## Version 0.8.2 (2018-12-22)
 
-The updater will now replaces NULL values in the column `temperature_F` in the
+The updater will now replace NULL values in the column `temperature_F` in the
 tables `weatherdata` and `forecastdata` with their corresponding values,
 calculated from `temperature_K`, where applicable.
 
@@ -376,7 +376,7 @@ update program only.
 
 Add a new program that performs database structure and data updates for older
 database variants (currently only version 0.5.4 and earlier) and brings them
-up to data with the current database structure.
+up to date with the current database structure.
 
 ## Version 0.5.5 (2017-08-31)
 
