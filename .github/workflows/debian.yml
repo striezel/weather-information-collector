@@ -1,4 +1,4 @@
-name: Debian package
+name: Debian packages
 
 on:
   push:
@@ -7,43 +7,52 @@ on:
 
 jobs:
   package:
-    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - image: 'debian:11'
+          pack-name: 'debian_11'
+        - image: 'debian:12'
+          pack-name: 'debian_12'
+        - image: 'ubuntu:20.04'
+          pack-name: 'ubuntu_20_04'
+        - image: 'ubuntu:22.04'
+          pack-name: 'ubuntu_22_04'
+        - image: 'ubuntu:24.04'
+          pack-name: 'ubuntu_24_04'
+    runs-on: ubuntu-24.04
+    container: ${{ matrix.image }}
     steps:
+      - name: Install Git
+        run: |
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update && apt-get upgrade -y
+          apt-get install -y --no-install-recommends ca-certificates git
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - name: Git checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Prepare Git repository
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --force --tags
       - name: Install Debian packages
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends build-essential bzip2 ca-certificates debhelper devscripts fakeroot g++ git lsb-release tar wget
-          sudo apt-get install -y --no-install-recommends catch cmake g++ libcurl4-gnutls-dev libmariadb-dev
-      - name: Start MySQL database
-        run: sudo systemctl start mysql.service
-      - name: Show MySQL version information
-        run: |
-          mysql -uroot -proot -e "SHOW VARIABLES LIKE '%version%';"
-      - name: Prepare MySQL database
-        run: |
-          mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
-          mysql -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
-          mysql -uroot --password=root -e "SHOW DATABASES;"
-      - name: Adjust MySQL 8.0 authentication
-        run: |
-          mysql -uroot -proot -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY ''; ALTER USER root@localhost IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
-          mysql -uroot --password=root -e "SHOW DATABASES;"
+          cd "$GITHUB_WORKSPACE"
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update && apt-get upgrade -y
+          ./ci/gitlab-01-install-dependencies.sh
       - name: Build package
         run: |
           export CXX=g++
           export CC=gcc
           cd "$GITHUB_WORKSPACE"
           ./ci/gitlab-02-create-package.sh
-          pwd
-          ls -lah
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: package-debian
+          name: package-${{ matrix.pack-name }}
           path: weather-information-collector*.deb
           if-no-files-found: error
