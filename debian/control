@@ -13,7 +13,7 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: mariadb-server | default-mysql-server
 Description: Collects information from various weather APIs
  weather-information-collector is a tool that collects weather information from
- various available ReST API services (currently OpenWeatherMap, DarkSky,
+ various available ReST API services (currently OpenWeatherMap, Open-Meteo,
  Weatherbit and Weatherstack) and stores the information in a database.
  Currently only MySQL and compatible DBMS like MariaDB are supported.
  Data collection tasks can be configured individually.
