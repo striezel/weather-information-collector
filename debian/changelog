@@ -1,5 +1,5 @@
-weather-information-collector (0.11.1-1) UNRELEASED; urgency=medium
+weather-information-collector (0.11.2-1) UNRELEASED; urgency=medium
 
   * Initial release
 
- -- Dirk Stolle <striezel-dev@web.de>  Sat, 01 Apr 2023 22:50:22 +0200
+ -- Dirk Stolle <striezel-dev@web.de>  Sun, 08 Dec 2024 16:28:03 +0100

@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.?.? (2023-04-??)
+## Version 0.11.2 (2024-12-08)
 
 Fix a bug where some Linux distributions would not properly detect the user's
 home directory and thus would not search for an existing configuration file in
