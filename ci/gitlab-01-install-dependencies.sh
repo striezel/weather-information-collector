@@ -13,9 +13,16 @@ then
   exit 1
 fi
 
-apt-get -y install --no-install-recommends catch2 cmake g++ libcurl4-gnutls-dev libmariadb-dev
+apt-get -y install --no-install-recommends cmake g++ libcurl4-gnutls-dev libmariadb-dev pkg-config
 if [ $? -ne 0 ]
 then
   echo "ERROR: Could not install build dependencies!"
+  exit 1
+fi
+
+apt-get -y install --no-install-recommends catch2 || apt-get -y install --no-install-recommends catch
+if [ $? -ne 0 ]
+then
+  echo "ERROR: Could not install CATCH!"
   exit 1
 fi
