@@ -46,8 +46,8 @@ build_clang:
     - make -j4
     - ctest -V
 
-package_debian10:
-  image: debian:10
+package_debian12:
+  image: debian:12
   stage: build
   before_script:
     - ./ci/gitlab-01-install-dependencies.sh
