@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2024, 2025  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ void showVersion(const std::string_view name)
 
 void showLicenseInformation()
 {
-  std::cout << "\nCopyright (C) 2017 - 2024  Dirk Stolle\n"
+  std::cout << "\nCopyright (C) 2017 - 2025  Dirk Stolle\n"
             << "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>\n"
             << "This is free software: you are free to change and redistribute it under the\n"
             << "terms of the GNU General Public License version 3 or any later version.\n"
