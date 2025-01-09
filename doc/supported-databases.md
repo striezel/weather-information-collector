@@ -4,7 +4,7 @@ In general, weather-information-collector supports any somewhat recent MariaDB
 database server. This also includes compatible systems like MySQL or Percona
 Server.
 
-| DBMS          | Supported   | Tested                   |
+| DBMS          | Supported   | Tested continuously      |
 | ------------- | ----------- | ------------------------ |
 | MariaDB 11.6  | yes         | yes                      |
 | MariaDB 11.5  | yes         | no (reached end of life) |
