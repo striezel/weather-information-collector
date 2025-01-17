@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023  Dirk Stolle
+    Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2025  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -89,9 +89,9 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
          switch (planWs)
          {
              case PlanWeatherstack::Free:
-                  /* Limit for Weatherstack is 1000 calls per month on the free plan,
-                     which is ca. 1.34 requests per hour. */
-                  return Limit(1000, std::chrono::hours(24 * 31));
+                  /* Limit for Weatherstack is 100 calls per month on the free plan,
+                     which is ca. 0.134 requests per hour or ca. 3 requests per day. */
+                  return Limit(100, std::chrono::hours(24 * 31));
              case PlanWeatherstack::Standard:
                   /* Limit for Weatherstack is 50000 calls per month on the Standard plan,
                      which is ca. 67.2 requests per hour. */

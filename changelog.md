@@ -2,6 +2,9 @@
 
 ## Version 0.?.? (2024-12-??)
 
+The request limit for Weatherstacks's free plan is adjusted to 100 requests per
+month, since they changed the limit from 1000 to 100 requests.
+
 simdjson, the library used for JSON parsing, has been updated from version
 3.11.1 to version 3.11.6.
 
