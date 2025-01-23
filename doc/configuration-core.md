@@ -108,13 +108,13 @@ The following configuration settings for weather API plans are recognized:
   * **enterprise** - Enterprise plan (up to 200000 calls per minute)
 * **plan.weatherbit** - pricing plan for Weatherbit API; currently the following
   plans are recognized:
-  * **free** - free plan (up to 500 calls per day)
+  * **free** - free plan (up to 50 calls per day)
   * **starter** - Starter plan (up to 50000 calls per day)
   * **developer** - Developer plan (up to 500000 calls per day)
   * **advanced** - Advanced plan (up to 5000000 calls per day)
 * **plan.weatherstack** - pricing plan for Weatherstack API; currently the
   following plans are recognized:
-  * **free** - free plan (up to 1000 calls per month)
+  * **free** - free plan (up to 100 calls per month)
   * **standard** - Standard plan (up to 50000 calls per month)
   * **professional** - Professional plan (up to 300000 calls per month)
   * **business** - Business plan (up to 1000000 calls per month)
