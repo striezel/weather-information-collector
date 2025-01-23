@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the weather information collector.
-    Copyright (C) 2019, 2020, 2021, 2022, 2023  Dirk Stolle
+    Copyright (C) 2019, 2020, 2021, 2022, 2023, 2025  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -160,7 +160,6 @@ bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
   switch(m_plan)
   {
     case PlanWeatherbit::Free:
-    case PlanWeatherbit::Hobbyist:
          url = "https://api.weatherbit.io/v2.0/forecast/daily?key=" + m_apiKey
                // Use the metric system.
                + std::string("&units=M")
