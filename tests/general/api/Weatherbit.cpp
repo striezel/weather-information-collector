@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2022  Dirk Stolle
+    Copyright (C) 2022, 2025  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ TEST_CASE("Weatherbit - non-network tests")
 {
   using namespace wic;
 
-  Weatherbit api(PlanWeatherbit::Developer, "not a valid key");
+  Weatherbit api(PlanWeatherbit::Plus, "not a valid key");
 
   SECTION("validLocation")
   {

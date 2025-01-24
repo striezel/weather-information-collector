@@ -69,8 +69,8 @@ std::string toString(const PlanWeatherbit type)
          return "free";
     case PlanWeatherbit::Standard:
          return "standard";
-    case PlanWeatherbit::Developer:
-         return "developer";
+    case PlanWeatherbit::Plus:
+         return "plus";
     case PlanWeatherbit::Advanced:
          return "advanced";
     default: // i. e. PlanWeatherbit::none
@@ -86,8 +86,8 @@ PlanWeatherbit toPlanWeatherbit(const std::string& planName)
     return PlanWeatherbit::Free;
   if (name == "standard")
     return PlanWeatherbit::Standard;
-  if (name == "developer")
-    return PlanWeatherbit::Developer;
+  if (name == "plus")
+    return PlanWeatherbit::Plus;
   if (name == "advanced")
     return PlanWeatherbit::Advanced;
   // unknown / none

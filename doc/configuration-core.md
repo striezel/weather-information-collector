@@ -110,7 +110,7 @@ The following configuration settings for weather API plans are recognized:
   plans are recognized:
   * **free** - free plan (up to 50 calls per day)
   * **standard** - Standard plan (up to 25000 calls per day)
-  * **developer** - Developer plan (up to 500000 calls per day)
+  * **plus** - Plus plan (up to 250000 calls per day)
   * **advanced** - Advanced plan (up to 5000000 calls per day)
 * **plan.weatherstack** - pricing plan for Weatherstack API; currently the
   following plans are recognized:

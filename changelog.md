@@ -11,6 +11,8 @@ those changes:
   offer that plan anymore.
 * The Starter plan is renamed to Standard and the limit is changed from 50000
   requests per day to 25000 requests per day.
+* The Developer plan is renamed to Plus and the limit is changed from 500000
+  requests per day to 250000 requests per day.
 
 simdjson, the library used for JSON parsing, has been updated from version
 3.11.1 to version 3.11.6.

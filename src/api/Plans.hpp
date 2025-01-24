@@ -62,7 +62,7 @@ enum class PlanWeatherbit
     none,
     Free,
     Standard,
-    Developer,
+    Plus,
     Advanced
 };
 
