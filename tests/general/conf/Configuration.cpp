@@ -996,7 +996,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=business
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1062,7 +1062,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
       REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
       REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Enterprise );
-      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Advanced );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Business );
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Business );
 
       REQUIRE( conf.tasks().size() == 3 );
@@ -1127,7 +1127,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=business
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1160,7 +1160,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=business
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1196,7 +1196,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=business
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1238,7 +1238,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=standard
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1286,7 +1286,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=free
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1333,7 +1333,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=free
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1389,7 +1389,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=advanced
+      plan.weatherbit=standard
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1428,7 +1428,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
       REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
       REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Enterprise );
-      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Advanced );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Standard );
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Business );
 
       REQUIRE( conf.tasks().size() == 1 );

@@ -126,12 +126,12 @@ TEST_CASE("Weatherbit plan types")
     REQUIRE( wic::toPlanWeatherbit("\t  PlUs  \t") == wic::PlanWeatherbit::Plus );
   }
 
-  SECTION("to type: advanced")
+  SECTION("to type: business")
   {
-    REQUIRE( wic::toPlanWeatherbit("advanced") == wic::PlanWeatherbit::Advanced );
-    REQUIRE( wic::toPlanWeatherbit("Advanced") == wic::PlanWeatherbit::Advanced );
-    REQUIRE( wic::toPlanWeatherbit("ADVANCED") == wic::PlanWeatherbit::Advanced );
-    REQUIRE( wic::toPlanWeatherbit("\t  AdVaNcEd  \t") == wic::PlanWeatherbit::Advanced );
+    REQUIRE( wic::toPlanWeatherbit("business") == wic::PlanWeatherbit::Business );
+    REQUIRE( wic::toPlanWeatherbit("Business") == wic::PlanWeatherbit::Business );
+    REQUIRE( wic::toPlanWeatherbit("BUSINESS") == wic::PlanWeatherbit::Business );
+    REQUIRE( wic::toPlanWeatherbit("\t  BuSiNeSs  \t") == wic::PlanWeatherbit::Business );
   }
 
   SECTION("to type: none")
@@ -156,7 +156,7 @@ TEST_CASE("Weatherbit plan types")
     REQUIRE( wic::toString(wic::PlanWeatherbit::Free) == "free" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Standard) == "standard" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Plus) == "plus" );
-    REQUIRE( wic::toString(wic::PlanWeatherbit::Advanced) == "advanced" );
+    REQUIRE( wic::toString(wic::PlanWeatherbit::Business) == "business" );
   }
 
   SECTION("to string - to plan - roundtrip")
@@ -165,7 +165,7 @@ TEST_CASE("Weatherbit plan types")
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Free)) == wic::PlanWeatherbit::Free );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Standard)) == wic::PlanWeatherbit::Standard );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Plus)) == wic::PlanWeatherbit::Plus );
-    REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Advanced)) == wic::PlanWeatherbit::Advanced );
+    REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Business)) == wic::PlanWeatherbit::Business );
   }
 }
 

@@ -58,7 +58,7 @@ TEST_CASE("Different API plans")
     const auto free = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Free, PlanWeatherstack::none);
     const auto standard = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Standard, PlanWeatherstack::none);
     const auto plus = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Plus, PlanWeatherstack::none);
-    const auto advanced = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Advanced, PlanWeatherstack::none);
+    const auto business = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Business, PlanWeatherstack::none);
 
     REQUIRE( free.requests < standard.requests );
     REQUIRE( free.timespan == standard.timespan );
@@ -66,8 +66,8 @@ TEST_CASE("Different API plans")
     REQUIRE( standard.requests < plus.requests );
     REQUIRE( standard.timespan == plus.timespan );
 
-    REQUIRE( plus.requests < advanced.requests );
-    REQUIRE( plus.timespan == advanced.timespan );
+    REQUIRE( plus.requests < business.requests );
+    REQUIRE( plus.timespan == business.timespan );
   }
 
   SECTION("Weatherbit plan 'none' returns limit with zero allowed requests")
@@ -217,22 +217,22 @@ TEST_CASE("witinLimit for various plans")
       REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Plus, PlanWeatherstack::none) );
     }
 
-    SECTION("tasks within limits of advanced plan")
+    SECTION("tasks within limits of business plan")
     {
       for (int i = 0; i < 6; ++i) {
         tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(1)));
       }
 
-      REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Advanced, PlanWeatherstack::none) );
+      REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Business, PlanWeatherstack::none) );
     }
 
-    SECTION("tasks with too much requests for advanced plan")
+    SECTION("tasks with too much requests for business plan")
     {
-      for (int i = 0; i < 60; ++i) {
+      for (int i = 0; i < 25; ++i) {
         tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(1)));
       }
 
-      REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Advanced, PlanWeatherstack::none) );
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Business, PlanWeatherstack::none) );
     }
   } // withinLimits: Weatherbit
 

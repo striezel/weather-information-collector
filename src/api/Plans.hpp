@@ -63,7 +63,7 @@ enum class PlanWeatherbit
     Free,
     Standard,
     Plus,
-    Advanced
+    Business
 };
 
 

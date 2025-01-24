@@ -376,7 +376,7 @@ bool Configuration::loadCoreConfigurationValue(const std::string& name, const st
                 << "\t" << toString(PlanWeatherbit::Free) << std::endl
                 << "\t" << toString(PlanWeatherbit::Standard) << std::endl
                 << "\t" << toString(PlanWeatherbit::Plus) << std::endl
-                << "\t" << toString(PlanWeatherbit::Advanced) << std::endl;
+                << "\t" << toString(PlanWeatherbit::Business) << std::endl;
       return false;
     }
     planWb = plan;

@@ -167,7 +167,7 @@ bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
          break;
     case PlanWeatherbit::Standard:
     case PlanWeatherbit::Plus:
-    case PlanWeatherbit::Advanced:
+    case PlanWeatherbit::Business:
     default:
          url = "https://api.weatherbit.io/v2.0/forecast/hourly?key=" + m_apiKey
                // Use the metric system.
