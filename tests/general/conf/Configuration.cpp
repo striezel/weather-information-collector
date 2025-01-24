@@ -150,7 +150,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=developer
-      plan.weatherbit=starter
+      plan.weatherbit=standard
       plan.weatherstack=free
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -172,7 +172,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
       REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
       REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Developer );
-      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Starter );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Standard );
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Free );
     }
 
@@ -191,7 +191,7 @@ TEST_CASE("Class Configuration")
       key.owm=9876543210abcdefdeadbeef1c0ffee1
       # plans
       plan.owm=developer
-      plan.weatherbit=starter
+      plan.weatherbit=standard
       plan.weatherstack=standard
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -213,7 +213,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.key(ApiType::Weatherbit).empty() );
       REQUIRE( conf.key(ApiType::Weatherstack).empty() );
       REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Developer );
-      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Starter );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Standard );
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Standard );
     }
 
@@ -270,7 +270,7 @@ TEST_CASE("Class Configuration")
       # no API keys
       # plans
       plan.owm=developer
-      plan.weatherbit=starter
+      plan.weatherbit=standard
       plan.weatherstack=standard
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -308,7 +308,7 @@ TEST_CASE("Class Configuration")
       # no API keys
       # plans
       plan.owm=developer
-      plan.weatherbit=starter
+      plan.weatherbit=standard
       plan.weatherstack=standard
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -344,7 +344,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.key(ApiType::Weatherbit).empty() );
       REQUIRE( conf.key(ApiType::Weatherstack).empty() );
       REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Developer );
-      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Starter );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Standard );
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Standard );
     }
 
@@ -838,8 +838,8 @@ TEST_CASE("Class Configuration")
       key.owm=1234567890abcdef
       key.weatherbit=foo
       # plans
-      plan.weatherbit=starter
-      plan.weatherbit=starter
+      plan.weatherbit=standard
+      plan.weatherbit=standard
       )conf";
       REQUIRE( writeConfiguration(path, content) );
       FileGuard guard{path};
@@ -1468,7 +1468,7 @@ TEST_CASE("Class Configuration")
       key.weatherstack=f00ba12abcdef1234567890abcdef123
       # plans
       plan.owm=enterprise
-      plan.weatherbit=starter
+      plan.weatherbit=standard
       plan.weatherstack=business
       )conf";
       REQUIRE( writeConfiguration(path, content) );
@@ -1516,7 +1516,7 @@ TEST_CASE("Class Configuration")
       REQUIRE( conf.key(ApiType::Weatherbit) == "fedcba98765432100123456789abcdef" );
       REQUIRE( conf.key(ApiType::Weatherstack) == "f00ba12abcdef1234567890abcdef123" );
       REQUIRE( conf.planOpenWeatherMap() == PlanOwm::Enterprise );
-      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Starter );
+      REQUIRE( conf.planWeatherbit() == PlanWeatherbit::Standard );
       REQUIRE( conf.planWeatherstack() == PlanWeatherstack::Business );
 
       REQUIRE( conf.tasks().size() == 2 );

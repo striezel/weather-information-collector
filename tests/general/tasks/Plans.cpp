@@ -56,15 +56,15 @@ TEST_CASE("Different API plans")
   SECTION("Weatherbit plans have different limits")
   {
     const auto free = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Free, PlanWeatherstack::none);
-    const auto starter = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Starter, PlanWeatherstack::none);
+    const auto standard = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Standard, PlanWeatherstack::none);
     const auto dev = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Developer, PlanWeatherstack::none);
     const auto advanced = Limits::forApi(ApiType::Weatherbit, PlanOwm::none, PlanWeatherbit::Advanced, PlanWeatherstack::none);
 
-    REQUIRE( free.requests < starter.requests );
-    REQUIRE( free.timespan == starter.timespan );
+    REQUIRE( free.requests < standard.requests );
+    REQUIRE( free.timespan == standard.timespan );
 
-    REQUIRE( starter.requests < dev.requests );
-    REQUIRE( starter.timespan == dev.timespan );
+    REQUIRE( standard.requests < dev.requests );
+    REQUIRE( standard.timespan == dev.timespan );
 
     REQUIRE( dev.requests < advanced.requests );
     REQUIRE( dev.timespan == advanced.timespan );
@@ -187,18 +187,18 @@ TEST_CASE("witinLimit for various plans")
 
   SECTION("withinLimit: Weatherbit")
   {
-    SECTION("tasks within limits of starter plan")
+    SECTION("tasks within limits of standard plan")
+    {
+      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(4)));
+
+      REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Standard, PlanWeatherstack::none) );
+    }
+
+    SECTION("tasks with too much requests for standard plan")
     {
       tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(2)));
 
-      REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Starter, PlanWeatherstack::none) );
-    }
-
-    SECTION("tasks with too much requests for starter plan")
-    {
-      tasks.push_back(Task(loc, ApiType::Weatherbit, DataType::Current, std::chrono::seconds(1)));
-
-      REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Starter, PlanWeatherstack::none) );
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::none, PlanWeatherbit::Standard, PlanWeatherstack::none) );
     }
 
     SECTION("tasks within limits of developer plan")

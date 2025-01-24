@@ -374,7 +374,7 @@ bool Configuration::loadCoreConfigurationValue(const std::string& name, const st
                 << " is not a recognized plan for Weatherbit!" << std::endl;
       std::cerr << "Hint: Recognized Weatherbit plans are:" << std::endl
                 << "\t" << toString(PlanWeatherbit::Free) << std::endl
-                << "\t" << toString(PlanWeatherbit::Starter) << std::endl
+                << "\t" << toString(PlanWeatherbit::Standard) << std::endl
                 << "\t" << toString(PlanWeatherbit::Developer) << std::endl
                 << "\t" << toString(PlanWeatherbit::Advanced) << std::endl;
       return false;

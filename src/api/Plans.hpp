@@ -61,7 +61,7 @@ enum class PlanWeatherbit
 {
     none,
     Free,
-    Starter,
+    Standard,
     Developer,
     Advanced
 };

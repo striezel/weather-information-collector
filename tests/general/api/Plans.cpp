@@ -110,12 +110,12 @@ TEST_CASE("Weatherbit plan types")
     REQUIRE( wic::toPlanWeatherbit("\t  FrEe  \t") == wic::PlanWeatherbit::Free );
   }
 
-  SECTION("to type: starter")
+  SECTION("to type: standard")
   {
-    REQUIRE( wic::toPlanWeatherbit("starter") == wic::PlanWeatherbit::Starter );
-    REQUIRE( wic::toPlanWeatherbit("Starter") == wic::PlanWeatherbit::Starter );
-    REQUIRE( wic::toPlanWeatherbit("STARTER") == wic::PlanWeatherbit::Starter );
-    REQUIRE( wic::toPlanWeatherbit("\t  StArTeR  \t") == wic::PlanWeatherbit::Starter );
+    REQUIRE( wic::toPlanWeatherbit("standard") == wic::PlanWeatherbit::Standard );
+    REQUIRE( wic::toPlanWeatherbit("Standard") == wic::PlanWeatherbit::Standard );
+    REQUIRE( wic::toPlanWeatherbit("STANDARD") == wic::PlanWeatherbit::Standard );
+    REQUIRE( wic::toPlanWeatherbit("\t  StAnDaRd  \t") == wic::PlanWeatherbit::Standard );
   }
 
   SECTION("to type: developer")
@@ -154,7 +154,7 @@ TEST_CASE("Weatherbit plan types")
   {
     REQUIRE( wic::toString(wic::PlanWeatherbit::none) == "none" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Free) == "free" );
-    REQUIRE( wic::toString(wic::PlanWeatherbit::Starter) == "starter" );
+    REQUIRE( wic::toString(wic::PlanWeatherbit::Standard) == "standard" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Developer) == "developer" );
     REQUIRE( wic::toString(wic::PlanWeatherbit::Advanced) == "advanced" );
   }
@@ -163,7 +163,7 @@ TEST_CASE("Weatherbit plan types")
   {
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::none)) == wic::PlanWeatherbit::none );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Free)) == wic::PlanWeatherbit::Free );
-    REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Starter)) == wic::PlanWeatherbit::Starter );
+    REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Standard)) == wic::PlanWeatherbit::Standard );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Developer)) == wic::PlanWeatherbit::Developer );
     REQUIRE( wic::toPlanWeatherbit(wic::toString(wic::PlanWeatherbit::Advanced)) == wic::PlanWeatherbit::Advanced );
   }

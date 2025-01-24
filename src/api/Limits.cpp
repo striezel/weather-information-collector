@@ -66,10 +66,10 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
                   /* Limit for Weatherbit is 50 calls per day on the free plan,
                      which is ca. 2.0833 requests per hour. */
                   return Limit(50, std::chrono::hours(24));
-             case PlanWeatherbit::Starter:
-                  /* Limit for Weatherbit is 50000 calls per day on the Starter plan,
-                     which is ca. 2083.33 requests per hour. */
-                  return Limit(50000, std::chrono::hours(24));
+             case PlanWeatherbit::Standard:
+                  /* Limit for Weatherbit is 25000 calls per day on the Standard plan,
+                     which is ca. 1041.67 requests per hour. */
+                  return Limit(25000, std::chrono::hours(24));
              case PlanWeatherbit::Developer:
                   /* Limit for Weatherbit is 500000 calls per day on the Starter plan,
                      which is ca. 20833.33 requests per hour. */

@@ -109,7 +109,7 @@ The following configuration settings for weather API plans are recognized:
 * **plan.weatherbit** - pricing plan for Weatherbit API; currently the following
   plans are recognized:
   * **free** - free plan (up to 50 calls per day)
-  * **starter** - Starter plan (up to 50000 calls per day)
+  * **standard** - Standard plan (up to 25000 calls per day)
   * **developer** - Developer plan (up to 500000 calls per day)
   * **advanced** - Advanced plan (up to 5000000 calls per day)
 * **plan.weatherstack** - pricing plan for Weatherstack API; currently the
@@ -142,7 +142,7 @@ Possible values of these settings could be:
 # Example of a complete configuration file
 
 The following example is a complete core configuration file for the
-weather-information-collector program (as of version 0.11.0):
+weather-information-collector program (as of version 0.12.0):
 
     # This line is a comment and will be ignored by the program.
     #And so is this line.
@@ -162,5 +162,5 @@ weather-information-collector program (as of version 0.11.0):
     key.weatherstack=f00ba12abcdef1234567890abcdef123
     # API plans
     plan.owm=developer
-    plan.weatherbit=starter
+    plan.weatherbit=standard
     plan.weatherstack=free

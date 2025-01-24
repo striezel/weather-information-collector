@@ -165,7 +165,7 @@ bool Weatherbit::forecastWeather(const Location& location, Forecast& forecast)
                + std::string("&units=M")
                + "&" + toRequestString(location);
          break;
-    case PlanWeatherbit::Starter:
+    case PlanWeatherbit::Standard:
     case PlanWeatherbit::Developer:
     case PlanWeatherbit::Advanced:
     default:

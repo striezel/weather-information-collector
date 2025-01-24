@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2021, 2022  Dirk Stolle
+    Copyright (C) 2021, 2022, 2025  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ TEST_CASE("Factory gonna factor, right? ;P")
 
   SECTION("Weatherbit")
   {
-    const auto wbit = Factory::create(ApiType::Weatherbit, PlanWeatherbit::Starter, PlanWeatherstack::none, "No key.");
+    const auto wbit = Factory::create(ApiType::Weatherbit, PlanWeatherbit::Standard, PlanWeatherstack::none, "No key.");
     REQUIRE( wbit );
   }
 
