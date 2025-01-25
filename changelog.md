@@ -1,6 +1,6 @@
 # Version history of weather-information-collector
 
-## Version 0.?.? (2024-12-??)
+## Version 0.12.0 (2025-01-25)
 
 Support for OpenWeatherMap's Expert plan is added.
 
