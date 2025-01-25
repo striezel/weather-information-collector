@@ -49,6 +49,9 @@ Limit Limits::forApi(const ApiType api, const PlanOwm planOwm, const PlanWeather
              case PlanOwm::Professional:
                   /* Limit for OpenWeatherMap is 30000 calls per minute on the Professional plan. */
                   return Limit(30000, std::chrono::minutes(1));
+             case PlanOwm::Expert:
+                  /* Limit for OpenWeatherMap is 100000 calls per minute on the Expert plan. */
+                  return Limit(100000, std::chrono::minutes(1));
              case PlanOwm::Enterprise:
                   /* Limit for OpenWeatherMap is 200000 calls per minute on the Enterprise plan. */
                   return Limit(200000, std::chrono::minutes(1));

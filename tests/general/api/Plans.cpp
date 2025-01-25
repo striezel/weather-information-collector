@@ -55,6 +55,14 @@ TEST_CASE("OpenWeatherMap plan types")
     REQUIRE( wic::toPlanOwm("\t  PrOfEsSiOnAl  \t") == wic::PlanOwm::Professional );
   }
 
+  SECTION("to type: expert")
+  {
+    REQUIRE( wic::toPlanOwm("expert") == wic::PlanOwm::Expert );
+    REQUIRE( wic::toPlanOwm("Expert") == wic::PlanOwm::Expert );
+    REQUIRE( wic::toPlanOwm("EXPERT") == wic::PlanOwm::Expert );
+    REQUIRE( wic::toPlanOwm("\t  ExPeRt  \t") == wic::PlanOwm::Expert );
+  }
+
   SECTION("to type: enterprise")
   {
     REQUIRE( wic::toPlanOwm("enterprise") == wic::PlanOwm::Enterprise );
@@ -86,6 +94,7 @@ TEST_CASE("OpenWeatherMap plan types")
     REQUIRE( wic::toString(wic::PlanOwm::Startup) == "startup" );
     REQUIRE( wic::toString(wic::PlanOwm::Developer) == "developer" );
     REQUIRE( wic::toString(wic::PlanOwm::Professional) == "professional" );
+    REQUIRE( wic::toString(wic::PlanOwm::Expert) == "expert" );
     REQUIRE( wic::toString(wic::PlanOwm::Enterprise) == "enterprise" );
   }
 
@@ -96,6 +105,7 @@ TEST_CASE("OpenWeatherMap plan types")
     REQUIRE( wic::toPlanOwm(wic::toString(wic::PlanOwm::Startup)) == wic::PlanOwm::Startup );
     REQUIRE( wic::toPlanOwm(wic::toString(wic::PlanOwm::Developer)) == wic::PlanOwm::Developer );
     REQUIRE( wic::toPlanOwm(wic::toString(wic::PlanOwm::Professional)) == wic::PlanOwm::Professional );
+    REQUIRE( wic::toPlanOwm(wic::toString(wic::PlanOwm::Expert)) == wic::PlanOwm::Expert );
     REQUIRE( wic::toPlanOwm(wic::toString(wic::PlanOwm::Enterprise)) == wic::PlanOwm::Enterprise );
   }
 }

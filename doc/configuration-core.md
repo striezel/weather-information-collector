@@ -105,6 +105,7 @@ The following configuration settings for weather API plans are recognized:
   * **startup** - Startup plan (up to 600 calls per minute)
   * **developer** - Developer plan (up to 3000 calls per minute)
   * **professional** - Professional plan (up to 30000 calls per minute)
+  * **expert** - Expert plan (up to 100000 calls per minute)
   * **enterprise** - Enterprise plan (up to 200000 calls per minute)
 * **plan.weatherbit** - pricing plan for Weatherbit API; currently the following
   plans are recognized:

@@ -354,6 +354,7 @@ bool Configuration::loadCoreConfigurationValue(const std::string& name, const st
                 << "\t" << toString(PlanOwm::Startup) << std::endl
                 << "\t" << toString(PlanOwm::Developer) << std::endl
                 << "\t" << toString(PlanOwm::Professional) << std::endl
+                << "\t" << toString(PlanOwm::Expert) << std::endl
                 << "\t" << toString(PlanOwm::Enterprise) << std::endl;
       return false;
     }

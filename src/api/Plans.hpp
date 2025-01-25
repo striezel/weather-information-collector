@@ -35,6 +35,7 @@ enum class PlanOwm
     Startup,
     Developer,
     Professional,
+    Expert,
     Enterprise
 };
 

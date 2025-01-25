@@ -32,6 +32,7 @@ TEST_CASE("Different API plans")
     const auto startup = Limits::forApi(ApiType::OpenWeatherMap, PlanOwm::Startup, PlanWeatherbit::none, PlanWeatherstack::none);
     const auto dev = Limits::forApi(ApiType::OpenWeatherMap, PlanOwm::Developer, PlanWeatherbit::none, PlanWeatherstack::none);
     const auto prof = Limits::forApi(ApiType::OpenWeatherMap, PlanOwm::Professional, PlanWeatherbit::none, PlanWeatherstack::none);
+    const auto expert = Limits::forApi(ApiType::OpenWeatherMap, PlanOwm::Expert, PlanWeatherbit::none, PlanWeatherstack::none);
     const auto enterprise = Limits::forApi(ApiType::OpenWeatherMap, PlanOwm::Enterprise, PlanWeatherbit::none, PlanWeatherstack::none);
 
     REQUIRE( free.requests < startup.requests );
@@ -43,8 +44,11 @@ TEST_CASE("Different API plans")
     REQUIRE( dev.requests < prof.requests );
     REQUIRE( dev.timespan == prof.timespan );
 
-    REQUIRE( prof.requests < enterprise.requests );
-    REQUIRE( prof.timespan == enterprise.timespan );
+    REQUIRE( prof.requests < expert.requests );
+    REQUIRE( prof.timespan == expert.timespan );
+
+    REQUIRE( expert.requests < enterprise.requests );
+    REQUIRE( expert.timespan == enterprise.timespan );
   }
 
   SECTION("OpenWeatherMap plan 'none' returns limit with zero allowed requests")
@@ -164,6 +168,24 @@ TEST_CASE("witinLimit for various plans")
       }
 
       REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::Professional, PlanWeatherbit::none, PlanWeatherstack::none) );
+    }
+
+    SECTION("several tasks within limits of expert plan")
+    {
+      for (int i = 0; i < 160; ++i) {
+        tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(1)));
+      }
+
+      REQUIRE( TaskManager::withinLimits(tasks, PlanOwm::Expert, PlanWeatherbit::none, PlanWeatherstack::none) );
+    }
+
+    SECTION("several tasks with too much requests for expert plan")
+    {
+      for (int i = 0; i < 1670; ++i) {
+        tasks.push_back(Task(loc, ApiType::OpenWeatherMap, DataType::Current, std::chrono::seconds(1)));
+      }
+
+      REQUIRE_FALSE( TaskManager::withinLimits(tasks, PlanOwm::Expert, PlanWeatherbit::none, PlanWeatherstack::none) );
     }
 
     SECTION("several tasks within limits of enterprise plan")

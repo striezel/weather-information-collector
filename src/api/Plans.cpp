@@ -36,6 +36,8 @@ std::string toString(const PlanOwm type)
          return "developer";
     case PlanOwm::Professional:
          return "professional";
+    case PlanOwm::Expert:
+         return "expert";
     case PlanOwm::Enterprise:
          return "enterprise";
     default: // i. e. PlanOwm::none
@@ -55,6 +57,8 @@ PlanOwm toPlanOwm(const std::string& planName)
     return PlanOwm::Developer;
   if (name == "professional")
     return PlanOwm::Professional;
+  if (name == "expert")
+    return PlanOwm::Expert;
   if (name == "enterprise")
     return PlanOwm::Enterprise;
   // unknown / none

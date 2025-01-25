@@ -2,6 +2,8 @@
 
 ## Version 0.?.? (2024-12-??)
 
+Support for OpenWeatherMap's Expert plan is added.
+
 The request limit for Weatherstacks's free plan is adjusted to 100 requests per
 month, since they changed the limit from 1000 to 100 requests.
 
