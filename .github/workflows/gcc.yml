@@ -8,9 +8,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        # GCC 8 is only available on Ubuntu 20.04, not on Ubuntu 22.04.
-        - version: 8
-          os: ubuntu-20.04
+        - version: 9
+          os: ubuntu-22.04
         - version: 10
           os: ubuntu-22.04
         - version: 11
@@ -25,17 +24,10 @@ jobs:
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v4
-      - name: Install Debian packages (including Catch v1)
-        # Ubuntu 20.04 with GCC 8 has no Catch v2, so we have to use v1 here.
-        if: matrix.version == 8
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y catch cmake g++-${{ matrix.version }} git libcurl4-gnutls-dev libmariadb-dev pkg-config
-      - name: Install Debian packages (including Catch v2)
+      - name: Install Debian packages
         run: |
           sudo apt-get update
           sudo apt-get install -y catch2 cmake g++-${{ matrix.version }} git libcurl4-gnutls-dev libmariadb-dev pkg-config
-        if: matrix.version > 8
       - name: Start MySQL database
         run: sudo systemctl start mysql.service
       - name: Show MySQL version information
