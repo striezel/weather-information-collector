@@ -170,18 +170,6 @@ mysql_8_4:
   services:
   - mysql:8.4
 
-mysql_9_1:
-  <<: *mariadb_configuration
-  variables:
-    MYSQL_DATABASE: "weather_information_collector"
-    MYSQL_USER: "ci_user"
-    MYSQL_PASSWORD: "ci_password"
-    MYSQL_ROOT_PASSWORD: "ci_root_password"
-    MYSQL_HOST: "mysql"
-    SKIP_NETWORK_TESTS: "true"
-  services:
-  - mysql:9.1
-
 mysql_9_2:
   <<: *mariadb_configuration
   variables:
