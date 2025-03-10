@@ -6,6 +6,7 @@ Server.
 
 | DBMS          | Supported   | Tested continuously      |
 | ------------- | ----------- | ------------------------ |
+| MariaDB 11.7  | yes         | yes                      |
 | MariaDB 11.6  | yes         | yes                      |
 | MariaDB 11.5  | yes         | no (reached end of life) |
 | MariaDB 11.4  | yes         | yes                      |
