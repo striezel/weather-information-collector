@@ -82,7 +82,7 @@ Starting in the root directory of the source, you can do the following steps:
     mkdir build
     cd build
     cmake ../
-    make -j4
+    cmake --build . -j4
 
 ### Run with Docker
 
