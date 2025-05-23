@@ -24,6 +24,7 @@ Server.
 | MariaDB 10.4  | yes         | no (reached end of life) |
 | MariaDB 10.3  | yes         | no (reached end of life) |
 | MariaDB 10.2  | yes         | no (reached end of life) |
+| MySQL 9.3     | yes _(*)_   | yes                      |
 | MySQL 9.2     | yes _(*)_   | yes                      |
 | MySQL 9.1     | yes _(*)_   | no (reached end of life) |
 | MySQL 9.0     | yes _(*)_   | no (reached end of life) |
