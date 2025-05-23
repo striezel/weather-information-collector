@@ -1,0 +1,139 @@
+name: Alpine ARM
+
+on: push
+
+jobs:
+  alpine:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: 'alpine:3.20'
+      # Volume needed for monkey-patch step.
+      volumes:
+        - /:/host
+
+    steps:
+      - name: Install and prepare Git
+        run: |
+          apk update && apk upgrade
+          apk add git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Monkey-patch Alpine Node.js into runner
+        # This step is required because the actions refuse to run on ARM 64
+        # while in a container. So the OS ID is changed and the host's Node.js
+        # binary is replaced with the one from the container.
+        # Works for now, but may fail when Node or other stuff gets updated on
+        # the runner's side.
+        run: |
+          apk add nodejs
+          sed -i 's~ID=alpine~ID=nopine~g' /etc/os-release
+          cd /host/home/runner/runners/*/externals/
+          rm -rf node20/*
+          mkdir node20/bin
+          ln -s /usr/bin/node node20/bin/node
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          apk update
+          apk add catch2 cmake curl-dev g++ git make mariadb-connector-c-dev pkgconf
+      - name: Build
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+          cmake ../
+          cmake --build . -j2
+      - name: Start MariaDB server
+        run: |
+          apk add mariadb mariadb-client openrc openrc-tools
+          test -d /run/openrc || mkdir -p /run/openrc
+          touch /run/openrc/softlevel
+          rc-service mariadb setup
+          rc-service mariadb start || echo "Start of MariaDB is probably still in progress."
+          rc-status
+      - name: Waiting for database to start
+        run: |
+          rc-service mariadb start || echo "Waiting ..."
+          ITERATIONS=0
+          while ! rc-status | grep mariadb | grep -q started
+          do
+            echo Waiting for database server to start ...
+            sleep 5
+            ITERATIONS="$((ITERATIONS+1))"
+            if [ $ITERATIONS -gt 5 ]
+            then
+              rc-status
+              echo "Database did not start."
+              exit 1
+            fi
+          done
+          rc-status
+      - name: Prepare MariaDB database
+        run: |
+          mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mariadb -uroot --password=root -e "SHOW DATABASES;"
+      - name: Run tests
+        run: |
+          cd "$GITHUB_WORKSPACE/build"
+          ctest -V
+      - name: Install statically linked libraries
+        run: |
+          apk add brotli-static c-ares-static curl-static libidn2-static
+          apk add libpsl-static libunistring-static mariadb-static
+          apk add nghttp2-static openssl-libs-static zlib-static zstd-static
+      - name: Build statically linked executables
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir build-static
+          cd build-static
+          export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+          cmake ../ -DENABLE_LTO=ON -DENABLE_STATIC_LINKING=ON
+          cmake --build . -j2
+      - name: Reset MariaDB database
+        run: |
+          mariadb -uroot -proot -e "DROP DATABASE IF EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
+          mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
+          mariadb -uroot --password=root -e "SHOW DATABASES;"
+      - name: Run tests for statically linked build
+        run: |
+          cd "$GITHUB_WORKSPACE/build-static"
+          ctest -V
+      - name: Gather build artifacts
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir artifacts
+          # binary files
+          cp build-static/src/collector/weather-information-collector artifacts/
+          cp build-static/src/configtest/weather-information-collector-configtest artifacts/
+          cp build-static/src/creator/weather-information-collector-task-creator artifacts/
+          cp build-static/src/synchronizer/weather-information-collector-synchronizer artifacts/
+          cp build-static/src/update/weather-information-collector-update artifacts/
+          # license and third party notices
+          cp LICENSE artifacts/
+          cp doc/third-party.md artifacts/
+          # individual readme files for each binary
+          cp src/collector/readme.md artifacts/readme-weather-information-collector.md
+          cp src/configtest/readme.md artifacts/readme-weather-information-collector-configtest.md
+          cp src/creator/readme.md artifacts/readme-weather-information-collector-task-creator.md
+          cp src/synchronizer/readme.md artifacts/readme-weather-information-collector-synchronizer.md
+          cp src/update/readme.md artifacts/readme-weather-information-collector-update.md
+          # documentation folder
+          cp -R doc artifacts/documentation
+          # ... but remove MSYS2 build instructions
+          unlink artifacts/documentation/msys2-build.md
+          # determine version
+          VERSION=$(git describe --always)
+          echo Version is $VERSION.
+          mv artifacts weather-information-collector-$VERSION
+          tar czf weather-information-collector_${VERSION}_linux-arm64-generic.tar.gz weather-information-collector-$VERSION
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-information-collector_linux-arm64-generic
+          path: weather-information-collector_*_linux-arm64-generic.tar.gz
+          if-no-files-found: error
