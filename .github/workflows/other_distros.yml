@@ -1,0 +1,35 @@
+name: Other Linux distributions
+
+on: push
+
+jobs:
+  fedora:
+    runs-on: ubuntu-24.04
+    container: 'fedora:42'
+
+    steps:
+      - name: Install and prepare Git
+        run: |
+          yum update -y
+          yum install -y git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          yum install -y catch-devel cmake gcc-c++ libcurl-devel make mariadb-connector-c-devel pkgconf
+      - name: Build
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+          cmake ../
+          cmake --build . -j4
+      - name: Run tests
+        run: |
+          unset GITHUB_ACTIONS
+          cd "$GITHUB_WORKSPACE/build"
+          ctest -V
