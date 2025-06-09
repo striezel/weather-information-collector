@@ -3,6 +3,35 @@ name: Other Linux distributions
 on: push
 
 jobs:
+  arch:
+    runs-on: ubuntu-24.04
+    container: 'archlinux:latest'
+    steps:
+      - name: Install and prepare Git
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          pacman -S --noconfirm catch2 cmake curl gcc make mariadb-lts-libs pkgconf
+      - name: Build
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          cmake ../
+          cmake --build . -j4
+      - name: Run tests
+        run: |
+          unset GITHUB_ACTIONS
+          cd "$GITHUB_WORKSPACE/build"
+          ctest -V
+
   fedora:
     runs-on: ubuntu-24.04
     container: 'fedora:42'
