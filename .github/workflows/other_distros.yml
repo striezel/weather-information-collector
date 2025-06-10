@@ -93,3 +93,40 @@ jobs:
           unset GITHUB_ACTIONS
           cd "$GITHUB_WORKSPACE/build"
           ctest -V
+
+  void:
+    runs-on: ubuntu-24.04
+    container: 'ghcr.io/void-linux/void-musl'
+    steps:
+      - name: Install and prepare Git
+        run: |
+          xbps-install -Su -y
+          xbps-install -y git
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      # Checks-out the repository under $GITHUB_WORKSPACE.
+      # Unfortunately, the actions/checkout action does not work on Void Linux,
+      # so we have do a manual checkout to the proper directory.
+      - name: Git checkout
+        run: |
+          git init "$GITHUB_WORKSPACE"
+          cd "$GITHUB_WORKSPACE"
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --tags origin
+          git checkout --progress --force "$GITHUB_SHA"
+          # show the last commit log
+          git log -1
+      - name: Install packages
+        run: |
+          xbps-install -y catch2 cmake gcc libcurl-devel libmariadbclient-devel make mariadb pkg-config
+      - name: Build
+        run: |
+          cd "$GITHUB_WORKSPACE"
+          mkdir build
+          cd build
+          cmake ../
+          cmake --build . -j4
+      - name: Run tests
+        run: |
+          unset GITHUB_ACTIONS
+          cd "$GITHUB_WORKSPACE/build"
+          ctest -V
