@@ -5,6 +5,9 @@
 simdjson, the library used for JSON parsing, has been updated from version
 3.11.6 to version 3.13.0.
 
+nlohmann/json, the library used for JSON parsing when simdjson is not supported,
+has been updated from version 3.11.3 to version 3.12.0.
+
 ## Version 0.12.0 (2025-01-25)
 
 Support for OpenWeatherMap's Expert plan is added.
