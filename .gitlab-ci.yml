@@ -4,7 +4,7 @@ image: debian:12-slim
 build_gcc:
   stage: build
   services:
-  - mariadb:10.5
+  - mariadb:10.6
   variables:
     GIT_DEPTH: "0"
     MYSQL_DATABASE: "weather_information_collector"
@@ -30,7 +30,7 @@ build_gcc:
 build_clang:
   stage: build
   services:
-  - mariadb:10.6
+  - mariadb:10.11
   variables:
     MYSQL_DATABASE: "weather_information_collector"
     MYSQL_USER: "ci_user"
@@ -63,7 +63,7 @@ package_debian12:
 coverage:
   stage: build
   services:
-  - mariadb:10.11
+  - mariadb:11.4
   variables:
     MYSQL_DATABASE: "weather_information_collector"
     MYSQL_USER: "ci_user"
@@ -134,13 +134,8 @@ docker_in_docker:
     - ctest -V
 
 # Run tests with various MariaDB versions.
-# (Versions 10.5 and 10.6 are already tested in the GCC and Clang builds, and
-#  MariaDB 10.11 is tested in the coverage build job.)
-mariadb_11_4:
-  <<: *mariadb_configuration
-  services:
-  - mariadb:11.4
-
+# (Versions 10.6 and 10.11 are already tested in the GCC and Clang builds, and
+#  MariaDB 11.4 is tested in the coverage build job.)
 mariadb_11_7:
   <<: *mariadb_configuration
   services:
