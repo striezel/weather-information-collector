@@ -136,11 +136,6 @@ docker_in_docker:
 # Run tests with various MariaDB versions.
 # (Versions 10.6 and 10.11 are already tested in the GCC and Clang builds, and
 #  MariaDB 11.4 is tested in the coverage build job.)
-mariadb_11_7:
-  <<: *mariadb_configuration
-  services:
-  - mariadb:11.7
-
 mariadb_11_8:
   <<: *mariadb_configuration
   services:
