@@ -2,10 +2,10 @@
 # downloads a known Debian 10 package from GitLab instead. This speeds up the
 # Docker image creation and has a smaller image size, but it may not always get
 # the most up to date version.
-FROM debian:10-slim
+FROM debian:12-slim
 MAINTAINER Dirk Stolle <striezel-dev@web.de>
 
-ENV DEB_DOWNLOAD_URL https://gitlab.com/striezel/weather-information-collector/-/jobs/4045104506/artifacts/download
+ENV DEB_DOWNLOAD_URL https://gitlab.com/striezel/weather-information-collector/-/jobs/8950094660/artifacts/download
 RUN mkdir -p /opt
 WORKDIR /opt
 # Update packages, install dependencies + cleanup afterwards.
@@ -14,7 +14,7 @@ RUN apt-get update && apt-get upgrade -y && \
     wget -O download.zip "$DEB_DOWNLOAD_URL" && \
     unzip download.zip && rm -f download.zip && \
     apt-get install -y libc6 && \
-    apt-get install -y libcurl3-gnutls libgcc1 libmariadb3 libstdc++6 && \
+    apt-get install -y libcurl3-gnutls libgcc-s1 libmariadb3 libstdc++6 && \
     dpkg -i weather-information-collector*.deb && \
     rm -f weather-information-collector*.deb && \
     apt-get purge -y wget unzip && apt-get clean
