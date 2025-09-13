@@ -2,7 +2,7 @@
 # version and then installs the package. That approach is slower and takes
 # longer to build (and the image size is bigger, too), but it should be the most
 # compatible approach.
-FROM debian:12-slim
+FROM debian:13-slim
 MAINTAINER Dirk Stolle <striezel-dev@web.de>
 
 RUN mkdir -p /opt
