@@ -13,9 +13,11 @@ jobs:
           pacman -S --noconfirm git
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
       # Checks-out the repository under $GITHUB_WORKSPACE.
-      - uses: actions/checkout@v4
+      - name: Git checkout
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Install packages
         run: |
           pacman -S --noconfirm catch2 cmake curl gcc make mariadb-lts-libs pkgconf
@@ -43,9 +45,11 @@ jobs:
           yum install -y git
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
       # Checks-out the repository under $GITHUB_WORKSPACE.
-      - uses: actions/checkout@v4
+      - name: Git checkout
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Install packages
         run: |
           yum install -y catch-devel cmake gcc-c++ libcurl-devel make mariadb-connector-c-devel pkgconf
@@ -73,9 +77,11 @@ jobs:
           zypper install -y git
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
       # Checks-out the repository under $GITHUB_WORKSPACE.
-      - uses: actions/checkout@v4
+      - name: Git checkout
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Install packages
         run: |
           zypper install -y Catch2-devel cmake gcc12-c++ libcurl-devel libmariadb-devel make pkgconf
