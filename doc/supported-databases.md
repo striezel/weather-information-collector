@@ -70,7 +70,7 @@ the password `"secret-password"`:
 ```sql
 -- change user to use mysql_native_password authentication plugin
 ALTER USER weather_user@localhost IDENTIFIED WITH mysql_native_password BY '';
--- set password again, this time using the compatible authentiction
+-- set password again, this time using the compatible authentication
 ALTER USER weather_user@localhost IDENTIFIED BY 'secret-password';
 -- flush database privileges so changes take effect immediately without the need
 -- to perform a database server restart
