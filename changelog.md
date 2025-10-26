@@ -277,7 +277,7 @@ where the cloudiness is not known can be stored correctly.
 
 ## Version 0.8.5 (2019-02-20)
 
-A new version of the updater fixes some incorrect rain information for forcast
+A new version of the updater fixes some incorrect rain information for forecast
 data of OpenWeatherMap where rain was mistakenly set to NULL in the database.
 The value is now set to the correct value (zero) instead.
 
