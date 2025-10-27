@@ -141,7 +141,7 @@ jobs:
           mv artifacts weather-information-collector-$VERSION
           tar czf weather-information-collector_${VERSION}_linux-arm64-generic.tar.gz weather-information-collector-$VERSION
       - name: Archive build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: weather-information-collector_linux-arm64-generic
           path: weather-information-collector_*_linux-arm64-generic.tar.gz
