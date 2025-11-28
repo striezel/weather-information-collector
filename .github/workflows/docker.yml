@@ -7,7 +7,7 @@ jobs:
 #    runs-on: ubuntu-24.04
 #    steps:
 #      # Checks-out the repository under $GITHUB_WORKSPACE.
-#      - uses: actions/checkout@v5
+#      - uses: actions/checkout@v6
 #        with:
 #          persist-credentials: false
 #      - name: Build Dockerfile_download
@@ -18,7 +18,7 @@ jobs:
 #    runs-on: ubuntu-24.04
 #    steps:
 #      # Checks-out the repository under $GITHUB_WORKSPACE.
-#      - uses: actions/checkout@v5
+#      - uses: actions/checkout@v6
 #        with:
 #          persist-credentials: false
 #      - name: Build Dockerfile_build
@@ -30,7 +30,7 @@ jobs:
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE.
       - name: Git checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
       - name: Build Dockerfile_multistage_build
