@@ -146,6 +146,11 @@ mariadb_12_0:
   services:
   - mariadb:12.0
 
+mariadb_12_1:
+  <<: *mariadb_configuration
+  services:
+  - mariadb:12.1
+
 mysql_5_7:
   <<: *mariadb_configuration
   variables:
