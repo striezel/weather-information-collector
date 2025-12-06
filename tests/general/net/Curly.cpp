@@ -1,7 +1,7 @@
 /*
  -------------------------------------------------------------------------------
     This file is part of the test suite for weather-information-collector.
-    Copyright (C) 2022  Dirk Stolle
+    Copyright (C) 2022, 2025  Dirk Stolle
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -128,6 +128,8 @@ TEST_CASE("Curly")
 
   if (!wic::hasEnvVar("SKIP_NETWORK_TESTS"))
   {
+    const std::string httpbin_url = wic::hasEnvVar("USE_LOCAL_HTTPBIN") ? "http://127.0.0.1:8080" : "https://httpbin.org";
+
     SECTION("perform")
     {
       SECTION("URL too short")
@@ -143,7 +145,7 @@ TEST_CASE("Curly")
       {
         Curly curly;
 
-        curly.setURL("https://httpbin.org/get");
+        curly.setURL(httpbin_url + "/get");
         REQUIRE( curly.addHeader("foo: barbarbar") );
         std::string response;
         REQUIRE( curly.perform(response) );
@@ -154,7 +156,7 @@ TEST_CASE("Curly")
       {
         Curly curly;
 
-        curly.setURL("https://httpbin.org/redirect/2");
+        curly.setURL(httpbin_url + "/redirect/2");
         curly.followRedirects(true);
         curly.setMaximumRedirects(5);
         std::string response;

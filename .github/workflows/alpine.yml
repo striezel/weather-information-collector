@@ -61,9 +61,19 @@ jobs:
           mariadb -uroot -proot -e "CREATE DATABASE IF NOT EXISTS weather_information_collector"
           mariadb -uroot -proot -e "GRANT ALL ON weather_information_collector.* TO 'root'@'localhost';"
           mariadb -uroot --password=root -e "SHOW DATABASES;"
+      - name: Start local httpbin instance for tests
+        run: |
+          apk add py3-gunicorn py3-httpbin grep
+          gunicorn --bind=127.0.0.1:8080 httpbin:app --daemon
+          while ! netstat -tna | grep LISTEN | grep --silent 8080
+          do
+              echo Waiting for httpbin server to start ...
+              sleep 5
+          done
       - name: Run tests
         run: |
           cd "$GITHUB_WORKSPACE/build"
+          export USE_LOCAL_HTTPBIN=1
           ctest -V
       - name: Install statically linked libraries
         run: |
@@ -87,6 +97,7 @@ jobs:
       - name: Run tests for statically linked build
         run: |
           cd "$GITHUB_WORKSPACE/build-static"
+          export USE_LOCAL_HTTPBIN=1
           ctest -V
       - name: Gather build artifacts
         run: |
