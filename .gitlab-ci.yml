@@ -13,13 +13,21 @@ build_gcc:
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
     - apt-get update && apt-get -y install catch2 cmake g++ git libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - apt-get install -y gunicorn python3-httpbin net-tools
     - export CC=gcc && export CXX=g++
   script:
+    # linting
     - ./ci/cpplint.sh
+    # build
     - mkdir ./build
     - cd ./build
     - cmake ../ -DJSON_BENCHMARK=ON
     - make -j4
+    # start local httpbin instance for tests
+    - gunicorn --bind=127.0.0.1:8080 httpbin:app --daemon
+    - while ! netstat -tna | grep LISTEN | grep --silent 8080; do echo Waiting for httpbin server to start ... ; sleep 5; done
+    # tests
+    - export USE_LOCAL_HTTPBIN=1
     - ctest -V
   # Keep build artifacts for later database tests.
   artifacts:
@@ -38,13 +46,21 @@ build_clang:
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
     - apt-get update && apt-get -y install catch2 clang cmake libc++-14-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - apt-get install -y gunicorn python3-httpbin net-tools
     - export CC=clang && export CXX=clang++
   script:
+    # linting
     - ./ci/cpplint.sh
+    # build
     - mkdir ./build
     - cd ./build
     - cmake ../ -DJSON_BENCHMARK=ON
     - make -j4
+    # start local httpbin instance for tests
+    - gunicorn --bind=127.0.0.1:8080 httpbin:app --daemon
+    - while ! netstat -tna | grep LISTEN | grep --silent 8080; do echo Waiting for httpbin server to start ... ; sleep 5; done
+    # tests
+    - export USE_LOCAL_HTTPBIN=1
     - ctest -V
 
 package_debian12:
@@ -71,13 +87,19 @@ coverage:
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
     - apt-get update && apt-get -y install catch cmake g++ lcov libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - apt-get install -y gunicorn python3-httpbin net-tools
     - export CC=gcc && export CXX=g++
   script:
+    # build
     - mkdir ./coverage
     - cd ./coverage
     - cmake ../ -DJSON_BENCHMARK=ON -DCODE_COVERAGE=ON
     - make -j4
+    # start local httpbin instance for tests
+    - gunicorn --bind=127.0.0.1:8080 httpbin:app --daemon
+    - while ! netstat -tna | grep LISTEN | grep --silent 8080; do echo Waiting for httpbin server to start ... ; sleep 5; done
     # tests
+    - export USE_LOCAL_HTTPBIN=1
     - ctest -V
     # collect code coverage data
     - lcov -c --directory . --output-file coverage.info
