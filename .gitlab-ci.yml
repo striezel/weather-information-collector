@@ -204,6 +204,18 @@ mysql_9_4:
   services:
   - mysql:9.4
 
+mysql_9_5:
+  <<: *mariadb_configuration
+  variables:
+    MYSQL_DATABASE: "weather_information_collector"
+    MYSQL_USER: "ci_user"
+    MYSQL_PASSWORD: "ci_password"
+    MYSQL_ROOT_PASSWORD: "ci_root_password"
+    MYSQL_HOST: "mysql"
+    SKIP_NETWORK_TESTS: "true"
+  services:
+  - mysql:9.5
+
 percona_5_7:
   <<: *mariadb_configuration
   variables:
