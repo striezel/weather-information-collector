@@ -74,9 +74,10 @@ jobs:
           mv artifacts weather-information-collector-$VERSION
           '/c/Program Files/7-Zip/7z.exe' a -r weather-information-collector_${VERSION}_win64.zip weather-information-collector-${VERSION}
       - name: Upload artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: weather-information-collector-windows-msys2
           path: |
             weather-information-collector_*.zip
           if-no-files-found: error
+          archive: false
