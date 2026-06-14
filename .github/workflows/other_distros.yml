@@ -113,10 +113,20 @@ jobs:
           export CC=gcc-15
           cmake ../
           cmake --build . -j4
+      - name: Start local httpbin instance for tests
+        run: |
+          zypper install -y python313-gunicorn python313-httpbin net-tools-deprecated
+          gunicorn --bind=127.0.0.1:8080 httpbin:app --daemon
+          while ! netstat -tna | grep LISTEN | grep --silent 8080
+          do
+              echo Waiting for httpbin server to start ...
+              sleep 5
+          done
       - name: Run tests
         run: |
           unset GITHUB_ACTIONS
           cd "$GITHUB_WORKSPACE/build"
+          export USE_LOCAL_HTTPBIN=1
           ctest -V
 
   void:
