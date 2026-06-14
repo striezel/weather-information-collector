@@ -88,7 +88,7 @@ jobs:
 
   opensuse:
     runs-on: ubuntu-24.04
-    container: 'opensuse/leap:15'
+    container: 'opensuse/leap:16'
     steps:
       - name: Install and prepare Git
         run: |
@@ -103,14 +103,14 @@ jobs:
           persist-credentials: false
       - name: Install packages
         run: |
-          zypper install -y Catch2-devel cmake gcc12-c++ libcurl-devel libmariadb-devel make pkgconf
+          zypper install -y Catch2-devel cmake gcc15-c++ libcurl-devel libmariadb-devel make pkgconf
       - name: Build
         run: |
           cd "$GITHUB_WORKSPACE"
           mkdir build
           cd build
-          export CXX=g++-12
-          export CC=gcc-12
+          export CXX=g++-15
+          export CC=gcc-15
           cmake ../
           cmake --build . -j4
       - name: Run tests
