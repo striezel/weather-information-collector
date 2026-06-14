@@ -46,7 +46,7 @@ jobs:
 
   fedora:
     runs-on: ubuntu-24.04
-    container: 'fedora:43'
+    container: 'fedora:44'
     steps:
       - name: Install and prepare Git
         run: |
