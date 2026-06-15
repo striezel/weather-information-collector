@@ -168,6 +168,11 @@ mariadb_12_1:
   services:
   - mariadb:12.1
 
+mariadb_12_2:
+  <<: *mariadb_configuration
+  services:
+  - mariadb:12.2
+
 mysql_5_7:
   <<: *mariadb_configuration
   variables:
