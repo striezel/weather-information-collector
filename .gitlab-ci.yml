@@ -163,11 +163,6 @@ mariadb_11_8:
   services:
   - mariadb:11.8
 
-mariadb_12_1:
-  <<: *mariadb_configuration
-  services:
-  - mariadb:12.1
-
 mariadb_12_2:
   <<: *mariadb_configuration
   services:
