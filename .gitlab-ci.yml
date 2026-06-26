@@ -1,4 +1,4 @@
-image: debian:12-slim
+image: debian:13-slim
 
 # build with GCC
 build_gcc:
@@ -45,7 +45,7 @@ build_clang:
     MYSQL_PASSWORD: "ci_password"
     MYSQL_ROOT_PASSWORD: "ci_root_password"
   before_script:
-    - apt-get update && apt-get -y install catch2 clang cmake libc++-14-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
+    - apt-get update && apt-get -y install catch2 clang cmake libc++-19-dev libcurl4-gnutls-dev libmariadb-dev pkg-config
     - apt-get install -y gunicorn python3-httpbin net-tools
     - export CC=clang && export CXX=clang++
   script:
@@ -113,7 +113,7 @@ coverage:
       - public
 
 pages:
-  image: debian:12-slim
+  image: debian:13-slim
   stage: deploy
   needs: ["coverage"]
   dependencies:
