@@ -102,7 +102,7 @@ coverage:
     - export USE_LOCAL_HTTPBIN=1
     - ctest -V
     # collect code coverage data
-    - lcov -c --directory . --output-file coverage.info
+    - lcov -c --ignore-errors inconsistent,inconsistent --directory . --output-file coverage.info
     - lcov --remove coverage.info '/usr/*' '*tests/*' '*third-party/*' -o main_coverage.info
     - genhtml main_coverage.info --output-directory ../public
   coverage: /^[\t ]*lines\.*:\s*\d+.\d+\%/
