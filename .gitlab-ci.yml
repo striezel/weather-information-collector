@@ -253,7 +253,7 @@ updater_v0.5.3_structure:
   - mariadb:10.6
   script:
     - apt-get -y --no-install-suggests --no-install-recommends install mariadb-client
-    - mysql -pci_password -u ci_user -hmariadb < ci/structure_v0.5.3.sql
+    - mysql --skip-ssl -pci_password -u ci_user -hmariadb < ci/structure_v0.5.3.sql
     - touch connection.conf
     - echo "database.host=mariadb" >> connection.conf
     - echo "database.name=weather_information_collector" >> connection.conf
