@@ -4,7 +4,7 @@ on: push
 
 jobs:
   arch:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container: 'archlinux:latest'
     steps:
       - name: Install and prepare Git
@@ -45,7 +45,7 @@ jobs:
           ctest -V
 
   fedora:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container: 'fedora:44'
     steps:
       - name: Install and prepare Git
@@ -87,7 +87,7 @@ jobs:
           ctest -V
 
   opensuse:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container: 'opensuse/leap:16'
     steps:
       - name: Install and prepare Git
@@ -130,7 +130,7 @@ jobs:
           ctest -V
 
   void:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     container: 'ghcr.io/void-linux/void-musl'
     steps:
       - name: Install and prepare Git
