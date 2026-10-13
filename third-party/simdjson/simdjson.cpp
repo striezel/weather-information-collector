@@ -1,4 +1,4 @@
-/* auto-generated on 2026-10-04 09:02:57 -0400. version 5.0.2 Do not edit! */
+/* auto-generated on 2026-10-12 00:12:12 -0400. version 5.0.4 Do not edit! */
 /* including simdjson.cpp:  */
 /* begin file simdjson.cpp */
 #define SIMDJSON_SRC_SIMDJSON_CPP
@@ -3355,6 +3355,10 @@ consteval std::string consteval_to_quoted_escaped(std::string_view input) {
   out.push_back('"');
   return out;
 }
+
+consteval std::size_t padded_key_length(std::size_t length) {
+  return (length + 15) / 16 * 16;
+}
 #endif  // SIMDJSON_CONSTEVAL
 
 
@@ -3391,10 +3395,45 @@ struct fixed_string {
 template <std::size_t N>
 fixed_string(const char (&)[N]) -> fixed_string<N>;
 
+template <typename T>
+inline constexpr bool is_fixed_string = false;
+template <std::size_t N>
+inline constexpr bool is_fixed_string<constevalutil::fixed_string<N>> = true;
+
 template <fixed_string str>
 struct string_constant {
     static constexpr std::string_view value = str.view();
 };
+
+#if SIMDJSON_CONSTEVAL
+template <typename Text>
+consteval std::size_t static_string_size() {
+  return Text::text().size();
+}
+template <typename Text>
+consteval std::size_t padded_static_string_size() {
+  return padded_key_length(static_string_size<Text>());
+}
+
+template <typename Text>
+consteval auto make_static_string() {
+  std::array<char, padded_static_string_size<Text>()> out{};
+  std::string text = Text::text();
+  // The tail past text.size() stays zero: it is the padding.
+  for (std::size_t i = 0; i < text.size(); ++i) {
+    out[i] = text[i];
+  }
+  return out;
+}
+
+template <typename Text>
+inline constexpr auto static_string = make_static_string<Text>();
+
+template <fixed_string str>
+struct quoted_escaped_text {
+  static consteval std::string text() { return consteval_to_quoted_escaped(str.view()); }
+};
+#endif // SIMDJSON_CONSTEVAL
 #endif // SIMDJSON_SUPPORTS_CONCEPTS
 
 } // namespace constevalutil
@@ -16223,6 +16262,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -23936,6 +23979,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -31472,6 +31519,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -39165,6 +39216,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -47208,6 +47263,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -55103,6 +55162,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -62451,6 +62514,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -69786,6 +69853,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
@@ -77102,6 +77173,10 @@ simdjson_inline void parse_integer_digits(const uint8_t *&p, uint64_t &i) {
 #ifdef SIMDJSON_SWAR_NUMBER_PARSING
 #if SIMDJSON_SWAR_NUMBER_PARSING
   // Identifiers, timestamps and counters often have eight digits or more.
+  // Prior related work: jsonifier parses integers as eight-digit SWAR words
+  // (str_to_i.hpp, https://github.com/nihilai-collective/Jsonifier). This
+  // takes one such word with parse_eight_digits_unrolled, the routine
+  // simdjson uses for long fractions.
   if (is_made_of_eight_digits_fast(p)) {
     i = i * 100000000 + parse_eight_digits_unrolled(p);
     p += 8;
