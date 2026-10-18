@@ -46,7 +46,7 @@ Server.
 | Percona 9.7   | yes _(*)_   | yes                      |
 | Percona 8.4   | yes _(*)_   | yes                      |
 | Percona 8.0   | yes _(*)_   | yes                      |
-| Percona 5.7   | yes         | yes                      |
+| Percona 5.7   | yes         | no (reached end of life) |
 
 In theory, weather-information-collector should even be able to work with older
 DBMS versions down to MariaDB 5.5 / MySQL Server 5.5 / Percona Server 5.5.
